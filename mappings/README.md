@@ -8,7 +8,7 @@ Machine-readable mapping from Permit v1 wire-format fields and audit-export-bund
 
 | Tier | Frameworks | Status |
 |---|---|---|
-| **Verbatim verified** (`verified_2026_05_10`) | CCPA §1798.105(d), 11 CCR §7001/§7150/§7152/§7155, EU AI Act Art 26(6), GDPR Art 17(3)(b), NIST AI RMF 1.0, OWASP LLM Top 10 (2025), **ISO/IEC 42001:2023 Clauses 3-10 + subclauses + Annex structure**, **AICPA SOC 2 Trust Services Criteria CC1.1–CC9.2**, **MITRE ATLAS 14 tactics + ~50 techniques**, **OWASP API Security Top 10 (2023)**, **OWASP ASVS v5.0.0** | Subsection IDs and verbatim titles confirmed from official source documents on 2026-05-10. ISO 42001 clauses + subclauses + Clause 3 definitions + annex structure verified from authoritative ISO/IEC publication preview distributed via iTeh Standards. SOC 2 common criteria verified verbatim from the authoritative AICPA-published TSP Section 100 (2017 TSC with Revised Points of Focus — 2022). MITRE ATLAS verified from canonical ATLAS.yaml at github.com/mitre-atlas/atlas-data. OWASP API and ASVS verified from owasp.org and github.com/OWASP/ASVS respectively. |
+| **Verbatim verified** (`verified_2026_05_10`) | CCPA §1798.105(d), 11 CCR §7001/§7150/§7152/§7155, EU AI Act Art 26(6), GDPR Art 17(3)(b), NIST AI RMF 1.0, OWASP LLM Top 10 (2025), **ISO/IEC 42001:2023 Clauses 3-10 + subclauses + Annex structure**, **AICPA SOC 2 Trust Services Criteria CC1.1–CC9.2**, **MITRE ATLAS 14 tactics + ~50 techniques**, **OWASP API Security Top 10 (2023)**, **OWASP ASVS v5.0.0**, **FedRAMP / NIST SP 800-53 Rev 5** | Subsection IDs and verbatim titles confirmed from official source documents on 2026-05-10. ISO 42001 clauses + subclauses + Clause 3 definitions + annex structure verified from authoritative ISO/IEC publication preview distributed via iTeh Standards. SOC 2 common criteria verified verbatim from the authoritative AICPA-published TSP Section 100 (2017 TSC with Revised Points of Focus — 2022). MITRE ATLAS verified from canonical ATLAS.yaml at github.com/mitre-atlas/atlas-data. OWASP API and ASVS verified from owasp.org and github.com/OWASP/ASVS respectively. FedRAMP / NIST SP 800-53 Rev 5 control titles for the 23 mapped controls verified from csf.tools NIST-content mirror. **FedRAMP CAVEAT: Keel is NOT FedRAMP authorized — mappings describe customer-side evidence support, not Keel-side authorization. See dedicated section below.** |
 | **Two-source corroborated** (`verified_two_source_corroborated`) | ISO/IEC 42001:2023 individual Annex A control IDs + semantic content | ISMS.online and Mindsetcyber independently agree on all 38 control IDs, 9-section structure, control counts per section, and semantic content of each title. Differ only on stylistic conventions (Title Case + hyphenated vs lowercase + space). Exact verbatim typography remains MEDIUM CONFIDENCE pending the paywalled official Annex A pages from iso.org. Three other public summaries (Bastion, Reconn, isauditr) checked on 2026-05-10 and rejected for reproducing different draft/proposed structures — documented inline in the JSON. |
 
 `verified_single_source`, `verified_structurally_only`, and `draft_unverified` tiers are all empty after the 2026-05-10 verification pass.
@@ -41,6 +41,7 @@ Machine-readable mapping from Permit v1 wire-format fields and audit-export-bund
 | MITRE ATLAS — 14 tactics (AML.TA0000-AML.TA0015) and ~50 technique IDs+titles | github.com/mitre-atlas/atlas-data/dist/ATLAS.yaml (canonical machine-readable source) | Direct fetch of ATLAS.yaml on 2026-05-10; note current ATLAS terminology uses "AI" not "ML" (e.g., "AI Model Inference API Access") |
 | OWASP API Security Top 10 (2023) — API1:2023 through API10:2023 | owasp.org/API-Security/editions/2023/en/0x11-t10/ | Direct WebFetch on 2026-05-10, verbatim |
 | OWASP ASVS v5.0.0 — chapters V1-V17 | github.com/OWASP/ASVS/tree/master/5.0/en (canonical 5.0 source folder) | Direct fetch on 2026-05-10; ASVS v5 chapter numbering is NOT backwards-compatible with v4 |
+| FedRAMP / NIST SP 800-53 Rev 5 — verbatim titles for 23 mapped controls across AU, AC, CM, CA, IR, SI, SC families | csf.tools NIST-content mirror; cross-checked with NIST CSRC publication page (csrc.nist.gov/pubs/sp/800/53/r5/upd1/final) | Direct WebFetch of family pages on 2026-05-10; NIST SP 800-53 Rev 5 originally published September 2020, latest release 5.2.0 issued August 27, 2025 |
 
 ### Verified two-source corroborated (upgraded 2026-05-10)
 
@@ -128,6 +129,46 @@ The JSON file structure:
 - **necessary** — the field is required to satisfy the control but may need additional evidence to be sufficient
 - **sufficient** — the field directly satisfies the control
 - **partial** — the field contributes evidence but is not necessary nor sufficient on its own
+
+## FedRAMP — mandatory framing discipline
+
+**Keel API, Inc. is NOT a FedRAMP-authorized Cloud Service Offering.** No Joint Authorization Board (JAB) Provisional Authorization, no Agency ATO, not listed on the FedRAMP Marketplace as of 2026-05-10.
+
+The FedRAMP mapping in this artifact describes how Keel-produced evidence (Permit records, hash-chained audit logs, Ed25519 signed exports, RFC 3161 timestamps, externally anchored checkpoints) can **support a customer's NIST SP 800-53 Rev 5 control implementations** within the customer's existing FedRAMP-authorized boundary, under that boundary's shared-responsibility model. The customer remains the FedRAMP-authorized entity.
+
+### Correct framing in customer-facing material
+
+✅ "Keel evidence supports NIST 800-53 Rev 5 audit-and-accountability controls (AU family) within your FedRAMP-authorized boundary."
+
+✅ "Keel produces the evidence artifacts your 3PAO needs to demonstrate NIST 800-53 AU-9, AU-10, AU-12 compliance for AI/ML workloads under your boundary."
+
+✅ "Keel substrate supports customers operating under FedRAMP Low / Moderate / High / LI-SaaS baselines who need cryptographically verifiable AI-decision evidence."
+
+### Incorrect framing — do NOT use
+
+❌ "Keel is FedRAMP authorized" — false
+❌ "Keel is FedRAMP compliant" — false; only authorized CSOs are 'compliant'
+❌ "Keel supports FedRAMP High" — ambiguous; correct: "Keel evidence supports customers operating under FedRAMP High baseline"
+❌ "Use Keel to satisfy FedRAMP" — false; Keel does not satisfy any FedRAMP requirement on its own
+❌ "Keel is on the FedRAMP Marketplace" — false
+
+### Coverage scope
+
+| Control family | Permit fit | Mapped controls |
+|---|---|---|
+| **AU** Audit and Accountability | **Strongest** | AU-2, AU-3, AU-4, AU-6, AU-7, AU-8, AU-9, AU-9(2), AU-9(3), AU-10, AU-11, AU-12 |
+| **AC** Access Control | Partial | AC-3, AC-6 |
+| **CM** Configuration Management | Partial | CM-3, CM-8 |
+| **CA** Assessment, Authorization, and Monitoring | Partial | CA-7 |
+| **IR** Incident Response | Partial | IR-4, IR-5 |
+| **SI** System and Information Integrity | Strong | SI-7, SI-12 |
+| **SC** System and Communications Protection | Partial | SC-13, SC-28 |
+
+**Total: 23 mapped controls + 3 documented "uncovered high-priority controls" + 3 explicit non-mappings.** 13 of 20 NIST 800-53 control families are entirely out of scope for the Permit substrate (PE, MA, MP, PS, PL, PM, AT, etc.) and any FedRAMP claim covering them would be over-claim.
+
+### Future path
+
+If Keel itself pursues FedRAMP authorization in the future: (1) engage a FedRAMP 3PAO, (2) develop System Security Plan (SSP) mapping all required controls, (3) Security Assessment, (4) Agency ATO sponsorship OR JAB Provisional Authorization. Timeline: 12-18 months; cost: $250K-$1M+. This is post-revenue, post-design-partner-validation work — not pre-revenue.
 
 ## Coverage scope for security/adversary frameworks
 
