@@ -4,13 +4,12 @@ Machine-readable mapping from Permit v1 wire-format fields and audit-export-bund
 
 ## Status
 
-**Draft, version 0.1.0.** Four verification tiers reflected in the JSON's `verification_status` block:
+**Draft, version 0.1.0.** Three verification tiers reflected in the JSON's `verification_status` block:
 
 | Tier | Frameworks | Status |
 |---|---|---|
-| **Verbatim verified** (`verified_2026_05_10`) | CCPA §1798.105(d), 11 CCR §7001/§7150/§7152/§7155, EU AI Act Art 26(6), GDPR Art 17(3)(b), NIST AI RMF 1.0, OWASP LLM Top 10 (2025), **ISO/IEC 42001:2023 Clauses 3-10 + subclauses + Annex structure** | Subsection IDs and verbatim titles confirmed from official source documents on 2026-05-10. ISO 42001 clauses + subclauses + Clause 3 definitions + annex structure verified from authoritative ISO/IEC publication preview distributed via iTeh Standards. |
+| **Verbatim verified** (`verified_2026_05_10`) | CCPA §1798.105(d), 11 CCR §7001/§7150/§7152/§7155, EU AI Act Art 26(6), GDPR Art 17(3)(b), NIST AI RMF 1.0, OWASP LLM Top 10 (2025), **ISO/IEC 42001:2023 Clauses 3-10 + subclauses + Annex structure**, **AICPA SOC 2 Trust Services Criteria CC1.1–CC9.2** | Subsection IDs and verbatim titles confirmed from official source documents on 2026-05-10. ISO 42001 clauses + subclauses + Clause 3 definitions + annex structure verified from authoritative ISO/IEC publication preview distributed via iTeh Standards. SOC 2 common criteria (CC1–CC9 sub-criteria) verified verbatim from the authoritative AICPA-published TSP Section 100 (2017 TSC with Revised Points of Focus — 2022). |
 | **Single-source / medium confidence** (`verified_single_source`) | ISO/IEC 42001:2023 individual Annex A control titles | Annex A control IDs are multi-source corroborated; verbatim title wording varies slightly across public sources. Authoritative iTeh preview ends at Clause 4.4 (Annex A is in the paywalled portion). Confirm verbatim titles against the official standard or an audit-firm copy before customer-facing publication. |
-| **Verified structurally** (`verified_structurally_only`) | AICPA SOC 2 TSC | Category-level structure confirmed from public framework knowledge; **sub-criterion verbatim titles NOT independently verified** (SOC 2 TSC requires AICPA registration). Cite at category level. Confirm sub-criterion verbatim from AICPA source before customer-facing publication. |
 | **Draft / unverified** (`draft_unverified`) | MITRE ATLAS, OWASP API Security / ASVS | Not yet mapped in this revision |
 
 ## Files
@@ -37,6 +36,7 @@ Machine-readable mapping from Permit v1 wire-format fields and audit-export-bund
 | ISO/IEC 42001:2023 Clauses 4-10 + all subclauses (e.g., 4.1, 6.1.1-6.1.4, 7.5.1-7.5.3, 9.2.1-9.2.2, 9.3.1-9.3.3, 10.1-10.2) | cdn.standards.iteh.ai (authoritative ISO/IEC publication preview via iTeh Standards) | Direct PDF/preview read, verbatim ToC + Clauses 1-3 text |
 | ISO/IEC 42001:2023 Clause 3 Terms and Definitions (3.1-3.26) | cdn.standards.iteh.ai (iTeh authoritative preview pages 1-4) | Direct read, verbatim definitions |
 | ISO/IEC 42001:2023 Annex structure (A normative, B normative, C informative, D informative) | cdn.standards.iteh.ai (iTeh authoritative preview ToC) | Direct read; correction note: Annex B is **NORMATIVE** in the final standard (earlier public drafts and some third-party summaries had Annex B as informative) |
+| AICPA SOC 2 Trust Services Criteria — common criteria CC1.1 through CC9.2 (33 sub-criteria) | AICPA TSP Section 100, 2017 TSC with Revised Points of Focus — 2022 (registration-gated public download) | Direct PDF read of authoritative AICPA publication, pages 14-48; all sub-criterion titles captured verbatim |
 
 ### Verified single-source (medium confidence)
 
@@ -44,11 +44,16 @@ Machine-readable mapping from Permit v1 wire-format fields and audit-export-bund
 |---|---|---|
 | ISO/IEC 42001:2023 individual Annex A controls | 38 control IDs and verbatim titles (e.g., A.6.2.8 AI-System Recording of Event Logs) | Sourced primarily from ISMS.online. Section structure (A.2-A.10) and total count (38) corroborated by Vanta + Advisera + ChatGPT-cited Microsoft/UNIDO + AI Verify Foundation + Nemko. **Authoritative iTeh preview ends at Clause 4.4** (Annex A is on page 17 of the paywalled section, NOT in the public preview). Individual control verbatim titles vary slightly across sources (e.g., 'AI-System' vs 'AI system'; 'Organisational' vs 'Organizational'). Control IDs are HIGH CONFIDENCE; exact verbatim wording is MEDIUM CONFIDENCE pending the official Annex A pages. |
 
-### Verified structurally only
+### CC7.5 → CC7.2 correction (2026-05-10)
 
-| Framework | Public structure | Paywall / gating |
-|---|---|---|
-| AICPA SOC 2 TSC | CC1-CC9 category structure is public knowledge; mapped at category level (CC3 Risk Assessment, CC6 Logical and Physical Access, CC7 System Operations, CC8 Change Management, CC9 Risk Mitigation) | AICPA TSC 2017 (with 2022 revisions) requires registration/download from aicpa-cima.com — sub-criterion verbatim titles NOT independently verified in this pass |
+A prior draft mapped the "RFC 3161 timestamp receipt anchored to integrity checkpoint" artifact to `CC7.5 (System Operations — Logging)`. That label was a double error:
+
+- **Wrong criterion** — CC7.5 verbatim is *"The entity identifies, develops, and implements activities to recover from identified security incidents."* Recovery, not logging.
+- **No standalone "Logging" criterion exists in TSC** — log-related evidence is distributed across CC2.1 (information quality), CC4.1 (ongoing/separate evaluations), and CC7.2 (anomaly monitoring and change-detection).
+
+Corrected mapping: **CC7.2** — *"The entity monitors system components and the operation of those components for anomalies that are indicative of malicious acts, natural disasters, and errors affecting the entity's ability to meet its objectives; anomalies are analyzed to determine whether they represent security events."* RFC 3161 timestamps map specifically to the "Implements Change-Detection Mechanisms" point of focus under CC7.2 (file integrity monitoring is a named example).
+
+This is the kind of error that gets caught only by reading the authoritative AICPA text — exactly the upgrade this revision delivered.
 
 ## Critical scoping notes
 
