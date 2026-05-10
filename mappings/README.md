@@ -4,12 +4,13 @@ Machine-readable mapping from Permit v1 wire-format fields and audit-export-bund
 
 ## Status
 
-**Draft, version 0.1.0.** Three verification tiers reflected in the JSON's `verification_status` block:
+**Draft, version 0.1.0.** Four verification tiers reflected in the JSON's `verification_status` block:
 
 | Tier | Frameworks | Status |
 |---|---|---|
-| **Verbatim verified** (`verified_2026_05_10`) | CCPA §1798.105(d), 11 CCR §7001/§7150/§7152/§7155, EU AI Act Art 26(6), GDPR Art 17(3)(b), NIST AI RMF 1.0, OWASP LLM Top 10 (2025) | Subsection IDs and verbatim titles confirmed from official source documents on 2026-05-10 |
-| **Verified structurally** (`verified_structurally_only`) | AICPA SOC 2 TSC, ISO/IEC 42001:2023 | Category-level / clause-level structure confirmed from public framework knowledge; **sub-criterion verbatim titles NOT independently verified** (SOC 2 TSC requires AICPA registration; ISO 42001 standard text is paywalled). Mappings are cited at category/clause level. Confirm sub-criterion verbatim from authoritative source before customer-facing publication. |
+| **Verbatim verified** (`verified_2026_05_10`) | CCPA §1798.105(d), 11 CCR §7001/§7150/§7152/§7155, EU AI Act Art 26(6), GDPR Art 17(3)(b), NIST AI RMF 1.0, OWASP LLM Top 10 (2025), **ISO/IEC 42001:2023 Clauses 3-10 + subclauses + Annex structure** | Subsection IDs and verbatim titles confirmed from official source documents on 2026-05-10. ISO 42001 clauses + subclauses + Clause 3 definitions + annex structure verified from authoritative ISO/IEC publication preview distributed via iTeh Standards. |
+| **Single-source / medium confidence** (`verified_single_source`) | ISO/IEC 42001:2023 individual Annex A control titles | Annex A control IDs are multi-source corroborated; verbatim title wording varies slightly across public sources. Authoritative iTeh preview ends at Clause 4.4 (Annex A is in the paywalled portion). Confirm verbatim titles against the official standard or an audit-firm copy before customer-facing publication. |
+| **Verified structurally** (`verified_structurally_only`) | AICPA SOC 2 TSC | Category-level structure confirmed from public framework knowledge; **sub-criterion verbatim titles NOT independently verified** (SOC 2 TSC requires AICPA registration). Cite at category level. Confirm sub-criterion verbatim from AICPA source before customer-facing publication. |
 | **Draft / unverified** (`draft_unverified`) | MITRE ATLAS, OWASP API Security / ASVS | Not yet mapped in this revision |
 
 ## Files
@@ -33,12 +34,15 @@ Machine-readable mapping from Permit v1 wire-format fields and audit-export-bund
 | GDPR Article 17(3)(b) | gdpr-info.eu | Pre-existing direct fetch (per internal memo) |
 | NIST AI RMF 1.0 — Functions GOVERN/MAP/MEASURE/MANAGE | nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf | Direct PDF read, verbatim for GOVERN/MAP/MEASURE subcategories; structural for MANAGE |
 | OWASP Top 10 for LLM Applications (2025) — LLM01:2025 through LLM10:2025 | genai.owasp.org/llm-top-10/ | Direct WebFetch, verbatim |
+| ISO/IEC 42001:2023 Clauses 4-10 + all subclauses (e.g., 4.1, 6.1.1-6.1.4, 7.5.1-7.5.3, 9.2.1-9.2.2, 9.3.1-9.3.3, 10.1-10.2) | cdn.standards.iteh.ai (authoritative ISO/IEC publication preview via iTeh Standards) | Direct PDF/preview read, verbatim ToC + Clauses 1-3 text |
+| ISO/IEC 42001:2023 Clause 3 Terms and Definitions (3.1-3.26) | cdn.standards.iteh.ai (iTeh authoritative preview pages 1-4) | Direct read, verbatim definitions |
+| ISO/IEC 42001:2023 Annex structure (A normative, B normative, C informative, D informative) | cdn.standards.iteh.ai (iTeh authoritative preview ToC) | Direct read; correction note: Annex B is **NORMATIVE** in the final standard (earlier public drafts and some third-party summaries had Annex B as informative) |
 
 ### Verified single-source (medium confidence)
 
 | Framework | What's single-source | Notes |
 |---|---|---|
-| ISO/IEC 42001:2023 individual Annex A controls | 38 control IDs and verbatim titles (e.g., A.6.2.8 AI-System Recording of Event Logs) | Sourced from ISMS.online only. Section structure (A.2-A.10) and total count (38) corroborated by Vanta + Advisera. Individual control titles within sections need second-source verification — confirm against the official standard or an audit-firm copy before customer-facing publication. |
+| ISO/IEC 42001:2023 individual Annex A controls | 38 control IDs and verbatim titles (e.g., A.6.2.8 AI-System Recording of Event Logs) | Sourced primarily from ISMS.online. Section structure (A.2-A.10) and total count (38) corroborated by Vanta + Advisera + ChatGPT-cited Microsoft/UNIDO + AI Verify Foundation + Nemko. **Authoritative iTeh preview ends at Clause 4.4** (Annex A is on page 17 of the paywalled section, NOT in the public preview). Individual control verbatim titles vary slightly across sources (e.g., 'AI-System' vs 'AI system'; 'Organisational' vs 'Organizational'). Control IDs are HIGH CONFIDENCE; exact verbatim wording is MEDIUM CONFIDENCE pending the official Annex A pages. |
 
 ### Verified structurally only
 
@@ -105,6 +109,18 @@ The JSON file structure:
 - **necessary** — the field is required to satisfy the control but may need additional evidence to be sufficient
 - **sufficient** — the field directly satisfies the control
 - **partial** — the field contributes evidence but is not necessary nor sufficient on its own
+
+## Multi-source verification methodology (ISO 42001 lesson learned)
+
+Initial verification of ISO/IEC 42001:2023 went through three sources with materially different signal:
+
+1. **ChatGPT** — confident verbatim claim of 38/38 Annex A controls with multi-source citations. Independently useful for triangulating control IDs across publicly available summaries.
+2. **Perplexity** — cautious paraphrase, recommended buying the standard. Useful as a calibration on confidence: when Perplexity refuses to verbatim-quote, treat ChatGPT verbatim claims as needing a third source.
+3. **iTeh Standards** (`cdn.standards.iteh.ai`) — authorized ISO reseller; their public "samples" preview is the **authoritative ISO/IEC publication preview** (front matter + Clauses 1-3 verbatim + ToC). This is the closest free source to the canonical standard and is what we used to verbatim-verify clauses, subclauses, definitions, and annex structure.
+
+**Pattern to repeat:** when an LLM offers verbatim text from a paywalled standard, the verifier should (a) check whether an authorized reseller publishes a preview/sample, (b) read that preview directly, and (c) downgrade any LLM-quoted text outside the preview window from "verbatim verified" to "single-source, medium confidence."
+
+This is the same pattern that previously caught Perplexity hallucinating pre-CPRA CCPA text and ChatGPT misrouting bare `(d)(2)` shorthand to a different regulation. **Direct fetch of the authoritative source remains the only reliable verification path.**
 
 ## When to update this artifact
 
