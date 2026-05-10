@@ -1,0 +1,715 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keelapi/keel-permit/blob/main/mappings/control-frameworks.schema-mapping.json",
+  "title": "Permit v1 → Control Framework Mappings",
+  "description": "Mapping from Permit v1 wire-format fields and audit-export-bundle artifacts to specific control IDs in major AI / security / privacy frameworks. Auditor-and-procurement-friendly: a buyer reads which Permit fields satisfy which control evidence requirements. Honesty over coverage: 'sufficient' / 'partial' / 'necessary' labels reflect the actual evidentiary weight of the field for that control.",
+  "version": "0.1.0-draft",
+  "generated_at": "2026-05-10",
+  "spec_repository": "github.com/keelapi/keel-permit",
+  "license": "Apache-2.0",
+
+  "verification_status": {
+    "summary": "Selected citations directly verified via WebFetch of official sources on 2026-05-10. Other framework citations are draft mappings carried over from internal evidence-map work that have NOT been separately verified in this artifact. Verify each citation against the canonical published source before customer-facing publication.",
+    "verified_2026_05_10": [
+      "California Civil Code §1798.105(d)(2) — verbatim from leginfo.legislature.ca.gov",
+      "California Civil Code §1798.105(d)(8) — verbatim from leginfo.legislature.ca.gov",
+      "11 CCR §7001(e) ADMT definition — verbatim from CPPA final adopted text Sep 22 2025",
+      "11 CCR §7150(b) risk assessment triggers — verbatim from CPPA final adopted text",
+      "11 CCR §7152(a) Risk Assessment Requirements — verbatim from CPPA final adopted text",
+      "11 CCR §7155(a) timing/retention requirements — verbatim from CPPA final adopted text",
+      "NIST AI RMF 1.0 — Functions GOVERN, MAP, MEASURE, MANAGE and Categories/Subcategories verified verbatim from official NIST publication AI 100-1 (January 2023, nvlpubs.nist.gov)",
+      "OWASP Top 10 for LLM Applications (2025) — item IDs LLM01:2025 through LLM10:2025 verified verbatim from genai.owasp.org (released March 12, 2025)"
+    ],
+    "verified_pre_2026_05_10": [
+      "EU AI Act Article 26(6) — verbatim from artificialintelligenceact.eu (per project_dsar_legal_positioning_2026-05-08)",
+      "GDPR Article 17(3)(b) — per project_dsar_legal_positioning_2026-05-08"
+    ],
+    "verified_structurally_only": [
+      "AICPA SOC 2 Trust Services Criteria — CC1 through CC9 category structure is public knowledge; verbatim sub-criterion titles (e.g., CC6.1, CC7.2) require AICPA registration/download of the 2017 TSC with 2022 revisions and were NOT directly verified in this pass. Cite at category level (CC3 Risk Assessment, CC6 Logical and Physical Access, CC7 System Operations, CC8 Change Management, CC9 Risk Mitigation); confirm sub-criterion numbering and verbatim text from the AICPA document before customer-facing publication.",
+      "ISO/IEC 42001:2023 — clause structure (clauses 4-10 + Annex A) is public knowledge per ISO management-system standard form; verbatim clause titles and Annex A control IDs/titles are PAYWALLED at iso.org and were NOT directly verified in this pass. Verify against the purchased standard or an audit firm's copy before customer-facing publication."
+    ],
+    "draft_unverified": [
+      "MITRE ATLAS technique IDs",
+      "OWASP API Security / ASVS mappings"
+    ]
+  },
+
+  "frameworks": {
+    "ccpa": {
+      "name": "California Consumer Privacy Act / California Privacy Rights Act",
+      "scope": "California consumers; statute in Civil Code §1798.100 et seq.",
+      "source": "https://leginfo.legislature.ca.gov/",
+      "effective_status": "in force; CPRA amendments operative 2023-01-01",
+      "verification": "verified verbatim 2026-05-10"
+    },
+    "cppa_admt_regs": {
+      "name": "CPPA — CCPA Updates, Cyber, Risk, ADMT, and Insurance Regulations",
+      "scope": "California Privacy Protection Agency final adopted regulations in 11 CCR Title 11, Division 6, Chapter 1",
+      "source": "https://cppa.ca.gov/regulations/pdf/ccpa_updates_cyber_risk_admt_appr_text.pdf",
+      "notice_of_approval": "September 22, 2025",
+      "effective_status": "Risk assessments + cybersecurity audits effective January 1, 2026; ADMT notice/opt-out/access provisions effective January 1, 2027",
+      "verification": "verified verbatim against final adopted text 2026-05-10"
+    },
+    "eu_ai_act": {
+      "name": "European Union Artificial Intelligence Act (Regulation (EU) 2024/1689)",
+      "scope": "AI systems placed on the market or put into service in the EU; high-risk AI systems addressed in Articles 8-29",
+      "source": "https://artificialintelligenceact.eu/",
+      "effective_status": "Article 12 (logging) and Article 26(6) (deployer log retention ≥6mo) effective for new high-risk AI Aug 2 2026; legacy systems Aug 2 2027",
+      "verification": "Article 26(6) verbatim verified per existing internal memo"
+    },
+    "gdpr": {
+      "name": "GDPR — General Data Protection Regulation (Regulation (EU) 2016/679)",
+      "scope": "Personal data processing of EU subjects",
+      "source": "https://gdpr-info.eu/",
+      "effective_status": "in force",
+      "verification": "Article 17(3)(b) verbatim verified per existing internal memo"
+    },
+    "soc2": {
+      "name": "AICPA Trust Services Criteria (SOC 2)",
+      "official_citation": "AICPA Trust Services Criteria — 2017 (with revised Points of Focus, 2022)",
+      "scope": "Service organization controls audit framework",
+      "source": "https://www.aicpa-cima.com/resources/download/2017-trust-services-criteria-with-revised-points-of-focus-2022",
+      "common_criteria_categories": {
+        "CC1": "Control Environment",
+        "CC2": "Communication and Information",
+        "CC3": "Risk Assessment",
+        "CC4": "Monitoring Activities",
+        "CC5": "Control Activities",
+        "CC6": "Logical and Physical Access Controls",
+        "CC7": "System Operations",
+        "CC8": "Change Management",
+        "CC9": "Risk Mitigation"
+      },
+      "verification": "Category-level structure (CC1 through CC9) verified from public knowledge of AICPA TSC framework. Verbatim sub-criterion titles (e.g., CC6.1 'The entity implements logical access security software, infrastructure, and architectures...') were NOT directly verified in this pass — AICPA TSC text is registration/download-gated. Cite at category level; confirm sub-criterion verbatim from AICPA source before customer-facing publication.",
+      "verification_date": "2026-05-10 (structural)"
+    },
+    "nist_ai_rmf": {
+      "name": "NIST AI Risk Management Framework 1.0",
+      "official_citation": "NIST AI 100-1 — Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+      "scope": "Voluntary framework for AI risk management",
+      "source": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+      "id_format": "FUNCTION CATEGORY.SUBCATEGORY (e.g., GOVERN 1.1, MAP 2.3, MEASURE 2.9, MANAGE 1.1) — note: official format uses spaces between FUNCTION and category, periods within category.subcategory; no hyphens",
+      "functions": {
+        "GOVERN": "A culture of risk management is cultivated and present (cross-cutting; infused throughout the other functions)",
+        "MAP": "Context is recognized and risks related to context are identified",
+        "MEASURE": "Identified risks are assessed, analyzed, or tracked",
+        "MANAGE": "Risks are prioritized and acted upon based on a projected impact"
+      },
+      "verification": "Functions and key Categories/Subcategories within GOVERN, MAP, and MEASURE verified verbatim against NIST AI 100-1 official PDF (2026-05-10 WebFetch). MANAGE function structure not exhaustively read in this pass but is consistent with the four-function framework structure documented above. Subcategory IDs cited in mappings below are from the official NIST publication.",
+      "verification_date": "2026-05-10 (verbatim for GOVERN/MAP/MEASURE; structural for MANAGE)"
+    },
+    "iso_42001": {
+      "name": "ISO/IEC 42001:2023 — Artificial Intelligence Management System",
+      "official_citation": "ISO/IEC 42001:2023 — Information technology — Artificial intelligence — Management system",
+      "scope": "International management-system standard for AI",
+      "source": "https://www.iso.org/standard/81230.html (paywalled)",
+      "clause_structure_per_management_system_standard_form": {
+        "Clause 4": "Context of the organization",
+        "Clause 5": "Leadership",
+        "Clause 6": "Planning",
+        "Clause 7": "Support",
+        "Clause 8": "Operation",
+        "Clause 9": "Performance evaluation",
+        "Clause 10": "Improvement",
+        "Annex A": "Reference control objectives and controls (normative)",
+        "Annex B": "Implementation guidance for AI controls (informative)",
+        "Annex C": "Potential AI-related organizational objectives and risk sources (informative)",
+        "Annex D": "Use of the AI management system across domains or sectors (informative)"
+      },
+      "verification": "Clause structure (4-10) follows the standard form of ISO management system standards (ISO/IEC Directives Part 1, harmonized structure). Annex A control IDs (typically A.2 through A.10 in 42001) and verbatim titles are PAYWALLED at iso.org and were NOT directly verified in this pass. Public summaries from audit firms (BSI, Schellman, A-LIGN) and IAPP describe Annex A content but the URLs tried during verification returned 404. Recommend purchasing the standard or pulling the audit firm's copy before customer-facing publication.",
+      "verification_date": "2026-05-10 (structural per ISO MSS harmonized form; verbatim NOT verified due to paywall)"
+    },
+    "owasp_llm_2025": {
+      "name": "OWASP Top 10 for LLM Applications (2025)",
+      "official_citation": "OWASP Top 10 for LLM Applications (2025) — published March 12, 2025",
+      "scope": "Voluntary security framework for LLM-based applications",
+      "source": "https://genai.owasp.org/llm-top-10/",
+      "id_format": "LLM##:YYYY (e.g., LLM01:2025, LLM02:2025)",
+      "items": {
+        "LLM01:2025": "Prompt Injection",
+        "LLM02:2025": "Sensitive Information Disclosure",
+        "LLM03:2025": "Supply Chain",
+        "LLM04:2025": "Data and Model Poisoning",
+        "LLM05:2025": "Improper Output Handling",
+        "LLM06:2025": "Excessive Agency",
+        "LLM07:2025": "System Prompt Leakage",
+        "LLM08:2025": "Vector and Embedding Weaknesses",
+        "LLM09:2025": "Misinformation",
+        "LLM10:2025": "Unbounded Consumption"
+      },
+      "verification": "All 10 item IDs and titles verified verbatim from genai.owasp.org official page (2026-05-10 WebFetch).",
+      "verification_date": "2026-05-10 (verbatim)"
+    }
+  },
+
+  "mappings": [
+    {
+      "permit_field": "id",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(8)",
+          "evidence_type": "necessary",
+          "rationale": "Risk assessment must identify the individuals who provided the information for the assessment; permit id provides traceability to specific decisions whose evidence is referenced."
+        },
+        {
+          "framework": "soc2",
+          "control_id": "CC7.3 (System Operations — incident detection/identification)",
+          "evidence_type": "partial",
+          "rationale": "Unique permit identifier supports incident reconstruction; not sufficient on its own."
+        }
+      ]
+    },
+    {
+      "permit_field": "project_id",
+      "controls": [
+        {
+          "framework": "soc2",
+          "control_id": "CC6.1 (Access Controls)",
+          "evidence_type": "partial",
+          "rationale": "Tenancy boundary identifier supports demonstrating logical access controls between tenants."
+        }
+      ]
+    },
+    {
+      "permit_field": "decision",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(G)(ii)",
+          "evidence_type": "sufficient",
+          "rationale": "For ADMT used in significant decisions per §7150(b)(3), the risk assessment must identify the output of the ADMT and how the business will use the output to make a significant decision. The permit's decision field IS that output."
+        },
+        {
+          "framework": "eu_ai_act",
+          "control_id": "Article 12(2)(a)",
+          "evidence_type": "necessary",
+          "rationale": "Article 12 logging requires recordkeeping of AI system events; the decision is the central event."
+        }
+      ]
+    },
+    {
+      "permit_field": "reason",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(G)(i)",
+          "evidence_type": "partial",
+          "rationale": "Provides human-readable narrative supporting the documentation of ADMT logic; structured decision_details is the more rigorous evidence."
+        }
+      ]
+    },
+    {
+      "permit_field": "decision_details",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(G)(i)",
+          "evidence_type": "sufficient",
+          "rationale": "The decision_details code + reason captures the ADMT's logic at evaluation time, including assumptions/limitations expressed as policy rules."
+        }
+      ]
+    },
+    {
+      "permit_field": "actions_json",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(G)(ii)",
+          "evidence_type": "partial",
+          "rationale": "Documents the actions the ADMT system takes based on the decision output."
+        }
+      ]
+    },
+    {
+      "permit_field": "subject_type + subject_id",
+      "controls": [
+        {
+          "framework": "ccpa",
+          "control_id": "California Civil Code §1798.130(a)(2)",
+          "evidence_type": "partial",
+          "rationale": "Supports verification of consumer requests; subject identifier is the binding from a permit to a verifiable consumer."
+        },
+        {
+          "framework": "soc2",
+          "control_id": "CC6.2 (User Access Control)",
+          "evidence_type": "partial",
+          "rationale": "Identifies the subject for access-control audit purposes."
+        }
+      ]
+    },
+    {
+      "permit_field": "action_name",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(1)",
+          "evidence_type": "partial",
+          "rationale": "Action name supports identifying the purpose for processing; full purpose documentation is broader and lives in policy_id/policy_version."
+        }
+      ]
+    },
+    {
+      "permit_field": "resource_provider + resource_model",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(F)",
+          "evidence_type": "partial",
+          "rationale": "Identifies the third party (AI provider) to whom the business discloses or makes available consumers' personal information for processing."
+        },
+        {
+          "framework": "eu_ai_act",
+          "control_id": "Article 26(2)",
+          "evidence_type": "partial",
+          "rationale": "Deployer obligation to use AI systems as instructed; identifying the specific provider/model is necessary to match against the provider's instructions."
+        }
+      ]
+    },
+    {
+      "permit_field": "estimated_input_tokens + estimated_output_tokens",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(D)",
+          "evidence_type": "partial",
+          "rationale": "Supports identifying the scale of processing (approximate consumer count and per-decision data volume)."
+        }
+      ]
+    },
+    {
+      "permit_field": "request_fingerprint",
+      "controls": [
+        {
+          "framework": "soc2",
+          "control_id": "CC7.2 (Monitoring of System Components)",
+          "evidence_type": "necessary",
+          "rationale": "Cryptographic fingerprint of stable request semantics enables tamper-detection and replay verification."
+        },
+        {
+          "framework": "eu_ai_act",
+          "control_id": "Article 12(1)",
+          "evidence_type": "partial",
+          "rationale": "Automatic logging of AI events; fingerprint is part of the event record."
+        }
+      ]
+    },
+    {
+      "permit_field": "binding_request_hash",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(6)(A)(iv)",
+          "evidence_type": "partial",
+          "rationale": "Cryptographic binding of the dispatched request to the permit decision supports policies/procedures ensuring ADMT works as intended (i.e., no covert request alteration)."
+        },
+        {
+          "framework": "eu_ai_act",
+          "control_id": "Article 12(1)",
+          "evidence_type": "necessary",
+          "rationale": "Evidence that the request as evaluated matches the request as dispatched is foundational to event integrity in the logging requirement."
+        }
+      ]
+    },
+    {
+      "permit_field": "idempotency_key",
+      "controls": [
+        {
+          "framework": "soc2",
+          "control_id": "CC7.1 (System Operations)",
+          "evidence_type": "partial",
+          "rationale": "Idempotency keys support deduplication and replay-safety of automated operations."
+        }
+      ]
+    },
+    {
+      "permit_field": "policy_id + policy_version",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(6)(A)(iv)",
+          "evidence_type": "necessary",
+          "rationale": "Policy version stamp identifies the specific policies/procedures the business has implemented to ensure ADMT works as intended; combined with policy diff tracking, supports change-management evidence."
+        },
+        {
+          "framework": "soc2",
+          "control_id": "CC8.1 (Change Management)",
+          "evidence_type": "necessary",
+          "rationale": "Policy version on every decision enables traceability to a specific change-management record."
+        }
+      ]
+    },
+    {
+      "permit_field": "created_at",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(B) + §7155(a)",
+          "evidence_type": "necessary",
+          "rationale": "Timestamp drives retention-period calculation; risk assessment must document retention period and criteria. Combined with retention engine, supports the §7155 timing requirements."
+        },
+        {
+          "framework": "eu_ai_act",
+          "control_id": "Article 26(6)",
+          "evidence_type": "necessary",
+          "rationale": "Article 26(6) requires high-risk AI deployer logs to be kept ≥6 months; created_at is the anchor for that retention window."
+        },
+        {
+          "framework": "ccpa",
+          "control_id": "California Civil Code §1798.105(d)(2) and (d)(8)",
+          "evidence_type": "necessary",
+          "rationale": "Permit timestamp supports the retention defense under deletion-exception carve-outs (security/integrity per (d)(2); legal-obligation retention per (d)(8))."
+        }
+      ]
+    },
+    {
+      "permit_field": "parent_permit_id + delegation_depth",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(A)",
+          "evidence_type": "partial",
+          "rationale": "Lineage supports documenting the business's planned method for collecting/using/disclosing personal information across multi-step automated workflows."
+        }
+      ]
+    },
+    {
+      "permit_field": "status",
+      "controls": [
+        {
+          "framework": "soc2",
+          "control_id": "CC7.4 (System Operations — Incident Response)",
+          "evidence_type": "partial",
+          "rationale": "Lifecycle status (evaluated, bound, dispatched, closed, expired, revoked) supports tracing incident scope to specific permit lifecycle stages."
+        }
+      ]
+    }
+  ],
+
+  "audit_export_bundle_mappings": [
+    {
+      "artifact": "Signed audit export bundle (manifest with content_hash + Ed25519 signature)",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7155(a)(2)",
+          "evidence_type": "sufficient",
+          "rationale": "Risk assessments must be retained, reviewed and updated at least every 3 years. Signed export bundle is a tamper-evident retention artifact supporting that obligation."
+        },
+        {
+          "framework": "eu_ai_act",
+          "control_id": "Article 26(6)",
+          "evidence_type": "sufficient",
+          "rationale": "Provides the cryptographically verifiable retention substrate for high-risk AI deployer logs to be kept under deployer control for ≥6 months."
+        }
+      ]
+    },
+    {
+      "artifact": "RFC 3161 timestamp receipt anchored to integrity checkpoint",
+      "controls": [
+        {
+          "framework": "soc2",
+          "control_id": "CC7.5 (System Operations — Logging)",
+          "evidence_type": "partial",
+          "rationale": "Independent third-party time witness supports nonrepudiation claims about when events occurred."
+        }
+      ]
+    },
+    {
+      "artifact": "Hash chain (per-project, per-scope continuity)",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(6)(A)(i)",
+          "evidence_type": "necessary",
+          "rationale": "Listed safeguard for risk assessments includes encryption, segmentation, access controls, change management, network monitoring, and data and integrity monitoring. Hash chain is data-integrity monitoring evidence."
+        }
+      ]
+    }
+  ],
+
+  "framework_overlays": {
+    "nist_ai_rmf": [
+      {
+        "subcategory": "GOVERN 1.1",
+        "verbatim": "Legal and regulatory requirements involving AI are understood, managed, and documented.",
+        "permit_evidence": [
+          "policy_id + policy_version stamp every Permit with the regulatory framework the policy was authored against",
+          "Signed audit exports provide tamper-evident documentation that decisions complied with the stated policy"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "subcategory": "GOVERN 1.4",
+        "verbatim": "The risk management process and its outcomes are established through transparent policies, procedures, and other controls based on organizational risk priorities.",
+        "permit_evidence": [
+          "policy_id + policy_version + permit decision_details establish the transparent connection from policy → decision",
+          "Hash chain provides tamper-evident outcomes"
+        ],
+        "evidence_type": "sufficient"
+      },
+      {
+        "subcategory": "GOVERN 1.5",
+        "verbatim": "Ongoing monitoring and periodic review of the risk management process and its outcomes are planned and organizational roles and responsibilities clearly defined, including determining the frequency of periodic review.",
+        "permit_evidence": [
+          "Replay drift taxonomy enables ongoing monitoring of whether policy decisions remain consistent over time",
+          "Audit exports provide the artifact for periodic review"
+        ],
+        "evidence_type": "necessary"
+      },
+      {
+        "subcategory": "GOVERN 1.6",
+        "verbatim": "Mechanisms are in place to inventory AI systems and are resourced according to organizational risk priorities.",
+        "permit_evidence": [
+          "resource_provider + resource_model on every Permit forms a queryable inventory of every AI system the organization has used",
+          "permit lineage (parent_permit_id + delegation_depth) tracks compositional AI system use"
+        ],
+        "evidence_type": "sufficient"
+      },
+      {
+        "subcategory": "GOVERN 4.2",
+        "verbatim": "Organizational teams document the risks and potential impacts of the AI technology they design, develop, deploy, evaluate, and use, and they communicate about the impacts more broadly.",
+        "permit_evidence": [
+          "Every Permit is documentation of an evaluated AI use; decision_details captures the risk-relevant context",
+          "Audit exports are the broader-communication artifact"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "subcategory": "GOVERN 6.1",
+        "verbatim": "Policies and procedures are in place that address AI risks associated with third-party entities, including risks of infringement of a third-party's intellectual property or other rights.",
+        "permit_evidence": [
+          "resource_provider identifies the third-party AI vendor; routing decisions track multi-vendor exposure",
+          "Closure records bind to specific vendor responses, enabling third-party-attributable evidence"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "subcategory": "MAP 1.1",
+        "verbatim": "Intended purposes, potentially beneficial uses, context-specific laws, norms and expectations, and prospective settings in which the AI system will be deployed are understood and documented.",
+        "permit_evidence": [
+          "subject_type + subject_id + action_name + project_id together document the intended-use context for every AI invocation",
+          "policy_id captures the context-specific laws/norms encoded as policy"
+        ],
+        "evidence_type": "necessary"
+      },
+      {
+        "subcategory": "MAP 2.2",
+        "verbatim": "Information about the AI system's knowledge limits and how system output may be utilized and overseen by humans is documented. Documentation provides sufficient information to assist relevant AI actors when making decisions and taking subsequent actions.",
+        "permit_evidence": [
+          "decision_details captures the AI system's reasoning and limits at decision time",
+          "actions_json documents how the output is used; closure record binds the actual output"
+        ],
+        "evidence_type": "sufficient"
+      },
+      {
+        "subcategory": "MEASURE 2.4",
+        "verbatim": "The functionality and behavior of the AI system and its components — as identified in the MAP function — are monitored when in production.",
+        "permit_evidence": [
+          "Every production AI call produces a Permit; closure record binds actual production behavior",
+          "Replay enables continuous-monitoring comparison of intended vs actual decisions"
+        ],
+        "evidence_type": "sufficient"
+      },
+      {
+        "subcategory": "MEASURE 2.7",
+        "verbatim": "AI system security and resilience — as identified in the MAP function — are evaluated and documented.",
+        "permit_evidence": [
+          "Hash chain + Ed25519 signed exports provide cryptographic evidence of integrity (security)",
+          "RFC 3161 timestamped checkpoints provide tamper-evident time-witness (resilience)"
+        ],
+        "evidence_type": "necessary"
+      },
+      {
+        "subcategory": "MEASURE 2.8",
+        "verbatim": "Risks associated with transparency and accountability — as identified in the MAP function — are examined and documented.",
+        "permit_evidence": [
+          "Audit exports + offline verifier provide vendor-independent transparency",
+          "Three trust-root channels (Keel API, PyPI, GitHub) make accountability evidence verifiable post-vendor"
+        ],
+        "evidence_type": "sufficient"
+      },
+      {
+        "subcategory": "MEASURE 2.9",
+        "verbatim": "The AI model is explained, validated, and documented, and AI system output is interpreted within its context — as identified in the MAP function — to inform responsible use and governance.",
+        "permit_evidence": [
+          "decision_details + closure record document the model output within its decision context",
+          "Replay validates that the documented decision still reproduces under the recorded snapshot"
+        ],
+        "evidence_type": "necessary"
+      },
+      {
+        "subcategory": "MEASURE 2.11",
+        "verbatim": "Fairness and bias — as identified in the MAP function — are evaluated and results are documented.",
+        "permit_evidence": [
+          "Replay drift detection identifies whether decisions become biased over time",
+          "Audit exports retain the evaluation evidence under cryptographic integrity"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "subcategory": "MEASURE 3.1",
+        "verbatim": "Approaches, personnel, and documentation are in place to regularly identify and track existing, unanticipated, and emergent AI risks based on factors such as intended and actual performance in deployed contexts.",
+        "permit_evidence": [
+          "Replay drift taxonomy provides systematic tracking of decision changes",
+          "Permits + closure records compare intended (decision) vs actual (closure) AI performance"
+        ],
+        "evidence_type": "necessary"
+      }
+    ],
+    "owasp_llm_2025": [
+      {
+        "item": "LLM01:2025",
+        "name": "Prompt Injection",
+        "permit_evidence": [
+          "binding_request_hash binds the canonical wire-body bytes at dispatch time; any post-decision request alteration (including prompt injection that mutates the request payload after the policy decision) is cryptographically detectable",
+          "request_fingerprint stable semantic fingerprint detects semantic-level prompt manipulation across the request lifecycle"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "item": "LLM02:2025",
+        "name": "Sensitive Information Disclosure",
+        "permit_evidence": [
+          "Permit decision can deny or constrain operations that would disclose sensitive information before execution",
+          "Audit exports provide post-incident forensic evidence of what sensitive content (if any) was processed and through which provider"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "item": "LLM03:2025",
+        "name": "Supply Chain",
+        "permit_evidence": [
+          "resource_provider + resource_model identify the specific AI supply-chain component used for each decision",
+          "Permit policy_id can encode supply-chain governance rules (allowlist of providers, model versions, etc.)"
+        ],
+        "evidence_type": "sufficient"
+      },
+      {
+        "item": "LLM05:2025",
+        "name": "Improper Output Handling",
+        "permit_evidence": [
+          "Closure record's client_response_digest_v1 binds the bytes actually delivered to the client, enabling post-hoc validation that output handling was correct",
+          "Replay drift detection identifies if output validation behavior has changed"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "item": "LLM06:2025",
+        "name": "Excessive Agency",
+        "permit_evidence": [
+          "Permit primitive is the pre-execution authorization for every agent action — agency is bounded by policy, not by the LLM's autonomous capabilities",
+          "actions_json + constraints_json define the bounds of authorized agency for each decision",
+          "Permit lineage (parent_permit_id, delegation_depth) tracks delegated agency across multi-step workflows"
+        ],
+        "evidence_type": "sufficient"
+      },
+      {
+        "item": "LLM07:2025",
+        "name": "System Prompt Leakage",
+        "permit_evidence": [
+          "binding_request_hash detects if the system prompt portion of the request differs at dispatch from what was authorized at decision time"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "item": "LLM08:2025",
+        "name": "Vector and Embedding Weaknesses",
+        "permit_evidence": [
+          "Audit exports retain the resource_inputs_json (which may include reference to embedding/vector inputs) for forensic review",
+          "Replay drift detection may identify if vector-retrieval behavior has changed over time"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "item": "LLM09:2025",
+        "name": "Misinformation",
+        "permit_evidence": [
+          "Closure record + replay provide post-hoc auditability of what the LLM actually output and under what decision context",
+          "Permit decision_details + audit exports help establish ground-truth narrative for misinformation incidents"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "item": "LLM10:2025",
+        "name": "Unbounded Consumption",
+        "permit_evidence": [
+          "Permit budgets_json + constraints_json enforce per-call consumption limits at pre-execution",
+          "actual_input_tokens + actual_output_tokens + actual_cost_usd_micros provide consumption telemetry; usage_ledger supports budget reconciliation"
+        ],
+        "evidence_type": "sufficient"
+      }
+    ],
+    "soc2_category_level": {
+      "note": "Mapping is at the CATEGORY level (CC1 through CC9). Sub-criterion verbatim text was not directly verified in this pass due to AICPA gating; confirm sub-criterion IDs and verbatim from the AICPA TSC 2017 (with 2022 revisions) document before customer-facing publication.",
+      "mappings": [
+        {
+          "category": "CC3 Risk Assessment",
+          "permit_evidence": "Permit decision + risk-assessment evidence in audit exports support CC3 control activities. Sub-criterion alignment likely CC3.1 (risk identification) and CC3.2 (risk analysis); verify."
+        },
+        {
+          "category": "CC6 Logical and Physical Access Controls",
+          "permit_evidence": "Permit subject_type + subject_id + RBAC integration support CC6 user identification and access control evidence. Sub-criterion alignment likely CC6.1 (access controls), CC6.2 (user provisioning), CC6.6 (authentication); verify."
+        },
+        {
+          "category": "CC7 System Operations",
+          "permit_evidence": "Hash chain + signed exports + RFC 3161 timestamps support CC7 monitoring and logging evidence. Sub-criterion alignment likely CC7.1 (detection of vulnerabilities/anomalies), CC7.2 (monitoring), CC7.3 (anomaly evaluation); verify."
+        },
+        {
+          "category": "CC8 Change Management",
+          "permit_evidence": "policy_id + policy_version stamping on every decision provides change-management traceability per AI decision. Sub-criterion alignment likely CC8.1 (change authorization, testing, approval); verify."
+        },
+        {
+          "category": "CC9 Risk Mitigation",
+          "permit_evidence": "Permit constraints_json + budgets_json + denial decisions provide pre-execution risk mitigation; replay drift detection supports CC9 ongoing risk mitigation review. Sub-criterion alignment likely CC9.1 (risk mitigation activities); verify."
+        }
+      ]
+    },
+    "iso_42001_clause_level": {
+      "note": "Mapping is at the CLAUSE level (Clauses 4 through 10 + Annex A) per the standard form of ISO management system standards. Verbatim clause titles and Annex A control IDs/titles are paywalled at iso.org and were NOT directly verified in this pass. Verify against the purchased standard or audit firm copy before customer-facing publication.",
+      "mappings": [
+        {
+          "clause": "Clause 6 (Planning)",
+          "permit_evidence": "Permit policy_id + policy_version stamps demonstrate planned AI use is documented; AI objectives and risk treatment are encoded in policy. Sub-clause alignment likely 6.1 (actions to address risks) and 6.2 (AI objectives); verify."
+        },
+        {
+          "clause": "Clause 8 (Operation)",
+          "permit_evidence": "Permit primitive itself IS the operational artifact of the AI Management System — every operational AI use produces tamper-evident evidence. Sub-clause alignment likely 8.1 (operational planning and control); verify."
+        },
+        {
+          "clause": "Clause 9 (Performance evaluation)",
+          "permit_evidence": "Audit exports + replay drift detection support Clause 9 performance evaluation. Sub-clause alignment likely 9.1 (monitoring, measurement, analysis, evaluation) and 9.3 (management review); verify."
+        },
+        {
+          "clause": "Clause 10 (Improvement)",
+          "permit_evidence": "Replay drift + permit lineage + policy diff tracking support continuous improvement evidence. Sub-clause alignment likely 10.1 (nonconformity and corrective action); verify."
+        },
+        {
+          "clause": "Annex A (Reference controls)",
+          "permit_evidence": "Verbatim Annex A control IDs (typically A.2 through A.10 with subcontrols) were not directly verified in this pass due to ISO paywall. Annex A controls covering 'AI system documentation,' 'AI system operations records,' and 'third-party AI risk' are likely the most directly applicable; verify against the standard or audit firm copy."
+        }
+      ]
+    }
+  },
+
+  "explicit_non_mappings": [
+    {
+      "framework": "cppa_admt_regs",
+      "control_id": "11 CCR §7150(b)(4)(E) (proposed text)",
+      "status": "DOES NOT APPLY",
+      "rationale": "Proposed-text trigger 'operation of generative models, such as large language models' was REMOVED in the September 2025 final adopted text. Do not cite as a current trigger. Final scope is limited to ADMT used to REPLACE human decisionmaking for significant decisions (§7150(b)(3)) or training ADMT for those uses or for identity-biological-profiling tech (§7150(b)(6))."
+    },
+    {
+      "framework": "cppa_admt_regs",
+      "control_id": "11 CCR §7152(a)(2)(B) (proposed text)",
+      "status": "REMOVED IN FINAL",
+      "rationale": "ADMT 'quality of personal information' sub-block (completeness/representativeness/timeliness/validity/accuracy/consistency/reliability) was removed from §7152(a)(2) in the final adopted text. Final §7152(a)(2) only requires identifying categories of personal information processed."
+    },
+    {
+      "framework": "cppa_admt_regs",
+      "control_id": "11 CCR §7152(a)(6)(B) (proposed text)",
+      "status": "COLLAPSED IN FINAL",
+      "rationale": "The detailed ADMT evaluation framework with three sub-requirements in proposed (a)(6)(B)(i)–(iii) was reduced to a single line at final §7152(a)(6)(A)(iv): 'Implementing policies, procedures, and training to ensure that the business's ADMT works for the business's purpose and does not unlawfully discriminate based upon protected characteristics.'"
+    }
+  ]
+}
