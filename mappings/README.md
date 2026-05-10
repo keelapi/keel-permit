@@ -4,13 +4,14 @@ Machine-readable mapping from Permit v1 wire-format fields and audit-export-bund
 
 ## Status
 
-**Draft, version 0.1.0.** Three verification tiers reflected in the JSON's `verification_status` block:
+**Draft, version 0.1.0.** Two verification tiers remain active in the JSON's `verification_status` block:
 
 | Tier | Frameworks | Status |
 |---|---|---|
-| **Verbatim verified** (`verified_2026_05_10`) | CCPA §1798.105(d), 11 CCR §7001/§7150/§7152/§7155, EU AI Act Art 26(6), GDPR Art 17(3)(b), NIST AI RMF 1.0, OWASP LLM Top 10 (2025), **ISO/IEC 42001:2023 Clauses 3-10 + subclauses + Annex structure**, **AICPA SOC 2 Trust Services Criteria CC1.1–CC9.2** | Subsection IDs and verbatim titles confirmed from official source documents on 2026-05-10. ISO 42001 clauses + subclauses + Clause 3 definitions + annex structure verified from authoritative ISO/IEC publication preview distributed via iTeh Standards. SOC 2 common criteria (CC1–CC9 sub-criteria) verified verbatim from the authoritative AICPA-published TSP Section 100 (2017 TSC with Revised Points of Focus — 2022). |
+| **Verbatim verified** (`verified_2026_05_10`) | CCPA §1798.105(d), 11 CCR §7001/§7150/§7152/§7155, EU AI Act Art 26(6), GDPR Art 17(3)(b), NIST AI RMF 1.0, OWASP LLM Top 10 (2025), **ISO/IEC 42001:2023 Clauses 3-10 + subclauses + Annex structure**, **AICPA SOC 2 Trust Services Criteria CC1.1–CC9.2**, **MITRE ATLAS 14 tactics + ~50 techniques**, **OWASP API Security Top 10 (2023)**, **OWASP ASVS v5.0.0** | Subsection IDs and verbatim titles confirmed from official source documents on 2026-05-10. ISO 42001 clauses + subclauses + Clause 3 definitions + annex structure verified from authoritative ISO/IEC publication preview distributed via iTeh Standards. SOC 2 common criteria verified verbatim from the authoritative AICPA-published TSP Section 100 (2017 TSC with Revised Points of Focus — 2022). MITRE ATLAS verified from canonical ATLAS.yaml at github.com/mitre-atlas/atlas-data. OWASP API and ASVS verified from owasp.org and github.com/OWASP/ASVS respectively. |
 | **Single-source / medium confidence** (`verified_single_source`) | ISO/IEC 42001:2023 individual Annex A control titles | Annex A control IDs are multi-source corroborated; verbatim title wording varies slightly across public sources. Authoritative iTeh preview ends at Clause 4.4 (Annex A is in the paywalled portion). Confirm verbatim titles against the official standard or an audit-firm copy before customer-facing publication. |
-| **Draft / unverified** (`draft_unverified`) | MITRE ATLAS, OWASP API Security / ASVS | Not yet mapped in this revision |
+
+`verified_structurally_only` and `draft_unverified` tiers are both empty after the 2026-05-10 verification pass.
 
 ## Files
 
@@ -37,6 +38,9 @@ Machine-readable mapping from Permit v1 wire-format fields and audit-export-bund
 | ISO/IEC 42001:2023 Clause 3 Terms and Definitions (3.1-3.26) | cdn.standards.iteh.ai (iTeh authoritative preview pages 1-4) | Direct read, verbatim definitions |
 | ISO/IEC 42001:2023 Annex structure (A normative, B normative, C informative, D informative) | cdn.standards.iteh.ai (iTeh authoritative preview ToC) | Direct read; correction note: Annex B is **NORMATIVE** in the final standard (earlier public drafts and some third-party summaries had Annex B as informative) |
 | AICPA SOC 2 Trust Services Criteria — common criteria CC1.1 through CC9.2 (33 sub-criteria) | AICPA TSP Section 100, 2017 TSC with Revised Points of Focus — 2022 (registration-gated public download) | Direct PDF read of authoritative AICPA publication, pages 14-48; all sub-criterion titles captured verbatim |
+| MITRE ATLAS — 14 tactics (AML.TA0000-AML.TA0015) and ~50 technique IDs+titles | github.com/mitre-atlas/atlas-data/dist/ATLAS.yaml (canonical machine-readable source) | Direct fetch of ATLAS.yaml on 2026-05-10; note current ATLAS terminology uses "AI" not "ML" (e.g., "AI Model Inference API Access") |
+| OWASP API Security Top 10 (2023) — API1:2023 through API10:2023 | owasp.org/API-Security/editions/2023/en/0x11-t10/ | Direct WebFetch on 2026-05-10, verbatim |
+| OWASP ASVS v5.0.0 — chapters V1-V17 | github.com/OWASP/ASVS/tree/master/5.0/en (canonical 5.0 source folder) | Direct fetch on 2026-05-10; ASVS v5 chapter numbering is NOT backwards-compatible with v4 |
 
 ### Verified single-source (medium confidence)
 
@@ -114,6 +118,30 @@ The JSON file structure:
 - **necessary** — the field is required to satisfy the control but may need additional evidence to be sufficient
 - **sufficient** — the field directly satisfies the control
 - **partial** — the field contributes evidence but is not necessary nor sufficient on its own
+
+## Coverage scope for security/adversary frameworks
+
+Three frameworks added in the 2026-05-10 pass have **narrower natural mappings** than the compliance/AI-governance frameworks. This is intentional — Permit is pre-execution governance plus tamper-evident evidence, not adversary detection or general application security. Honest scoping:
+
+### MITRE ATLAS (~13 of ~50 techniques mapped)
+
+In scope: AI Model Access (T0040, T0044, T0047), Execution (T0050, T0051, T0053), Defense Evasion / Privilege Escalation (T0054), Exfiltration (T0024, T0056), Impact (T0029, T0034, T0046), Initial Access (T0049 as partial).
+
+Explicitly out of scope: Reconnaissance, Discovery, Persistence, Lateral Movement, Command and Control. These are SOC/EDR responsibilities, not Permit-primitive scope.
+
+### OWASP API Security Top 10 (2023) — 8 of 10 items mapped
+
+Mapped: API1 (BOLA), API2 (Broken Auth — necessary identity context), API3 (Property-level Authz), API4 (Resource Consumption — sufficient via budgets), API5 (Function-level Authz — sufficient), API6 (Sensitive Business Flows), API9 (Inventory), API10 (Unsafe Consumption of APIs).
+
+Explicit non-mappings: **API7 Server Side Request Forgery** (network-layer concern), **API8 Security Misconfiguration** (deployment/config baseline concern). Both are listed in `explicit_non_mappings`.
+
+### OWASP ASVS v5.0.0 — 6 of 17 chapters mapped
+
+Mapped: V4 (API and Web Service), V8 (Authorization), V11 (Cryptography), V13 (Configuration), V14 (Data Protection), V16 (Security Logging and Error Handling).
+
+Not load-bearing for Permit: V1, V3, V5, V7, V17. **V17 WebRTC** is in `explicit_non_mappings` because Permit has no WebRTC surface.
+
+**Version qualifier matters:** ASVS v5 (2025) is NOT backwards-compatible with v4. Cite as "ASVS v5.0.0" in customer-facing artifacts to avoid the v4 vs v5 ambiguity (e.g., v5 V8 = Authorization; v4 V8 = Data Protection — different chapters entirely).
 
 ## Multi-source verification methodology (ISO 42001 lesson learned)
 
