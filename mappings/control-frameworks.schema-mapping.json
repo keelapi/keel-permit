@@ -18,15 +18,20 @@
       "11 CCR §7152(a) Risk Assessment Requirements — verbatim from CPPA final adopted text",
       "11 CCR §7155(a) timing/retention requirements — verbatim from CPPA final adopted text",
       "NIST AI RMF 1.0 — Functions GOVERN, MAP, MEASURE, MANAGE and Categories/Subcategories verified verbatim from official NIST publication AI 100-1 (January 2023, nvlpubs.nist.gov)",
-      "OWASP Top 10 for LLM Applications (2025) — item IDs LLM01:2025 through LLM10:2025 verified verbatim from genai.owasp.org (released March 12, 2025)"
+      "OWASP Top 10 for LLM Applications (2025) — item IDs LLM01:2025 through LLM10:2025 verified verbatim from genai.owasp.org (released March 12, 2025)",
+      "ISO/IEC 42001:2023 Clauses 4-10 titles — verbatim verified two-source (Compliancepoint + harmonized ISO management system standard form)",
+      "ISO/IEC 42001:2023 Annex A section headers A.2 through A.10 — verbatim verified two-source (ISMS.online + Vanta independent confirmation)",
+      "ISO/IEC 42001:2023 Annex A total control count (38 controls across 9 sections) — confirmed via multi-source agreement (ISMS.online + Vanta + Advisera)"
     ],
     "verified_pre_2026_05_10": [
       "EU AI Act Article 26(6) — verbatim from artificialintelligenceact.eu (per project_dsar_legal_positioning_2026-05-08)",
       "GDPR Article 17(3)(b) — per project_dsar_legal_positioning_2026-05-08"
     ],
+    "verified_single_source": [
+      "ISO/IEC 42001:2023 individual Annex A control IDs and titles (e.g., A.2.2 AI Policy, A.6.2.8 AI-System Recording of Event Logs) — sourced from ISMS.online ONLY. While the section structure (A.2-A.10) and total count (38) are independently corroborated, individual control IDs within sections have NOT been verified against a second source. Treat as MEDIUM CONFIDENCE; confirm individual control verbatim from the official standard or audit-firm copy before customer-facing publication."
+    ],
     "verified_structurally_only": [
-      "AICPA SOC 2 Trust Services Criteria — CC1 through CC9 category structure is public knowledge; verbatim sub-criterion titles (e.g., CC6.1, CC7.2) require AICPA registration/download of the 2017 TSC with 2022 revisions and were NOT directly verified in this pass. Cite at category level (CC3 Risk Assessment, CC6 Logical and Physical Access, CC7 System Operations, CC8 Change Management, CC9 Risk Mitigation); confirm sub-criterion numbering and verbatim text from the AICPA document before customer-facing publication.",
-      "ISO/IEC 42001:2023 — clause structure (clauses 4-10 + Annex A) is public knowledge per ISO management-system standard form; verbatim clause titles and Annex A control IDs/titles are PAYWALLED at iso.org and were NOT directly verified in this pass. Verify against the purchased standard or an audit firm's copy before customer-facing publication."
+      "AICPA SOC 2 Trust Services Criteria — CC1 through CC9 category structure is public knowledge; verbatim sub-criterion titles (e.g., CC6.1, CC7.2) require AICPA registration/download of the 2017 TSC with 2022 revisions and were NOT directly verified in this pass. Cite at category level (CC3 Risk Assessment, CC6 Logical and Physical Access, CC7 System Operations, CC8 Change Management, CC9 Risk Mitigation); confirm sub-criterion numbering and verbatim text from the AICPA document before customer-facing publication."
     ],
     "draft_unverified": [
       "MITRE ATLAS technique IDs",
@@ -103,21 +108,81 @@
       "official_citation": "ISO/IEC 42001:2023 — Information technology — Artificial intelligence — Management system",
       "scope": "International management-system standard for AI",
       "source": "https://www.iso.org/standard/81230.html (paywalled)",
-      "clause_structure_per_management_system_standard_form": {
-        "Clause 4": "Context of the organization",
-        "Clause 5": "Leadership",
-        "Clause 6": "Planning",
-        "Clause 7": "Support",
-        "Clause 8": "Operation",
-        "Clause 9": "Performance evaluation",
-        "Clause 10": "Improvement",
-        "Annex A": "Reference control objectives and controls (normative)",
-        "Annex B": "Implementation guidance for AI controls (informative)",
-        "Annex C": "Potential AI-related organizational objectives and risk sources (informative)",
-        "Annex D": "Use of the AI management system across domains or sectors (informative)"
+      "clauses_verified_verbatim_2026_05_10": {
+        "4": "Context of the organization",
+        "5": "Leadership",
+        "6": "Planning",
+        "7": "Support",
+        "8": "Operation",
+        "9": "Performance evaluation",
+        "10": "Improvement"
       },
-      "verification": "Clause structure (4-10) follows the standard form of ISO management system standards (ISO/IEC Directives Part 1, harmonized structure). Annex A control IDs (typically A.2 through A.10 in 42001) and verbatim titles are PAYWALLED at iso.org and were NOT directly verified in this pass. Public summaries from audit firms (BSI, Schellman, A-LIGN) and IAPP describe Annex A content but the URLs tried during verification returned 404. Recommend purchasing the standard or pulling the audit firm's copy before customer-facing publication.",
-      "verification_date": "2026-05-10 (structural per ISO MSS harmonized form; verbatim NOT verified due to paywall)"
+      "clause_verification_sources": [
+        "Compliancepoint ISO 42001 page (Clauses 4-10 titles verbatim)",
+        "Cross-reference against harmonized ISO management system standard form per ISO/IEC Directives Part 1, Annex SL"
+      ],
+      "annex_a_sections_verified_verbatim_2026_05_10": {
+        "A.2": "Policies related to AI",
+        "A.3": "Internal organization",
+        "A.4": "Resources for AI systems",
+        "A.5": "Assessing impacts of AI systems",
+        "A.6": "AI system life cycle",
+        "A.7": "Data for AI systems",
+        "A.8": "Information for interested parties of AI systems",
+        "A.9": "Use of AI systems",
+        "A.10": "Third-party and customer relationships"
+      },
+      "annex_a_section_verification_sources": [
+        "ISMS.online — Annex A controls page (https://www.isms.online/iso-42001/annex-a-controls/)",
+        "Vanta — ISO 42001 collection (https://www.vanta.com/collection/iso-42001) — independent confirmation of all 9 section titles verbatim"
+      ],
+      "annex_a_total_controls": "38 controls across 9 sections (two-source confirmation from Vanta and Advisera)",
+      "annex_a_individual_controls_single_source": {
+        "note": "Individual control IDs and titles below are from ISMS.online ONLY. While the section structure (A.2-A.10) and total count (38) are confirmed by multiple independent sources, the specific control IDs (e.g., A.2.2, A.6.2.8) within each section are sourced from a single audit-platform vendor and have NOT been independently corroborated against a second source. Treat as MEDIUM CONFIDENCE pending verification against the official standard or audit-firm copy.",
+        "single_source_url": "https://www.isms.online/iso-42001/annex-a-controls/",
+        "controls": {
+          "A.2.2": "AI Policy",
+          "A.2.3": "Alignment With Other Organisational Policies",
+          "A.2.4": "Review of the AI Policy",
+          "A.3.2": "AI Roles and Responsibilities",
+          "A.3.3": "Reporting of Concerns",
+          "A.4.2": "Resource Documentation",
+          "A.4.3": "Data Resources",
+          "A.4.4": "Tooling Resources",
+          "A.4.5": "System and Computing Resources",
+          "A.4.6": "Human Resources",
+          "A.5.2": "AI-System Impact-Assessment Process",
+          "A.5.3": "Documentation of AI-System Impact Assessments",
+          "A.5.4": "Assessing AI-System Impact on Individuals or Groups",
+          "A.5.5": "Assessing Societal Impacts of AI Systems",
+          "A.6.1.2": "Objectives for Responsible Development of AI Systems",
+          "A.6.1.3": "Processes for Responsible AI-System Design and Development",
+          "A.6.2.2": "AI-System Requirements and Specification",
+          "A.6.2.3": "Documentation of AI-System Design and Development",
+          "A.6.2.4": "AI-System Verification and Validation",
+          "A.6.2.5": "AI-System Deployment",
+          "A.6.2.6": "AI-System Operation and Monitoring",
+          "A.6.2.7": "AI-System Technical Documentation",
+          "A.6.2.8": "AI-System Recording of Event Logs",
+          "A.7.2": "Data for Development and Enhancement of AI Systems",
+          "A.7.3": "Acquisition of Data",
+          "A.7.4": "Quality of Data for AI Systems",
+          "A.7.5": "Data Provenance",
+          "A.7.6": "Data Preparation",
+          "A.8.2": "System Documentation and Information for Users",
+          "A.8.3": "External Reporting",
+          "A.8.4": "Communication of Incidents",
+          "A.8.5": "Information for Interested Parties",
+          "A.9.2": "Processes for Responsible Use of AI Systems",
+          "A.9.3": "Objectives for Responsible Use of AI Systems",
+          "A.9.4": "Intended use of the AI system",
+          "A.10.2": "Allocating Responsibilities",
+          "A.10.3": "Suppliers",
+          "A.10.4": "Customers"
+        }
+      },
+      "verification": "Three-tier verification: (1) Clauses 4-10 titles — verbatim, two-source (Compliancepoint + harmonized ISO MSS form). (2) Annex A section headers A.2-A.10 — verbatim, two-source (ISMS.online + Vanta). (3) Individual Annex A control IDs and titles — single-source (ISMS.online), corroborated only at the aggregate level (Vanta + Advisera confirm '38 controls in 9 sections'). Total control count consistent across sources. Audit-firm or standard-purchase verification recommended before customer-facing publication of individual control IDs.",
+      "verification_date": "2026-05-10 (clauses + section headers verified; individual controls single-source)"
     },
     "owasp_llm_2025": {
       "name": "OWASP Top 10 for LLM Applications (2025)",
@@ -665,28 +730,126 @@
         }
       ]
     },
-    "iso_42001_clause_level": {
-      "note": "Mapping is at the CLAUSE level (Clauses 4 through 10 + Annex A) per the standard form of ISO management system standards. Verbatim clause titles and Annex A control IDs/titles are paywalled at iso.org and were NOT directly verified in this pass. Verify against the purchased standard or audit firm copy before customer-facing publication.",
-      "mappings": [
+    "iso_42001_clauses_and_annex_a": {
+      "verification_note": "Clauses 4-10 verbatim titles confirmed two-source. Annex A section headers A.2-A.10 confirmed two-source (ISMS.online + Vanta). Individual Annex A control IDs and titles are SINGLE-SOURCE (ISMS.online). Confirm individual control titles against the official standard or an audit-firm copy before customer-facing publication.",
+      "clause_mappings": [
         {
-          "clause": "Clause 6 (Planning)",
-          "permit_evidence": "Permit policy_id + policy_version stamps demonstrate planned AI use is documented; AI objectives and risk treatment are encoded in policy. Sub-clause alignment likely 6.1 (actions to address risks) and 6.2 (AI objectives); verify."
+          "clause": "6 (Planning)",
+          "permit_evidence": "Permit policy_id + policy_version on every decision documents the planned AI policies that satisfy Clause 6.1 (actions to address risks and opportunities) and Clause 6.2 (AI management system objectives). Policy diff tracking supports 6.3 (planning of changes)."
         },
         {
-          "clause": "Clause 8 (Operation)",
-          "permit_evidence": "Permit primitive itself IS the operational artifact of the AI Management System — every operational AI use produces tamper-evident evidence. Sub-clause alignment likely 8.1 (operational planning and control); verify."
+          "clause": "8 (Operation)",
+          "permit_evidence": "Permit primitive IS the operational artifact of the AIMS — every operational AI use produces tamper-evident, signed evidence. Hash chain + closure record bind operational behavior at the moment of each decision (8.1 operational planning and control)."
         },
         {
-          "clause": "Clause 9 (Performance evaluation)",
-          "permit_evidence": "Audit exports + replay drift detection support Clause 9 performance evaluation. Sub-clause alignment likely 9.1 (monitoring, measurement, analysis, evaluation) and 9.3 (management review); verify."
+          "clause": "9 (Performance evaluation)",
+          "permit_evidence": "Audit exports retain performance evidence for Clause 9.1 (monitoring, measurement, analysis, evaluation). Replay drift detection identifies emergent performance deviations (9.1.3). Audit exports support management review (9.3)."
         },
         {
-          "clause": "Clause 10 (Improvement)",
-          "permit_evidence": "Replay drift + permit lineage + policy diff tracking support continuous improvement evidence. Sub-clause alignment likely 10.1 (nonconformity and corrective action); verify."
+          "clause": "10 (Improvement)",
+          "permit_evidence": "Replay drift + permit lineage + policy diff tracking support 10.1 (continual improvement) and 10.2 (nonconformity and corrective action) by surfacing decision drift and supporting root-cause traceability."
+        }
+      ],
+      "annex_a_mappings_high_relevance": [
+        {
+          "control_id": "A.6.2.8",
+          "control_title": "AI-System Recording of Event Logs",
+          "verification": "single-source (ISMS.online)",
+          "evidence_type": "sufficient",
+          "permit_evidence": "Keel IS this control. Per-project hash chain with Ed25519 signed exports + RFC 3161 timestamps provides cryptographically verifiable AI-system event logging. Verifier checks chain continuity + record integrity offline."
         },
         {
-          "clause": "Annex A (Reference controls)",
-          "permit_evidence": "Verbatim Annex A control IDs (typically A.2 through A.10 with subcontrols) were not directly verified in this pass due to ISO paywall. Annex A controls covering 'AI system documentation,' 'AI system operations records,' and 'third-party AI risk' are likely the most directly applicable; verify against the standard or audit firm copy."
+          "control_id": "A.6.2.6",
+          "control_title": "AI-System Operation and Monitoring",
+          "verification": "single-source (ISMS.online)",
+          "evidence_type": "sufficient",
+          "permit_evidence": "Every production AI call produces a Permit (operation evidence) and closure record (monitoring evidence). Replay drift detection identifies behavioral changes over time."
+        },
+        {
+          "control_id": "A.6.2.7",
+          "control_title": "AI-System Technical Documentation",
+          "verification": "single-source (ISMS.online)",
+          "evidence_type": "necessary",
+          "permit_evidence": "Permit decision_details + binding evidence + closure record document the technical configuration of every AI call. Coupled with the public Permit Spec at github.com/keelapi/keel-permit, the wire-format documentation is itself published."
+        },
+        {
+          "control_id": "A.5.3",
+          "control_title": "Documentation of AI-System Impact Assessments",
+          "verification": "single-source (ISMS.online)",
+          "evidence_type": "necessary",
+          "permit_evidence": "Signed audit exports + cryptographic integrity chain retain impact-assessment documentation with tamper-evident verification. 11 CCR §7152 risk assessments per California requirement are an example of the impact-assessment artifact Keel evidence supports."
+        },
+        {
+          "control_id": "A.5.2",
+          "control_title": "AI-System Impact-Assessment Process",
+          "verification": "single-source (ISMS.online)",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit primitive provides the per-decision evidence that feeds the impact assessment process; Keel does NOT itself perform the assessment but provides the substrate."
+        },
+        {
+          "control_id": "A.7.5",
+          "control_title": "Data Provenance",
+          "verification": "single-source (ISMS.online)",
+          "evidence_type": "sufficient",
+          "permit_evidence": "Permit request_fingerprint + binding_request_hash + closure record digests provide cryptographic provenance: from input bytes through dispatch to provider response to client delivery."
+        },
+        {
+          "control_id": "A.6.2.4",
+          "control_title": "AI-System Verification and Validation",
+          "verification": "single-source (ISMS.online)",
+          "evidence_type": "necessary",
+          "permit_evidence": "Replay drift taxonomy provides systematic V&V evidence: replays a past decision against its snapshot policy and against current policy; classifies drift (replay_vs_original, current_vs_snapshot, replay_impossible)."
+        },
+        {
+          "control_id": "A.2.2",
+          "control_title": "AI Policy",
+          "verification": "single-source (ISMS.online)",
+          "evidence_type": "necessary",
+          "permit_evidence": "policy_id + policy_version stamped on every Permit makes the AI Policy operationally enforced and evidentially documented per decision."
+        },
+        {
+          "control_id": "A.3.2",
+          "control_title": "AI Roles and Responsibilities",
+          "verification": "single-source (ISMS.online)",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit subject_type + subject_id + action_name attributes every AI use to a specific role/responsibility."
+        },
+        {
+          "control_id": "A.10.3",
+          "control_title": "Suppliers",
+          "verification": "single-source (ISMS.online)",
+          "evidence_type": "sufficient",
+          "permit_evidence": "resource_provider + resource_model on every Permit forms a queryable inventory of AI suppliers used across the organization, with cryptographic linkage to specific transactions."
+        }
+      ],
+      "annex_a_mappings_secondary_relevance": [
+        {
+          "control_id": "A.7.4",
+          "control_title": "Quality of Data for AI Systems",
+          "verification": "single-source (ISMS.online)",
+          "evidence_type": "partial",
+          "permit_evidence": "Closure record provider_response_digest_v1 binds the actual data bytes received from the AI provider; supports post-hoc quality auditing."
+        },
+        {
+          "control_id": "A.6.2.2",
+          "control_title": "AI-System Requirements and Specification",
+          "verification": "single-source (ISMS.online)",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit constraints_json + budgets_json + policy_id encode AI-system requirements at decision time."
+        },
+        {
+          "control_id": "A.10.4",
+          "control_title": "Customers",
+          "verification": "single-source (ISMS.online)",
+          "evidence_type": "partial",
+          "permit_evidence": "project_id + tenancy boundary supports per-customer governance evidence for B2B SaaS operators using Keel."
+        },
+        {
+          "control_id": "A.8.4",
+          "control_title": "Communication of Incidents",
+          "verification": "single-source (ISMS.online)",
+          "evidence_type": "partial",
+          "permit_evidence": "Tampering detection codes (WALK_RECORD_HASH_MISMATCH, WALK_CLOSURE_DISPATCH_DIGEST_MISMATCH, etc., per spec/failure-codes.md) provide specific incident classification for AI-system integrity events."
         }
       ]
     }

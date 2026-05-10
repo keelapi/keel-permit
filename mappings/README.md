@@ -34,12 +34,17 @@ Machine-readable mapping from Permit v1 wire-format fields and audit-export-bund
 | NIST AI RMF 1.0 — Functions GOVERN/MAP/MEASURE/MANAGE | nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf | Direct PDF read, verbatim for GOVERN/MAP/MEASURE subcategories; structural for MANAGE |
 | OWASP Top 10 for LLM Applications (2025) — LLM01:2025 through LLM10:2025 | genai.owasp.org/llm-top-10/ | Direct WebFetch, verbatim |
 
-### Verified structurally only (verbatim subsection titles require authoritative source)
+### Verified single-source (medium confidence)
+
+| Framework | What's single-source | Notes |
+|---|---|---|
+| ISO/IEC 42001:2023 individual Annex A controls | 38 control IDs and verbatim titles (e.g., A.6.2.8 AI-System Recording of Event Logs) | Sourced from ISMS.online only. Section structure (A.2-A.10) and total count (38) corroborated by Vanta + Advisera. Individual control titles within sections need second-source verification — confirm against the official standard or an audit-firm copy before customer-facing publication. |
+
+### Verified structurally only
 
 | Framework | Public structure | Paywall / gating |
 |---|---|---|
 | AICPA SOC 2 TSC | CC1-CC9 category structure is public knowledge; mapped at category level (CC3 Risk Assessment, CC6 Logical and Physical Access, CC7 System Operations, CC8 Change Management, CC9 Risk Mitigation) | AICPA TSC 2017 (with 2022 revisions) requires registration/download from aicpa-cima.com — sub-criterion verbatim titles NOT independently verified in this pass |
-| ISO/IEC 42001:2023 | Clauses 4-10 + Annex A structure follows the harmonized form of ISO management system standards | ISO 42001 standard text is paywalled at iso.org (~$200) — clause titles and Annex A control IDs/titles NOT independently verified in this pass; public summaries returned 404 across multiple sources |
 
 ## Critical scoping notes
 
