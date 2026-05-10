@@ -8,7 +8,7 @@ Machine-readable mapping from Permit v1 wire-format fields and audit-export-bund
 
 | Tier | Frameworks | Status |
 |---|---|---|
-| **Verbatim verified** (`verified_2026_05_10`) | CCPA §1798.105(d), 11 CCR §7001/§7150/§7152/§7155, EU AI Act Art 26(6), GDPR Art 17(3)(b), NIST AI RMF 1.0, OWASP LLM Top 10 (2025), **ISO/IEC 42001:2023 Clauses 3-10 + subclauses + Annex structure**, **AICPA SOC 2 Trust Services Criteria CC1.1–CC9.2**, **MITRE ATLAS 14 tactics + ~50 techniques**, **OWASP API Security Top 10 (2023)**, **OWASP ASVS v5.0.0**, **FedRAMP / NIST SP 800-53 Rev 5** | Subsection IDs and verbatim titles confirmed from official source documents on 2026-05-10. ISO 42001 clauses + subclauses + Clause 3 definitions + annex structure verified from authoritative ISO/IEC publication preview distributed via iTeh Standards. SOC 2 common criteria verified verbatim from the authoritative AICPA-published TSP Section 100 (2017 TSC with Revised Points of Focus — 2022). MITRE ATLAS verified from canonical ATLAS.yaml at github.com/mitre-atlas/atlas-data. OWASP API and ASVS verified from owasp.org and github.com/OWASP/ASVS respectively. FedRAMP / NIST SP 800-53 Rev 5 control titles for the 23 mapped controls verified from csf.tools NIST-content mirror. **FedRAMP CAVEAT: Keel is NOT FedRAMP authorized — mappings describe customer-side evidence support, not Keel-side authorization. See dedicated section below.** |
+| **Verbatim verified** (`verified_2026_05_10`) | CCPA §1798.105(d), 11 CCR §7001/§7150/§7152/§7155, EU AI Act Art 26(6), GDPR Art 17(3)(b), NIST AI RMF 1.0, OWASP LLM Top 10 (2025), **ISO/IEC 42001:2023 Clauses 3-10 + subclauses + Annex structure**, **AICPA SOC 2 Trust Services Criteria CC1.1–CC9.2**, **MITRE ATLAS 14 tactics + ~50 techniques**, **OWASP API Security Top 10 (2023)**, **OWASP ASVS v5.0.0**, **FedRAMP / NIST SP 800-53 Rev 5**, **CIS Controls v8.1**, **PCI DSS v4.0.1** | Subsection IDs and verbatim titles confirmed from official source documents on 2026-05-10. ISO 42001 clauses + subclauses + Clause 3 definitions + annex structure verified from authoritative ISO/IEC publication preview distributed via iTeh Standards. SOC 2 common criteria verified verbatim from the authoritative AICPA-published TSP Section 100 (2017 TSC with Revised Points of Focus — 2022). MITRE ATLAS verified from canonical ATLAS.yaml at github.com/mitre-atlas/atlas-data. OWASP API and ASVS verified from owasp.org and github.com/OWASP/ASVS respectively. FedRAMP / NIST SP 800-53 Rev 5 control titles for the 23 mapped controls verified from csf.tools NIST-content mirror. CIS Controls v8.1 (May 2024) all 18 controls verified from cisecurity.org. PCI DSS v4.0.1 (June 2024) all 12 requirements verified. **AUTHORIZATION/VALIDATION CAVEATS: Keel is NOT FedRAMP authorized and NOT PCI-DSS validated — both mappings describe customer-side evidence support only. See dedicated sections below.** |
 | **Two-source corroborated** (`verified_two_source_corroborated`) | ISO/IEC 42001:2023 individual Annex A control IDs + semantic content | ISMS.online and Mindsetcyber independently agree on all 38 control IDs, 9-section structure, control counts per section, and semantic content of each title. Differ only on stylistic conventions (Title Case + hyphenated vs lowercase + space). Exact verbatim typography remains MEDIUM CONFIDENCE pending the paywalled official Annex A pages from iso.org. Three other public summaries (Bastion, Reconn, isauditr) checked on 2026-05-10 and rejected for reproducing different draft/proposed structures — documented inline in the JSON. |
 
 `verified_single_source`, `verified_structurally_only`, and `draft_unverified` tiers are all empty after the 2026-05-10 verification pass.
@@ -42,6 +42,8 @@ Machine-readable mapping from Permit v1 wire-format fields and audit-export-bund
 | OWASP API Security Top 10 (2023) — API1:2023 through API10:2023 | owasp.org/API-Security/editions/2023/en/0x11-t10/ | Direct WebFetch on 2026-05-10, verbatim |
 | OWASP ASVS v5.0.0 — chapters V1-V17 | github.com/OWASP/ASVS/tree/master/5.0/en (canonical 5.0 source folder) | Direct fetch on 2026-05-10; ASVS v5 chapter numbering is NOT backwards-compatible with v4 |
 | FedRAMP / NIST SP 800-53 Rev 5 — verbatim titles for 23 mapped controls across AU, AC, CM, CA, IR, SI, SC families | csf.tools NIST-content mirror; cross-checked with NIST CSRC publication page (csrc.nist.gov/pubs/sp/800/53/r5/upd1/final) | Direct WebFetch of family pages on 2026-05-10; NIST SP 800-53 Rev 5 originally published September 2020, latest release 5.2.0 issued August 27, 2025 |
+| CIS Critical Security Controls v8.1 — all 18 controls | cisecurity.org blog post for v8.1 controls list | Direct WebFetch on 2026-05-10; v8.1 published May 2024 |
+| PCI DSS v4.0.1 — all 12 requirements | Wikipedia summary cross-referenced to PCI SSC document library (pcisecuritystandards.org) | Direct WebFetch on 2026-05-10; v4.0.1 released June 2024 (v4.0 was March 2022 with full enforcement April 1, 2024); 12 top-level requirement titles have been stable across PCI DSS versions |
 
 ### Verified two-source corroborated (upgraded 2026-05-10)
 
@@ -169,6 +171,60 @@ The FedRAMP mapping in this artifact describes how Keel-produced evidence (Permi
 ### Future path
 
 If Keel itself pursues FedRAMP authorization in the future: (1) engage a FedRAMP 3PAO, (2) develop System Security Plan (SSP) mapping all required controls, (3) Security Assessment, (4) Agency ATO sponsorship OR JAB Provisional Authorization. Timeline: 12-18 months; cost: $250K-$1M+. This is post-revenue, post-design-partner-validation work — not pre-revenue.
+
+## PCI DSS — narrow scope + framing discipline
+
+**Keel API, Inc. is NOT a PCI-DSS-validated service provider.** No Attestation of Compliance (AOC), no Report on Compliance (ROC), not listed as PCI-DSS-validated as of 2026-05-10.
+
+**More importantly: PCI DSS itself applies only to entities handling cardholder data within a defined Cardholder Data Environment (CDE).** For most B2B SaaS AI workloads — including the majority of Keel's ICP — PCI DSS does not apply at all.
+
+### When PCI mappings are RELEVANT
+
+Only when AI workloads touch a customer's CDE. Concrete examples:
+
+- AI-driven fraud detection on transaction data
+- AI-augmented customer service with payment context
+- AI-powered chargeback processing
+- AI-driven payment flow optimization
+
+For these cases, Permit substrate maps to:
+
+| Requirement | Permit fit | Notes |
+|---|---|---|
+| **Req 10** Log and monitor all access to system components and cardholder data | **Sufficient** | Hash chain + signed exports + TSA = tamper-evident audit logging satisfying Req 10.5. Enterprise tier (365d retention) recommended for PCI 12-month floor. |
+| Req 6 Develop and maintain secure systems and software | Partial | policy_id + policy_version + policy diff tracking |
+| Req 7 Restrict access by business need to know | Partial | Permit gating at AI-action boundary |
+| Req 12 Support information security with organizational policies and programs | Partial | Permit policies are documented |
+
+### When PCI mappings are NOT relevant
+
+For B2B SaaS AI use cases that do not process payment card data, **do not cite PCI mappings as a general AI governance signal.** Cite SOC 2, ISO 42001, NIST AI RMF, EU AI Act, or CCPA/CPPA instead.
+
+### Correct framing for PCI-in-scope cases
+
+✅ "Keel evidence supports PCI DSS Requirement 10 (audit logging and monitoring) for AI workloads that touch your Cardholder Data Environment."
+
+❌ "Keel is PCI DSS compliant" — false
+❌ "Keel is PCI certified" — false
+❌ "Use Keel to meet PCI" — false
+
+## CIS Controls v8.1 — coverage scope
+
+CIS Controls v8.1 (May 2024) is a voluntary framework with 18 controls. Permit substrate maps naturally to 6 of 18:
+
+| Control | Permit fit | Notes |
+|---|---|---|
+| **Control 8** Audit Log Management | **Sufficient** | Strongest CIS fit — hash chain + signed exports + TSA satisfies safeguards 8.2, 8.3, 8.10, 8.11 |
+| Control 3 Data Protection | Partial | AI-decision audit evidence at rest |
+| Control 4 Secure Configuration of Enterprise Assets and Software | Partial | policy_id is config-as-code for AI |
+| Control 6 Access Control Management | Partial | AI-action access control boundary |
+| Control 15 Service Provider Management | Partial | Keel as service provider + resource_provider inventory |
+| Control 16 Application Software Security | Partial | closure_v2 cryptographic binding |
+| Control 17 Incident Response Management | Partial | Incident evidence export bundle |
+
+**Out of scope (12 of 18):** Controls 1, 2, 5, 7, 9, 10, 11, 12, 13, 14, 18. Customer addresses these via standard security tooling — these are not procurement-blocking gaps in the Keel substrate, they are simply outside Permit scope.
+
+CIS Controls are recognized in mid-market security questionnaires but rarely a hard procurement gate.
 
 ## Coverage scope for security/adversary frameworks
 

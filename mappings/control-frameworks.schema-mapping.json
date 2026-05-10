@@ -28,7 +28,9 @@
       "MITRE ATLAS — Adversarial Threat Landscape for Artificial-Intelligence Systems — all 14 named tactics (AML.TA0000-AML.TA0015) and the ~50 technique IDs+titles verified verbatim from the canonical ATLAS.yaml at github.com/mitre-atlas/atlas-data/dist/ on 2026-05-10. Permit primitive maps to ~13 techniques (AI Model Access, Execution, Exfiltration, Impact tactics); Reconnaissance + Discovery + Persistence + Lateral Movement + C2 are explicitly out of scope.",
       "OWASP API Security Top 10 (2023) — all 10 item IDs (API1:2023 through API10:2023) and verbatim titles verified from owasp.org/API-Security/editions/2023/en/0x11-t10/ on 2026-05-10. Permit primitive maps to 8 of 10 items; API7 (SSRF) and API8 (Security Misconfiguration) are explicit non-mappings.",
       "OWASP Application Security Verification Standard v5.0.0 — all 17 chapter IDs (V1 through V17) and verbatim titles verified from github.com/OWASP/ASVS/tree/master/5.0/en on 2026-05-10. ASVS v5.0.0 was released May 30, 2025 at Global AppSec EU Barcelona. Chapter numbering is NOT backwards-compatible with v4 — always include the v5 version qualifier in customer-facing citations. Permit primitive natural mappings: V4, V8, V11, V13, V14, V16.",
-      "FedRAMP / NIST SP 800-53 Rev 5 — control titles for AU-2, AU-3, AU-4, AU-6, AU-7, AU-8, AU-9, AU-9(2), AU-9(3), AU-10, AU-11, AU-12, AC-3, AC-6, CM-3, CM-8, CA-7, IR-4, IR-5, SI-7, SI-12, SC-13, SC-28 verified verbatim from csf.tools NIST-content mirror on 2026-05-10. NIST SP 800-53 Rev 5 (originally September 2020, latest release 5.2.0 issued August 27, 2025) is the canonical control catalog FedRAMP Rev 5 baselines (Low/Moderate/High/LI-SaaS) are built on. CRITICAL: Keel is NOT FedRAMP authorized — mappings describe how Keel-produced evidence supports a customer's NIST 800-53 control implementations within the customer's existing FedRAMP boundary, NOT a claim that Keel is FedRAMP-authorized in its own right. See frameworks.fedramp.CRITICAL_FRAMING_DISCIPLINE for the framing guardrails that must be applied to any customer-facing use of these mappings."
+      "FedRAMP / NIST SP 800-53 Rev 5 — control titles for AU-2, AU-3, AU-4, AU-6, AU-7, AU-8, AU-9, AU-9(2), AU-9(3), AU-10, AU-11, AU-12, AC-3, AC-6, CM-3, CM-8, CA-7, IR-4, IR-5, SI-7, SI-12, SC-13, SC-28 verified verbatim from csf.tools NIST-content mirror on 2026-05-10. NIST SP 800-53 Rev 5 (originally September 2020, latest release 5.2.0 issued August 27, 2025) is the canonical control catalog FedRAMP Rev 5 baselines (Low/Moderate/High/LI-SaaS) are built on. CRITICAL: Keel is NOT FedRAMP authorized — mappings describe how Keel-produced evidence supports a customer's NIST 800-53 control implementations within the customer's existing FedRAMP boundary, NOT a claim that Keel is FedRAMP-authorized in its own right. See frameworks.fedramp.CRITICAL_FRAMING_DISCIPLINE for the framing guardrails that must be applied to any customer-facing use of these mappings.",
+      "CIS Critical Security Controls v8.1 — all 18 control titles verified verbatim from cisecurity.org blog post on 2026-05-10. v8.1 is the current published version (v8 originally May 2021, v8.1 published May 2024). Permit substrate maps to ~6 of 18 controls — Control 8 (Audit Log Management) is the strongest fit; Controls 3, 4, 6, 15, 16, 17 are partial. The other 12 controls (asset inventory, software inventory, account management, vulnerability management, email/browser, malware, data recovery, network, training, penetration testing) are entirely out-of-scope for Permit substrate.",
+      "PCI DSS v4.0.1 — all 12 requirement titles verified verbatim from Wikipedia summary cross-referenced to PCI SSC document library on 2026-05-10. v4.0.1 is the current published version (June 2024 release; v4.0 was released March 2022 with full enforcement starting April 1, 2024). NARROW SCOPE: PCI DSS applies only to entities handling cardholder data within a defined Cardholder Data Environment (CDE). Most B2B SaaS AI workloads do NOT touch CDE — for those cases PCI is entirely out-of-scope. When AI workloads DO touch CDE, Permit substrate maps to Requirement 10 (sufficient) and Requirements 6, 7, 12 (partial). Keel is NOT a PCI-DSS-validated service provider; see frameworks.pci_dss.FRAMING_DISCIPLINE for guardrails."
     ],
     "verified_pre_2026_05_10": [
       "EU AI Act Article 26(6) — verbatim from artificialintelligenceact.eu (per project_dsar_legal_positioning_2026-05-08)",
@@ -408,6 +410,67 @@
           "'Keel is on the FedRAMP Marketplace' — false"
         ],
         "future_path": "If Keel itself pursues FedRAMP authorization in the future, the process is: (1) work with a FedRAMP 3PAO (Third Party Assessment Organization), (2) develop System Security Plan (SSP) mapping all required controls, (3) undergo Security Assessment, (4) seek either Agency ATO sponsorship OR JAB Provisional Authorization. Timeline: typically 12-18 months; cost: $250K-$1M+ depending on baseline. This is the post-revenue, post-design-partner-validation work — not pre-revenue."
+      }
+    },
+    "cis_controls": {
+      "name": "CIS Critical Security Controls",
+      "version": "v8.1 (current published version; v8 originally published May 2021, v8.1 published May 2024)",
+      "scope": "Prioritized set of 18 critical security controls with associated safeguards. Voluntary framework maintained by the Center for Internet Security. Widely cited in mid-market security questionnaires; not a procurement-blocking regulatory requirement.",
+      "source": "https://www.cisecurity.org/controls/v8 (current page references v8.1 download)",
+      "controls": {
+        "Control 1": "Inventory and Control of Enterprise Assets",
+        "Control 2": "Inventory and Control of Software Assets",
+        "Control 3": "Data Protection",
+        "Control 4": "Secure Configuration of Enterprise Assets and Software",
+        "Control 5": "Account Management",
+        "Control 6": "Access Control Management",
+        "Control 7": "Continuous Vulnerability Management",
+        "Control 8": "Audit Log Management",
+        "Control 9": "Email and Web Browser Protections",
+        "Control 10": "Malware Defenses",
+        "Control 11": "Data Recovery",
+        "Control 12": "Network Infrastructure Management",
+        "Control 13": "Network Monitoring and Defense",
+        "Control 14": "Security Awareness and Skills Training",
+        "Control 15": "Service Provider Management",
+        "Control 16": "Application Software Security",
+        "Control 17": "Incident Response Management",
+        "Control 18": "Penetration Testing"
+      },
+      "verification": "All 18 control titles verified verbatim from cisecurity.org blog post listing v8.1 controls on 2026-05-10 WebFetch. Permit substrate naturally maps to ~6 of 18 controls; the others are out-of-scope (network, physical, email/browser, training, malware, penetration testing).",
+      "verification_date": "2026-05-10 (verbatim)"
+    },
+    "pci_dss": {
+      "name": "Payment Card Industry Data Security Standard",
+      "version": "v4.0.1 (released June 2024; current published version; v4.0 was released March 2022 with full enforcement starting April 1, 2024)",
+      "scope": "Mandatory security standard for organizations that handle cardholder data — credit/debit card processing, storage, or transmission. Defines the Cardholder Data Environment (CDE) — the scope boundary for PCI compliance. AI use rarely touches the CDE directly; when it does, Permit substrate provides audit evidence for AI access patterns under PCI Requirement 10.",
+      "source": "https://www.pcisecuritystandards.org/document_library/?category=pcidss (PCI Security Standards Council document library)",
+      "requirements": {
+        "Requirement 1": "Install and maintain network security controls",
+        "Requirement 2": "Apply secure configurations to all system components",
+        "Requirement 3": "Protect stored account data",
+        "Requirement 4": "Protect cardholder data with strong cryptography during transmission over open, public networks",
+        "Requirement 5": "Protect all systems and networks from malicious software",
+        "Requirement 6": "Develop and maintain secure systems and software",
+        "Requirement 7": "Restrict access to system components and cardholder data by business need to know",
+        "Requirement 8": "Identify users and authenticate access to system components",
+        "Requirement 9": "Restrict physical access to cardholder data",
+        "Requirement 10": "Log and monitor all access to system components and cardholder data",
+        "Requirement 11": "Test security of systems and networks regularly",
+        "Requirement 12": "Support information security with organizational policies and programs"
+      },
+      "verification": "All 12 requirement titles verified verbatim from Wikipedia's PCI DSS article (cross-referenced to PCI SSC document library) on 2026-05-10. The 12 requirement titles 'have not changed since the inception of the standard' per Wikipedia; v4.0.1 vs v4.0 updates affect sub-requirement specifications and testing procedures, not the top-level requirement titles. Permit substrate maps narrowly — Requirement 10 (audit logging) is the primary fit; Requirements 6, 7, 12 have partial alignment when AI workloads touch CDE.",
+      "verification_date": "2026-05-10 (verbatim)",
+      "FRAMING_DISCIPLINE": {
+        "what_keel_is_NOT": "Keel API, Inc. is NOT a PCI-DSS-validated service provider. Keel has NO Attestation of Compliance (AOC), NO Report on Compliance (ROC), and is NOT listed as a PCI-DSS-validated service provider as of 2026-05-10. Statements claiming Keel is 'PCI compliant' or 'PCI certified' would be FALSE.",
+        "what_keel_DOES_provide": "Keel provides tamper-evident audit evidence (per-project hash chain, Ed25519 signed exports, RFC 3161 timestamps) that can support a customer's PCI Requirement 10 (Log and monitor all access) for AI-decision events when AI workloads touch the customer's CDE. The customer remains the PCI-validated entity; Keel is supporting evidence substrate.",
+        "correct_framing": "'Keel evidence supports PCI DSS Requirement 10 (audit logging and monitoring) for AI workloads that touch your Cardholder Data Environment.' OR 'Keel's tamper-evident audit substrate satisfies PCI Req 10.5 protection-of-audit-trail requirements for AI-decision events.'",
+        "incorrect_framing_to_avoid": [
+          "'Keel is PCI DSS compliant' — false",
+          "'Keel is PCI certified' — false",
+          "'Use Keel to meet PCI' — false; Keel does not satisfy any PCI requirement on its own",
+          "'Keel is a PCI-validated service provider' — false"
+        ]
       }
     },
     "owasp_asvs": {
@@ -1401,6 +1464,106 @@
         }
       ]
     },
+    "cis_controls": {
+      "scope_note": "Permit substrate naturally maps to ~6 of 18 CIS Controls v8.1. Control 8 (Audit Log Management) is the strongest fit; Controls 3, 4, 6, 16, 17 have partial alignment. The remaining 12 controls (Asset inventory, Vulnerability Management, Email/Browser, Malware Defense, Data Recovery, Network, Training, Penetration Testing, etc.) are out-of-scope for Permit substrate — customer addresses these via standard security tooling.",
+      "control_mappings": [
+        {
+          "control": "Control 3",
+          "name": "Data Protection",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit substrate protects AI-decision audit evidence at rest via Ed25519 signatures + hash chain integrity. Customer is responsible for general data protection beyond AI audit surface."
+        },
+        {
+          "control": "Control 4",
+          "name": "Secure Configuration of Enterprise Assets and Software",
+          "evidence_type": "partial",
+          "permit_evidence": "policy_id + policy_version are configuration-as-code for AI governance rules. Policy diff tracking with content-addressed snapshots provides change traceability. Covers AI-governance configuration only, not general enterprise/asset configuration."
+        },
+        {
+          "control": "Control 6",
+          "name": "Access Control Management",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit is the AI-action access control mechanism. subject_id + project_id + action_name + policy_id record every authorized AI action. Denied permits log access-control violations. Partial because Control 6 covers identity/access broadly; Permit covers the AI-action boundary only."
+        },
+        {
+          "control": "Control 8",
+          "name": "Audit Log Management",
+          "evidence_type": "sufficient",
+          "permit_evidence": "Strongest fit. Per-project hash chain ensures audit log integrity (Control 8 safeguard 8.2: 'Collect Audit Logs'). Tier-gated retention (Production 180d, Enterprise 365d) addresses 8.3 ('Ensure Adequate Audit Log Storage'). Ed25519 signed exports + RFC 3161 timestamps address 8.10 ('Retain Audit Logs') and 8.11 ('Conduct Audit Log Reviews') — the audit evidence is preserved in tamper-evident form for review without vendor dependency."
+        },
+        {
+          "control": "Control 15",
+          "name": "Service Provider Management",
+          "evidence_type": "partial",
+          "permit_evidence": "Where Keel IS the customer's AI-governance service provider, the customer can demonstrate Control 15.3 ('Classify Service Providers') and 15.6 ('Monitor Service Providers') using Keel's signed audit exports as objective performance evidence. resource_provider field on Permit also inventories OTHER AI service providers used (OpenAI, Anthropic, Google, etc.) — supporting 15.1 ('Establish and Maintain an Inventory of Service Providers')."
+        },
+        {
+          "control": "Control 16",
+          "name": "Application Software Security",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit governs the security of AI-driven application behavior — closure_v2 cryptographic binding detects unauthorized modification of dispatched requests between policy evaluation and provider execution. Build SHA stamping on every governance event supports 16.7 ('Use Standard Hardening Configuration Templates for Application Infrastructure'). Partial because Control 16 covers application security broadly; Permit covers the AI-action surface."
+        },
+        {
+          "control": "Control 17",
+          "name": "Incident Response Management",
+          "evidence_type": "partial",
+          "permit_evidence": "Incident evidence export bundle (shipped 2026-04-25) packages signed evidence for IR workflows. Tampering-detection failure codes (per spec/failure-codes.md) provide specific incident classification for AI-integrity events. Supports customer IR program for AI-related incidents."
+        }
+      ],
+      "out_of_scope_controls": [
+        "Control 1 Inventory and Control of Enterprise Assets — customer asset inventory responsibility",
+        "Control 2 Inventory and Control of Software Assets — customer software inventory responsibility",
+        "Control 5 Account Management — customer IAM responsibility",
+        "Control 7 Continuous Vulnerability Management — customer vuln management responsibility",
+        "Control 9 Email and Web Browser Protections — entirely customer responsibility",
+        "Control 10 Malware Defenses — entirely customer responsibility",
+        "Control 11 Data Recovery — customer backup/recovery responsibility",
+        "Control 12 Network Infrastructure Management — customer responsibility",
+        "Control 13 Network Monitoring and Defense — customer responsibility",
+        "Control 14 Security Awareness and Skills Training — customer responsibility",
+        "Control 18 Penetration Testing — customer responsibility"
+      ]
+    },
+    "pci_dss": {
+      "scope_note": "MANDATORY FRAMING: Keel is NOT a PCI-DSS-validated service provider. Mappings below describe how Keel-produced audit evidence can SUPPORT a customer's PCI compliance WHEN AI workloads touch the customer's Cardholder Data Environment (CDE). For most B2B SaaS AI use cases that do NOT touch CDE, PCI DSS is entirely OUT OF SCOPE and these mappings do not apply. Requirement 10 (audit logging) is the only requirement where Permit substrate is load-bearing. Partial alignment with Requirements 6, 7, 12.",
+      "requirement_mappings": [
+        {
+          "requirement": "Requirement 6",
+          "name": "Develop and maintain secure systems and software",
+          "evidence_type": "partial",
+          "permit_evidence": "policy_id + policy_version on every Permit + policy diff tracking (migration 0147) provides change-management traceability for AI policies — relevant to PCI Req 6.5 ('Changes to all system components in the production environment are made according to established procedures'). Permit does NOT cover general secure-development practices (Req 6.2 secure-coding training, Req 6.3 software vulnerabilities management, etc.)."
+        },
+        {
+          "requirement": "Requirement 7",
+          "name": "Restrict access to system components and cardholder data by business need to know",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit policy can encode business-need-to-know rules for AI-action access (e.g., agent X may invoke only specific tools on specific data classes). Denied permits log access violations. Partial — PCI Req 7 covers cardholder-data access broadly; Permit covers the AI-action boundary only. Customer must implement PCI Req 7.1, 7.2 access control for CDE itself."
+        },
+        {
+          "requirement": "Requirement 10",
+          "name": "Log and monitor all access to system components and cardholder data",
+          "evidence_type": "sufficient",
+          "permit_evidence": "Primary Permit fit for PCI. Hash-chained audit records (Req 10.5 'Audit logs are protected from destruction and unauthorized modifications' — cryptographically satisfied). Tier-gated retention (Production 180d, Enterprise 365d) addresses 10.7 ('Audit logs are retained for at least 12 months'... Enterprise tier meets the standard 12-month floor; longer windows available on request). RFC 3161 timestamps support 10.6 ('Time-synchronization mechanisms support consistent time settings'). Ed25519 signed exports + verifier CLI enable Req 10.4 review processes without vendor dependency. Note: Production 180d retention falls SHORT of PCI 12-month floor — Enterprise tier is the recommended tier for PCI-in-scope AI workloads."
+        },
+        {
+          "requirement": "Requirement 12",
+          "name": "Support information security with organizational policies and programs",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit policy artifacts ARE documented AI-governance policies. policy_version provides version-controlled policy evidence. Partial alignment because Req 12 covers organizational security policy broadly; Permit covers the AI-action policy surface."
+        }
+      ],
+      "out_of_scope_requirements": [
+        "Requirement 1 Install and maintain network security controls — customer network responsibility",
+        "Requirement 2 Apply secure configurations to all system components — customer config baseline responsibility",
+        "Requirement 3 Protect stored account data — Permit substrate doesn't touch cardholder data",
+        "Requirement 4 Protect cardholder data with strong cryptography during transmission over open, public networks — TLS/transport layer responsibility outside Permit substrate",
+        "Requirement 5 Protect all systems and networks from malicious software — customer EDR/anti-malware responsibility",
+        "Requirement 8 Identify users and authenticate access to system components — customer IAM responsibility",
+        "Requirement 9 Restrict physical access to cardholder data — physical security responsibility",
+        "Requirement 11 Test security of systems and networks regularly — customer vulnerability scanning / pentesting responsibility"
+      ],
+      "broad_scoping_caveat": "PCI DSS applies only to entities that handle cardholder data within a defined Cardholder Data Environment (CDE). For most B2B SaaS AI workloads that do not process payment card data, PCI DSS is entirely OUT OF SCOPE — these mappings exist for the narrow case where AI processing touches a customer's CDE (e.g., AI-driven fraud detection on transaction data, AI-augmented customer service with payment context). Do not cite PCI mappings broadly for non-CDE AI use cases."
+    },
     "owasp_asvs": {
       "version_note": "ASVS v5.0.0 (released May 30 2025). Chapter numbering is NOT backwards-compatible with v4 — V8 is 'Authorization' in v5 (was 'Data Protection' in v4); V4 is 'API and Web Service' in v5 (was 'Access Control' in v4). When citing in customer-facing artifacts, always include the v5 version qualifier.",
       "chapter_mappings": [
@@ -1510,6 +1673,24 @@
       "control_id": "AU-9(4) Protection of Audit Information | Access by Subset of Privileged Users",
       "status": "CUSTOMER RESPONSIBILITY",
       "rationale": "Cryptographic integrity (any tampering is detectable post-hoc) is different from access-control on READING audit logs. Keel substrate provides integrity; customer-side IAM/RBAC determines who can read audit exports. Customers should not claim AU-9(4) compliance based on Keel substrate alone."
+    },
+    {
+      "framework": "pci_dss",
+      "control_id": "PCI DSS validation status entirely",
+      "status": "KEEL IS NOT PCI-DSS-VALIDATED",
+      "rationale": "Keel API, Inc. is NOT a PCI-DSS-validated service provider. No Attestation of Compliance (AOC), no Report on Compliance (ROC), not listed as a PCI-DSS-validated service provider as of 2026-05-10. Customer-facing material claiming Keel is 'PCI compliant', 'PCI certified', or 'PCI-validated' would be FALSE. Mappings describe how Keel-produced evidence supports a customer's PCI Requirement 10 AI-related logging when AI workloads touch the customer's CDE."
+    },
+    {
+      "framework": "pci_dss",
+      "control_id": "PCI DSS broadly when AI workloads do NOT touch CDE",
+      "status": "ENTIRELY OUT OF SCOPE",
+      "rationale": "For B2B SaaS AI use cases that do not process payment card data within a Cardholder Data Environment (CDE), PCI DSS does not apply. These mappings exist for the narrow case where AI processing touches a customer's CDE. Do not cite PCI mappings as a general AI governance signal — they apply only when payment card data flows through AI workloads."
+    },
+    {
+      "framework": "cis_controls",
+      "control_id": "Controls 1, 2, 5, 7, 9, 10, 11, 12, 13, 14, 18 (12 of 18 controls)",
+      "status": "OUT OF SCOPE FOR PERMIT SUBSTRATE",
+      "rationale": "Of the 18 CIS Controls v8.1, 12 are entirely outside Permit substrate scope (asset inventory, software inventory, account management, vulnerability management, email/browser, malware defense, data recovery, network management, network monitoring, training, penetration testing). Permit substrate covers ~6 of 18 with varying strength; CIS Control 8 (Audit Log Management) is the only sufficient-fit; Controls 3, 4, 6, 15, 16, 17 have partial alignment."
     }
   ]
 }
