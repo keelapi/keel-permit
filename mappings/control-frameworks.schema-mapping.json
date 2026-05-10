@@ -33,9 +33,10 @@
       "EU AI Act Article 26(6) — verbatim from artificialintelligenceact.eu (per project_dsar_legal_positioning_2026-05-08)",
       "GDPR Article 17(3)(b) — per project_dsar_legal_positioning_2026-05-08"
     ],
-    "verified_single_source": [
-      "ISO/IEC 42001:2023 individual Annex A control IDs and titles (e.g., A.2.2 AI Policy, A.6.2.8 AI-System Recording of Event Logs) — control IDs are multi-source corroborated (ISMS.online + ChatGPT-cited iTeh PDF + Microsoft/UNIDO + AI Verify Foundation + Nemko). Verbatim TITLE WORDING varies slightly across sources (e.g., 'AI-System' vs 'AI system'; 'Organisational' vs 'Organizational'; 'individuals or groups of individuals' vs 'individuals and groups'). The iTeh Standards authoritative preview does NOT include Annex A (preview ends at Clause 4.4; Annex A begins on page 17 of the paywalled section). Treat individual control IDs as HIGH CONFIDENCE; treat exact verbatim titles as MEDIUM CONFIDENCE pending the official Annex A pages. Do NOT publish verbatim Annex A titles customer-facing without the official standard or an audit-firm copy."
+    "verified_two_source_corroborated": [
+      "ISO/IEC 42001:2023 individual Annex A control IDs and SEMANTIC CONTENT of titles — UPGRADED 2026-05-10 from single-source to two-source corroborated. Mindsetcyber (mindsetcyber.com.au/iso-42001-controls-list/) and ISMS.online (isms.online/iso-42001/annex-a-controls/) independently agree on (a) all 38 control IDs (A.2.2 through A.10.4), (b) section structure (9 sections A.2-A.10), (c) section control counts (3+2+5+4+9+5+4+3+3=38), and (d) semantic content of each title. The two sources differ only in stylistic convention (Mindsetcyber: lowercase 'AI system', no hyphen; ISMS.online: Title Case 'AI-System', hyphenated). Current JSON uses the ISMS.online convention for consistency with prior entries. EXACT VERBATIM WORDING (capitalization, hyphenation) remains MEDIUM CONFIDENCE until the official Annex A pages are accessible — the iTeh Standards authoritative preview ends at Clause 4.4, so Annex A is in the paywalled portion. THREE OTHER PUBLIC SUMMARIES (bastion.tech/learn/iso42001/annex-a-controls, orbit.reconn.io/iso-42001-controls-guide/, isauditr.com/blog/iso-42001-annex-a-38-controls-practical-guide-auditors) were checked on 2026-05-10 and FOUND TO MATERIALLY DISAGREE — Bastion and Reconn reproduce different control structures entirely (different IDs, different titles, different section organization), almost certainly because they reproduce earlier ISO 42001 PROPOSED-TEXT drafts rather than the final 2023 adopted standard. Do NOT cite Bastion, Reconn, or isauditr as Annex A sources. Document the two-source-corroborated entries as HIGH CONFIDENCE on IDs+content, MEDIUM CONFIDENCE on exact verbatim style, pending the official Annex A pages."
     ],
+    "verified_single_source": [],
     "verified_structurally_only": [],
     "draft_unverified": []
   },
@@ -253,9 +254,27 @@
         "Vanta — ISO 42001 collection (https://www.vanta.com/collection/iso-42001) — independent confirmation of all 9 section titles verbatim"
       ],
       "annex_a_total_controls": "38 controls across 9 sections (two-source confirmation from Vanta and Advisera)",
-      "annex_a_individual_controls_single_source": {
-        "note": "Individual control IDs and titles below are from ISMS.online ONLY. While the section structure (A.2-A.10) and total count (38) are confirmed by multiple independent sources, the specific control IDs (e.g., A.2.2, A.6.2.8) within each section are sourced from a single audit-platform vendor and have NOT been independently corroborated against a second source. Treat as MEDIUM CONFIDENCE pending verification against the official standard or audit-firm copy.",
-        "single_source_url": "https://www.isms.online/iso-42001/annex-a-controls/",
+      "annex_a_individual_controls_two_source_corroborated": {
+        "note": "Individual control IDs and SEMANTIC CONTENT are TWO-SOURCE CORROBORATED — ISMS.online and Mindsetcyber (mindsetcyber.com.au/iso-42001-controls-list/) independently agree on all 38 control IDs, the 9-section structure (A.2-A.10), section control counts (3+2+5+4+9+5+4+3+3=38), and the semantic content of each title. The two sources differ only in stylistic convention: ISMS.online uses Title Case + hyphenated 'AI-System'; Mindsetcyber uses lowercase 'AI system' (no hyphen). This JSON adopts the ISMS.online convention for consistency with prior entries. EXACT VERBATIM WORDING (capitalization, hyphenation, singular vs plural like 'AI System' vs 'AI Systems') remains MEDIUM CONFIDENCE until the official Annex A pages are accessible. The authoritative iTeh Standards preview ends at Clause 4.4; Annex A is in the paywalled portion (pages 17+). UPGRADED 2026-05-10 from single-source (ISMS.online only) to two-source corroborated.",
+        "primary_source_url": "https://www.isms.online/iso-42001/annex-a-controls/",
+        "corroborating_source_url": "https://mindsetcyber.com.au/iso-42001-controls-list/",
+        "unreliable_sources_checked_and_rejected_2026_05_10": {
+          "note": "Three other public summaries were checked on 2026-05-10 and found to materially disagree with the two-source-corroborated structure. Most likely they reproduce earlier ISO 42001 PROPOSED-TEXT drafts rather than the final 2023 adopted standard. DO NOT cite as Annex A sources.",
+          "rejected": [
+            {
+              "source_url": "https://bastion.tech/learn/iso42001/annex-a-controls",
+              "disagreements": "Lists control IDs that don't exist in final standard (A.3.4, A.6.2.9, A.6.2.10, A.6.2.11); section A.7 has 'Data Quality for ML' phrasing that doesn't match final; A.5.4 reproduced as 'Impact of AI System Documentation' which is materially different from final 'Assessing AI-System impact on individuals or groups of individuals'."
+            },
+            {
+              "source_url": "https://orbit.reconn.io/iso-42001-controls-guide/",
+              "disagreements": "Has A.4.1 (doesn't exist in final), A.6.1.1 and A.6.1.5 (don't exist), claims A.6.2.4 is 'AI System Event Logs' (final standard places event logs at A.6.2.8), claims A.7.5 is 'Processing of Personal Information' (final is 'Data Provenance')."
+            },
+            {
+              "source_url": "https://isauditr.com/blog/iso-42001-annex-a-38-controls-practical-guide-auditors",
+              "disagreements": "Article discusses controls conceptually but does not list a complete verbatim Annex A. Not usable as a primary verification source."
+            }
+          ]
+        },
         "controls": {
           "A.2.2": "AI Policy",
           "A.2.3": "Alignment With Other Organisational Policies",
@@ -269,7 +288,7 @@
           "A.4.6": "Human Resources",
           "A.5.2": "AI-System Impact-Assessment Process",
           "A.5.3": "Documentation of AI-System Impact Assessments",
-          "A.5.4": "Assessing AI-System Impact on Individuals or Groups",
+          "A.5.4": "Assessing AI-System Impact on Individuals or Groups of Individuals",
           "A.5.5": "Assessing Societal Impacts of AI Systems",
           "A.6.1.2": "Objectives for Responsible Development of AI Systems",
           "A.6.1.3": "Processes for Responsible AI-System Design and Development",
@@ -297,8 +316,8 @@
           "A.10.4": "Customers"
         }
       },
-      "verification": "Four-tier verification: (1) Clauses 4-10 titles AND ALL subclause titles — verbatim verified from authoritative ISO/IEC iTeh Standards publication preview (HIGH CONFIDENCE). (2) Clause 3 Terms and Definitions 3.1-3.26 verbatim verified from same preview. (3) Annex A section headers A.2-A.10 — verbatim two-source (ISMS.online + Vanta + ChatGPT-cited Microsoft/UNIDO). (4) Individual Annex A control IDs — multi-source corroborated; verbatim titles - MEDIUM CONFIDENCE (titles vary slightly across sources; the authoritative iTeh preview ends at Clause 4.4 and does not include Annex A pages 17+). Recommendation: clauses + subclauses + definitions safe for customer-facing publication; individual Annex A verbatim titles require official standard or audit-firm copy before external publication.",
-      "verification_date": "2026-05-10 (clauses + subclauses + definitions + annex structure: verbatim verified; individual Annex A controls: structure verified, verbatim title wording medium-confidence)"
+      "verification": "Four-tier verification: (1) Clauses 4-10 titles AND ALL subclause titles — verbatim verified from authoritative ISO/IEC iTeh Standards publication preview (HIGH CONFIDENCE). (2) Clause 3 Terms and Definitions 3.1-3.26 verbatim verified from same preview. (3) Annex A section headers A.2-A.10 — verbatim two-source (ISMS.online + Vanta + ChatGPT-cited Microsoft/UNIDO). (4) Individual Annex A control IDs + semantic content — TWO-SOURCE CORROBORATED (ISMS.online + Mindsetcyber agree on all 38 IDs, section structure, and content; differ only on stylistic conventions). Exact verbatim wording (capitalization, hyphenation) — MEDIUM CONFIDENCE pending official Annex A pages from iso.org. Three other public summaries (Bastion, Reconn, isauditr) were checked and rejected for reproducing different draft/proposed structures. Recommendation: clauses + subclauses + definitions safe for customer-facing publication; individual Annex A verbatim titles in this JSON use the ISMS.online stylistic convention (Title Case + hyphenated 'AI-System'), with the explicit caveat that exact typography may differ from the official standard.",
+      "verification_date": "2026-05-10 (clauses + subclauses + definitions + annex structure: verbatim verified; individual Annex A controls: two-source corroborated on IDs+content, medium-confidence on exact verbatim style)"
     },
     "owasp_llm_2025": {
       "name": "OWASP Top 10 for LLM Applications (2025)",
@@ -924,7 +943,7 @@
       ]
     },
     "iso_42001_clauses_and_annex_a": {
-      "verification_note": "Clauses 4-10 verbatim titles confirmed two-source. Annex A section headers A.2-A.10 confirmed two-source (ISMS.online + Vanta). Individual Annex A control IDs and titles are SINGLE-SOURCE (ISMS.online). Confirm individual control titles against the official standard or an audit-firm copy before customer-facing publication.",
+      "verification_note": "Clauses 4-10 verbatim titles confirmed verbatim from authoritative iTeh preview. Annex A section headers A.2-A.10 confirmed two-source (ISMS.online + Vanta). Individual Annex A control IDs and SEMANTIC CONTENT — TWO-SOURCE CORROBORATED (ISMS.online + Mindsetcyber, agree on all 38 IDs + content; differ only on stylistic conventions). Exact verbatim wording (capitalization, hyphenation, singular/plural) — MEDIUM CONFIDENCE pending the paywalled official Annex A pages. Three other public summaries (Bastion, Reconn, isauditr) checked and rejected on 2026-05-10 — see frameworks.iso_42001.annex_a_individual_controls_two_source_corroborated.unreliable_sources_checked_and_rejected_2026_05_10 for specifics.",
       "clause_mappings": [
         {
           "clause": "6 (Planning)",
@@ -947,70 +966,70 @@
         {
           "control_id": "A.6.2.8",
           "control_title": "AI-System Recording of Event Logs",
-          "verification": "single-source (ISMS.online)",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
           "evidence_type": "sufficient",
           "permit_evidence": "Keel IS this control. Per-project hash chain with Ed25519 signed exports + RFC 3161 timestamps provides cryptographically verifiable AI-system event logging. Verifier checks chain continuity + record integrity offline."
         },
         {
           "control_id": "A.6.2.6",
           "control_title": "AI-System Operation and Monitoring",
-          "verification": "single-source (ISMS.online)",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
           "evidence_type": "sufficient",
           "permit_evidence": "Every production AI call produces a Permit (operation evidence) and closure record (monitoring evidence). Replay drift detection identifies behavioral changes over time."
         },
         {
           "control_id": "A.6.2.7",
           "control_title": "AI-System Technical Documentation",
-          "verification": "single-source (ISMS.online)",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
           "evidence_type": "necessary",
           "permit_evidence": "Permit decision_details + binding evidence + closure record document the technical configuration of every AI call. Coupled with the public Permit Spec at github.com/keelapi/keel-permit, the wire-format documentation is itself published."
         },
         {
           "control_id": "A.5.3",
           "control_title": "Documentation of AI-System Impact Assessments",
-          "verification": "single-source (ISMS.online)",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
           "evidence_type": "necessary",
           "permit_evidence": "Signed audit exports + cryptographic integrity chain retain impact-assessment documentation with tamper-evident verification. 11 CCR §7152 risk assessments per California requirement are an example of the impact-assessment artifact Keel evidence supports."
         },
         {
           "control_id": "A.5.2",
           "control_title": "AI-System Impact-Assessment Process",
-          "verification": "single-source (ISMS.online)",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
           "evidence_type": "partial",
           "permit_evidence": "Permit primitive provides the per-decision evidence that feeds the impact assessment process; Keel does NOT itself perform the assessment but provides the substrate."
         },
         {
           "control_id": "A.7.5",
           "control_title": "Data Provenance",
-          "verification": "single-source (ISMS.online)",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
           "evidence_type": "sufficient",
           "permit_evidence": "Permit request_fingerprint + binding_request_hash + closure record digests provide cryptographic provenance: from input bytes through dispatch to provider response to client delivery."
         },
         {
           "control_id": "A.6.2.4",
           "control_title": "AI-System Verification and Validation",
-          "verification": "single-source (ISMS.online)",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
           "evidence_type": "necessary",
           "permit_evidence": "Replay drift taxonomy provides systematic V&V evidence: replays a past decision against its snapshot policy and against current policy; classifies drift (replay_vs_original, current_vs_snapshot, replay_impossible)."
         },
         {
           "control_id": "A.2.2",
           "control_title": "AI Policy",
-          "verification": "single-source (ISMS.online)",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
           "evidence_type": "necessary",
           "permit_evidence": "policy_id + policy_version stamped on every Permit makes the AI Policy operationally enforced and evidentially documented per decision."
         },
         {
           "control_id": "A.3.2",
           "control_title": "AI Roles and Responsibilities",
-          "verification": "single-source (ISMS.online)",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
           "evidence_type": "partial",
           "permit_evidence": "Permit subject_type + subject_id + action_name attributes every AI use to a specific role/responsibility."
         },
         {
           "control_id": "A.10.3",
           "control_title": "Suppliers",
-          "verification": "single-source (ISMS.online)",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
           "evidence_type": "sufficient",
           "permit_evidence": "resource_provider + resource_model on every Permit forms a queryable inventory of AI suppliers used across the organization, with cryptographic linkage to specific transactions."
         }
@@ -1019,28 +1038,28 @@
         {
           "control_id": "A.7.4",
           "control_title": "Quality of Data for AI Systems",
-          "verification": "single-source (ISMS.online)",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
           "evidence_type": "partial",
           "permit_evidence": "Closure record provider_response_digest_v1 binds the actual data bytes received from the AI provider; supports post-hoc quality auditing."
         },
         {
           "control_id": "A.6.2.2",
           "control_title": "AI-System Requirements and Specification",
-          "verification": "single-source (ISMS.online)",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
           "evidence_type": "partial",
           "permit_evidence": "Permit constraints_json + budgets_json + policy_id encode AI-system requirements at decision time."
         },
         {
           "control_id": "A.10.4",
           "control_title": "Customers",
-          "verification": "single-source (ISMS.online)",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
           "evidence_type": "partial",
           "permit_evidence": "project_id + tenancy boundary supports per-customer governance evidence for B2B SaaS operators using Keel."
         },
         {
           "control_id": "A.8.4",
           "control_title": "Communication of Incidents",
-          "verification": "single-source (ISMS.online)",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
           "evidence_type": "partial",
           "permit_evidence": "Tampering detection codes (WALK_RECORD_HASH_MISMATCH, WALK_CLOSURE_DISPATCH_DIGEST_MISMATCH, etc., per spec/failure-codes.md) provide specific incident classification for AI-system integrity events."
         }

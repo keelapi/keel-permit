@@ -9,9 +9,9 @@ Machine-readable mapping from Permit v1 wire-format fields and audit-export-bund
 | Tier | Frameworks | Status |
 |---|---|---|
 | **Verbatim verified** (`verified_2026_05_10`) | CCPA §1798.105(d), 11 CCR §7001/§7150/§7152/§7155, EU AI Act Art 26(6), GDPR Art 17(3)(b), NIST AI RMF 1.0, OWASP LLM Top 10 (2025), **ISO/IEC 42001:2023 Clauses 3-10 + subclauses + Annex structure**, **AICPA SOC 2 Trust Services Criteria CC1.1–CC9.2**, **MITRE ATLAS 14 tactics + ~50 techniques**, **OWASP API Security Top 10 (2023)**, **OWASP ASVS v5.0.0** | Subsection IDs and verbatim titles confirmed from official source documents on 2026-05-10. ISO 42001 clauses + subclauses + Clause 3 definitions + annex structure verified from authoritative ISO/IEC publication preview distributed via iTeh Standards. SOC 2 common criteria verified verbatim from the authoritative AICPA-published TSP Section 100 (2017 TSC with Revised Points of Focus — 2022). MITRE ATLAS verified from canonical ATLAS.yaml at github.com/mitre-atlas/atlas-data. OWASP API and ASVS verified from owasp.org and github.com/OWASP/ASVS respectively. |
-| **Single-source / medium confidence** (`verified_single_source`) | ISO/IEC 42001:2023 individual Annex A control titles | Annex A control IDs are multi-source corroborated; verbatim title wording varies slightly across public sources. Authoritative iTeh preview ends at Clause 4.4 (Annex A is in the paywalled portion). Confirm verbatim titles against the official standard or an audit-firm copy before customer-facing publication. |
+| **Two-source corroborated** (`verified_two_source_corroborated`) | ISO/IEC 42001:2023 individual Annex A control IDs + semantic content | ISMS.online and Mindsetcyber independently agree on all 38 control IDs, 9-section structure, control counts per section, and semantic content of each title. Differ only on stylistic conventions (Title Case + hyphenated vs lowercase + space). Exact verbatim typography remains MEDIUM CONFIDENCE pending the paywalled official Annex A pages from iso.org. Three other public summaries (Bastion, Reconn, isauditr) checked on 2026-05-10 and rejected for reproducing different draft/proposed structures — documented inline in the JSON. |
 
-`verified_structurally_only` and `draft_unverified` tiers are both empty after the 2026-05-10 verification pass.
+`verified_single_source`, `verified_structurally_only`, and `draft_unverified` tiers are all empty after the 2026-05-10 verification pass.
 
 ## Files
 
@@ -42,11 +42,21 @@ Machine-readable mapping from Permit v1 wire-format fields and audit-export-bund
 | OWASP API Security Top 10 (2023) — API1:2023 through API10:2023 | owasp.org/API-Security/editions/2023/en/0x11-t10/ | Direct WebFetch on 2026-05-10, verbatim |
 | OWASP ASVS v5.0.0 — chapters V1-V17 | github.com/OWASP/ASVS/tree/master/5.0/en (canonical 5.0 source folder) | Direct fetch on 2026-05-10; ASVS v5 chapter numbering is NOT backwards-compatible with v4 |
 
-### Verified single-source (medium confidence)
+### Verified two-source corroborated (upgraded 2026-05-10)
 
-| Framework | What's single-source | Notes |
+| Framework | What's two-source corroborated | Notes |
 |---|---|---|
-| ISO/IEC 42001:2023 individual Annex A controls | 38 control IDs and verbatim titles (e.g., A.6.2.8 AI-System Recording of Event Logs) | Sourced primarily from ISMS.online. Section structure (A.2-A.10) and total count (38) corroborated by Vanta + Advisera + ChatGPT-cited Microsoft/UNIDO + AI Verify Foundation + Nemko. **Authoritative iTeh preview ends at Clause 4.4** (Annex A is on page 17 of the paywalled section, NOT in the public preview). Individual control verbatim titles vary slightly across sources (e.g., 'AI-System' vs 'AI system'; 'Organisational' vs 'Organizational'). Control IDs are HIGH CONFIDENCE; exact verbatim wording is MEDIUM CONFIDENCE pending the official Annex A pages. |
+| ISO/IEC 42001:2023 individual Annex A controls | All 38 control IDs + semantic content of each title | ISMS.online and Mindsetcyber (mindsetcyber.com.au/iso-42001-controls-list/) independently agree on all 38 IDs, the 9-section structure (A.2-A.10), section control counts (3+2+5+4+9+5+4+3+3=38), and the semantic content of every title. Differ only on stylistic conventions: ISMS.online uses Title Case + hyphenated "AI-System"; Mindsetcyber uses lowercase "AI system" without hyphen. JSON adopts the ISMS.online convention. **Authoritative iTeh preview ends at Clause 4.4** (Annex A is on page 17 of the paywalled section, NOT in the public preview). Exact verbatim wording (capitalization, hyphenation, singular/plural) is MEDIUM CONFIDENCE pending the paywalled official Annex A pages. |
+
+### Sources checked and rejected for ISO 42001 Annex A (2026-05-10)
+
+Three other commonly-cited third-party summaries were checked on 2026-05-10 and **found to materially disagree** with the two-source-corroborated structure. Most likely they reproduce earlier ISO 42001 **proposed-text drafts** rather than the final 2023 adopted standard. **Do not cite as Annex A sources.**
+
+| Source | Why rejected |
+|---|---|
+| bastion.tech/learn/iso42001/annex-a-controls | Lists control IDs that don't exist in the final standard (A.3.4, A.6.2.9, A.6.2.10, A.6.2.11); A.5.4 reproduced as "Impact of AI System Documentation" which is materially different from the two-source-corroborated "Assessing AI-System Impact on Individuals or Groups of Individuals" |
+| orbit.reconn.io/iso-42001-controls-guide/ | Has A.4.1, A.6.1.1, A.6.1.5 (don't exist); claims A.6.2.4 is "AI System Event Logs" (final places event logs at A.6.2.8); claims A.7.5 is "Processing of Personal Information" (final is "Data Provenance") |
+| isauditr.com/blog/iso-42001-annex-a-38-controls-practical-guide-auditors | Article discusses controls conceptually but does not list a complete verbatim Annex A; not usable as a primary verification source |
 
 ### CC7.5 → CC7.2 correction (2026-05-10)
 
