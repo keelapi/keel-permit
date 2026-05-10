@@ -1,0 +1,1676 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keelapi/keel-permit/blob/main/mappings/control-frameworks.schema-mapping.json",
+  "title": "Permit v1 → Control Framework Mappings",
+  "description": "Public mapping from Permit v1 wire-format fields and audit-export-bundle artifacts to selected evidence needs in AI, security, privacy, and compliance frameworks. Evidence labels describe the role of a Permit field or artifact for a control; customers and assessors determine applicability and sufficiency.",
+  "version": "0.1.0-draft",
+  "generated_at": "2026-05-10",
+  "spec_repository": "github.com/keelapi/keel-permit",
+  "license": "Apache-2.0",
+  "verification_status": {
+    "summary": "Draft 0.1.0 public evidence-support mapping. Framework references were checked against public or authoritative sources where available; customers and assessors determine applicability and sufficiency.",
+    "verified_frameworks_2026_05_10": [
+      "CCPA §1798.105(d)",
+      "11 CCR §7001/§7150/§7152/§7155",
+      "EU AI Act Article 26(6)",
+      "GDPR Article 17(3)(b)",
+      "NIST AI RMF 1.0",
+      "OWASP Top 10 for LLM Applications 2025",
+      "ISO/IEC 42001:2023 clauses, subclauses, definitions, and annex structure",
+      "AICPA SOC 2 Trust Services Criteria common criteria",
+      "MITRE ATLAS tactics and selected techniques",
+      "OWASP API Security Top 10 2023",
+      "OWASP ASVS v5.0.0 chapters",
+      "FedRAMP / NIST SP 800-53 Rev 5 selected control titles",
+      "CIS Controls v8.1 control titles",
+      "PCI DSS v4.0.1 top-level requirement titles"
+    ],
+    "corroborated_frameworks_2026_05_10": [
+      "ISO/IEC 42001:2023 Annex A control IDs and title substance were corroborated from multiple public summaries; use the official standard for verbatim quotation."
+    ],
+    "unverified_frameworks": []
+  },
+  "frameworks": {
+    "ccpa": {
+      "name": "California Consumer Privacy Act / California Privacy Rights Act",
+      "scope": "California consumers; statute in Civil Code §1798.100 et seq.",
+      "source": "https://leginfo.legislature.ca.gov/",
+      "effective_status": "in force; CPRA amendments operative 2023-01-01",
+      "verification": "verified verbatim 2026-05-10"
+    },
+    "cppa_admt_regs": {
+      "name": "CPPA — CCPA Updates, Cyber, Risk, ADMT, and Insurance Regulations",
+      "scope": "California Privacy Protection Agency final adopted regulations in 11 CCR Title 11, Division 6, Chapter 1",
+      "source": "https://cppa.ca.gov/regulations/pdf/ccpa_updates_cyber_risk_admt_appr_text.pdf",
+      "notice_of_approval": "September 22, 2025",
+      "effective_status": "Risk assessments + cybersecurity audits effective January 1, 2026; ADMT notice/opt-out/access provisions effective January 1, 2027",
+      "verification": "verified verbatim against final adopted text 2026-05-10"
+    },
+    "eu_ai_act": {
+      "name": "European Union Artificial Intelligence Act (Regulation (EU) 2024/1689)",
+      "scope": "AI systems placed on the market or put into service in the EU; high-risk AI systems addressed in Articles 8-29",
+      "source": "https://artificialintelligenceact.eu/",
+      "effective_status": "Article 12 (logging) and Article 26(6) (deployer log retention for an adequate period, as determined by customer counsel) effective for new high-risk AI Aug 2 2026; legacy systems Aug 2 2027",
+      "verification": "Article 26(6) checked against the cited public source."
+    },
+    "gdpr": {
+      "name": "GDPR — General Data Protection Regulation (Regulation (EU) 2016/679)",
+      "scope": "Personal data processing of EU subjects",
+      "source": "https://gdpr-info.eu/",
+      "effective_status": "in force",
+      "verification": "Article 17(3)(b) checked against the cited public source."
+    },
+    "soc2": {
+      "name": "AICPA Trust Services Criteria (SOC 2)",
+      "official_citation": "TSP Section 100 — 2017 Trust Services Criteria for Security, Availability, Processing Integrity, Confidentiality, and Privacy (With Revised Points of Focus — 2022)",
+      "scope": "Service organization controls audit framework. Common criteria CC1-CC5 align to the 17 COSO Internal Control — Integrated Framework principles. Common criteria CC6-CC9 are supplemental criteria for logical/physical access, system operations, change management, and risk mitigation. Category-specific criteria for Availability (A series), Processing Integrity (PI series), Confidentiality (C series), and Privacy (P series) supplement the common criteria.",
+      "source": "AICPA — TSP Section 100, distributed at https://www.aicpa-cima.com/resources/download/2017-trust-services-criteria-with-revised-points-of-focus-2022 (registration-gated public download).",
+      "verified_against": "Local PDF of TSP Section 100 (cover page identifies it as the AICPA-published 2017 Trust Services Criteria with Revised Points of Focus — 2022). All sub-criterion titles below were verbatim-extracted from pages 14-50 of that document on 2026-05-10.",
+      "common_criteria_categories": {
+        "CC1": "Control Environment",
+        "CC2": "Communication and Information",
+        "CC3": "Risk Assessment",
+        "CC4": "Monitoring Activities",
+        "CC5": "Control Activities",
+        "CC6": "Logical and Physical Access Controls",
+        "CC7": "System Operations",
+        "CC8": "Change Management",
+        "CC9": "Risk Mitigation"
+      },
+      "common_criteria_subcriteria": {
+        "CC1.1": "COSO Principle 1: The entity demonstrates a commitment to integrity and ethical values.",
+        "CC1.2": "COSO Principle 2: The board of directors demonstrates independence from management and exercises oversight of the development and performance of internal control.",
+        "CC1.3": "COSO Principle 3: Management establishes, with board oversight, structures, reporting lines, and appropriate authorities and responsibilities in the pursuit of objectives.",
+        "CC1.4": "COSO Principle 4: The entity demonstrates a commitment to attract, develop, and retain competent individuals in alignment with objectives.",
+        "CC1.5": "COSO Principle 5: The entity holds individuals accountable for their internal control responsibilities in the pursuit of objectives.",
+        "CC2.1": "COSO Principle 13: The entity obtains or generates and uses relevant, quality information to support the functioning of internal control.",
+        "CC2.2": "COSO Principle 14: The entity internally communicates information, including objectives and responsibilities for internal control, necessary to support the functioning of internal control.",
+        "CC2.3": "COSO Principle 15: The entity communicates with external parties regarding matters affecting the functioning of internal control.",
+        "CC3.1": "COSO Principle 6: The entity specifies objectives with sufficient clarity to enable the identification and assessment of risks relating to objectives.",
+        "CC3.2": "COSO Principle 7: The entity identifies risks to the achievement of its objectives across the entity and analyzes risks as a basis for determining how the risks should be managed.",
+        "CC3.3": "COSO Principle 8: The entity considers the potential for fraud in assessing risks to the achievement of objectives.",
+        "CC3.4": "COSO Principle 9: The entity identifies and assesses changes that could significantly impact the system of internal control.",
+        "CC4.1": "COSO Principle 16: The entity selects, develops, and performs ongoing and/or separate evaluations to ascertain whether the components of internal control are present and functioning.",
+        "CC4.2": "COSO Principle 17: The entity evaluates and communicates internal control deficiencies in a timely manner to those parties responsible for taking corrective action, including senior management and the board of directors, as appropriate.",
+        "CC5.1": "COSO Principle 10: The entity selects and develops control activities that contribute to the mitigation of risks to the achievement of objectives to acceptable levels.",
+        "CC5.2": "COSO Principle 11: The entity also selects and develops general control activities over technology to support the achievement of objectives.",
+        "CC5.3": "COSO Principle 12: The entity deploys control activities through policies that establish what is expected and in procedures that put policies into action.",
+        "CC6.1": "The entity implements logical access security software, infrastructure, and architectures over protected information assets to protect them from security events to meet the entity's objectives.",
+        "CC6.2": "Prior to issuing system credentials and granting system access, the entity registers and authorizes new internal and external users whose access is administered by the entity. For those users whose access is administered by the entity, user system credentials are removed when user access is no longer authorized.",
+        "CC6.3": "The entity authorizes, modifies, or removes access to data, software, functions, and other protected information assets based on roles, responsibilities, or the system design and changes, giving consideration to the concepts of least privilege and segregation of duties, to meet the entity's objectives.",
+        "CC6.4": "The entity restricts physical access to facilities and protected information assets (for example, data center facilities, backup media storage, and other sensitive locations) to authorized personnel to meet the entity's objectives.",
+        "CC6.5": "The entity discontinues logical and physical protections over physical assets only after the ability to read or recover data and software from those assets has been diminished and is no longer required to meet the entity's objectives.",
+        "CC6.6": "The entity implements logical access security measures to protect against threats from sources outside its system boundaries.",
+        "CC6.7": "The entity restricts the transmission, movement, and removal of information to authorized internal and external users and processes, and protects it during transmission, movement, or removal to meet the entity's objectives.",
+        "CC6.8": "The entity implements controls to prevent or detect and act upon the introduction of unauthorized or malicious software to meet the entity's objectives.",
+        "CC7.1": "To meet its objectives, the entity uses detection and monitoring procedures to identify (1) changes to configurations that result in the introduction of new vulnerabilities, and (2) susceptibilities to newly discovered vulnerabilities.",
+        "CC7.2": "The entity monitors system components and the operation of those components for anomalies that are indicative of malicious acts, natural disasters, and errors affecting the entity's ability to meet its objectives; anomalies are analyzed to determine whether they represent security events.",
+        "CC7.3": "The entity evaluates security events to determine whether they could or have resulted in a failure of the entity to meet its objectives (security incidents) and, if so, takes actions to prevent or address such failures.",
+        "CC7.4": "The entity responds to identified security incidents by executing a defined incident-response program to understand, contain, remediate, and communicate security incidents, as appropriate.",
+        "CC7.5": "The entity identifies, develops, and implements activities to recover from identified security incidents.",
+        "CC8.1": "The entity authorizes, designs, develops or acquires, configures, documents, tests, approves, and implements changes to infrastructure, data, software, and procedures to meet its objectives.",
+        "CC9.1": "The entity identifies, selects, and develops risk mitigation activities for risks arising from potential business disruptions.",
+        "CC9.2": "The entity assesses and manages risks associated with vendors and business partners."
+      },
+      "verification": "Common-criteria category structure (CC1 through CC9) AND verbatim sub-criterion titles (CC1.1 through CC9.2) verified directly against AICPA TSP Section 100 — 2017 Trust Services Criteria with Revised Points of Focus 2022 (the authoritative AICPA publication). Verification date: 2026-05-10.",
+      "verification_date": "2026-05-10 (verbatim)"
+    },
+    "nist_ai_rmf": {
+      "name": "NIST AI Risk Management Framework 1.0",
+      "official_citation": "NIST AI 100-1 — Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+      "scope": "Voluntary framework for AI risk management",
+      "source": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+      "id_format": "FUNCTION CATEGORY.SUBCATEGORY (e.g., GOVERN 1.1, MAP 2.3, MEASURE 2.9, MANAGE 1.1) — note: official format uses spaces between FUNCTION and category, periods within category.subcategory; no hyphens",
+      "functions": {
+        "GOVERN": "A culture of risk management is cultivated and present (cross-cutting; infused throughout the other functions)",
+        "MAP": "Context is recognized and risks related to context are identified",
+        "MEASURE": "Identified risks are assessed, analyzed, or tracked",
+        "MANAGE": "Risks are prioritized and acted upon based on a projected impact"
+      },
+      "verification": "Functions and key Categories/Subcategories within GOVERN, MAP, and MEASURE verified verbatim against NIST AI 100-1 official PDF (2026-05-10 WebFetch). MANAGE function structure not exhaustively read in this pass but is consistent with the four-function framework structure documented above. Subcategory IDs cited in mappings below are from the official NIST publication.",
+      "verification_date": "2026-05-10 (verbatim for GOVERN/MAP/MEASURE; structural for MANAGE)"
+    },
+    "iso_42001": {
+      "name": "ISO/IEC 42001:2023 — Artificial Intelligence Management System",
+      "official_citation": "ISO/IEC 42001:2023 — Information technology — Artificial intelligence — Management system",
+      "scope": "International management-system standard for AI",
+      "source": "https://www.iso.org/standard/81230.html (paywalled)",
+      "clauses_verified_verbatim_2026_05_10": {
+        "4": {
+          "title": "Context of the organization",
+          "subclauses": {
+            "4.1": "Understanding the organization and its context",
+            "4.2": "Understanding the needs and expectations of interested parties",
+            "4.3": "Determining the scope of the AI management system",
+            "4.4": "AI management system"
+          }
+        },
+        "5": {
+          "title": "Leadership",
+          "subclauses": {
+            "5.1": "Leadership and commitment",
+            "5.2": "AI policy",
+            "5.3": "Roles, responsibilities and authorities"
+          }
+        },
+        "6": {
+          "title": "Planning",
+          "subclauses": {
+            "6.1": "Actions to address risks and opportunities",
+            "6.1.1": "General",
+            "6.1.2": "AI risk assessment",
+            "6.1.3": "AI risk treatment",
+            "6.1.4": "AI system impact assessment",
+            "6.2": "AI objectives and planning to achieve them",
+            "6.3": "Planning of changes"
+          }
+        },
+        "7": {
+          "title": "Support",
+          "subclauses": {
+            "7.1": "Resources",
+            "7.2": "Competence",
+            "7.3": "Awareness",
+            "7.4": "Communication",
+            "7.5": "Documented information",
+            "7.5.1": "General",
+            "7.5.2": "Creating and updating documented information",
+            "7.5.3": "Control of documented information"
+          }
+        },
+        "8": {
+          "title": "Operation",
+          "subclauses": {
+            "8.1": "Operational planning and control",
+            "8.2": "AI risk assessment",
+            "8.3": "AI risk treatment",
+            "8.4": "AI system impact assessment"
+          }
+        },
+        "9": {
+          "title": "Performance evaluation",
+          "subclauses": {
+            "9.1": "Monitoring, measurement, analysis and evaluation",
+            "9.2": "Internal audit",
+            "9.2.1": "General",
+            "9.2.2": "Internal audit programme",
+            "9.3": "Management review",
+            "9.3.1": "General",
+            "9.3.2": "Management review inputs",
+            "9.3.3": "Management review results"
+          }
+        },
+        "10": {
+          "title": "Improvement",
+          "subclauses": {
+            "10.1": "Continual improvement",
+            "10.2": "Nonconformity and corrective action"
+          }
+        }
+      },
+      "annexes_verified_verbatim_2026_05_10": {
+        "Annex A": {
+          "type": "normative",
+          "title": "Reference control objectives and controls",
+          "starts_at_page": 17
+        },
+        "Annex B": {
+          "type": "normative",
+          "title": "Implementation guidance for AI controls",
+          "starts_at_page": 21,
+          "note": "CORRECTION: Annex B is NORMATIVE in the final standard, not informative as some secondary sources state"
+        },
+        "Annex C": {
+          "type": "informative",
+          "title": "Potential AI-related organizational objectives and risk sources",
+          "starts_at_page": 46
+        },
+        "Annex D": {
+          "type": "informative",
+          "title": "Use of the AI management system across domains or sectors",
+          "starts_at_page": 49
+        }
+      },
+      "key_definitions_verified_verbatim_2026_05_10": {
+        "note": "From iTeh Standards authoritative preview, Clause 3 Terms and definitions. Especially relevant for Keel mapping:",
+        "3.10_documented_information": "information required to be controlled and maintained by an organization and the medium on which it is contained — explicitly includes 'evidence of results achieved (records)'",
+        "3.18_audit": "systematic and independent process for obtaining evidence and evaluating it objectively to determine the extent to which the audit criteria are fulfilled",
+        "3.21_control_with_risk_qualifier": "measure that maintains and/or modifies risk; includes process, policy, device, practice or other conditions and/or actions",
+        "3.24_ai_system_impact_assessment": "formal, documented process by which the impacts on individuals, groups of individuals, or both, and societies are identified, evaluated and addressed by an organization developing, providing or using products or services utilizing artificial intelligence",
+        "3.26_statement_of_applicability": "documentation of all necessary controls and justification for inclusion or exclusion of controls — explicitly references Annex A"
+      },
+      "clause_verification_sources": [
+        "iTeh Standards authoritative ISO/IEC 42001:2023 Document Preview (cdn.standards.iteh.ai/samples/81230/...) — pages 1-7 of the standard, including full Table of Contents, Foreword, Introduction, Compatibility with other management system standards, Clause 1 Scope, Clause 2 Normative references, Clause 3 Terms and definitions 3.1-3.26, and Clause 4 Context of the organization verbatim",
+        "Compliancepoint ISO 42001 page (Clauses 4-10 titles)"
+      ],
+      "annex_a_sections_verified_verbatim_2026_05_10": {
+        "A.2": "Policies related to AI",
+        "A.3": "Internal organization",
+        "A.4": "Resources for AI systems",
+        "A.5": "Assessing impacts of AI systems",
+        "A.6": "AI system life cycle",
+        "A.7": "Data for AI systems",
+        "A.8": "Information for interested parties of AI systems",
+        "A.9": "Use of AI systems",
+        "A.10": "Third-party and customer relationships"
+      },
+      "annex_a_section_verification_sources": [
+        "ISMS.online — Annex A controls page (https://www.isms.online/iso-42001/annex-a-controls/)",
+        "Vanta — ISO 42001 collection (https://www.vanta.com/collection/iso-42001) — independent confirmation of all 9 section titles verbatim"
+      ],
+      "annex_a_total_controls": "38 controls across 9 sections (two-source confirmation from Vanta and Advisera)",
+      "annex_a_individual_controls_two_source_corroborated": {
+        "note": "Control IDs and title substance are corroborated by ISMS.online and Mindsetcyber. Use the official ISO/IEC standard for verbatim quotation and final typography.",
+        "primary_source_url": "https://www.isms.online/iso-42001/annex-a-controls/",
+        "corroborating_source_url": "https://mindsetcyber.com.au/iso-42001-controls-list/",
+        "controls": {
+          "A.2.2": "AI Policy",
+          "A.2.3": "Alignment With Other Organisational Policies",
+          "A.2.4": "Review of the AI Policy",
+          "A.3.2": "AI Roles and Responsibilities",
+          "A.3.3": "Reporting of Concerns",
+          "A.4.2": "Resource Documentation",
+          "A.4.3": "Data Resources",
+          "A.4.4": "Tooling Resources",
+          "A.4.5": "System and Computing Resources",
+          "A.4.6": "Human Resources",
+          "A.5.2": "AI-System Impact-Assessment Process",
+          "A.5.3": "Documentation of AI-System Impact Assessments",
+          "A.5.4": "Assessing AI-System Impact on Individuals or Groups of Individuals",
+          "A.5.5": "Assessing Societal Impacts of AI Systems",
+          "A.6.1.2": "Objectives for Responsible Development of AI Systems",
+          "A.6.1.3": "Processes for Responsible AI-System Design and Development",
+          "A.6.2.2": "AI-System Requirements and Specification",
+          "A.6.2.3": "Documentation of AI-System Design and Development",
+          "A.6.2.4": "AI-System Verification and Validation",
+          "A.6.2.5": "AI-System Deployment",
+          "A.6.2.6": "AI-System Operation and Monitoring",
+          "A.6.2.7": "AI-System Technical Documentation",
+          "A.6.2.8": "AI-System Recording of Event Logs",
+          "A.7.2": "Data for Development and Enhancement of AI Systems",
+          "A.7.3": "Acquisition of Data",
+          "A.7.4": "Quality of Data for AI Systems",
+          "A.7.5": "Data Provenance",
+          "A.7.6": "Data Preparation",
+          "A.8.2": "System Documentation and Information for Users",
+          "A.8.3": "External Reporting",
+          "A.8.4": "Communication of Incidents",
+          "A.8.5": "Information for Interested Parties",
+          "A.9.2": "Processes for Responsible Use of AI Systems",
+          "A.9.3": "Objectives for Responsible Use of AI Systems",
+          "A.9.4": "Intended use of the AI system",
+          "A.10.2": "Allocating Responsibilities",
+          "A.10.3": "Suppliers",
+          "A.10.4": "Customers"
+        }
+      },
+      "verification": "Clauses, subclauses, definitions, and annex structure checked against the ISO/IEC publication preview. Annex A control IDs and title substance are corroborated from multiple public summaries; use the official standard for verbatim quotation.",
+      "verification_date": "2026-05-10"
+    },
+    "owasp_llm_2025": {
+      "name": "OWASP Top 10 for LLM Applications (2025)",
+      "official_citation": "OWASP Top 10 for LLM Applications (2025) — published March 12, 2025",
+      "scope": "Voluntary security framework for LLM-based applications",
+      "source": "https://genai.owasp.org/llm-top-10/",
+      "id_format": "LLM##:YYYY (e.g., LLM01:2025, LLM02:2025)",
+      "items": {
+        "LLM01:2025": "Prompt Injection",
+        "LLM02:2025": "Sensitive Information Disclosure",
+        "LLM03:2025": "Supply Chain",
+        "LLM04:2025": "Data and Model Poisoning",
+        "LLM05:2025": "Improper Output Handling",
+        "LLM06:2025": "Excessive Agency",
+        "LLM07:2025": "System Prompt Leakage",
+        "LLM08:2025": "Vector and Embedding Weaknesses",
+        "LLM09:2025": "Misinformation",
+        "LLM10:2025": "Unbounded Consumption"
+      },
+      "verification": "All 10 item IDs and titles verified verbatim from genai.owasp.org official page (2026-05-10 WebFetch).",
+      "verification_date": "2026-05-10 (verbatim)"
+    },
+    "mitre_atlas": {
+      "name": "MITRE ATLAS — Adversarial Threat Landscape for Artificial-Intelligence Systems",
+      "scope": "Adversary tactic + technique taxonomy specific to AI/ML systems; the AI counterpart of MITRE ATT&CK.",
+      "source": "https://atlas.mitre.org/ (matrix view) and https://github.com/mitre-atlas/atlas-data (machine-readable ATLAS.yaml in dist/)",
+      "id_format": "Tactics: AML.TAxxxx (e.g., AML.TA0004 Initial Access). Techniques: AML.Txxxx (e.g., AML.T0040 AI Model Inference API Access). Some techniques are reused across tactics (e.g., AML.T0012 Valid Accounts appears under Initial Access and Privilege Escalation).",
+      "notes": "ATLAS terminology has migrated from 'ML' to 'AI' in current published data (e.g., 'AI Model Inference API Access', not 'ML Model Inference API Access'). Use AI-prefixed verbatim titles.",
+      "tactics": {
+        "AML.TA0002": "Reconnaissance",
+        "AML.TA0003": "Resource Development",
+        "AML.TA0004": "Initial Access",
+        "AML.TA0000": "AI Model Access",
+        "AML.TA0005": "Execution",
+        "AML.TA0006": "Persistence",
+        "AML.TA0012": "Privilege Escalation",
+        "AML.TA0007": "Defense Evasion",
+        "AML.TA0013": "Credential Access",
+        "AML.TA0008": "Discovery",
+        "AML.TA0015": "Lateral Movement",
+        "AML.TA0009": "Collection",
+        "AML.TA0001": "AI Attack Staging",
+        "AML.TA0014": "Command and Control",
+        "AML.TA0010": "Exfiltration",
+        "AML.TA0011": "Impact"
+      },
+      "verification": "Tactic and technique IDs + titles verified verbatim from atlas-data ATLAS.yaml (dist/) on 2026-05-10. Permit primitive does not address the full ATLAS taxonomy — Permit is pre-execution governance and post-execution evidence, not adversary detection. Natural mappings (~12 techniques) are scoped to where Permit logs authoritative evidence of authorized vs denied actions, budget enforcement, and tamper-detection on the AI evidence chain.",
+      "verification_date": "2026-05-10 (verbatim)"
+    },
+    "owasp_api_top_10_2023": {
+      "name": "OWASP API Security Top 10 (2023 Edition)",
+      "scope": "Application-level API security risks; not AI-specific.",
+      "source": "https://owasp.org/API-Security/editions/2023/en/0x11-t10/",
+      "id_format": "APIxx:2023 (e.g., API1:2023 Broken Object Level Authorization)",
+      "items": {
+        "API1:2023": "Broken Object Level Authorization",
+        "API2:2023": "Broken Authentication",
+        "API3:2023": "Broken Object Property Level Authorization",
+        "API4:2023": "Unrestricted Resource Consumption",
+        "API5:2023": "Broken Function Level Authorization",
+        "API6:2023": "Unrestricted Access to Sensitive Business Flows",
+        "API7:2023": "Server Side Request Forgery",
+        "API8:2023": "Security Misconfiguration",
+        "API9:2023": "Improper Inventory Management",
+        "API10:2023": "Unsafe Consumption of APIs"
+      },
+      "verification": "All 10 item IDs and titles checked against the cited OWASP API Security Top 10 2023 source on 2026-05-10. Permit mappings concentrate on authorization, resource consumption, provider/API consumption, and inventory evidence.",
+      "verification_date": "2026-05-10 (verbatim)"
+    },
+    "fedramp": {
+      "name": "FedRAMP — Federal Risk and Authorization Management Program",
+      "basis_standard": "NIST Special Publication 800-53 Revision 5 (September 2020, Update 1 December 10, 2020; latest release 5.2.0 issued August 27, 2025)",
+      "scope": "US Federal cloud service authorization program. Applies to Cloud Service Offerings (CSOs) used by federal agencies. Four baselines: Low, Moderate, High, and LI-SaaS (Low Impact SaaS). Each baseline selects a subset of NIST SP 800-53 Rev 5 controls plus FedRAMP-specific parameter values.",
+      "source": "https://www.fedramp.gov/ (program), https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final (NIST 800-53 Rev 5 control catalog), https://www.fedramp.gov/rev5/documents-templates/ (FedRAMP Rev 5 baseline workbooks)",
+      "verification": "Selected NIST SP 800-53 Rev 5 control titles checked against the cited public control catalog source on 2026-05-10. Mappings are evidence-support only within a customer-controlled authorization boundary.",
+      "verification_date": "2026-05-10 (NIST 800-53 Rev 5 control titles verbatim)",
+      "framing": {
+        "statement": "Keel is not a FedRAMP-authorized Cloud Service Offering. These mappings describe how Permit evidence can support a customer's own NIST SP 800-53 control implementation inside that customer's authorization boundary.",
+        "evidence_support": [
+          "Permit records and signed exports can support audit-and-accountability evidence needs.",
+          "Hash chains, checkpoint signatures, and timestamp evidence can support integrity evidence needs."
+        ],
+        "do_not_claim": [
+          "Keel holds a FedRAMP authorization.",
+          "Keel completes a FedRAMP requirement by itself.",
+          "Keel is listed in the FedRAMP Marketplace."
+        ]
+      }
+    },
+    "cis_controls": {
+      "name": "CIS Critical Security Controls",
+      "version": "v8.1 (current published version; v8 originally published May 2021, v8.1 published May 2024)",
+      "scope": "Prioritized set of 18 security controls with associated safeguards. Voluntary framework maintained by the Center for Internet Security.",
+      "source": "https://www.cisecurity.org/controls/v8 (current page references v8.1 download)",
+      "controls": {
+        "Control 1": "Inventory and Control of Enterprise Assets",
+        "Control 2": "Inventory and Control of Software Assets",
+        "Control 3": "Data Protection",
+        "Control 4": "Secure Configuration of Enterprise Assets and Software",
+        "Control 5": "Account Management",
+        "Control 6": "Access Control Management",
+        "Control 7": "Continuous Vulnerability Management",
+        "Control 8": "Audit Log Management",
+        "Control 9": "Email and Web Browser Protections",
+        "Control 10": "Malware Defenses",
+        "Control 11": "Data Recovery",
+        "Control 12": "Network Infrastructure Management",
+        "Control 13": "Network Monitoring and Defense",
+        "Control 14": "Security Awareness and Skills Training",
+        "Control 15": "Service Provider Management",
+        "Control 16": "Application Software Security",
+        "Control 17": "Incident Response Management",
+        "Control 18": "Penetration Testing"
+      },
+      "verification": "All 18 control titles verified verbatim from cisecurity.org blog post listing v8.1 controls on 2026-05-10 WebFetch. Permit substrate naturally maps to ~6 of 18 controls; the others are out-of-scope (network, physical, email/browser, training, malware, penetration testing).",
+      "verification_date": "2026-05-10 (verbatim)"
+    },
+    "pci_dss": {
+      "name": "Payment Card Industry Data Security Standard",
+      "version": "v4.0.1 (released June 2024; current published version; v4.0 was released March 2022 with full enforcement starting April 1, 2024)",
+      "scope": "Mandatory security standard for organizations that handle cardholder data. These mappings apply only when AI workloads touch a customer Cardholder Data Environment.",
+      "source": "https://www.pcisecuritystandards.org/document_library/?category=pcidss (PCI Security Standards Council document library)",
+      "requirements": {
+        "Requirement 1": "Install and maintain network security controls",
+        "Requirement 2": "Apply secure configurations to all system components",
+        "Requirement 3": "Protect stored account data",
+        "Requirement 4": "Protect cardholder data with strong cryptography during transmission over open, public networks",
+        "Requirement 5": "Protect all systems and networks from malicious software",
+        "Requirement 6": "Develop and maintain secure systems and software",
+        "Requirement 7": "Restrict access to system components and cardholder data by business need to know",
+        "Requirement 8": "Identify users and authenticate access to system components",
+        "Requirement 9": "Restrict physical access to cardholder data",
+        "Requirement 10": "Log and monitor all access to system components and cardholder data",
+        "Requirement 11": "Test security of systems and networks regularly",
+        "Requirement 12": "Support information security with organizational policies and programs"
+      },
+      "verification": "Top-level PCI DSS v4.0.1 requirement titles checked against the cited PCI SSC document-library source on 2026-05-10. Mappings apply only when AI workloads touch a customer Cardholder Data Environment.",
+      "verification_date": "2026-05-10 (verbatim)",
+      "framing": {
+        "statement": "Keel is not a PCI DSS validated service provider. These mappings describe evidence support only for customer workloads where AI processing is inside PCI DSS scope.",
+        "evidence_support": [
+          "Permit evidence can support audit logging and monitoring evidence for in-scope AI workloads.",
+          "Customer PCI DSS applicability and validation remain outside Permit scope."
+        ],
+        "do_not_claim": [
+          "Keel is PCI DSS compliant or certified.",
+          "Keel completes PCI DSS requirements by itself.",
+          "PCI DSS applies to AI workloads that do not process cardholder data."
+        ]
+      }
+    },
+    "owasp_asvs": {
+      "name": "OWASP Application Security Verification Standard",
+      "version": "v5.0.0 (released May 30, 2025 at Global AppSec EU Barcelona)",
+      "scope": "Web/application security verification requirements organized into 17 chapters (V1-V17). Reorganized substantially from v4 — chapter numbering and titles are NOT backwards-compatible with v4 sources.",
+      "source": "https://github.com/OWASP/ASVS/tree/master/5.0/en (canonical 5.0 source files)",
+      "id_format": "Vxx.yy.zz (e.g., V8.2.1) — V is the chapter, yy.zz is sub-requirement",
+      "chapters": {
+        "V1": "Encoding and Sanitization",
+        "V2": "Validation and Business Logic",
+        "V3": "Web Frontend Security",
+        "V4": "API and Web Service",
+        "V5": "File Handling",
+        "V6": "Authentication",
+        "V7": "Session Management",
+        "V8": "Authorization",
+        "V9": "Self-contained Tokens",
+        "V10": "OAuth and OIDC",
+        "V11": "Cryptography",
+        "V12": "Secure Communication",
+        "V13": "Configuration",
+        "V14": "Data Protection",
+        "V15": "Secure Coding and Architecture",
+        "V16": "Security Logging and Error Handling",
+        "V17": "WebRTC"
+      },
+      "verification": "Chapter IDs (V1-V17) and verbatim titles confirmed against the ASVS v5.0.0 source folder at github.com/OWASP/ASVS/tree/master/5.0/en on 2026-05-10. Permit primitive natural mappings concentrate in V4 (API and Web Service), V8 (Authorization), V13 (Configuration), V14 (Data Protection), and V16 (Security Logging and Error Handling). Other chapters (V1, V3, V5, V7, V17) are not load-bearing for Permit evidence.",
+      "verification_date": "2026-05-10 (verbatim)"
+    }
+  },
+  "mappings": [
+    {
+      "permit_field": "id",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(8)",
+          "evidence_type": "necessary",
+          "rationale": "Risk assessment must identify the individuals who provided the information for the assessment; permit id provides traceability to specific decisions whose evidence is referenced."
+        },
+        {
+          "framework": "soc2",
+          "control_id": "CC7.3 (System Operations — incident detection/identification)",
+          "evidence_type": "partial",
+          "rationale": "Unique permit identifier supports incident reconstruction; not enough on its own."
+        }
+      ]
+    },
+    {
+      "permit_field": "project_id",
+      "controls": [
+        {
+          "framework": "soc2",
+          "control_id": "CC6.1 (Access Controls)",
+          "evidence_type": "partial",
+          "rationale": "Tenancy boundary identifier supports demonstrating logical access controls between tenants."
+        }
+      ]
+    },
+    {
+      "permit_field": "decision",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(G)(ii)",
+          "evidence_type": "direct_support",
+          "rationale": "For ADMT used in significant decisions per §7150(b)(3), the risk assessment must identify the output of the ADMT and how the business will use the output to make a significant decision. The permit's decision field IS that output."
+        },
+        {
+          "framework": "eu_ai_act",
+          "control_id": "Article 12(2)(a)",
+          "evidence_type": "necessary",
+          "rationale": "Article 12 logging requires recordkeeping of AI system events; the decision is the central event."
+        }
+      ]
+    },
+    {
+      "permit_field": "reason",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(G)(i)",
+          "evidence_type": "partial",
+          "rationale": "Provides human-readable narrative supporting the documentation of ADMT logic; structured decision_details is the more rigorous evidence."
+        }
+      ]
+    },
+    {
+      "permit_field": "decision_details",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(G)(i)",
+          "evidence_type": "direct_support",
+          "rationale": "The decision_details code + reason captures the ADMT's logic at evaluation time, including assumptions/limitations expressed as policy rules."
+        }
+      ]
+    },
+    {
+      "permit_field": "actions_json",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(G)(ii)",
+          "evidence_type": "partial",
+          "rationale": "Documents the actions the ADMT system takes based on the decision output."
+        }
+      ]
+    },
+    {
+      "permit_field": "subject_type + subject_id",
+      "controls": [
+        {
+          "framework": "ccpa",
+          "control_id": "California Civil Code §1798.130(a)(2)",
+          "evidence_type": "partial",
+          "rationale": "Supports verification of consumer requests; subject identifier is the binding from a permit to a verifiable consumer."
+        },
+        {
+          "framework": "soc2",
+          "control_id": "CC6.2 (User Access Control)",
+          "evidence_type": "partial",
+          "rationale": "Identifies the subject for access-control audit purposes."
+        }
+      ]
+    },
+    {
+      "permit_field": "action_name",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(1)",
+          "evidence_type": "partial",
+          "rationale": "Action name supports identifying the purpose for processing; full purpose documentation is broader and lives in policy_id/policy_version."
+        }
+      ]
+    },
+    {
+      "permit_field": "resource_provider + resource_model",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(F)",
+          "evidence_type": "partial",
+          "rationale": "Identifies the third party (AI provider) to whom the business discloses or makes available consumers' personal information for processing."
+        },
+        {
+          "framework": "eu_ai_act",
+          "control_id": "Article 26(2)",
+          "evidence_type": "partial",
+          "rationale": "Deployer obligation to use AI systems as instructed; identifying the specific provider/model is necessary to match against the provider's instructions."
+        }
+      ]
+    },
+    {
+      "permit_field": "estimated_input_tokens + estimated_output_tokens",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(D)",
+          "evidence_type": "partial",
+          "rationale": "Supports identifying the scale of processing (approximate consumer count and per-decision data volume)."
+        }
+      ]
+    },
+    {
+      "permit_field": "request_fingerprint",
+      "controls": [
+        {
+          "framework": "soc2",
+          "control_id": "CC7.2 (Monitoring of System Components)",
+          "evidence_type": "necessary",
+          "rationale": "Cryptographic fingerprint of stable request semantics enables tamper-detection and replay verification."
+        },
+        {
+          "framework": "eu_ai_act",
+          "control_id": "Article 12(1)",
+          "evidence_type": "partial",
+          "rationale": "Automatic logging of AI events; fingerprint is part of the event record."
+        }
+      ]
+    },
+    {
+      "permit_field": "binding_request_hash",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(6)(A)(iv)",
+          "evidence_type": "partial",
+          "rationale": "Cryptographic binding of the dispatched request to the permit decision supports policies/procedures ensuring ADMT works as intended (i.e., no covert request alteration)."
+        },
+        {
+          "framework": "eu_ai_act",
+          "control_id": "Article 12(1)",
+          "evidence_type": "necessary",
+          "rationale": "Evidence that the request as evaluated matches the request as dispatched is foundational to event integrity in the logging requirement."
+        }
+      ]
+    },
+    {
+      "permit_field": "idempotency_key",
+      "controls": [
+        {
+          "framework": "soc2",
+          "control_id": "CC7.1 (System Operations)",
+          "evidence_type": "partial",
+          "rationale": "Idempotency keys support deduplication and replay-safety of automated operations."
+        }
+      ]
+    },
+    {
+      "permit_field": "policy_id + policy_version",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(6)(A)(iv)",
+          "evidence_type": "necessary",
+          "rationale": "Policy version stamp identifies the specific policies/procedures the business has implemented to ensure ADMT works as intended; combined with policy diff tracking, supports change-management evidence."
+        },
+        {
+          "framework": "soc2",
+          "control_id": "CC8.1 (Change Management)",
+          "evidence_type": "necessary",
+          "rationale": "Policy version on every decision enables traceability to a specific change-management record."
+        }
+      ]
+    },
+    {
+      "permit_field": "created_at",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(B) + §7155(a)",
+          "evidence_type": "necessary",
+          "rationale": "Timestamp drives retention-period calculation; risk assessment must document retention period and criteria. Combined with retention engine, supports the §7155 timing requirements."
+        },
+        {
+          "framework": "eu_ai_act",
+          "control_id": "Article 26(6)",
+          "evidence_type": "necessary",
+          "rationale": "Article 26(6) requires high-risk AI deployer logs to be retained for an adequate period determined by applicable law and counsel review; created_at is the anchor for whatever retention window the customer applies."
+        },
+        {
+          "framework": "ccpa",
+          "control_id": "California Civil Code §1798.105(d)(2) and (d)(8)",
+          "evidence_type": "necessary",
+          "rationale": "Permit timestamp supports the retention defense under deletion-exception carve-outs (security/integrity per (d)(2); legal-obligation retention per (d)(8))."
+        }
+      ]
+    },
+    {
+      "permit_field": "parent_permit_id + delegation_depth",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(3)(A)",
+          "evidence_type": "partial",
+          "rationale": "Lineage supports documenting the business's planned method for collecting/using/disclosing personal information across multi-step automated workflows."
+        }
+      ]
+    },
+    {
+      "permit_field": "status",
+      "controls": [
+        {
+          "framework": "soc2",
+          "control_id": "CC7.4 (System Operations — Incident Response)",
+          "evidence_type": "partial",
+          "rationale": "Lifecycle status (evaluated, bound, dispatched, closed, expired, revoked) supports tracing incident scope to specific permit lifecycle stages."
+        }
+      ]
+    }
+  ],
+  "audit_export_bundle_mappings": [
+    {
+      "artifact": "Signed audit export bundle (manifest with content_hash + Ed25519 signature)",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7155(a)(2)",
+          "evidence_type": "direct_support",
+          "rationale": "Risk assessments must be retained, reviewed and updated at least every 3 years. Signed export bundle is a tamper-evident retention artifact supporting that obligation."
+        },
+        {
+          "framework": "eu_ai_act",
+          "control_id": "Article 26(6)",
+          "evidence_type": "direct_support",
+          "rationale": "Provides a cryptographically verifiable retention substrate for high-risk AI deployer logs kept under deployer control for the customer-defined, legally reviewed retention period."
+        }
+      ]
+    },
+    {
+      "artifact": "RFC 3161 timestamp receipt anchored to integrity checkpoint",
+      "controls": [
+        {
+          "framework": "soc2",
+          "control_id": "CC7.2",
+          "control_id_short_title": "System Operations — Monitoring system components for anomalies",
+          "evidence_type": "partial",
+          "rationale": "Independent third-party time witness on integrity checkpoints supports the change-detection / file-integrity-monitoring point of focus under CC7.2 ('Implements Change-Detection Mechanisms — The IT system includes a change-detection mechanism, for example, file integrity monitoring tools, to alert personnel to unauthorized modifications'). RFC 3161 timestamps bind the chain state to an externally witnessed time, which is one form of integrity monitoring evidence.",
+          "correction_note": "Earlier draft labeled this CC7.5 (Logging). That was a mislabel: CC7.5 verbatim is 'The entity identifies, develops, and implements activities to recover from identified security incidents' — recovery, not logging. TSC has no standalone 'Logging' criterion; logging-related evidence lives under CC2.1 (information quality), CC4.1 (ongoing monitoring), and CC7.2 (change-detection). Corrected 2026-05-10 against the authoritative AICPA publication."
+        }
+      ]
+    },
+    {
+      "artifact": "Hash chain (per-project, per-scope continuity)",
+      "controls": [
+        {
+          "framework": "cppa_admt_regs",
+          "control_id": "11 CCR §7152(a)(6)(A)(i)",
+          "evidence_type": "necessary",
+          "rationale": "Listed safeguard for risk assessments includes encryption, segmentation, access controls, change management, network monitoring, and data and integrity monitoring. Hash chain is data-integrity monitoring evidence."
+        }
+      ]
+    }
+  ],
+  "framework_overlays": {
+    "nist_ai_rmf": [
+      {
+        "subcategory": "GOVERN 1.1",
+        "verbatim": "Legal and regulatory requirements involving AI are understood, managed, and documented.",
+        "permit_evidence": [
+          "policy_id + policy_version stamp every Permit with the regulatory framework the policy was authored against",
+          "Signed audit exports provide tamper-evident documentation that decisions complied with the stated policy"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "subcategory": "GOVERN 1.4",
+        "verbatim": "The risk management process and its outcomes are established through transparent policies, procedures, and other controls based on organizational risk priorities.",
+        "permit_evidence": [
+          "policy_id + policy_version + permit decision_details establish the transparent connection from policy → decision",
+          "Hash chain provides tamper-evident outcomes"
+        ],
+        "evidence_type": "direct_support"
+      },
+      {
+        "subcategory": "GOVERN 1.5",
+        "verbatim": "Ongoing monitoring and periodic review of the risk management process and its outcomes are planned and organizational roles and responsibilities clearly defined, including determining the frequency of periodic review.",
+        "permit_evidence": [
+          "Replay drift taxonomy enables ongoing monitoring of whether policy decisions remain consistent over time",
+          "Audit exports provide the artifact for periodic review"
+        ],
+        "evidence_type": "necessary"
+      },
+      {
+        "subcategory": "GOVERN 1.6",
+        "verbatim": "Mechanisms are in place to inventory AI systems and are resourced according to organizational risk priorities.",
+        "permit_evidence": [
+          "resource_provider + resource_model on every Permit forms a queryable inventory of every AI system the organization has used",
+          "permit lineage (parent_permit_id + delegation_depth) tracks compositional AI system use"
+        ],
+        "evidence_type": "direct_support"
+      },
+      {
+        "subcategory": "GOVERN 4.2",
+        "verbatim": "Organizational teams document the risks and potential impacts of the AI technology they design, develop, deploy, evaluate, and use, and they communicate about the impacts more broadly.",
+        "permit_evidence": [
+          "Every Permit is documentation of an evaluated AI use; decision_details captures the risk-relevant context",
+          "Audit exports are the broader-communication artifact"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "subcategory": "GOVERN 6.1",
+        "verbatim": "Policies and procedures are in place that address AI risks associated with third-party entities, including risks of infringement of a third-party's intellectual property or other rights.",
+        "permit_evidence": [
+          "resource_provider identifies the third-party AI vendor; routing decisions track multi-vendor exposure",
+          "Closure records bind to specific vendor responses, enabling third-party-attributable evidence"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "subcategory": "MAP 1.1",
+        "verbatim": "Intended purposes, potentially beneficial uses, context-specific laws, norms and expectations, and prospective settings in which the AI system will be deployed are understood and documented.",
+        "permit_evidence": [
+          "subject_type + subject_id + action_name + project_id together document the intended-use context for every AI invocation",
+          "policy_id captures the context-specific laws/norms encoded as policy"
+        ],
+        "evidence_type": "necessary"
+      },
+      {
+        "subcategory": "MAP 2.2",
+        "verbatim": "Information about the AI system's knowledge limits and how system output may be utilized and overseen by humans is documented. Documentation provides sufficient information to assist relevant AI actors when making decisions and taking subsequent actions.",
+        "permit_evidence": [
+          "decision_details captures Keel authorization reasoning and policy limits at decision time, not model reasoning or model knowledge limits",
+          "actions_json documents intended action context; closure records can bind managed-execution bytes within closure scope"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "subcategory": "MEASURE 2.4",
+        "verbatim": "The functionality and behavior of the AI system and its components — as identified in the MAP function — are monitored when in production.",
+        "permit_evidence": [
+          "Every governed production AI call produces a Permit; closure records bind managed-execution behavior only within closure scope",
+          "Replay enables comparison of policy decisions over time; it does not validate model output quality"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "subcategory": "MEASURE 2.7",
+        "verbatim": "AI system security and resilience — as identified in the MAP function — are evaluated and documented.",
+        "permit_evidence": [
+          "Hash chain + Ed25519 signed exports provide cryptographic evidence of integrity (security)",
+          "RFC 3161 timestamped checkpoints provide tamper-evident time-witness (resilience)"
+        ],
+        "evidence_type": "necessary"
+      },
+      {
+        "subcategory": "MEASURE 2.8",
+        "verbatim": "Risks associated with transparency and accountability — as identified in the MAP function — are examined and documented.",
+        "permit_evidence": [
+          "Audit exports + offline verifier provide vendor-independent transparency",
+          "Three trust-root channels (Keel API, PyPI, GitHub) make accountability evidence verifiable post-vendor"
+        ],
+        "evidence_type": "direct_support"
+      },
+      {
+        "subcategory": "MEASURE 2.9",
+        "verbatim": "The AI model is explained, validated, and documented, and AI system output is interpreted within its context — as identified in the MAP function — to inform responsible use and governance.",
+        "permit_evidence": [
+          "decision_details and closure records document authorization and execution context; they do not explain or validate the model itself",
+          "Replay checks policy-decision reproducibility under recorded snapshots; it does not prove model correctness, factuality, accuracy, or safety"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "subcategory": "MEASURE 2.11",
+        "verbatim": "Fairness and bias — as identified in the MAP function — are evaluated and results are documented.",
+        "permit_evidence": [
+          "Keel does not evaluate fairness or bias; authorization records can help scope which governed decisions a customer includes in fairness or bias review",
+          "Audit exports can retain customer-supplied evaluation artifacts when the customer attaches them, but the customer owns the evaluation"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "subcategory": "MEASURE 3.1",
+        "verbatim": "Approaches, personnel, and documentation are in place to regularly identify and track existing, unanticipated, and emergent AI risks based on factors such as intended and actual performance in deployed contexts.",
+        "permit_evidence": [
+          "Replay drift taxonomy provides systematic tracking of decision changes",
+          "Permits + closure records compare intended (decision) vs actual (closure) AI performance"
+        ],
+        "evidence_type": "necessary"
+      }
+    ],
+    "owasp_llm_2025": [
+      {
+        "item": "LLM01:2025",
+        "name": "Prompt Injection",
+        "permit_evidence": [
+          "binding_request_hash binds the canonical wire-body bytes at dispatch time; any post-decision request alteration (including prompt injection that mutates the request payload after the policy decision) is cryptographically detectable",
+          "request_fingerprint stable semantic fingerprint detects semantic-level prompt manipulation across the request lifecycle"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "item": "LLM02:2025",
+        "name": "Sensitive Information Disclosure",
+        "permit_evidence": [
+          "Permit decision can deny or constrain operations that would disclose sensitive information before execution",
+          "Audit exports provide post-incident forensic evidence of what sensitive content (if any) was processed and through which provider"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "item": "LLM03:2025",
+        "name": "Supply Chain",
+        "permit_evidence": [
+          "resource_provider + resource_model identify the specific AI supply-chain component used for each decision",
+          "Permit policy_id can encode supply-chain governance rules (allowlist of providers, model versions, etc.)"
+        ],
+        "evidence_type": "direct_support"
+      },
+      {
+        "item": "LLM05:2025",
+        "name": "Improper Output Handling",
+        "permit_evidence": [
+          "Closure record's client_response_digest_v1 binds the bytes actually delivered to the client, enabling post-hoc validation that output handling was correct",
+          "Replay drift detection identifies if output validation behavior has changed"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "item": "LLM06:2025",
+        "name": "Excessive Agency",
+        "permit_evidence": [
+          "Permit primitive is the pre-execution authorization for every agent action — agency is bounded by policy, not by the LLM's autonomous capabilities",
+          "actions_json + constraints_json define the bounds of authorized agency for each decision",
+          "Permit lineage (parent_permit_id, delegation_depth) tracks delegated agency across multi-step workflows"
+        ],
+        "evidence_type": "direct_support"
+      },
+      {
+        "item": "LLM07:2025",
+        "name": "System Prompt Leakage",
+        "permit_evidence": [
+          "binding_request_hash detects if the system prompt portion of the request differs at dispatch from what was authorized at decision time"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "item": "LLM08:2025",
+        "name": "Vector and Embedding Weaknesses",
+        "permit_evidence": [
+          "Audit exports retain the resource_inputs_json (which may include reference to embedding/vector inputs) for forensic review",
+          "Replay drift detection may identify if vector-retrieval behavior has changed over time"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "item": "LLM09:2025",
+        "name": "Misinformation",
+        "permit_evidence": [
+          "Closure record + replay provide post-hoc auditability of what the LLM actually output and under what decision context",
+          "Permit decision_details + audit exports help establish ground-truth narrative for misinformation incidents"
+        ],
+        "evidence_type": "partial"
+      },
+      {
+        "item": "LLM10:2025",
+        "name": "Unbounded Consumption",
+        "permit_evidence": [
+          "Permit budgets_json + constraints_json enforce per-call consumption limits at pre-execution",
+          "actual_input_tokens + actual_output_tokens + actual_cost_usd_micros provide consumption telemetry; usage_ledger supports budget reconciliation"
+        ],
+        "evidence_type": "direct_support"
+      }
+    ],
+    "soc2_category_level": {
+      "note": "Mapping is at the category level (CC1 through CC9). Customers and assessors should confirm sub-criterion applicability against the current AICPA Trust Services Criteria.",
+      "mappings": [
+        {
+          "category": "CC3 Risk Assessment",
+          "permit_evidence": "Permit decisions and risk-assessment evidence in audit exports can support customer CC3 risk-assessment evidence."
+        },
+        {
+          "category": "CC6 Logical and Physical Access Controls",
+          "permit_evidence": "Permit subject, project, action, and policy fields can support customer CC6 access-control evidence for governed AI actions."
+        },
+        {
+          "category": "CC7 System Operations",
+          "permit_evidence": "Hash chains, signed exports, and timestamp evidence can support customer CC7 monitoring and logging evidence."
+        },
+        {
+          "category": "CC8 Change Management",
+          "permit_evidence": "policy_id and policy_version fields provide change traceability for AI-governance policy decisions."
+        },
+        {
+          "category": "CC9 Risk Mitigation",
+          "permit_evidence": "constraints_json, budgets_json, denial decisions, and replay evidence can support customer CC9 risk-mitigation evidence."
+        }
+      ]
+    },
+    "iso_42001_clauses_and_annex_a": {
+      "verification_note": "Clauses, subclauses, definitions, and annex structure checked against the ISO/IEC publication preview. Annex A control IDs and title substance are corroborated from multiple public summaries; use the official standard for verbatim quotation.",
+      "clause_mappings": [
+        {
+          "clause": "6 (Planning)",
+          "permit_evidence": "Permit policy_id + policy_version on every decision documents the planned AI policies that support Clause 6.1 (actions to address risks and opportunities) and Clause 6.2 (AI management system objectives). Policy diff tracking supports 6.3 (planning of changes)."
+        },
+        {
+          "clause": "8 (Operation)",
+          "permit_evidence": "Permit primitive IS the operational artifact of the AIMS — every operational AI use produces tamper-evident, signed evidence. Hash chain + closure record bind operational behavior at the moment of each decision (8.1 operational planning and control)."
+        },
+        {
+          "clause": "9 (Performance evaluation)",
+          "permit_evidence": "Audit exports retain performance evidence for Clause 9.1 (monitoring, measurement, analysis, evaluation). Replay drift detection identifies emergent performance deviations (9.1.3). Audit exports support management review (9.3)."
+        },
+        {
+          "clause": "10 (Improvement)",
+          "permit_evidence": "Replay drift + permit lineage + policy diff tracking support 10.1 (continual improvement) and 10.2 (nonconformity and corrective action) by surfacing decision drift and supporting root-cause traceability."
+        }
+      ],
+      "annex_a_mappings_high_relevance": [
+        {
+          "control_id": "A.6.2.8",
+          "control_title": "AI-System Recording of Event Logs",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Per-project hash chain with Ed25519 signed exports and RFC 3161 timestamps provides tamper-evident AI-system event logging evidence. Verifier checks chain continuity and record integrity offline; the customer and auditor determine control sufficiency."
+        },
+        {
+          "control_id": "A.6.2.6",
+          "control_title": "AI-System Operation and Monitoring",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Every production AI call produces a Permit (operation evidence) and closure record (monitoring evidence). Replay drift detection identifies behavioral changes over time."
+        },
+        {
+          "control_id": "A.6.2.7",
+          "control_title": "AI-System Technical Documentation",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
+          "evidence_type": "necessary",
+          "permit_evidence": "Permit decision_details + binding evidence + closure record document the technical configuration of every AI call. Coupled with the public Permit Spec at github.com/keelapi/keel-permit, the wire-format documentation is itself published."
+        },
+        {
+          "control_id": "A.5.3",
+          "control_title": "Documentation of AI-System Impact Assessments",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
+          "evidence_type": "necessary",
+          "permit_evidence": "Signed audit exports + cryptographic integrity chain retain impact-assessment documentation with tamper-evident verification. 11 CCR §7152 risk assessments per California requirement are an example of the impact-assessment artifact Keel evidence supports."
+        },
+        {
+          "control_id": "A.5.2",
+          "control_title": "AI-System Impact-Assessment Process",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit primitive provides the per-decision evidence that feeds the impact assessment process; Keel does NOT itself perform the assessment but provides the substrate."
+        },
+        {
+          "control_id": "A.7.5",
+          "control_title": "Data Provenance",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Permit request_fingerprint + binding_request_hash + closure record digests provide cryptographic provenance: from input bytes through dispatch to provider response to client delivery."
+        },
+        {
+          "control_id": "A.6.2.4",
+          "control_title": "AI-System Verification and Validation",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
+          "evidence_type": "necessary",
+          "permit_evidence": "Replay drift taxonomy provides systematic V&V evidence: replays a past decision against its snapshot policy and against current policy; classifies drift (replay_vs_original, current_vs_snapshot, replay_impossible)."
+        },
+        {
+          "control_id": "A.2.2",
+          "control_title": "AI Policy",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
+          "evidence_type": "necessary",
+          "permit_evidence": "policy_id + policy_version stamped on every Permit makes the AI Policy operationally enforced and evidentially documented per decision."
+        },
+        {
+          "control_id": "A.3.2",
+          "control_title": "AI Roles and Responsibilities",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit subject_type + subject_id + action_name attributes every AI use to a specific role/responsibility."
+        },
+        {
+          "control_id": "A.10.3",
+          "control_title": "Suppliers",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
+          "evidence_type": "direct_support",
+          "permit_evidence": "resource_provider + resource_model on every Permit forms a queryable inventory of AI suppliers used across the organization, with cryptographic linkage to specific transactions."
+        }
+      ],
+      "annex_a_mappings_secondary_relevance": [
+        {
+          "control_id": "A.7.4",
+          "control_title": "Quality of Data for AI Systems",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
+          "evidence_type": "partial",
+          "permit_evidence": "Closure record provider_response_digest_v1 binds the actual data bytes received from the AI provider; supports post-hoc quality auditing."
+        },
+        {
+          "control_id": "A.6.2.2",
+          "control_title": "AI-System Requirements and Specification",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit constraints_json + budgets_json + policy_id encode AI-system requirements at decision time."
+        },
+        {
+          "control_id": "A.10.4",
+          "control_title": "Customers",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
+          "evidence_type": "partial",
+          "permit_evidence": "project_id + tenancy boundary supports per-customer governance evidence for B2B SaaS operators using Keel."
+        },
+        {
+          "control_id": "A.8.4",
+          "control_title": "Communication of Incidents",
+          "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
+          "evidence_type": "partial",
+          "permit_evidence": "Tampering detection codes (WALK_RECORD_HASH_MISMATCH, WALK_CLOSURE_DISPATCH_DIGEST_MISMATCH, etc., per spec/failure-codes.md) provide specific incident classification for AI-system integrity events."
+        }
+      ]
+    },
+    "mitre_atlas": {
+      "scope_note": "Permit is pre-execution authorization plus tamper-evident post-execution evidence — NOT an EDR/SOC tool, NOT adversary detection. Mappings below are limited to techniques where the Permit primitive directly authorizes/denies the action OR the audit chain provides authoritative evidence of what was authorized vs attempted vs executed. Recon/Discovery/Lateral-Movement tactics are out of scope.",
+      "technique_mappings": [
+        {
+          "technique_id": "AML.T0040",
+          "technique_name": "AI Model Inference API Access",
+          "tactic": "AML.TA0000 AI Model Access",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Permit primitive IS the pre-execution authorization for inference API access. Every call produces a decision artifact (allow/deny/challenge) bound to subject_id, resource_provider, and resource_model. Audit chain provides post-hoc evidence of every authorized inference."
+        },
+        {
+          "technique_id": "AML.T0044",
+          "technique_name": "Full AI Model Access",
+          "tactic": "AML.TA0000 AI Model Access",
+          "evidence_type": "necessary",
+          "permit_evidence": "Permit policy_id can encode allowlist of approved model surfaces; resource_provider + resource_model identify the specific model boundary on every decision. Permit alone does not control credentials or infrastructure access — necessary but not enough on its own."
+        },
+        {
+          "technique_id": "AML.T0047",
+          "technique_name": "AI-Enabled Product or Service",
+          "tactic": "AML.TA0000 AI Model Access",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit logs every authorized invocation of the AI-enabled service. Does not prevent abuse via the legitimate product surface, but provides forensic evidence of usage patterns."
+        },
+        {
+          "technique_id": "AML.T0049",
+          "technique_name": "Exploit Public-Facing Application",
+          "tactic": "AML.TA0004 Initial Access",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit audit chain provides tamper-evident record of which actions were authorized vs denied. Does NOT prevent application-layer exploits; provides post-incident forensic evidence about what the attacker was authorized to do post-exploit."
+        },
+        {
+          "technique_id": "AML.T0050",
+          "technique_name": "Command and Scripting Interpreter",
+          "tactic": "AML.TA0005 Execution",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Permit gates action_name and actions_json — agents can only invoke commands/scripts the policy authorizes. Permit lineage (parent_permit_id) tracks compositional script execution. Denied permits log attempted unauthorized invocations."
+        },
+        {
+          "technique_id": "AML.T0051",
+          "technique_name": "LLM Prompt Injection",
+          "tactic": "AML.TA0005 Execution",
+          "evidence_type": "partial",
+          "permit_evidence": "binding_request_hash binds the canonical wire body at dispatch — post-decision request alteration (one class of prompt injection) is cryptographically detectable. Does not prevent prompt-injection at the input layer; provides evidence chain of what was authorized vs what was dispatched."
+        },
+        {
+          "technique_id": "AML.T0053",
+          "technique_name": "AI Agent Tool Invocation",
+          "tactic": "AML.TA0005 Execution / AML.TA0012 Privilege Escalation",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Every agent tool invocation requires a Permit. action_name identifies the tool; actions_json captures parameters; subject_id binds the invoking agent. Constraints/budgets prevent escalation via legitimate tools."
+        },
+        {
+          "technique_id": "AML.T0054",
+          "technique_name": "LLM Jailbreak",
+          "tactic": "AML.TA0007 Defense Evasion / AML.TA0012 Privilege Escalation",
+          "evidence_type": "partial",
+          "permit_evidence": "Even if a model is jailbroken, the Permit policy gates which actions can be invoked downstream — jailbreaking the model does not bypass policy enforcement on resulting tool calls. Audit chain records denied permits showing jailbreak-induced unauthorized requests."
+        },
+        {
+          "technique_id": "AML.T0024",
+          "technique_name": "Exfiltration via AI Inference API",
+          "tactic": "AML.TA0010 Exfiltration",
+          "evidence_type": "necessary",
+          "permit_evidence": "Permit budgets_json caps per-window token/cost consumption — limits bulk-exfiltration via inference. estimated_output_tokens + actual_output_tokens enable detection of unusual extraction volume. closure record's provider_response_digest_v1 binds what was actually returned for post-incident forensics."
+        },
+        {
+          "technique_id": "AML.T0056",
+          "technique_name": "Extract LLM System Prompt",
+          "tactic": "AML.TA0010 Exfiltration",
+          "evidence_type": "partial",
+          "permit_evidence": "binding_request_hash detects if the system prompt portion of the request was altered post-decision. closure record bundles the actual output bytes — supports post-hoc detection of system-prompt leakage in responses."
+        },
+        {
+          "technique_id": "AML.T0029",
+          "technique_name": "Denial of AI Service",
+          "tactic": "AML.TA0011 Impact",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Permit budgets_json enforces per-subject rate and cost limits at pre-execution — directly prevents cost-based and request-volume DoS. Quota envelope denies further calls when limits are hit, with full denial audit trail."
+        },
+        {
+          "technique_id": "AML.T0034",
+          "technique_name": "Cost Harvesting",
+          "tactic": "AML.TA0011 Impact",
+          "evidence_type": "direct_support",
+          "permit_evidence": "budgets_json is the direct control for cost harvesting. usage_ledger reconciles authorized vs actual cost; denied permits log attempted budget overruns. Replay enables forensic attribution of cost-harvesting attempts."
+        },
+        {
+          "technique_id": "AML.T0046",
+          "technique_name": "Spamming AI System with Chaff Data",
+          "tactic": "AML.TA0011 Impact",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit budgets + rate limits restrict chaff-data injection volume. Does not detect chaff quality; provides bound on chaff quantity."
+        }
+      ]
+    },
+    "owasp_api_top_10_2023": {
+      "scope_note": "Permit primitive is API-level governance. Natural mappings concentrate on authorization (API1, API3, API5), resource consumption (API4, API6), and AI-provider consumption (API10). Permit provides necessary identity binding for API2. Permit does NOT address SSRF (API7) or system-configuration (API8); those are explicit non-mappings.",
+      "item_mappings": [
+        {
+          "item": "API1:2023",
+          "name": "Broken Object Level Authorization",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit binds subject_id + project_id + resource (resource_provider + resource_model) to every authorized action. Does NOT replace per-object authorization in the application layer, but provides tamper-evident decision evidence at the AI-action boundary."
+        },
+        {
+          "item": "API2:2023",
+          "name": "Broken Authentication",
+          "evidence_type": "necessary",
+          "permit_evidence": "Permit framework requires authenticated identity (subject_id) on every decision — broken authentication upstream propagates into broken Permit evidence. Audit chain provides forensic record of which authenticated principal performed each action."
+        },
+        {
+          "item": "API3:2023",
+          "name": "Broken Object Property Level Authorization",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit decision_details + constraints_json can encode property-level access rules (e.g., redaction policies). Closure record's client_response_digest_v1 binds the actual bytes delivered for post-hoc property-level audit."
+        },
+        {
+          "item": "API4:2023",
+          "name": "Unrestricted Resource Consumption",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Permit budgets_json enforces per-subject, per-project, and per-window consumption limits at pre-execution. usage_ledger reconciles authorized vs actual; denials log attempted overruns. This is the direct mapping — Permit is purpose-built for AI resource consumption governance."
+        },
+        {
+          "item": "API5:2023",
+          "name": "Broken Function Level Authorization",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Permit action_name + policy_id gate which functions/actions a subject can invoke. Every authorized function call produces an audit record; denials log attempted unauthorized invocations."
+        },
+        {
+          "item": "API6:2023",
+          "name": "Unrestricted Access to Sensitive Business Flows",
+          "evidence_type": "necessary",
+          "permit_evidence": "Permit policy can encode business-flow-level constraints (e.g., per-flow budgets, per-flow subject restrictions). policy_id stamps the flow that authorized the action. Necessary for flow-level governance; direct support only when paired with business-flow policy authoring."
+        },
+        {
+          "item": "API9:2023",
+          "name": "Improper Inventory Management",
+          "evidence_type": "partial",
+          "permit_evidence": "resource_provider + resource_model + project_id on every Permit forms a queryable inventory of which AI APIs were used by which projects. Signed audit exports retain this inventory tamper-evidently. Does not catch unused/legacy APIs that never produce Permits."
+        },
+        {
+          "item": "API10:2023",
+          "name": "Unsafe Consumption of APIs",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit governs outbound AI provider API consumption: resource_provider + resource_model identify the third party, closure record's provider_response_digest_v1 binds what was actually returned, allowing detection of unsafe responses post-hoc."
+        }
+      ]
+    },
+    "fedramp": {
+      "scope_note": "Evidence-support mapping for selected NIST SP 800-53 Rev 5 controls inside a customer's own authorization boundary. Coverage is strongest in AU audit-and-accountability controls, with partial support in selected AC, CM, CA, IR, SI, and SC controls.",
+      "baseline_applicability_note": "FedRAMP baselines select different NIST SP 800-53 controls. Customers should consult their selected baseline workbook to determine applicability.",
+      "control_mappings": [
+        {
+          "control_id": "AU-2",
+          "control_title": "Event Logging",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Every Permit decision is an event log entry. Per-project hash chain makes captured event continuity verifiable. resource_provider + resource_model + action_name + subject_id form the event description. Permit substrate captures governed AI-decision events emitted by Keel and supports AU-2 evidence at the AI-action boundary."
+        },
+        {
+          "control_id": "AU-3",
+          "control_title": "Content of Audit Records",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Permit decision and closure fields record event type, time, resource, subject, outcome, policy version, and execution context for governed AI actions."
+        },
+        {
+          "control_id": "AU-4",
+          "control_title": "Audit Log Storage Capacity",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit evidence should be paired with customer-defined storage-capacity and retention controls. Signed exports support customer archive workflows."
+        },
+        {
+          "control_id": "AU-6",
+          "control_title": "Audit Record Review, Analysis, and Reporting",
+          "evidence_type": "partial",
+          "permit_evidence": "Signed audit export bundles and verifier output support customer review, analysis, and reporting workflows for governed AI actions."
+        },
+        {
+          "control_id": "AU-7",
+          "control_title": "Audit Record Reduction and Report Generation",
+          "evidence_type": "necessary",
+          "permit_evidence": "Audit export bundle is queryable and content-addressed via manifest. Customer integrates Keel exports with their reporting workflows. Permit substrate provides the records; reduction/report generation lives in the customer's reporting layer."
+        },
+        {
+          "control_id": "AU-8",
+          "control_title": "Time Stamps",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Permit timestamps and RFC 3161 timestamp receipts, when present, support independent time evidence for integrity checkpoints."
+        },
+        {
+          "control_id": "AU-9",
+          "control_title": "Protection of Audit Information",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Per-project hash chain detects unauthorized modification of covered audit records because each record is cryptographically bound to its predecessor via SHA-256. Ed25519 signed exports detect post-export modification. These primitives support AU-9 audit-information integrity evidence; customer access-control design remains separate."
+        },
+        {
+          "control_id": "AU-9(2)",
+          "control_title": "Protection of Audit Information | Store on Separate Physical Systems or Components",
+          "evidence_type": "direct_support",
+          "permit_evidence": "External checkpoint anchoring can store signed chain snapshots separately from primary audit storage."
+        },
+        {
+          "control_id": "AU-9(3)",
+          "control_title": "Protection of Audit Information | Cryptographic Protection",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Hash chain (SHA-256), Ed25519 signed exports, RFC 3161 TSA receipts. Three cryptographic protection mechanisms are layered: chain integrity, export authenticity, and time-witnessing. These named, auditable primitives support AU-9(3) cryptographic-integrity evidence."
+        },
+        {
+          "control_id": "AU-10",
+          "control_title": "Non-repudiation",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Ed25519 signed exports, public key manifests, and timestamp receipts support scoped signature-attribution evidence for exported AI-action records."
+        },
+        {
+          "control_id": "AU-11",
+          "control_title": "Audit Record Retention",
+          "evidence_type": "partial",
+          "permit_evidence": "Signed exports can be archived to support customer-defined audit-retention requirements. Retention duration remains a customer control and contract question."
+        },
+        {
+          "control_id": "AU-12",
+          "control_title": "Audit Record Generation",
+          "evidence_type": "direct_support",
+          "permit_evidence": "The Permit primitive generates AI-action audit records for governed requests. Hash-chain continuity makes covered record deletion or reordering detectable. Every governed Permit produces a record; bypassed traffic outside Keel is out of scope."
+        },
+        {
+          "control_id": "AC-3",
+          "control_title": "Access Enforcement",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Permit is the AI-action access enforcement mechanism. policy_id + policy_version stamp the enforcement rule; subject_id binds the requesting identity. Denied permits log unauthorized-access attempts. Note: AC-3 covers system access broadly; Permit enforces at the AI-action boundary only — system-level access enforcement remains customer responsibility."
+        },
+        {
+          "control_id": "AC-6",
+          "control_title": "Least Privilege",
+          "evidence_type": "partial",
+          "permit_evidence": "Policies can encode least-privilege rules for AI actions (e.g., agent X may invoke only tool subset Y). Permit denials evidence least-privilege enforcement. Customer is responsible for authoring least-privilege policies; Permit enforces and evidences them."
+        },
+        {
+          "control_id": "CM-3",
+          "control_title": "Configuration Change Control",
+          "evidence_type": "necessary",
+          "permit_evidence": "policy_id and policy_version fields bind each AI decision to a specific policy configuration version and support customer change-traceability evidence."
+        },
+        {
+          "control_id": "CM-8",
+          "control_title": "System Component Inventory",
+          "evidence_type": "partial",
+          "permit_evidence": "resource_provider + resource_model on every Permit forms a queryable inventory of AI components used (which providers, which models). Supports the AI portion of system component inventory. Customer responsible for general system component inventory beyond AI components."
+        },
+        {
+          "control_id": "CA-7",
+          "control_title": "Continuous Monitoring",
+          "evidence_type": "necessary",
+          "permit_evidence": "Per-project hash chain emits continuous audit evidence. External checkpoint cadence (every 5 minutes) provides ongoing integrity proof. Replay drift detection identifies behavioral changes over time. Provides the AI-action telemetry for the customer's continuous monitoring program."
+        },
+        {
+          "control_id": "IR-4",
+          "control_title": "Incident Handling",
+          "evidence_type": "partial",
+          "permit_evidence": "Incident evidence export bundle (shipped 2026-04-25) packages signed evidence for incident response workflows. Tampering detection codes (WALK_RECORD_HASH_MISMATCH, WALK_CLOSURE_DISPATCH_DIGEST_MISMATCH, etc.) provide specific incident classification for AI-integrity events. Supports customer IR program for AI-related incidents; does not provide general incident response."
+        },
+        {
+          "control_id": "IR-5",
+          "control_title": "Incident Monitoring",
+          "evidence_type": "partial",
+          "permit_evidence": "Replay drift detection is the AI-incident monitoring surface — identifies emerging decision drift, policy violations, and integrity events. Customer integrates with their SIEM for cross-surface incident monitoring."
+        },
+        {
+          "control_id": "SI-7",
+          "control_title": "Software, Firmware, and Information Integrity",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Hash chain integrity + Ed25519 signed exports + RFC 3161 timestamps provide cryptographic integrity evidence for AI-decision information. Build SHA stamped on every governance event provides code-level traceability. Verifier CLI checks integrity without vendor access. These artifacts support SI-7 integrity-verification evidence for the Permit substrate."
+        },
+        {
+          "control_id": "SI-12",
+          "control_title": "Information Management and Retention",
+          "evidence_type": "partial",
+          "permit_evidence": "Signed exports and customer archives can support AI-evidence retention. Customer information-management policies remain outside Permit scope."
+        },
+        {
+          "control_id": "SC-13",
+          "control_title": "Cryptographic Protection",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Named cryptographic primitives used: SHA-256 (chain), Ed25519 (signatures), AES-256-GCM (provider key encryption), RFC 3161 (timestamping). All NIST-approved or industry-standard primitives. Cryptographic protection is design-level not bolt-on."
+        },
+        {
+          "control_id": "SC-28",
+          "control_title": "Protection of Information at Rest",
+          "evidence_type": "partial",
+          "permit_evidence": "Signed exports, hash-chain integrity, and checkpoint evidence protect AI evidence with cryptographic integrity. Customer confidentiality controls remain separate."
+        }
+      ],
+      "uncovered_high_priority_controls": [
+        {
+          "control_id": "AU-9(4)",
+          "control_title": "Protection of Audit Information | Access by Subset of Privileged Users",
+          "status": "OUT OF SCOPE FOR PERMIT SUBSTRATE",
+          "rationale": "Privileged-user access management to audit logs is a customer-side control. Keel substrate provides cryptographic integrity (any tampering is detectable) but does not enforce who can READ audit logs — that is customer IAM / RBAC responsibility."
+        },
+        {
+          "control_id": "AU-5",
+          "control_title": "Response to Audit Logging Process Failures",
+          "status": "PARTIAL - CUSTOMER ALERTING REQUIRED",
+          "rationale": "Permit verifier failure codes can identify integrity failures; customer monitoring and alert routing remain customer-owned controls."
+        },
+        {
+          "control_id": "CP-2",
+          "control_title": "Contingency Plan",
+          "status": "PARTIAL - CUSTOMER PLAN REQUIRED",
+          "rationale": "Permit evidence availability can support contingency evidence needs, but the customer contingency plan remains outside Permit scope."
+        }
+      ]
+    },
+    "cis_controls": {
+      "scope_note": "Permit maps to selected CIS Controls where AI-decision evidence, policy traceability, and audit-log integrity are relevant. Other CIS Controls remain customer-owned.",
+      "control_mappings": [
+        {
+          "control": "Control 3",
+          "name": "Data Protection",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit substrate protects AI-decision audit evidence at rest via Ed25519 signatures + hash chain integrity. Customer is responsible for general data protection beyond AI audit surface."
+        },
+        {
+          "control": "Control 4",
+          "name": "Secure Configuration of Enterprise Assets and Software",
+          "evidence_type": "partial",
+          "permit_evidence": "policy_id + policy_version are configuration-as-code for AI governance rules. Policy diff tracking with content-addressed snapshots provides change traceability. Covers AI-governance configuration only, not general enterprise/asset configuration."
+        },
+        {
+          "control": "Control 6",
+          "name": "Access Control Management",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit is the AI-action access control mechanism. subject_id + project_id + action_name + policy_id record every authorized AI action. Denied permits log access-control violations. Partial because Control 6 covers identity/access broadly; Permit covers the AI-action boundary only."
+        },
+        {
+          "control": "Control 8",
+          "name": "Audit Log Management",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Hash chains, signed exports, and timestamp evidence support tamper-evident audit-log collection, retention, and review for governed AI actions."
+        },
+        {
+          "control": "Control 15",
+          "name": "Service Provider Management",
+          "evidence_type": "partial",
+          "permit_evidence": "Signed audit exports and resource_provider fields can support customer service-provider inventory and monitoring evidence for AI providers."
+        },
+        {
+          "control": "Control 16",
+          "name": "Application Software Security",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit governs the security of AI-driven application behavior — closure_v2 cryptographic binding detects unauthorized modification of dispatched requests between policy evaluation and provider execution. Build SHA stamping on every governance event supports 16.7 ('Use Standard Hardening Configuration Templates for Application Infrastructure'). Partial because Control 16 covers application security broadly; Permit covers the AI-action surface."
+        },
+        {
+          "control": "Control 17",
+          "name": "Incident Response Management",
+          "evidence_type": "partial",
+          "permit_evidence": "Incident evidence export bundle (shipped 2026-04-25) packages signed evidence for IR workflows. Tampering-detection failure codes (per spec/failure-codes.md) provide specific incident classification for AI-integrity events. Supports customer IR program for AI-related incidents."
+        }
+      ],
+      "out_of_scope_controls": [
+        "Control 1 Inventory and Control of Enterprise Assets — customer asset inventory responsibility",
+        "Control 2 Inventory and Control of Software Assets — customer software inventory responsibility",
+        "Control 5 Account Management — customer IAM responsibility",
+        "Control 7 Continuous Vulnerability Management — customer vuln management responsibility",
+        "Control 9 Email and Web Browser Protections — entirely customer responsibility",
+        "Control 10 Malware Defenses — entirely customer responsibility",
+        "Control 11 Data Recovery — customer backup/recovery responsibility",
+        "Control 12 Network Infrastructure Management — customer responsibility",
+        "Control 13 Network Monitoring and Defense — customer responsibility",
+        "Control 14 Security Awareness and Skills Training — customer responsibility",
+        "Control 18 Penetration Testing — customer responsibility"
+      ]
+    },
+    "pci_dss": {
+      "scope_note": "Evidence-support mapping for customer AI workloads that process cardholder data within a Cardholder Data Environment. Requirement 10 is the primary fit; Requirements 6, 7, and 12 are partial fits.",
+      "requirement_mappings": [
+        {
+          "requirement": "Requirement 6",
+          "name": "Develop and maintain secure systems and software",
+          "evidence_type": "partial",
+          "permit_evidence": "policy_id and policy_version fields provide AI-policy change traceability. General secure-development controls remain customer-owned."
+        },
+        {
+          "requirement": "Requirement 7",
+          "name": "Restrict access to system components and cardholder data by business need to know",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit policies can document and enforce AI-action access boundaries. CDE access control remains customer-owned."
+        },
+        {
+          "requirement": "Requirement 10",
+          "name": "Log and monitor all access to system components and cardholder data",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Hash-chained audit records, signed exports, verifier output, and timestamp evidence can support audit logging and monitoring evidence for in-scope AI workloads. Customer retention requirements remain customer-owned."
+        },
+        {
+          "requirement": "Requirement 12",
+          "name": "Support information security with organizational policies and programs",
+          "evidence_type": "partial",
+          "permit_evidence": "Permit policy artifacts and policy versions can support AI-governance policy evidence. Organization-wide security policy remains customer-owned."
+        }
+      ],
+      "out_of_scope_requirements": [
+        "Requirement 1 Install and maintain network security controls — customer network responsibility",
+        "Requirement 2 Apply secure configurations to all system components — customer config baseline responsibility",
+        "Requirement 3 Protect stored account data — Permit substrate doesn't touch cardholder data",
+        "Requirement 4 Protect cardholder data with strong cryptography during transmission over open, public networks — TLS/transport layer responsibility outside Permit substrate",
+        "Requirement 5 Protect all systems and networks from malicious software — customer EDR/anti-malware responsibility",
+        "Requirement 8 Identify users and authenticate access to system components — customer IAM responsibility",
+        "Requirement 9 Restrict physical access to cardholder data — physical security responsibility",
+        "Requirement 11 Test security of systems and networks regularly — customer vulnerability scanning / pentesting responsibility"
+      ],
+      "broad_scoping_caveat": "PCI DSS applies to entities that handle cardholder data within a Cardholder Data Environment. These mappings are for customer AI workloads that are inside that scope."
+    },
+    "owasp_asvs": {
+      "version_note": "ASVS v5.0.0 chapter numbering differs from v4; cite the v5 version qualifier when using these mappings.",
+      "chapter_mappings": [
+        {
+          "chapter": "V4 API and Web Service",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Permit primitive is API governance: every AI API call requires a decision, with subject + resource + action attribution. Signed exports + closure records provide tamper-evident API-call evidence. Use as primary chapter for ASVS-aligned coverage claims."
+        },
+        {
+          "chapter": "V8 Authorization",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Permit IS the AI-action authorization layer. policy_id + policy_version stamp the authorization rule; subject_id + resource binding produces the decision record. Denied permits log unauthorized-attempt evidence."
+        },
+        {
+          "chapter": "V11 Cryptography",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Hash-chain integrity, Ed25519 signed exports, timestamp receipts, externally anchored checkpoints, and key manifests provide cryptographic integrity evidence."
+        },
+        {
+          "chapter": "V13 Configuration",
+          "evidence_type": "partial",
+          "permit_evidence": "policy_id and policy_version provide AI-governance configuration traceability. Runtime and infrastructure configuration remain outside Permit scope."
+        },
+        {
+          "chapter": "V14 Data Protection",
+          "evidence_type": "necessary",
+          "permit_evidence": "Permit closure records and signed exports protect AI evidence with cryptographic integrity. General data-protection compliance remains customer-owned."
+        },
+        {
+          "chapter": "V16 Security Logging and Error Handling",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Per-project hash chain + Ed25519 signatures + RFC 3161 timestamps provide tamper-evident security logging for the AI surface. Tampering-detection codes (WALK_RECORD_HASH_MISMATCH, etc.) provide specific error classification. Independent verifier CLI enables verification without vendor account."
+        }
+      ]
+    }
+  },
+  "explicit_non_mappings": [
+    {
+      "framework": "cppa_admt_regs",
+      "control_id": "11 CCR §7150(b)(4)(E) (proposed text)",
+      "status": "NOT IN FINAL ADOPTED TEXT",
+      "rationale": "This trigger was not included in the final adopted text. Final scope is limited to ADMT used to replace human decisionmaking for significant decisions, or training ADMT for those uses or for identity/biological profiling technology."
+    },
+    {
+      "framework": "cppa_admt_regs",
+      "control_id": "11 CCR §7152(a)(2)(B) (proposed text)",
+      "status": "NOT IN FINAL ADOPTED TEXT",
+      "rationale": "This sub-block was not included in final §7152(a)(2); final text requires a concise explanation of assessment purpose."
+    },
+    {
+      "framework": "cppa_admt_regs",
+      "control_id": "11 CCR §7152(a)(6)(B) (proposed text)",
+      "status": "NOT IN FINAL ADOPTED TEXT",
+      "rationale": "The detailed proposed evaluation framework was reduced in the final adopted text to policy, procedure, and training requirements."
+    },
+    {
+      "framework": "owasp_api_top_10_2023",
+      "control_id": "API7:2023 (Server Side Request Forgery)",
+      "status": "OUT OF SCOPE",
+      "rationale": "SSRF is a transport-layer/application-layer concern handled by network egress controls, URL allowlists, and request-validation libraries in the application. Permit primitive operates at the AI decision boundary and does not control outbound HTTP behavior at the network layer. Customers should address API7 via standard application-security controls."
+    },
+    {
+      "framework": "owasp_api_top_10_2023",
+      "control_id": "API8:2023 (Security Misconfiguration)",
+      "status": "OUT OF SCOPE",
+      "rationale": "Security Misconfiguration spans deployment configuration, framework defaults, HTTP headers, error verbosity, and infrastructure hardening — none of which the Permit primitive addresses. Customers should address API8 via standard application-security configuration baselines (e.g., CIS benchmarks)."
+    },
+    {
+      "framework": "owasp_asvs",
+      "control_id": "V17 (WebRTC)",
+      "status": "NOT APPLICABLE",
+      "rationale": "ASVS v5.0.0 V17 covers WebRTC peer-connection security. Permit primitive is HTTP-API governance and has no WebRTC surface."
+    },
+    {
+      "framework": "mitre_atlas",
+      "control_id": "AML.TA0008 Discovery (entire tactic)",
+      "status": "OUT OF SCOPE",
+      "rationale": "Discovery techniques (AML.T0007 Discover AI Artifacts, AML.T0013 Discover AI Model Ontology, etc.) describe adversary recon AFTER access has been obtained. Permit does not detect recon behavior — that is a SOC/EDR responsibility. Permit may provide forensic context post-incident but does not provide preventive or detection evidence for this tactic."
+    },
+    {
+      "framework": "mitre_atlas",
+      "control_id": "AML.TA0002 Reconnaissance (entire tactic)",
+      "status": "OUT OF SCOPE",
+      "rationale": "Reconnaissance techniques are pre-engagement adversary behavior outside the Permit primitive's scope. Permit operates inside the customer environment at the AI decision boundary."
+    },
+    {
+      "framework": "mitre_atlas",
+      "control_id": "AML.TA0006 Persistence + AML.TA0015 Lateral Movement + AML.TA0014 Command and Control",
+      "status": "OUT OF SCOPE",
+      "rationale": "These tactics describe in-environment adversary behavior (persistence mechanisms, lateral movement, C2 channels). Permit governs the AI decision boundary, not host/network telemetry. Mappings to these tactics would be over-claim."
+    },
+    {
+      "framework": "fedramp",
+      "control_id": "FedRAMP program participation (entirely)",
+      "status": "NOT A SERVICE AUTHORIZATION CLAIM",
+      "rationale": "Keel is not a FedRAMP-authorized Cloud Service Offering. This artifact maps Permit evidence to selected customer-side NIST SP 800-53 evidence needs only."
+    },
+    {
+      "framework": "fedramp",
+      "control_id": "Most NIST 800-53 control families outside AU/AC/CM/CA/IR/SI/SC scope (PE, MA, MP, PS, PL, PM, AT, etc.)",
+      "status": "OUT OF SCOPE FOR PERMIT SUBSTRATE",
+      "rationale": "NIST 800-53 Rev 5 contains 20 control families and 1000+ controls/enhancements. The Permit substrate naturally maps to subsets of 7 families (AU, AC, CM, CA, IR, SI, SC) where AI-decision evidence is load-bearing. The other 13 families (Physical & Environmental Protection PE, Maintenance MA, Media Protection MP, Personnel Security PS, Planning PL, Program Management PM, Awareness and Training AT, etc.) are entirely customer responsibility and unrelated to AI-decision substrate. Listing them as 'mapped' would be over-claim."
+    },
+    {
+      "framework": "fedramp",
+      "control_id": "AU-9(4) Protection of Audit Information | Access by Subset of Privileged Users",
+      "status": "CUSTOMER RESPONSIBILITY",
+      "rationale": "Cryptographic integrity (any tampering is detectable post-hoc) is different from access-control on READING audit logs. Keel substrate provides integrity; customer-side IAM/RBAC determines who can read audit exports. Customers should not claim AU-9(4) compliance based on Keel substrate alone."
+    },
+    {
+      "framework": "pci_dss",
+      "control_id": "PCI DSS validation status entirely",
+      "status": "NOT A SERVICE VALIDATION CLAIM",
+      "rationale": "Keel is not a PCI DSS validated service provider. This artifact maps Permit evidence to selected customer-side evidence needs only when the customer workload is in PCI DSS scope."
+    },
+    {
+      "framework": "pci_dss",
+      "control_id": "PCI DSS broadly when AI workloads do NOT touch CDE",
+      "status": "OUT OF SCOPE WHEN NO CDE TOUCHPOINT EXISTS",
+      "rationale": "PCI DSS does not apply to AI workloads that do not process payment card data within a Cardholder Data Environment. These mappings are for the narrower in-scope case."
+    },
+    {
+      "framework": "cis_controls",
+      "control_id": "Controls 1, 2, 5, 7, 9, 10, 11, 12, 13, 14, 18 (12 of 18 controls)",
+      "status": "OUT OF SCOPE FOR PERMIT SUBSTRATE",
+      "rationale": "Of the 18 CIS Controls v8.1, 12 are entirely outside Permit substrate scope (asset inventory, software inventory, account management, vulnerability management, email/browser, malware defense, data recovery, network management, network monitoring, training, penetration testing). Permit substrate covers ~6 of 18 with varying strength; CIS Control 8 (Audit Log Management) is the only direct-support fit; Controls 3, 4, 6, 15, 16, 17 have partial alignment."
+    }
+  ]
+}
