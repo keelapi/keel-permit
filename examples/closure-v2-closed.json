@@ -1,0 +1,29 @@
+{
+  "payload": {
+    "binding_version": "closure_v2",
+    "permit_id": "9f2e3a40-1c5d-4d8b-9a4c-7f6e2b1d8c01",
+    "execution_id": "req_2026-05-10_12-34-56_a3f9",
+    "correlation_id": "corr_7e3c1f9a8b4d",
+    "provider": "anthropic",
+    "model": "claude-sonnet-4-6",
+    "dispatch_request_digest_v1": "a1f8d4c7e3b9a2d6f1e4b8c5a9d2f7e3c4b6a1d8f5e2c9b7a4d1f6e3b8c5a2d7",
+    "provider_response_digest_v1": "e4b9c2a6d1f7e3b8a5c2d9f4e1b7c3a6d8f2e5b1c4a7d9e3f6b8c1a4d7e2f5b9",
+    "client_response_digest_v1": "e4b9c2a6d1f7e3b8a5c2d9f4e1b7c3a6d8f2e5b1c4a7d9e3f6b8c1a4d7e2f5b9",
+    "closure_status": "closed",
+    "status_code": 200,
+    "provider_response_id": "msg_01H8X3F4QY7Z5RJ9C2W6",
+    "dispatch_request_digest_semantics": "approved_request_body_bytes_at_dispatch_time",
+    "provider_response_digest_semantics": "provider_bytes_received_by_keel",
+    "client_response_digest_semantics": "response_bytes_handed_to_asgi_not_tcp_receipt",
+    "request_created_at": "2026-05-10T12:34:56.000000Z",
+    "started_at": "2026-05-10T12:34:56.124000Z",
+    "completed_at": "2026-05-10T12:34:58.412000Z",
+    "provider_response_received_at": "2026-05-10T12:34:58.401000Z",
+    "client_response_delivered_at": "2026-05-10T12:34:58.412000Z",
+    "closure_signed_at": "2026-05-10T12:34:58.420000Z",
+    "binding_key_id": "157c11203f46bfdc"
+  },
+  "canonical_hash": "5c9d2a8e3f1b6c4a9d7e2f5b8c1a3d6e9f4b7c2a5d8e1f3b6c9a2d5e8f1b4c7a",
+  "signature": "ed25519:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+  "binding_key_id": "157c11203f46bfdc"
+}

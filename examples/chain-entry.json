@@ -1,0 +1,20 @@
+{
+  "event_id": "ev_8a4b1c6d9e3f2a5d7e1f4b8c2a6d9e3f",
+  "event_type": "permit.evaluated",
+  "resource_type": "permit",
+  "resource_id": "9f2e3a40-1c5d-4d8b-9a4c-7f6e2b1d8c01",
+  "outcome": "allow",
+  "severity": "info",
+  "chain_scope": "project:1b3e9f2c-8a4d-4b6e-9f2c-3a4d6b9e2c8a",
+  "sequence_number": 4218,
+  "record_hash": "7c3a9d2f5e8b1c4a6d9e2f5b8c1a3d6e9f4b7c2a5d8e1f3b6c9a2d5e8f1b4c7a",
+  "prev_hash": "1a4d7e2f5b8c3a6d9e1f4b7c2a5d8e1f3b6c9a2d5e8f1b4c7a3d6e9f2b5c8a1d",
+  "payload_json": {
+    "permit_id": "9f2e3a40-1c5d-4d8b-9a4c-7f6e2b1d8c01",
+    "decision": "allow",
+    "policy_id": "policy:default-chat",
+    "policy_version": "v2026-04-12"
+  },
+  "created_at": "2026-05-10T12:34:56.000000Z",
+  "chain_format_version": "v1"
+}

@@ -1,0 +1,47 @@
+{
+  "id": "6c1f8d2e-4a7b-4c3e-9f2d-8a4b1c6d9e3f",
+  "project_id": "1b3e9f2c-8a4d-4b6e-9f2c-3a4d6b9e2c8a",
+  "parent_permit_id": null,
+  "delegation_depth": 0,
+  "subject_type": "agent",
+  "subject_id": "agent-7e3c1f9a",
+  "action_name": "chat.completion",
+  "resource_provider": "openai",
+  "resource_model": "gpt-4o",
+  "resource_operation": "chat.completions.create",
+  "resource_modality": "text",
+  "estimated_input_tokens": 8240,
+  "estimated_output_tokens": 4096,
+  "max_output_tokens_requested": 4096,
+  "actual_input_tokens": null,
+  "actual_output_tokens": null,
+  "actual_total_tokens": null,
+  "actual_cost_usd_micros": null,
+  "decision": "deny",
+  "reason": "Per-permit cost cap exceeded.",
+  "decision_details": {
+    "decision": "deny",
+    "code": "budget.per_permit_cap_exceeded",
+    "reason": "Estimated cost 2.18 USD exceeds per-permit cap of 1.00 USD."
+  },
+  "constraints_json": null,
+  "budgets_json": {
+    "envelope_id": "9d4f2c1a-7e8b-4c6d-8f2a-1b3e4d5c6f7a",
+    "per_permit_cap_usd_micros": 1000000,
+    "estimated_cost_usd_micros": 2180000
+  },
+  "actions_json": [
+    {
+      "type": "block",
+      "message": "Action blocked; per-permit cost cap exceeded."
+    }
+  ],
+  "policy_id": "policy:default-chat",
+  "policy_version": "v2026-04-12",
+  "idempotency_key": "client-req-2026-05-10-9b2c",
+  "request_fingerprint": "f3a7d4c1b8e2a6f9d3c7b1e4a8d2f5c9b3e7a1d4f8c2b6e3a9d1f7c4b2e8a5d6",
+  "binding_request_hash": null,
+  "status": null,
+  "expires_at": null,
+  "created_at": "2026-05-10T12:36:01.000000Z"
+}

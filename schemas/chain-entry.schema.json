@@ -1,0 +1,101 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "chain_format_version": {
+      "const": "v1",
+      "default": "v1",
+      "title": "Chain Format Version",
+      "type": "string"
+    },
+    "chain_scope": {
+      "title": "Chain Scope",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "event_type": {
+      "title": "Event Type",
+      "type": "string"
+    },
+    "outcome": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Outcome"
+    },
+    "payload_json": {
+      "title": "Payload Json",
+      "type": "object"
+    },
+    "prev_hash": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Prev Hash",
+      "type": "string"
+    },
+    "record_hash": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Record Hash",
+      "type": "string"
+    },
+    "resource_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Resource Id"
+    },
+    "resource_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Resource Type"
+    },
+    "sequence_number": {
+      "minimum": 1,
+      "title": "Sequence Number",
+      "type": "integer"
+    },
+    "severity": {
+      "title": "Severity",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_type",
+    "resource_type",
+    "resource_id",
+    "outcome",
+    "severity",
+    "chain_scope",
+    "sequence_number",
+    "record_hash",
+    "prev_hash",
+    "payload_json",
+    "created_at",
+    "chain_format_version"
+  ],
+  "title": "ChainEntry",
+  "type": "object"
+}

@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keelapi/keel-permit/blob/main/schemas/closure-v2.schema.json",
+  "title": "Closure Record (closure_v2)",
+  "description": "Sealed envelope for a closure_v2 record per spec/closure-v2.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payload", "canonical_hash", "signature", "binding_key_id"],
+  "properties": {
+    "payload": { "$ref": "#/$defs/ClosureV2Payload" },
+    "canonical_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256(canonical_json(payload)) as hex digest."
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^ed25519:[A-Za-z0-9+/]+={0,2}$",
+      "description": "Ed25519 signature over the UTF-8 bytes of canonical_hash, base64-encoded."
+    },
+    "binding_key_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Issuer-stable identifier for the signing key. MUST resolve via the issuer key manifest with purpose 'permit_binding_signing'."
+    }
+  },
+  "$defs": {
+    "ClosureV2Payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binding_version",
+        "permit_id",
+        "execution_id",
+        "correlation_id",
+        "provider",
+        "model",
+        "provider_response_digest_v1",
+        "client_response_digest_v1",
+        "closure_status",
+        "status_code",
+        "provider_response_id",
+        "dispatch_request_digest_semantics",
+        "provider_response_digest_semantics",
+        "client_response_digest_semantics",
+        "request_created_at",
+        "started_at",
+        "completed_at",
+        "provider_response_received_at",
+        "client_response_delivered_at",
+        "closure_signed_at",
+        "binding_key_id"
+      ],
+      "properties": {
+        "binding_version": { "const": "closure_v2" },
+        "permit_id": { "type": "string", "format": "uuid" },
+        "execution_id": { "type": "string", "minLength": 1 },
+        "correlation_id": { "type": ["string", "null"] },
+        "provider": { "type": ["string", "null"] },
+        "model": { "type": ["string", "null"] },
+        "dispatch_request_digest_v1": {
+          "anyOf": [
+            { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            { "type": "null" }
+          ]
+        },
+        "provider_response_digest_v1": {
+          "anyOf": [
+            { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            { "type": "null" }
+          ]
+        },
+        "client_response_digest_v1": {
+          "anyOf": [
+            { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            { "type": "null" }
+          ]
+        },
+        "closure_status": {
+          "enum": [
+            "closed",
+            "client_disconnected",
+            "provider_error",
+            "timeout",
+            "dispatch_error",
+            "provider_digest_missing",
+            "client_digest_missing",
+            "missing_closure"
+          ]
+        },
+        "status_code": { "type": ["integer", "null"] },
+        "provider_response_id": { "type": ["string", "null"] },
+        "dispatch_request_digest_semantics": {
+          "const": "approved_request_body_bytes_at_dispatch_time"
+        },
+        "provider_response_digest_semantics": { "type": "string", "minLength": 1 },
+        "client_response_digest_semantics": { "type": "string", "minLength": 1 },
+        "request_created_at": { "type": "string", "format": "date-time" },
+        "started_at": { "type": "string", "format": "date-time" },
+        "completed_at": { "type": "string", "format": "date-time" },
+        "provider_response_received_at": {
+          "anyOf": [
+            { "type": "string", "format": "date-time" },
+            { "type": "null" }
+          ]
+        },
+        "client_response_delivered_at": {
+          "anyOf": [
+            { "type": "string", "format": "date-time" },
+            { "type": "null" }
+          ]
+        },
+        "closure_signed_at": { "type": "string", "format": "date-time" },
+        "binding_key_id": { "type": "string", "minLength": 1 },
+        "usage_reported_at": {
+          "anyOf": [
+            { "type": "string", "format": "date-time" },
+            { "type": "null" }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "closure_status": { "const": "closed" } } },
+          "then": {
+            "properties": {
+              "provider_response_digest_v1": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+              "dispatch_request_digest_v1": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+              "client_response_digest_v1": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            },
+            "required": ["dispatch_request_digest_v1"]
+          }
+        }
+      ]
+    }
+  }
+}
