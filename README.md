@@ -49,6 +49,12 @@ Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated f
 
 Reference artifacts in [`examples/`](examples/) — schema-valid illustrative permits, closure records, chain entries, and an illustrative audit export bundle. Unless an example is explicitly marked as a cryptographically verifiable reference bundle, hashes, signatures, and key identifiers are placeholders.
 
+## Control framework mappings
+
+[`mappings/control-frameworks.schema-mapping.json`](mappings/control-frameworks.schema-mapping.json) — machine-readable mapping from Permit v1 wire-format fields and audit-export-bundle artifacts to specific control IDs across 14 frameworks (CCPA §1798.105, CPPA ADMT regulations, EU AI Act, GDPR, AICPA SOC 2, NIST AI RMF, ISO/IEC 42001:2023, OWASP LLM Top 10 2025, MITRE ATLAS, OWASP API Security Top 10 2023, OWASP ASVS v5.0.0, FedRAMP / NIST SP 800-53 Rev 5, CIS Controls v8.1, PCI DSS v4.0.1).
+
+See [`mappings/README.md`](mappings/README.md) for verification methodology, framing-discipline guardrails (especially for FedRAMP and PCI DSS where Keel is NOT authorized/validated as a service), and explicit non-mappings documenting controls Keel does NOT address.
+
 ## Versioning
 
 Three orthogonal version axes:
