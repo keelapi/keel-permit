@@ -12,6 +12,15 @@ This conformance model pins to:
 
 When citing a conformance result, all three versions MUST be reported together. A result of "verifier X passes test vectors" without version pins is not citable.
 
+## Two related schemas
+
+This document defines **two related but distinct JSON schemas**:
+
+1. **Verifier output schema** — what a verifier MUST emit when it runs against any input.
+2. **Vector expectation schema** (`expected.json`) — what a fixture asserts must be true for a conforming verifier's output.
+
+A conformance match is a comparison of the two: the verifier's output is matched against the vector's expectation. See "How matching works" below.
+
 ## Verifier output schema
 
 For every test vector input, a conforming verifier MUST produce machine-readable output (the format below is canonical; equivalent serializations are acceptable so long as the same fields are present):
@@ -19,9 +28,10 @@ For every test vector input, a conforming verifier MUST produce machine-readable
 ```json
 {
   "test_vector_id": "cat-02-tamper-chain/02-01-record-hash-modified",
-  "test_vector_version": "0.1.0-draft",
+  "test_vectors_version": "0.1.0-draft",
   "verifier_id": "<implementation-identifier>",
   "verifier_version": "<implementation-version>",
+  "verifier_mode": "PRODUCTION" | "TEST",
   "result": "PASS" | "FAIL",
   "failure_codes": ["<code from spec/failure-codes.md>"],
   "first_failure_at": {
@@ -39,12 +49,94 @@ For every test vector input, a conforming verifier MUST produce machine-readable
 }
 ```
 
-The `expected.json` file in each test vector directory contains the same schema with the `required` values filled in. A conforming verifier matches the test vector's expected output when:
+## Vector expectation schema (`expected.json`)
 
-- `result` field matches exactly.
-- `failure_codes` set is equal as a set (order-independent).
-- If `first_failure_at` is present in the expected output, the verifier's value matches.
-- Other fields (`evidence_inspected`, `trust_root_source`, `verifier_id`, `verifier_version`) are informational and not part of the conformance match.
+Each test vector directory contains an `expected.json` declaring what a conforming verifier MUST produce when run against that vector's input. This schema is more granular than the verifier output schema because it captures **why** a fixture should fail (or pass), not just **whether** it should fail.
+
+The richer schema prevents the canonical interoperability failure mode where two verifiers both reject a fixture but report different failure codes — see the §"Layer enumeration" and §"Failure isolation" sections.
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "vector_id": "cat-02-tamper-chain/02-01-record-hash-modified",
+  "spec_version": "permit-v1.0.0",
+  "test_vectors_version": "0.1.0-draft",
+  "expected_mode": "TEST",
+  "expected_result": "PASS" | "FAIL",
+  "primary_failure_code": "<code from spec/failure-codes.md or null when expected_result is PASS>",
+  "acceptable_secondary_codes": ["<additional codes a conforming verifier MAY emit alongside the primary code>"],
+  "valid_layers": ["<layer-name from the enumeration below>"],
+  "invalid_layers": ["<layer-name from the enumeration below>"],
+  "expected_first_failure_at": {
+    "type": "<artifact type>",
+    "id": "<artifact id>",
+    "sequence": <int or null>
+  } | null,
+  "artifact_hashes": {
+    "<filename relative to input/>": "sha256:<hex>"
+  },
+  "expected_evidence_inspected_at_least": {
+    "permits": <int>,
+    "chain_entries": <int>,
+    "closure_records": <int>,
+    "checkpoints": <int>
+  },
+  "trust_root_resolution": "<human-readable description of which trust root flag the verifier must pass>",
+  "error_precedence_note": "<documentation of which failure codes might fire if a non-conforming verifier mishandles this fixture>",
+  "failure_isolation_note": "<documentation of which layers are deliberately valid vs invalid in this fixture, to prevent failure-mode confusion>",
+  "notes": "<human-readable explanation>"
+}
+```
+
+### Layer enumeration
+
+The `valid_layers` and `invalid_layers` arrays MUST use values from the following normative enumeration. Every verification layer that a conforming verifier checks MUST appear in either `valid_layers` or `invalid_layers` for any non-trivial fixture.
+
+| Layer name | What it means |
+|---|---|
+| `json` | All fixture files parse as well-formed JSON. |
+| `schema` | All fixture artifacts validate against their respective JSON schemas in `keel-permit/schemas/`. |
+| `manifest_hash` | The manifest's `content_hash` field matches the actual SHA-256 of the content bytes. |
+| `manifest_signature` | The detached Ed25519 signature over the manifest verifies against the trust root. |
+| `chain_record_hash` | Every chain entry's `record_hash` field equals the recomputed SHA-256 of its content. |
+| `chain_linkage` | Every chain entry's `prev_hash` field equals the previous entry's `record_hash`. |
+| `chain_sequence` | Chain entry sequence numbers are monotonic and contiguous (no gaps, no duplicates, no reordering). |
+| `closure_dispatch_binding` | The closure record's `dispatch_digest_v1` matches the SHA-256 of the dispatched canonical request bytes. |
+| `closure_provider_binding` | The closure record's `provider_response_digest_v1` matches the recorded provider response bytes. |
+| `closure_client_binding` | The closure record's `client_response_digest_v1` matches the bytes delivered to the client. |
+| `permit_dispatch_binding` | The Permit's `binding_request_hash` matches the canonical hash of the dispatched request. |
+| `tsa_receipt` | The RFC 3161 TSA receipt verifies and binds to the externally anchored checkpoint hash. |
+| `key_validity` | The signing key referenced by the manifest signature was active at the recorded `signed_at` time. |
+| `canonicalization` | Equivalent JSON representations produce identical canonical bytes per `spec/canonical-json.md`. |
+
+### Failure isolation
+
+A test vector that fails on `chain_record_hash` MUST list `json`, `schema`, `manifest_hash`, `manifest_signature`, and `chain_linkage` in `valid_layers` if those layers are intended to remain valid in this fixture. This prevents the canonical interoperability failure: two verifiers both reject the fixture but for different reasons, and a non-conforming verifier passes by accidentally checking only one layer.
+
+**Failure isolation is the primary guarantee of every tampered vector.** Each tampered vector deliberately invalidates exactly the layer(s) listed in `invalid_layers`, and a fixture-generator MUST recompute all other layers' hashes/signatures to keep them valid after tampering.
+
+### Error precedence
+
+A conforming verifier MAY check layers in any order. However, the test vector's `expected_first_failure_at` SHOULD reflect the **earliest layer** at which a conforming verifier MUST detect the invalid state. For a fixture that invalidates `chain_record_hash`, a verifier that checks the chain before reading the manifest may detect the failure earlier than one that processes the manifest first; both are conforming if they emit the correct primary code, but only the second would report a position consistent with a chain-walk-first implementation.
+
+**The `acceptable_secondary_codes` array enumerates additional codes a conforming verifier MAY emit alongside the primary code** if its layer-checking order would surface them. The set MUST NOT include codes that would mask the primary failure.
+
+### Artifact hashes
+
+The `artifact_hashes` field is the byte-level expected SHA-256 of each file under `input/`. This is the **fixture-local cross-platform tripwire**: a verifier or a CI job reading these fixtures can confirm bytes are intact end-to-end, catching invisible line-ending corruption, encoding drift, or partial-extract errors. Until the fixture generator is committed, these values are placeholders (`sha256:TBD-generator-pending`); they MUST be filled in when fixtures are populated.
+
+## How matching works
+
+A conformance match is computed as:
+
+1. **`expected_result`** matches `result` exactly (`PASS` vs `FAIL`).
+2. **`primary_failure_code`** matches the first entry of `failure_codes`, OR is contained in `failure_codes` if the verifier emits multiple codes.
+3. **`failure_codes`** is a subset of `[primary_failure_code] + acceptable_secondary_codes`.
+4. **`expected_first_failure_at`** (when not null) matches `first_failure_at` exactly.
+5. **`evidence_inspected`** counts meet the lower bound in `expected_evidence_inspected_at_least` (verifier may inspect more, never less).
+6. **`artifact_hashes`** validate against the actual bytes in `input/` (independent of the verifier — this is a fixture integrity check the CI runs).
+
+A verifier whose output satisfies all 6 is conforming on that vector.
 
 ## Conformance levels
 

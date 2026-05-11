@@ -1,14 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/keelapi/keel-permit/blob/main/test-vectors/MANIFEST.json",
-  "title": "Permit Spec — Test Vector Manifest",
+  "title": "Permit Spec \u2014 Test Vector Manifest",
   "test_vectors_version": "0.1.0-draft",
   "permit_spec_version": "1.0.0",
   "generated_at": "2026-05-10",
   "categories": [
     {
       "id": "cat-01-baseline",
-      "title": "Baseline — correctly-signed, correctly-chained, correctly-bound",
+      "title": "Baseline \u2014 correctly-signed, correctly-chained, correctly-bound",
       "purpose": "Verifier PASS cases. A correctly-constructed export bundle MUST verify successfully.",
       "vectors": [
         {
@@ -16,28 +16,41 @@
           "title": "Valid Permit + signed export bundle",
           "expected_result": "PASS",
           "status": "scaffolded",
-          "spec_references": ["spec/permit-v1.md §2", "spec/audit-export-bundle.md §3"]
+          "spec_references": [
+            "spec/permit-v1.md \u00a72",
+            "spec/audit-export-bundle.md \u00a73"
+          ],
+          "priority": "mvp_v0_1"
         },
         {
           "id": "01-02-valid-chain-segment",
           "title": "Multi-entry chain segment with intact prev-hash linkage",
           "expected_result": "PASS",
           "status": "TODO",
-          "spec_references": ["spec/chain-entry.md §4"]
+          "spec_references": [
+            "spec/chain-entry.md \u00a74"
+          ],
+          "priority": "deferred_post_v0_1"
         },
         {
           "id": "01-03-valid-closure-record",
           "title": "closure_v2 record with valid binding digests",
           "expected_result": "PASS",
           "status": "TODO",
-          "spec_references": ["spec/closure-v2.md §3"]
+          "spec_references": [
+            "spec/closure-v2.md \u00a73"
+          ],
+          "priority": "deferred_post_v0_1"
         },
         {
           "id": "01-04-valid-checkpoint-with-tsa",
           "title": "Externally anchored checkpoint with valid RFC 3161 TSA receipt",
           "expected_result": "PASS",
           "status": "TODO",
-          "spec_references": ["spec/audit-export-bundle.md §6"]
+          "spec_references": [
+            "spec/audit-export-bundle.md \u00a76"
+          ],
+          "priority": "deferred_post_v0_1"
         }
       ]
     },
@@ -50,50 +63,85 @@
           "id": "02-01-record-hash-modified",
           "title": "Single chain entry's record_hash field modified",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["WALK_RECORD_HASH_MISMATCH"],
+          "expected_failure_codes": [
+            "WALK_RECORD_HASH_MISMATCH"
+          ],
           "status": "scaffolded",
-          "spec_references": ["spec/chain-entry.md §4", "spec/failure-codes.md §3.1"]
+          "spec_references": [
+            "spec/chain-entry.md \u00a74",
+            "spec/failure-codes.md \u00a73.1"
+          ],
+          "priority": "mvp_v0_1"
         },
         {
           "id": "02-02-prev-hash-modified",
           "title": "Single chain entry's prev_hash field modified",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["WALK_CHAIN_LINK_MISMATCH"],
+          "expected_failure_codes": [
+            "WALK_CHAIN_LINK_MISMATCH"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/chain-entry.md §4", "spec/failure-codes.md §3.2"]
+          "spec_references": [
+            "spec/chain-entry.md \u00a74",
+            "spec/failure-codes.md \u00a73.2"
+          ],
+          "priority": "deferred_post_v0_1"
         },
         {
           "id": "02-03-event-payload-modified",
           "title": "Chain entry's event payload modified, record_hash not regenerated",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["WALK_RECORD_HASH_MISMATCH"],
+          "expected_failure_codes": [
+            "WALK_RECORD_HASH_MISMATCH"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/chain-entry.md §4"]
+          "spec_references": [
+            "spec/chain-entry.md \u00a74"
+          ],
+          "priority": "deferred_post_v0_1"
         },
         {
           "id": "02-04-sequence-gap",
           "title": "Chain entries jump from sequence 5 directly to sequence 7",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["WALK_CHAIN_GAP"],
+          "expected_failure_codes": [
+            "WALK_CHAIN_GAP"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/chain-entry.md §5"]
+          "spec_references": [
+            "spec/chain-entry.md \u00a75"
+          ],
+          "priority": "mvp_v0_1"
         },
         {
           "id": "02-05-out-of-order-entries",
           "title": "Chain entries delivered in non-monotonic order",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["WALK_CHAIN_ORDER"],
+          "expected_failure_codes": [
+            "WALK_CHAIN_ORDER"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/chain-entry.md §5"]
+          "spec_references": [
+            "spec/chain-entry.md \u00a75"
+          ],
+          "priority": "deferred_post_v0_1"
         },
         {
           "id": "02-06-genesis-entry-modified",
-          "title": "First chain entry (genesis) modified — should fail before subsequent entries are processed",
+          "title": "First chain entry (genesis) modified \u2014 should fail before subsequent entries are processed",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["WALK_RECORD_HASH_MISMATCH"],
-          "expected_first_failure_at": {"type": "chain_entry", "sequence": 0},
+          "expected_failure_codes": [
+            "WALK_RECORD_HASH_MISMATCH"
+          ],
+          "expected_first_failure_at": {
+            "type": "chain_entry",
+            "sequence": 0
+          },
           "status": "TODO",
-          "spec_references": ["spec/chain-entry.md §4"]
+          "spec_references": [
+            "spec/chain-entry.md \u00a74"
+          ],
+          "priority": "deferred_post_v0_1"
         }
       ]
     },
@@ -106,33 +154,57 @@
           "id": "03-01-signature-byte-flipped",
           "title": "Detached manifest signature has one byte flipped",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["MANIFEST_SIGNATURE_INVALID"],
+          "expected_failure_codes": [
+            "MANIFEST_SIGNATURE_INVALID"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/audit-export-bundle.md §9", "spec/failure-codes.md §4.1"]
+          "spec_references": [
+            "spec/audit-export-bundle.md \u00a79",
+            "spec/failure-codes.md \u00a74.1"
+          ],
+          "priority": "mvp_v0_1"
         },
         {
           "id": "03-02-payload-modified-after-signing",
           "title": "Signed payload (export bundle) modified after signature generation",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["MANIFEST_HASH_MISMATCH"],
+          "expected_failure_codes": [
+            "MANIFEST_HASH_MISMATCH"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/audit-export-bundle.md §8", "spec/failure-codes.md §4.2"]
+          "spec_references": [
+            "spec/audit-export-bundle.md \u00a78",
+            "spec/failure-codes.md \u00a74.2"
+          ],
+          "priority": "deferred_post_v0_1"
         },
         {
           "id": "03-03-signature-missing",
           "title": "Manifest present, signature file absent",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["MANIFEST_SIGNATURE_MISSING"],
+          "expected_failure_codes": [
+            "MANIFEST_SIGNATURE_MISSING"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/audit-export-bundle.md §9", "spec/failure-codes.md §4.3"]
+          "spec_references": [
+            "spec/audit-export-bundle.md \u00a79",
+            "spec/failure-codes.md \u00a74.3"
+          ],
+          "priority": "deferred_post_v0_1"
         },
         {
           "id": "03-04-wrong-key-id",
           "title": "Signature valid format but signed with key_id not in the trust manifest",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["UNKNOWN_SIGNING_KEY"],
+          "expected_failure_codes": [
+            "UNKNOWN_SIGNING_KEY"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/audit-export-bundle.md §9", "spec/failure-codes.md §4.4"]
+          "spec_references": [
+            "spec/audit-export-bundle.md \u00a79",
+            "spec/failure-codes.md \u00a74.4"
+          ],
+          "priority": "deferred_post_v0_1"
         }
       ]
     },
@@ -145,41 +217,70 @@
           "id": "04-01-dispatch-digest-mismatch",
           "title": "Closure record's dispatch_digest does not match dispatched payload bytes",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["CLOSURE_DISPATCH_DIGEST_MISMATCH"],
+          "expected_failure_codes": [
+            "CLOSURE_DISPATCH_DIGEST_MISMATCH"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/closure-v2.md §3", "spec/failure-codes.md §5.1"]
+          "spec_references": [
+            "spec/closure-v2.md \u00a73",
+            "spec/failure-codes.md \u00a75.1"
+          ],
+          "priority": "mvp_v0_1"
         },
         {
           "id": "04-02-provider-response-digest-mismatch",
           "title": "Closure record's provider_response_digest_v1 does not match recorded provider bytes",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["CLOSURE_PROVIDER_DIGEST_MISMATCH"],
+          "expected_failure_codes": [
+            "CLOSURE_PROVIDER_DIGEST_MISMATCH"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/closure-v2.md §3", "spec/failure-codes.md §5.2"]
+          "spec_references": [
+            "spec/closure-v2.md \u00a73",
+            "spec/failure-codes.md \u00a75.2"
+          ],
+          "priority": "deferred_post_v0_1"
         },
         {
           "id": "04-03-client-response-digest-mismatch",
           "title": "Closure record's client_response_digest_v1 does not match delivered client bytes",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["CLOSURE_CLIENT_DIGEST_MISMATCH"],
+          "expected_failure_codes": [
+            "CLOSURE_CLIENT_DIGEST_MISMATCH"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/closure-v2.md §3", "spec/failure-codes.md §5.3"]
+          "spec_references": [
+            "spec/closure-v2.md \u00a73",
+            "spec/failure-codes.md \u00a75.3"
+          ],
+          "priority": "deferred_post_v0_1"
         },
         {
           "id": "04-04-orphan-closure",
           "title": "Closure record references permit_id not present in export bundle",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["CLOSURE_ORPHAN"],
+          "expected_failure_codes": [
+            "CLOSURE_ORPHAN"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/closure-v2.md §4"]
+          "spec_references": [
+            "spec/closure-v2.md \u00a74"
+          ],
+          "priority": "deferred_post_v0_1"
         },
         {
           "id": "04-05-binding-request-hash-mismatch",
           "title": "Permit's binding_request_hash does not match the dispatched request's canonical hash",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["PERMIT_DISPATCH_BINDING_MISMATCH"],
+          "expected_failure_codes": [
+            "PERMIT_DISPATCH_BINDING_MISMATCH"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/permit-v1.md §2.4", "spec/failure-codes.md §5.4"]
+          "spec_references": [
+            "spec/permit-v1.md \u00a72.4",
+            "spec/failure-codes.md \u00a75.4"
+          ],
+          "priority": "deferred_post_v0_1"
         }
       ]
     },
@@ -193,35 +294,62 @@
           "title": "Two JSON objects with keys in different order MUST produce identical hashes",
           "expected_result": "PASS",
           "status": "TODO",
-          "spec_references": ["spec/canonical-json.md §2"]
+          "spec_references": [
+            "spec/canonical-json.md \u00a72"
+          ],
+          "priority": "mvp_v0_1"
         },
         {
-          "id": "05-02-whitespace-equivalent",
-          "title": "Two JSON objects with different whitespace MUST produce identical hashes",
-          "expected_result": "PASS",
+          "id": "05-02-non-canonical-similar",
+          "title": "Two visually similar JSON documents MUST NOT canonicalize to identical bytes",
+          "purpose_note": "Negative canonicalization test \u2014 prevents an over-aggressive canonicalizer from collapsing semantically distinct inputs. Per ChatGPT design review 2026-05-10: prevents the failure mode where two inputs that should hash differently are accidentally collapsed by an implementer's canonicalizer.",
+          "expected_result": "PASS_DIFFERENT_HASHES",
           "status": "TODO",
-          "spec_references": ["spec/canonical-json.md §3"]
+          "spec_references": [
+            "spec/canonical-json.md \u00a72",
+            "spec/canonical-json.md \u00a76"
+          ],
+          "priority": "mvp_v0_1"
         },
         {
           "id": "05-03-unicode-normalization",
           "title": "Unicode characters in string values MUST hash identically when canonicalized",
           "expected_result": "PASS",
           "status": "TODO",
-          "spec_references": ["spec/canonical-json.md §4"]
+          "spec_references": [
+            "spec/canonical-json.md \u00a74"
+          ],
+          "priority": "deferred_post_v0_1"
         },
         {
           "id": "05-04-escape-sequence-equivalent",
           "title": "Equivalent JSON escape representations MUST produce identical canonical bytes",
           "expected_result": "PASS",
           "status": "TODO",
-          "spec_references": ["spec/canonical-json.md §4"]
+          "spec_references": [
+            "spec/canonical-json.md \u00a74"
+          ],
+          "priority": "deferred_post_v0_1"
         },
         {
           "id": "05-05-number-representation",
           "title": "Numeric values with different representations (1, 1.0, 1e0) MUST canonicalize per spec rules",
           "expected_result": "PASS",
           "status": "TODO",
-          "spec_references": ["spec/canonical-json.md §5"]
+          "spec_references": [
+            "spec/canonical-json.md \u00a75"
+          ],
+          "priority": "deferred_post_v0_1"
+        },
+        {
+          "id": "05-06-whitespace-equivalent",
+          "title": "Two JSON objects with different whitespace MUST produce identical hashes",
+          "expected_result": "PASS",
+          "status": "TODO",
+          "spec_references": [
+            "spec/canonical-json.md \u00a73"
+          ],
+          "priority": "deferred_post_v0_1"
         }
       ]
     },
@@ -235,23 +363,36 @@
           "title": "Artifact signed by key K1 (now retired, active_until=T1) verifies if signed_at < T1",
           "expected_result": "PASS",
           "status": "TODO",
-          "spec_references": ["spec/audit-export-bundle.md §10"]
+          "spec_references": [
+            "spec/audit-export-bundle.md \u00a710"
+          ],
+          "priority": "mvp_v0_1"
         },
         {
           "id": "06-02-expired-key-rejected",
           "title": "Artifact signed by key K1 after its active_until rejected",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["KEY_EXPIRED_AT_SIGNING_TIME"],
+          "expected_failure_codes": [
+            "KEY_EXPIRED_AT_SIGNING_TIME"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/audit-export-bundle.md §10"]
+          "spec_references": [
+            "spec/audit-export-bundle.md \u00a710"
+          ],
+          "priority": "deferred_post_v0_1"
         },
         {
           "id": "06-03-revoked-key-warning",
-          "title": "Artifact signed by key K1 (later marked compromised) — verifier MUST report 'signature valid but key revoked'",
+          "title": "Artifact signed by key K1 (later marked compromised) \u2014 verifier MUST report 'signature valid but key revoked'",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["SIGNING_KEY_REVOKED"],
+          "expected_failure_codes": [
+            "SIGNING_KEY_REVOKED"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/audit-export-bundle.md §10"]
+          "spec_references": [
+            "spec/audit-export-bundle.md \u00a710"
+          ],
+          "priority": "deferred_post_v0_1"
         }
       ]
     },
@@ -265,37 +406,126 @@
           "title": "Bundle with valid manifest but zero entries",
           "expected_result": "PASS",
           "status": "TODO",
-          "spec_references": ["spec/audit-export-bundle.md §5"]
+          "spec_references": [
+            "spec/audit-export-bundle.md \u00a75"
+          ],
+          "priority": "mvp_v0_1"
         },
         {
           "id": "07-02-single-entry-bundle",
           "title": "Bundle with exactly one entry (genesis only)",
           "expected_result": "PASS",
           "status": "TODO",
-          "spec_references": ["spec/audit-export-bundle.md §5"]
+          "spec_references": [
+            "spec/audit-export-bundle.md \u00a75"
+          ],
+          "priority": "deferred_post_v0_1"
         },
         {
           "id": "07-03-malformed-manifest-json",
           "title": "Manifest file is not valid JSON",
           "expected_result": "FAIL",
-          "expected_failure_codes": ["MANIFEST_PARSE_ERROR"],
+          "expected_failure_codes": [
+            "MANIFEST_PARSE_ERROR"
+          ],
           "status": "TODO",
-          "spec_references": ["spec/audit-export-bundle.md §3"]
+          "spec_references": [
+            "spec/audit-export-bundle.md \u00a73"
+          ],
+          "priority": "deferred_post_v0_1"
         }
       ]
     }
   ],
   "summary": {
     "total_categories": 7,
-    "total_planned_vectors": 30,
+    "total_planned_vectors": 31,
+    "mvp_v0_1_count": 9,
+    "deferred_post_v0_1_count": 22,
     "scaffolded": 2,
-    "todo": 28
+    "todo": 29
   },
   "conformance_levels": {
-    "level_1_baseline": ["cat-01-baseline", "cat-02-tamper-chain"],
-    "level_2_signed": ["cat-01-baseline", "cat-02-tamper-chain", "cat-03-tamper-signature", "cat-04-closure-binding"],
-    "level_3_canonical": ["cat-01-baseline", "cat-02-tamper-chain", "cat-03-tamper-signature", "cat-04-closure-binding", "cat-05-canonicalization"],
-    "level_4_full": ["cat-01-baseline", "cat-02-tamper-chain", "cat-03-tamper-signature", "cat-04-closure-binding", "cat-05-canonicalization", "cat-06-key-rotation", "cat-07-bundle-format"]
+    "level_1_baseline": [
+      "cat-01-baseline",
+      "cat-02-tamper-chain"
+    ],
+    "level_2_signed": [
+      "cat-01-baseline",
+      "cat-02-tamper-chain",
+      "cat-03-tamper-signature",
+      "cat-04-closure-binding"
+    ],
+    "level_3_canonical": [
+      "cat-01-baseline",
+      "cat-02-tamper-chain",
+      "cat-03-tamper-signature",
+      "cat-04-closure-binding",
+      "cat-05-canonicalization"
+    ],
+    "level_4_full": [
+      "cat-01-baseline",
+      "cat-02-tamper-chain",
+      "cat-03-tamper-signature",
+      "cat-04-closure-binding",
+      "cat-05-canonicalization",
+      "cat-06-key-rotation",
+      "cat-07-bundle-format"
+    ]
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "version_milestones": {
+    "v0.1": {
+      "scope": "MVP \u2014 9 vectors providing minimum coverage across all 7 categories. Sufficient to unblock external verifier implementations and demonstrate the conformance model end-to-end.",
+      "vector_ids": [
+        "cat-01-baseline/01-01-valid-permit-export",
+        "cat-02-tamper-chain/02-01-record-hash-modified",
+        "cat-02-tamper-chain/02-04-sequence-gap",
+        "cat-03-tamper-signature/03-01-signature-byte-flipped",
+        "cat-04-closure-binding/04-01-dispatch-digest-mismatch",
+        "cat-05-canonicalization/05-01-key-reorder-equivalent",
+        "cat-05-canonicalization/05-02-non-canonical-similar",
+        "cat-06-key-rotation/06-01-retired-key-still-verifies",
+        "cat-07-bundle-format/07-01-empty-bundle"
+      ],
+      "rationale": "Per ChatGPT design review 2026-05-10: smoke-test minimum that exercises all 7 categories. Populating all 30+ vectors before any are usable would be over-engineering; populating 9 unblocks parallel implementation work."
+    },
+    "v1.0": {
+      "scope": "Full corpus \u2014 all enumerated vectors populated with deterministic byte-level fixtures, generator tool committed, conformance runner CLI shipped.",
+      "vector_ids": [
+        "cat-01-baseline/01-01-valid-permit-export",
+        "cat-01-baseline/01-02-valid-chain-segment",
+        "cat-01-baseline/01-03-valid-closure-record",
+        "cat-01-baseline/01-04-valid-checkpoint-with-tsa",
+        "cat-02-tamper-chain/02-01-record-hash-modified",
+        "cat-02-tamper-chain/02-02-prev-hash-modified",
+        "cat-02-tamper-chain/02-03-event-payload-modified",
+        "cat-02-tamper-chain/02-04-sequence-gap",
+        "cat-02-tamper-chain/02-05-out-of-order-entries",
+        "cat-02-tamper-chain/02-06-genesis-entry-modified",
+        "cat-03-tamper-signature/03-01-signature-byte-flipped",
+        "cat-03-tamper-signature/03-02-payload-modified-after-signing",
+        "cat-03-tamper-signature/03-03-signature-missing",
+        "cat-03-tamper-signature/03-04-wrong-key-id",
+        "cat-04-closure-binding/04-01-dispatch-digest-mismatch",
+        "cat-04-closure-binding/04-02-provider-response-digest-mismatch",
+        "cat-04-closure-binding/04-03-client-response-digest-mismatch",
+        "cat-04-closure-binding/04-04-orphan-closure",
+        "cat-04-closure-binding/04-05-binding-request-hash-mismatch",
+        "cat-05-canonicalization/05-01-key-reorder-equivalent",
+        "cat-05-canonicalization/05-02-non-canonical-similar",
+        "cat-05-canonicalization/05-03-unicode-normalization",
+        "cat-05-canonicalization/05-04-escape-sequence-equivalent",
+        "cat-05-canonicalization/05-05-number-representation",
+        "cat-05-canonicalization/05-06-whitespace-equivalent",
+        "cat-06-key-rotation/06-01-retired-key-still-verifies",
+        "cat-06-key-rotation/06-02-expired-key-rejected",
+        "cat-06-key-rotation/06-03-revoked-key-warning",
+        "cat-07-bundle-format/07-01-empty-bundle",
+        "cat-07-bundle-format/07-02-single-entry-bundle",
+        "cat-07-bundle-format/07-03-malformed-manifest-json"
+      ],
+      "rationale": "Production-ready conformance suite. v1.0 of test vectors will be pinned to Permit Spec v1.0.0 (or whichever spec version is current at that time)."
+    }
+  }
 }
