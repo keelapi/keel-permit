@@ -86,6 +86,14 @@ A Permit verifier conforms if it implements the failure codes in [`spec/failure-
 
 The wire formats and hash algorithms in this spec are stable. A breaking change to any wire format requires a new format version (`v2`, `closure_v3`, etc.); the previous version remains valid indefinitely so that historical artifacts continue to verify. See [`CHANGELOG.md`](CHANGELOG.md).
 
+## Project Stewardship
+
+Permit Spec is maintained by Keel API, Inc.
+
+- Website: https://keelapi.com
+- Reference implementation: https://github.com/keelapi/keel-api
+- Reference verifier: https://github.com/keelapi/keel-verifier
+
 ## License
 
 Apache License 2.0. See [`LICENSE`](LICENSE).
