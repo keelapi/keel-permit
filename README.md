@@ -55,6 +55,12 @@ Reference artifacts in [`examples/`](examples/) — schema-valid illustrative pe
 
 See [`mappings/README.md`](mappings/README.md) for verification methodology, framing-discipline guardrails (especially for FedRAMP and PCI DSS where Keel is NOT authorized/validated as a service), and explicit non-mappings documenting controls Keel does NOT address.
 
+## Conformance test vectors
+
+[`test-vectors/`](test-vectors/) — a versioned conformance fixture set that any verifier (Keel's reference verifier or independent third-party implementations) can be tested against. Each fixture has an `expected.json` defining the required outcome; a verifier that disagrees on any fixture is non-conforming.
+
+7 categories planned (baseline, tamper-chain, tamper-signature, closure-binding, canonicalization, key-rotation, bundle-format) with ~30 fixtures total. Scaffolding committed; fixture-generator tool and complete byte-level fixtures are follow-up work. See [`test-vectors/README.md`](test-vectors/README.md) and [`test-vectors/CONFORMANCE.md`](test-vectors/CONFORMANCE.md).
+
 ## Versioning
 
 Three orthogonal version axes:
