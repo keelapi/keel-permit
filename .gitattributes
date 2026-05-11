@@ -1,0 +1,37 @@
+# Enforce LF line endings + binary handling on cryptographic fixture artifacts.
+# Critical for cross-platform reproducibility of test vectors: Windows checkouts
+# with autocrlf=true would silently corrupt JSON line endings, breaking SHA-256
+# computations and signature verification.
+
+# Default: treat as text with LF line endings
+* text=auto eol=lf
+
+# Spec + docs
+*.md text eol=lf
+*.txt text eol=lf
+
+# JSON and JSONL fixtures - LF only, never CRLF
+*.json text eol=lf
+*.jsonl text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# Source code (if/when reference impl lands)
+*.py text eol=lf
+*.go text eol=lf
+*.rs text eol=lf
+*.ts text eol=lf
+*.js text eol=lf
+*.sh text eol=lf
+
+# Cryptographic / binary fixture artifacts - byte-exact, no line-ending munging
+*.bin binary
+*.sig binary
+*.der binary
+*.pem text eol=lf
+*.key text eol=lf
+*.tsr binary
+*.ots binary
+
+# Schema files
+*.schema.json text eol=lf

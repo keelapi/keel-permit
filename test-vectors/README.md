@@ -2,6 +2,14 @@
 
 A versioned collection of test fixtures that a conforming verifier MUST process correctly. The goal: any verifier implementation — Keel's reference verifier, or an independent third-party verifier — can be tested against the same fixture set and produce the same pass/fail outcomes.
 
+## Foundational framing
+
+Three principles that shape every decision in this directory:
+
+1. **The committed fixture bytes in `vectors/*/input/` are the conformance product.** Implementers and customers run their verifiers against the committed bytes. Those bytes are what counts. (Currently scaffolded with placeholders — see "Status" below.)
+2. **The fixture generator is a reproducibility tool, not the source of truth.** When committed (TODO under `tools/`), the generator's job is to make committed fixtures reproducible from source — not to define correctness. Correctness is defined by `CONFORMANCE.md` + the per-vector `expected.json` files.
+3. **A conformance runner CLI is planned.** The intended shape is `keel-conformance run --verifier <command> --vectors <directory>` — invokes any verifier against any version of this fixture set and produces a machine-readable `verifier-conformance-report.json`. This is the artifact a customer cites when evaluating verifiers ("verifier X is Level 3 conforming against test-vectors v0.1.0"). Spec for this CLI lands alongside the first fully-populated v0.1 fixture set.
+
 ## Why this exists
 
 A specification document is text. Two implementers can read the same text and produce verifiers that disagree on edge cases. Test vectors collapse that ambiguity: each case is a concrete input + a documented expected outcome. If two verifiers process the same fixture and disagree, at least one is non-conforming.
@@ -20,6 +28,8 @@ For Permit Spec, this enables:
 **Version:** `0.1.0-draft` (matches Permit Spec v1.0.0).
 
 This is a scaffold, not a complete fixture set. Categories and category structure are enumerated in `MANIFEST.json`; complete fixtures will be added incrementally. The conformance model in `CONFORMANCE.md` is the binding contract for verifier behavior, even where a specific fixture is still TODO.
+
+A **9-vector MVP subset** is marked in `MANIFEST.json` under `version_milestones.v0.1`. These 9 are the smoke-test minimum that exercises all 7 categories at minimum coverage and unblocks independent verifier implementations. The remaining 22 vectors are marked `priority: "deferred_post_v0_1"` and are populated once v0.1 is solid.
 
 When a verifier conformance result is published, it MUST cite the test-vector version (`test-vectors-v0.1.0`) so the result is reproducible against the same fixture set.
 
@@ -76,11 +86,11 @@ If you are evaluating two verifiers for cross-verification of the same export bu
 | **cat-02-tamper-chain** | Hash chain integrity failures — modified record hashes, broken prev-hash links, gaps in sequence. | 6 |
 | **cat-03-tamper-signature** | Signature failures — modified signed bytes, wrong key, missing manifest signature. | 4 |
 | **cat-04-closure-binding** | Closure record binding failures — dispatch digest mismatch, provider digest mismatch, client digest mismatch. | 5 |
-| **cat-05-canonicalization** | JSON canonicalization edge cases — key reordering, Unicode normalization, escape sequence handling. | 5 |
+| **cat-05-canonicalization** | JSON canonicalization edge cases — key reordering, whitespace, Unicode normalization, escape sequence handling, **plus negative cases** (visually-similar JSON that must NOT canonicalize identically). | 6 |
 | **cat-06-key-rotation** | Multi-key trust root scenarios — verifying old artifacts with retired keys, post-rotation freshness. | 3 |
 | **cat-07-bundle-format** | Bundle format edge cases — empty bundle, single-entry bundle, multi-gigabyte bundle reference. | 3 |
 
-Total planned: ~30 fixtures. Current scaffolded count: see `MANIFEST.json`.
+Total planned: 31 fixtures (9 in v0.1 MVP scope, 22 deferred to post-v0.1). Current scaffolded count: see `MANIFEST.json`.
 
 ## Adding a new test vector
 

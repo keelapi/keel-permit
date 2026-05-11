@@ -1,16 +1,43 @@
 {
-  "test_vector_id": "cat-02-tamper-chain/02-01-record-hash-modified",
-  "test_vector_version": "0.1.0-draft",
-  "permit_spec_version": "1.0.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "vector_id": "cat-02-tamper-chain/02-01-record-hash-modified",
+  "spec_version": "permit-v1.0.0",
+  "test_vectors_version": "0.1.0-draft",
+  "expected_mode": "TEST",
   "expected_result": "FAIL",
-  "expected_failure_codes": ["WALK_RECORD_HASH_MISMATCH"],
+  "primary_failure_code": "WALK_RECORD_HASH_MISMATCH",
+  "acceptable_secondary_codes": [],
+  "valid_layers": [
+    "json",
+    "schema",
+    "manifest_hash",
+    "manifest_signature",
+    "chain_linkage",
+    "chain_sequence",
+    "key_validity"
+  ],
+  "invalid_layers": [
+    "chain_record_hash"
+  ],
   "expected_first_failure_at": {
     "type": "chain_entry",
+    "id": null,
     "sequence": 2
   },
-  "expected_evidence_inspected_at_least": {
-    "chain_entries": 3,
-    "note": "Verifier MUST inspect at least the first 3 entries (sequences 0, 1, 2) to detect the tamper at sequence 2. May inspect more if implementation continues past first failure."
+  "artifact_hashes": {
+    "export.jsonl": "sha256:TBD-generator-pending",
+    "manifest.json": "sha256:TBD-generator-pending",
+    "signature.bin": "sha256:TBD-generator-pending",
+    "trust-root.json": "sha256:TBD-generator-pending"
   },
-  "notes": "Canonical tamper-detection test. Manifest signature MUST be valid in this fixture; only the chain walk should fail. A verifier that fails this with MANIFEST_HASH_MISMATCH or PASS is non-conforming."
+  "expected_evidence_inspected_at_least": {
+    "permits": 0,
+    "chain_entries": 3,
+    "closure_records": 0,
+    "checkpoints": 0
+  },
+  "trust_root_resolution": "Verifier MUST be invoked in TEST mode with --trust-root pointing to input/trust-root.json.",
+  "error_precedence_note": "Manifest signature MUST verify successfully against the trust root. The manifest's content_hash MUST match the actual content bytes (the manifest was re-signed after the tamper was applied to the chain entry). A verifier that reports MANIFEST_HASH_MISMATCH or MANIFEST_SIGNATURE_INVALID for this fixture is non-conforming — it has either failed to re-derive the manifest's content_hash correctly or is incorrectly mapping a chain failure to a manifest code. The intended failure is isolated to chain_record_hash; acceptable_secondary_codes is empty to enforce strict primary code reporting.",
+  "failure_isolation_note": "Single deliberate failure injection: the record_hash field on chain entry at sequence 2 has been modified by one byte. The chain's prev_hash linkage is recomputed downstream so chain_linkage remains technically valid relative to the tampered record_hash — only record_hash itself fails recomputation. The manifest content_hash is recomputed and re-signed after the tamper. All other layers MUST verify successfully; only chain_record_hash fails.",
+  "notes": "Canonical tamper-detection test. This is the fixture demonstrated visually in the disappearance demo (`Keel_Demo_Script_2026-05-10.md` beat 4). Conformance Level 1 requires passing this fixture. A verifier that emits PASS for this fixture is fundamentally broken; a verifier that emits FAIL but with the wrong primary_failure_code is non-conforming on this vector."
 }
