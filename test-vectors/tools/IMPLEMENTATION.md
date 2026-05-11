@@ -1,12 +1,10 @@
-# Fixture Generator — v0.1 Implementation Plan
+# Fixture Generator — Implementation Roadmap
 
-**Status:** PLAN, not implementation
+**Status:** Planned for v0.1
 **Pinned to:** Permit Spec v1.0.0 + test-vectors version 0.1.0-draft
-**Author:** Plan drafted 2026-05-10 after adversarial design review (ChatGPT) of test-vectors scaffold
-**Implementation owner:** TBD (whoever picks up the generator work)
-**Estimated effort to v0.1:** 28-53 focused hours total (16-28 framework + 12-25 MVP vector population)
+**Last reviewed:** 2026-05-10
 
-This document is the implementation plan for the v0.1 fixture generator. It does NOT contain generator code. It describes the architecture, scope, non-goals, risks, and module breakdown so that a contributor (Claude, Codex, the founder, or an external implementer) can pick this up and execute against a tight spec.
+This document is the implementation roadmap for the v0.1 fixture generator: architecture, scope, non-goals, module breakdown, risks, and open decisions. It describes what needs to be built so that any contributor — internal or external — can pick this up and execute against a tight specification.
 
 ---
 
@@ -16,7 +14,7 @@ This document is the implementation plan for the v0.1 fixture generator. It does
 
 The bytes in `test-vectors/vectors/*/input/` are what external verifier implementers consume. They are reviewable in PRs. They are byte-comparable in CI. They are the artifact a customer can inspect when evaluating verifier conformance.
 
-The generator's job is **reproducibility**: when the spec evolves or a vector is added, the generator can regenerate the affected fixtures deterministically from source.
+The generator's job is **reproducibility**: when the spec evolves or a vector is added, the generator regenerates the affected fixtures deterministically from source.
 
 The generator MUST NOT be a runtime dependency for using the test vectors. An external implementer must be able to run their verifier against the committed bytes without running the generator at all.
 
@@ -52,13 +50,13 @@ Each fixture must be:
 | Non-goal | Rationale |
 |---|---|
 | **Full 31-vector population** | v0.1 is the smoke-test minimum. Populating the remaining 22 vectors is v1.0 work. |
-| **Dependency on `keel-api` private repo** | The fixture core MUST NOT import from `keel-api`. External implementers will not have access to that repo. The fixture core MUST live entirely under `test-vectors/tools/lib/` with no external private dependencies. |
+| **Dependency on the reference implementation's private code** | The fixture core MUST live entirely under `test-vectors/tools/lib/` with public, spec-pinned implementations of canonicalization, signing, chain, and manifest assembly. External implementers will not have access to the reference implementation's private code. |
 | **Dynamic fixtures (CI regenerates fresh each time)** | Fixtures are committed. CI regenerates into a temp dir and byte-compares against committed bytes. "Always regenerate" hides meaningful fixture changes in CI behavior. |
 | **Schema validation of `expected.json`** | Out of scope for v0.1. JSON Schema for `expected.json` per `CONFORMANCE.md` is a follow-up if it becomes load-bearing. |
 | **Full conformance runner CLI** (`keel-conformance run --verifier X --vectors Y`) | Separate deliverable. Spec lands alongside v0.1 fixtures; CLI ships post-v0.1. |
 | **Production test keys** | Test keys are clearly marked `environment: "test"` and `key_id` prefixed with `keel-test-`. They are committed publicly. A production verifier MUST reject test-key signatures regardless of cryptographic validity. |
 | **Non-LF line endings** | Forced by `.gitattributes`. Generator MUST produce LF-only output regardless of platform. |
-| **UUIDv4 randomness** | Per ChatGPT review §1: "Test vectors should read like legal exhibits, not casino receipts." Use fixed semantic IDs (e.g., `permit-01-01-baseline`, `chain-02-01-seq2-tampered`) unless the vector specifically tests UUID handling. |
+| **UUIDv4 randomness** | Test vectors should read like legal exhibits, not random output. Use fixed semantic IDs (e.g., `permit-01-01-baseline`, `chain-02-01-seq2-tampered`) unless the vector specifically tests UUID handling. |
 
 ---
 
@@ -67,7 +65,7 @@ Each fixture must be:
 ```
 test-vectors/
 ├── tools/
-│   ├── GENERATOR_V0_1_PLAN.md       (this file)
+│   ├── IMPLEMENTATION.md             (this file)
 │   ├── generate_fixtures.py          (entry-point CLI)
 │   ├── check_fixtures.py             (byte-compare CI mode)
 │   ├── lib/
@@ -174,11 +172,13 @@ Byte-compare mode for CI. Regenerates into `.tmp/`, compares byte-for-byte again
 
 ---
 
-## 6. First implementation milestone (smoke-test bootstrap)
+## 6. Implementation sequencing
 
-Before any tamper vector is touched, ship this:
+The work decomposes into three sequential phases.
 
-**Milestone 1.0 — Single-vector golden path**
+### Phase 1 — Bootstrap milestone (single-vector golden path)
+
+Before any tamper vector is touched:
 
 1. Implement `canonical_json.py`, `permit.py`, `chain.py`, `manifest.py`, `signing.py` modules. Each module independently tested against its spec section.
 2. Generate test keys, commit `tools/test-keys/`. Public key format: raw 32-byte base64 with `environment: "test"` + `key_id: "keel-test-export-signing-v1"` in the trust-root JSON.
@@ -187,15 +187,29 @@ Before any tamper vector is touched, ship this:
 5. Run `generate-one --vector-id cat-01-baseline/01-01-valid-permit-export` three times in succession. **All three runs MUST produce byte-identical output across all 5 files in `input/`.** This is the determinism gate.
 6. Commit the resulting fixtures. `expected.json` `artifact_hashes` now contains real SHA-256 values.
 
-After Milestone 1.0:
+After Phase 1:
 - The fixture core's determinism is proven.
 - The CI byte-compare gate has a real reference to test against.
 - The signing flow + key format is locked.
 - Subsequent vectors (especially tampers) reuse the same plumbing.
 
-This milestone is the highest-risk part of the v0.1 work because every architectural choice (signing format, canonicalization, trust-root structure, file naming) gets locked in by the bytes that ship in this single fixture. Get Milestone 1.0 right, the remaining 8 vectors compose.
+This phase is the foundational one because every architectural choice (signing format, canonicalization, trust-root structure, file naming) gets locked in by the bytes that ship in this single fixture. Phase 1 done right means the remaining 8 vectors compose against a stable base.
 
-**Estimated effort for Milestone 1.0 alone: 12-20 focused hours.**
+### Phase 2 — MVP vector population
+
+After Phase 1 lands:
+
+1. Implement the remaining 8 MVP vectors using `tamper.py` recipes. Tamper vectors share the Phase 1 golden bundle as a starting point; each applies a deliberate mutation and recomputes downstream hashes that should remain valid.
+2. Implement `generate-mvp` subcommand to drive all 9 vectors in sequence.
+3. Each vector's `expected.json` `artifact_hashes` field is populated by the generator on first successful run.
+
+### Phase 3 — CI integration
+
+After Phase 2 lands:
+
+1. Implement `check_fixtures.py` byte-compare gate.
+2. Wire into CI workflow that runs on every push touching `test-vectors/`.
+3. Include at least one Windows runner in the CI matrix (verifies LF line-ending enforcement end-to-end).
 
 ---
 
@@ -206,9 +220,9 @@ This milestone is the highest-risk part of the v0.1 work because every architect
 **Risk:** the generator's understanding of Permit Spec drifts from the spec text. Generator produces fixtures that pass the reference verifier but fail third-party verifiers that read the spec correctly.
 
 **Mitigation:**
-- `canonical_json.py` is implemented from spec text, NOT from `keel-api` code.
+- `canonical_json.py` is implemented from spec text, NOT from the reference implementation's code.
 - Every fixture's `expected.json` carries `spec_version: "permit-v1.0.0"`. If spec evolves, fixtures must be regenerated against the new version into a separate directory (`test-vectors/v1.1.0/` rather than overwriting `v0.1.0`).
-- Lock `generator_version` in fixture manifests once it is implemented; allows tracing back which generator produced which committed fixture.
+- Lock `generator_version` in fixture manifests once implemented; allows tracing back which generator produced which committed fixture.
 
 ### 7.2 Newline drift
 
@@ -263,28 +277,9 @@ This milestone is the highest-risk part of the v0.1 work because every architect
 
 ---
 
-## 8. Estimated effort
+## 8. Open decisions for the implementer
 
-| Phase | Range | Notes |
-|---|---|---|
-| **Milestone 1.0 — single-vector golden path** | 12-20 hours | Highest-risk phase. Sets all architectural locks. |
-| **Remaining 8 MVP vectors** | 12-25 hours | Each tamper vector is ~1-3 hours once the framework exists; baseline-PASS vectors are faster. |
-| **CI integration** (byte-compare gate, Windows runner) | 2-4 hours | Straightforward once `check` subcommand exists. |
-| **Test key generation + commit** | 1-2 hours | Deterministic, one-time. |
-| **Documentation polish** (description.md per vector, post-generation) | 2-4 hours | Reviewing each fixture's description against actual generated bytes. |
-| **v0.1 framework total** | **16-28 hours** | Per ChatGPT review §6. |
-| **v0.1 MVP fixtures populated** | **12-25 additional hours** | Per ChatGPT review §6. |
-| **v0.1 complete (framework + MVP)** | **28-53 hours total** | Tight focus, single contributor. |
-| **v1.0 full corpus (remaining 22 vectors)** | **+22-47 hours** | Mix of variant-of-existing-pattern and new-failure-class vectors. |
-| **v1.0 complete (all 31 vectors)** | **50-100 total hours** | Per ChatGPT review §6 — "respectable v1-quality corpus." |
-
-Effort scales nonlinearly across categories. Tamper vectors with carefully-isolated failure modes are the expensive ones. Canonicalization edge cases require deep care because they exercise the canonicalizer itself, which is the lowest-level piece of the stack.
-
----
-
-## 9. Open decisions for the implementer
-
-These choices are deliberately deferred. The implementer makes them based on what works in practice; any one of them could be revisited later without breaking v0.1.
+These choices are deliberately deferred. The implementation contributor makes them based on what works in practice; any one of them could be revisited later without breaking v0.1.
 
 1. **Python version target.** 3.11+ recommended for `tomllib`, structural pattern matching, and consistent JSON handling. Could be 3.10 if external implementers need it; consult before deciding.
 
@@ -302,7 +297,7 @@ These choices are deliberately deferred. The implementer makes them based on wha
 
 ---
 
-## 10. Success criteria for v0.1
+## 9. Success criteria for v0.1
 
 v0.1 ships when ALL of the following are true:
 
@@ -318,7 +313,7 @@ v0.1 ships when ALL of the following are true:
 
 ---
 
-## 11. Pointers
+## 10. Pointers
 
 - Conformance contract: [`../CONFORMANCE.md`](../CONFORMANCE.md)
 - Vector enumeration + MVP scope: [`../MANIFEST.json`](../MANIFEST.json) `version_milestones.v0.1`
@@ -331,8 +326,3 @@ v0.1 ships when ALL of the following are true:
   - [`../../spec/audit-export-bundle.md`](../../spec/audit-export-bundle.md)
   - [`../../spec/canonical-json.md`](../../spec/canonical-json.md)
   - [`../../spec/failure-codes.md`](../../spec/failure-codes.md)
-- Adversarial design review that produced this plan: ChatGPT pass dated 2026-05-10 (see commit `c6b2984` and subsequent test-vector commits for the upstream context).
-
----
-
-**Implementation owner: pick this up when ready. Until then, this plan is the binding scope.**
