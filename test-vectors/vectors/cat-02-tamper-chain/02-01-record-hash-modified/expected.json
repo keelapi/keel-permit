@@ -1,0 +1,16 @@
+{
+  "test_vector_id": "cat-02-tamper-chain/02-01-record-hash-modified",
+  "test_vector_version": "0.1.0-draft",
+  "permit_spec_version": "1.0.0",
+  "expected_result": "FAIL",
+  "expected_failure_codes": ["WALK_RECORD_HASH_MISMATCH"],
+  "expected_first_failure_at": {
+    "type": "chain_entry",
+    "sequence": 2
+  },
+  "expected_evidence_inspected_at_least": {
+    "chain_entries": 3,
+    "note": "Verifier MUST inspect at least the first 3 entries (sequences 0, 1, 2) to detect the tamper at sequence 2. May inspect more if implementation continues past first failure."
+  },
+  "notes": "Canonical tamper-detection test. Manifest signature MUST be valid in this fixture; only the chain walk should fail. A verifier that fails this with MANIFEST_HASH_MISMATCH or PASS is non-conforming."
+}

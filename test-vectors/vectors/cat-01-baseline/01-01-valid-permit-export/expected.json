@@ -1,0 +1,16 @@
+{
+  "test_vector_id": "cat-01-baseline/01-01-valid-permit-export",
+  "test_vector_version": "0.1.0-draft",
+  "permit_spec_version": "1.0.0",
+  "expected_result": "PASS",
+  "expected_failure_codes": [],
+  "expected_first_failure_at": null,
+  "expected_evidence_inspected": {
+    "permits": 1,
+    "chain_entries": 1,
+    "closure_records": 1,
+    "checkpoints": 0
+  },
+  "trust_root_resolution": "must use --trust-root flag pointing to input/trust-root.json; default production trust root MUST reject this fixture's test-key signature",
+  "notes": "Baseline happy path. A verifier that fails this in test mode (with the correct --trust-root) is non-conforming."
+}

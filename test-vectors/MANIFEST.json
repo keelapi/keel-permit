@@ -1,0 +1,301 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keelapi/keel-permit/blob/main/test-vectors/MANIFEST.json",
+  "title": "Permit Spec — Test Vector Manifest",
+  "test_vectors_version": "0.1.0-draft",
+  "permit_spec_version": "1.0.0",
+  "generated_at": "2026-05-10",
+  "categories": [
+    {
+      "id": "cat-01-baseline",
+      "title": "Baseline — correctly-signed, correctly-chained, correctly-bound",
+      "purpose": "Verifier PASS cases. A correctly-constructed export bundle MUST verify successfully.",
+      "vectors": [
+        {
+          "id": "01-01-valid-permit-export",
+          "title": "Valid Permit + signed export bundle",
+          "expected_result": "PASS",
+          "status": "scaffolded",
+          "spec_references": ["spec/permit-v1.md §2", "spec/audit-export-bundle.md §3"]
+        },
+        {
+          "id": "01-02-valid-chain-segment",
+          "title": "Multi-entry chain segment with intact prev-hash linkage",
+          "expected_result": "PASS",
+          "status": "TODO",
+          "spec_references": ["spec/chain-entry.md §4"]
+        },
+        {
+          "id": "01-03-valid-closure-record",
+          "title": "closure_v2 record with valid binding digests",
+          "expected_result": "PASS",
+          "status": "TODO",
+          "spec_references": ["spec/closure-v2.md §3"]
+        },
+        {
+          "id": "01-04-valid-checkpoint-with-tsa",
+          "title": "Externally anchored checkpoint with valid RFC 3161 TSA receipt",
+          "expected_result": "PASS",
+          "status": "TODO",
+          "spec_references": ["spec/audit-export-bundle.md §6"]
+        }
+      ]
+    },
+    {
+      "id": "cat-02-tamper-chain",
+      "title": "Hash chain integrity failures",
+      "purpose": "Verifier FAIL cases. Any modification to chain entries MUST be detected.",
+      "vectors": [
+        {
+          "id": "02-01-record-hash-modified",
+          "title": "Single chain entry's record_hash field modified",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["WALK_RECORD_HASH_MISMATCH"],
+          "status": "scaffolded",
+          "spec_references": ["spec/chain-entry.md §4", "spec/failure-codes.md §3.1"]
+        },
+        {
+          "id": "02-02-prev-hash-modified",
+          "title": "Single chain entry's prev_hash field modified",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["WALK_CHAIN_LINK_MISMATCH"],
+          "status": "TODO",
+          "spec_references": ["spec/chain-entry.md §4", "spec/failure-codes.md §3.2"]
+        },
+        {
+          "id": "02-03-event-payload-modified",
+          "title": "Chain entry's event payload modified, record_hash not regenerated",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["WALK_RECORD_HASH_MISMATCH"],
+          "status": "TODO",
+          "spec_references": ["spec/chain-entry.md §4"]
+        },
+        {
+          "id": "02-04-sequence-gap",
+          "title": "Chain entries jump from sequence 5 directly to sequence 7",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["WALK_CHAIN_GAP"],
+          "status": "TODO",
+          "spec_references": ["spec/chain-entry.md §5"]
+        },
+        {
+          "id": "02-05-out-of-order-entries",
+          "title": "Chain entries delivered in non-monotonic order",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["WALK_CHAIN_ORDER"],
+          "status": "TODO",
+          "spec_references": ["spec/chain-entry.md §5"]
+        },
+        {
+          "id": "02-06-genesis-entry-modified",
+          "title": "First chain entry (genesis) modified — should fail before subsequent entries are processed",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["WALK_RECORD_HASH_MISMATCH"],
+          "expected_first_failure_at": {"type": "chain_entry", "sequence": 0},
+          "status": "TODO",
+          "spec_references": ["spec/chain-entry.md §4"]
+        }
+      ]
+    },
+    {
+      "id": "cat-03-tamper-signature",
+      "title": "Signature failures",
+      "purpose": "Verifier FAIL cases when signed bundles are tampered or signatures are invalid.",
+      "vectors": [
+        {
+          "id": "03-01-signature-byte-flipped",
+          "title": "Detached manifest signature has one byte flipped",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["MANIFEST_SIGNATURE_INVALID"],
+          "status": "TODO",
+          "spec_references": ["spec/audit-export-bundle.md §9", "spec/failure-codes.md §4.1"]
+        },
+        {
+          "id": "03-02-payload-modified-after-signing",
+          "title": "Signed payload (export bundle) modified after signature generation",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["MANIFEST_HASH_MISMATCH"],
+          "status": "TODO",
+          "spec_references": ["spec/audit-export-bundle.md §8", "spec/failure-codes.md §4.2"]
+        },
+        {
+          "id": "03-03-signature-missing",
+          "title": "Manifest present, signature file absent",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["MANIFEST_SIGNATURE_MISSING"],
+          "status": "TODO",
+          "spec_references": ["spec/audit-export-bundle.md §9", "spec/failure-codes.md §4.3"]
+        },
+        {
+          "id": "03-04-wrong-key-id",
+          "title": "Signature valid format but signed with key_id not in the trust manifest",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["UNKNOWN_SIGNING_KEY"],
+          "status": "TODO",
+          "spec_references": ["spec/audit-export-bundle.md §9", "spec/failure-codes.md §4.4"]
+        }
+      ]
+    },
+    {
+      "id": "cat-04-closure-binding",
+      "title": "closure_v2 binding failures",
+      "purpose": "Verifier FAIL cases when closure record digests do not bind correctly to the dispatched payload chain.",
+      "vectors": [
+        {
+          "id": "04-01-dispatch-digest-mismatch",
+          "title": "Closure record's dispatch_digest does not match dispatched payload bytes",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["CLOSURE_DISPATCH_DIGEST_MISMATCH"],
+          "status": "TODO",
+          "spec_references": ["spec/closure-v2.md §3", "spec/failure-codes.md §5.1"]
+        },
+        {
+          "id": "04-02-provider-response-digest-mismatch",
+          "title": "Closure record's provider_response_digest_v1 does not match recorded provider bytes",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["CLOSURE_PROVIDER_DIGEST_MISMATCH"],
+          "status": "TODO",
+          "spec_references": ["spec/closure-v2.md §3", "spec/failure-codes.md §5.2"]
+        },
+        {
+          "id": "04-03-client-response-digest-mismatch",
+          "title": "Closure record's client_response_digest_v1 does not match delivered client bytes",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["CLOSURE_CLIENT_DIGEST_MISMATCH"],
+          "status": "TODO",
+          "spec_references": ["spec/closure-v2.md §3", "spec/failure-codes.md §5.3"]
+        },
+        {
+          "id": "04-04-orphan-closure",
+          "title": "Closure record references permit_id not present in export bundle",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["CLOSURE_ORPHAN"],
+          "status": "TODO",
+          "spec_references": ["spec/closure-v2.md §4"]
+        },
+        {
+          "id": "04-05-binding-request-hash-mismatch",
+          "title": "Permit's binding_request_hash does not match the dispatched request's canonical hash",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["PERMIT_DISPATCH_BINDING_MISMATCH"],
+          "status": "TODO",
+          "spec_references": ["spec/permit-v1.md §2.4", "spec/failure-codes.md §5.4"]
+        }
+      ]
+    },
+    {
+      "id": "cat-05-canonicalization",
+      "title": "JSON canonicalization edge cases",
+      "purpose": "Verifier MUST hash equivalent JSON representations identically. Tests that canonicalization is correctly implemented.",
+      "vectors": [
+        {
+          "id": "05-01-key-reorder-equivalent",
+          "title": "Two JSON objects with keys in different order MUST produce identical hashes",
+          "expected_result": "PASS",
+          "status": "TODO",
+          "spec_references": ["spec/canonical-json.md §2"]
+        },
+        {
+          "id": "05-02-whitespace-equivalent",
+          "title": "Two JSON objects with different whitespace MUST produce identical hashes",
+          "expected_result": "PASS",
+          "status": "TODO",
+          "spec_references": ["spec/canonical-json.md §3"]
+        },
+        {
+          "id": "05-03-unicode-normalization",
+          "title": "Unicode characters in string values MUST hash identically when canonicalized",
+          "expected_result": "PASS",
+          "status": "TODO",
+          "spec_references": ["spec/canonical-json.md §4"]
+        },
+        {
+          "id": "05-04-escape-sequence-equivalent",
+          "title": "Equivalent JSON escape representations MUST produce identical canonical bytes",
+          "expected_result": "PASS",
+          "status": "TODO",
+          "spec_references": ["spec/canonical-json.md §4"]
+        },
+        {
+          "id": "05-05-number-representation",
+          "title": "Numeric values with different representations (1, 1.0, 1e0) MUST canonicalize per spec rules",
+          "expected_result": "PASS",
+          "status": "TODO",
+          "spec_references": ["spec/canonical-json.md §5"]
+        }
+      ]
+    },
+    {
+      "id": "cat-06-key-rotation",
+      "title": "Multi-key trust root scenarios",
+      "purpose": "Verifier MUST correctly verify signatures against the key active at the signing time, not just the current active key.",
+      "vectors": [
+        {
+          "id": "06-01-retired-key-still-verifies",
+          "title": "Artifact signed by key K1 (now retired, active_until=T1) verifies if signed_at < T1",
+          "expected_result": "PASS",
+          "status": "TODO",
+          "spec_references": ["spec/audit-export-bundle.md §10"]
+        },
+        {
+          "id": "06-02-expired-key-rejected",
+          "title": "Artifact signed by key K1 after its active_until rejected",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["KEY_EXPIRED_AT_SIGNING_TIME"],
+          "status": "TODO",
+          "spec_references": ["spec/audit-export-bundle.md §10"]
+        },
+        {
+          "id": "06-03-revoked-key-warning",
+          "title": "Artifact signed by key K1 (later marked compromised) — verifier MUST report 'signature valid but key revoked'",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["SIGNING_KEY_REVOKED"],
+          "status": "TODO",
+          "spec_references": ["spec/audit-export-bundle.md §10"]
+        }
+      ]
+    },
+    {
+      "id": "cat-07-bundle-format",
+      "title": "Bundle format edge cases",
+      "purpose": "Verifier MUST handle unusual but valid bundle shapes.",
+      "vectors": [
+        {
+          "id": "07-01-empty-bundle",
+          "title": "Bundle with valid manifest but zero entries",
+          "expected_result": "PASS",
+          "status": "TODO",
+          "spec_references": ["spec/audit-export-bundle.md §5"]
+        },
+        {
+          "id": "07-02-single-entry-bundle",
+          "title": "Bundle with exactly one entry (genesis only)",
+          "expected_result": "PASS",
+          "status": "TODO",
+          "spec_references": ["spec/audit-export-bundle.md §5"]
+        },
+        {
+          "id": "07-03-malformed-manifest-json",
+          "title": "Manifest file is not valid JSON",
+          "expected_result": "FAIL",
+          "expected_failure_codes": ["MANIFEST_PARSE_ERROR"],
+          "status": "TODO",
+          "spec_references": ["spec/audit-export-bundle.md §3"]
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_categories": 7,
+    "total_planned_vectors": 30,
+    "scaffolded": 2,
+    "todo": 28
+  },
+  "conformance_levels": {
+    "level_1_baseline": ["cat-01-baseline", "cat-02-tamper-chain"],
+    "level_2_signed": ["cat-01-baseline", "cat-02-tamper-chain", "cat-03-tamper-signature", "cat-04-closure-binding"],
+    "level_3_canonical": ["cat-01-baseline", "cat-02-tamper-chain", "cat-03-tamper-signature", "cat-04-closure-binding", "cat-05-canonicalization"],
+    "level_4_full": ["cat-01-baseline", "cat-02-tamper-chain", "cat-03-tamper-signature", "cat-04-closure-binding", "cat-05-canonicalization", "cat-06-key-rotation", "cat-07-bundle-format"]
+  },
+  "license": "Apache-2.0"
+}
