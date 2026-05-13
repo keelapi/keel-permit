@@ -447,6 +447,46 @@
           ],
           "default": null,
           "title": "Usage Verification Updated At"
+        },
+        "workflow_declaration_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workflow Declaration Id"
+        },
+        "workflow_id": {
+          "anyOf": [
+            {
+              "maxLength": 255,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workflow Id"
+        },
+        "workflow_state_json": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workflow State Json"
         }
       },
       "required": [
