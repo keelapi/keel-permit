@@ -4,6 +4,22 @@ All notable changes to this specification are documented here.
 
 The spec document follows [Semantic Versioning](https://semver.org/). Wire formats (Permit `v1`, `closure_v1`, `closure_v2`, chain entry `v1`) version independently and are not bumped by spec-document revisions.
 
+## [1.1.0] — 2026-05-13
+
+Adds Permit composition with workflow_intent. Wire format `v1` is unchanged for callers that do not declare workflows; new fields are optional.
+
+- New optional Permit properties accepted in `audit-export-bundle.schema.json`, `audit-export-record.schema.json`, and `permit-v1.schema.json`:
+  - `workflow_declaration_id` (UUID): stable identifier of the workflow declaration that governs the Permit, when the Permit is part of a declared workflow.
+  - `workflow_id` (string): caller-facing workflow identifier associated with `workflow_declaration_id`.
+  - `workflow_state_json` (object): decision-time workflow snapshot. Includes at least `effective_intent_hash`, `declaration_version_at_decision`, `actual_calls_at_decision`, and `max_calls_at_decision`.
+- New spec section: "Composition with workflow declarations" describing the parent-workflow-to-child-permit model, `effective_intent_hash` derivation (`SHA-256(declaration.intent_json ‖ ordered amendments at decision time)`), and replay verification semantics.
+- Permit lineage (`parent_permit_id`, `delegation_depth`) and workflow grouping (`workflow_declaration_id`) are distinct: lineage describes per-call delegation, workflow grouping describes membership in a declared multi-call run.
+
+### Compatibility
+
+- Existing valid Permits continue to validate unchanged. No required fields added. No fields removed or renamed.
+- Validators that previously accepted `additionalProperties: false` schemas now accept Permits with workflow_intent fields without spec exception — the fields are defined in the schema, not ad-hoc extensions.
+
 ## [1.0.0] — 2026-05-10
 
 Initial public release. Codifies the wire formats already shipped in the reference implementation as of 2026-05-08.
