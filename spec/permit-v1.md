@@ -16,7 +16,7 @@ The keywords MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD NOT, REC
 
 A Permit is a JSON object with the fields defined below. The canonical wire shape is the form serialized into audit export bundles (see [`audit-export-bundle.md`](audit-export-bundle.md)) — that is the artifact verifiers consume. Implementations MAY expose alternative runtime API shapes (e.g., nested metadata envelopes); those are out of scope for this specification.
 
-The schema is closed: validators MUST reject unknown fields. Implementations that need to extend the wire format MUST do so through a future spec version, not by adding ad-hoc fields. See §11.
+The schema is closed: validators MUST reject unknown fields. Implementations that need to extend the wire format MUST do so through a future spec version, not by adding ad-hoc fields. See §12.
 
 ### 2.1 Required fields
 
@@ -69,6 +69,9 @@ For `decision == "deny"` and `decision == "challenge"`, `binding_request_hash` M
 | `resource_operation` | string | Operation within the resource (e.g., `"messages.create"`). |
 | `resource_modality` | string | Modality (e.g., `"text"`, `"image"`). |
 | `max_output_tokens_requested` | integer ≥ 0 | Output token cap requested at decision time. |
+| `workflow_declaration_id` | UUID | Stable identifier of the workflow declaration that governs this permit, when the permit is part of a declared workflow. |
+| `workflow_id` | string | Caller-facing workflow identifier associated with `workflow_declaration_id`. |
+| `workflow_state_json` | object | Decision-time workflow snapshot; see §5. |
 
 Implementations MAY include additional descriptive fields (usage verification metadata, accounting disposition, condition evaluation, budget envelope summary). Such fields are documented in the JSON Schema in `schemas/permit-v1.schema.json` but are not part of the normative wire-format minimum.
 
@@ -123,15 +126,27 @@ A reader MUST NOT assume a complete state machine from `status` alone. For a nor
 
 `shadow` is likewise not a canonical Permit decision. Shadow evaluation, shadow policy mode, or shadow routing is implementation metadata and MUST be represented, if emitted at all, outside the `decision` enum.
 
-## 5. Audit-export form
+## 5. Composition with workflow declarations
+
+A workflow declaration is a parent governance object for a declared multi-call run. Permits are child execution events under that declaration. One workflow declaration MAY contain many permits; a permit MAY reference at most one workflow declaration. This relationship is separate from Permit lineage (§8): `parent_permit_id` and `delegation_depth` describe per-call delegation, while `workflow_declaration_id` and `workflow_id` group permits under a declared workflow intent.
+
+When a Permit is evaluated in a workflow context, it carries `workflow_declaration_id`, `workflow_id`, and `workflow_state_json`. `workflow_declaration_id` is the stable evidence join key for the declaration and its amendments. `workflow_id` is the caller-facing handle. `workflow_state_json` is a decision-time snapshot of the workflow state used for the Permit decision. The snapshot includes at least `effective_intent_hash`, `declaration_version_at_decision`, `actual_calls_at_decision`, and `max_calls_at_decision`.
+
+`effective_intent_hash` is defined as `SHA-256(declaration.intent_json ‖ ordered amendments at decision time)`, using the canonical workflow declaration and amendment encodings defined by the workflow evidence schema. Amendments are ordered as applied before the Permit decision. Replay re-derives the effective intent hash from the workflow declaration plus the ordered amendments and verifies that it matches the value carried in `workflow_state_json`.
+
+Workflow declaration and amendment records are sibling evidence artifacts to Permit evidence, not replacements for Permits. A verifier that receives a workflow-aware export verifies the Permit object, then verifies `workflow_state_json` against the corresponding `workflow_declarations` and `workflow_amendments` artifacts. If declared intent, amendment order, or decision-time counters are altered after signing, the projected workflow state becomes tamper-evident through an effective-intent-hash or counter mismatch.
+
+The complete `workflow_intent` schema and runtime design are maintained in `/Users/cmunoz/Desktop/Business/Keel/Product/keel-api/docs/_strategy/WORKFLOW_INTENT_DESIGN_2026-05-12.md`.
+
+## 6. Audit-export form
 
 The Permit object defined in §2 **is** the audit-export form. There is no separate "additional fields" overlay; the canonical wire shape and the verified evidence shape are the same object. Implementations that expose alternative runtime API shapes (e.g., nested metadata envelopes) MUST translate to the §2 shape before serializing into an audit export bundle.
 
-## 6. Identity and subject
+## 7. Identity and subject
 
 The `subject_type` and `subject_id` fields together identify the actor. This spec does not constrain the identity model: `subject_type` is open-ended (`"user"`, `"agent"`, `"service"`, etc.) and the meaning of `subject_id` is determined by `subject_type`. Implementations MAY add issuer-specific identity context fields, but the canonical pair carried by every audit-exported Permit is `(subject_type, subject_id)`.
 
-## 7. Lineage
+## 8. Lineage
 
 Multi-step delegation is represented through the `parent_permit_id` and `delegation_depth` fields. The field shape permits at most one parent pointer per Permit.
 
@@ -141,7 +156,7 @@ Spec-level conformance expects emitters and verifiers to treat delegation as an 
 
 Implementations MAY enforce a maximum delegation depth. This spec recommends but does not mandate a soft limit.
 
-## 8. Hashing of permits
+## 9. Hashing of permits
 
 A Permit object itself is not directly hashed. Hash inputs in this specification are:
 
@@ -150,7 +165,7 @@ A Permit object itself is not directly hashed. Hash inputs in this specification
 
 Implementations MUST NOT modify either digest after the permit is sealed. A change to `binding_request_hash` after sealing MUST be treated as tampering and MUST cause dispatch to abort with a `permit.binding_violation` chain event (issuer-defined event name).
 
-## 9. Verification
+## 10. Verification
 
 A Permit by itself records a decision but does not by itself prove execution and is not self-authenticating as a standalone JSON object. To verify the full pre-execution-to-response-writer loop, a verifier consumes:
 
@@ -161,7 +176,7 @@ A Permit by itself records a decision but does not by itself prove execution and
 
 A verifier MUST emit one of the failure codes in [`failure-codes.md`](failure-codes.md) on any integrity violation.
 
-## 10. Reserved fields
+## 11. Reserved fields
 
 The following field names are reserved for future versions and MUST NOT be repurposed by implementations:
 
@@ -169,9 +184,9 @@ The following field names are reserved for future versions and MUST NOT be repur
 - `signature` (reserved for permit-level signatures in a future spec revision)
 - `counter_signature` (reserved for customer counter-signatures in a future spec revision)
 
-## 11. Extensions and future fields
+## 12. Extensions and future fields
 
-The wire format defined in `schemas/permit-v1.schema.json` is **closed**. Conforming validators MUST reject objects that contain fields not listed in the schema. Reserved field names in §10 are reserved for future versions and MUST NOT appear in current Permit v1 objects; the current schema rejects them with `additionalProperties: false`.
+The wire format defined in `schemas/permit-v1.schema.json` is **closed**. Conforming validators MUST reject objects that contain fields not listed in the schema. Reserved field names in §11 are reserved for future versions and MUST NOT appear in current Permit v1 objects; the current schema rejects them with `additionalProperties: false`.
 
 Two extension paths exist:
 
