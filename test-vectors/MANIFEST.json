@@ -435,14 +435,91 @@
           "priority": "deferred_post_v0_1"
         }
       ]
+    },
+    {
+      "id": "cat-08-permit-chains",
+      "title": "Permit chain semantics",
+      "purpose": "Verifier checks for issuance-validity, envelope-comparator, and result-status semantics defined by spec/permit-chain-v1.md. These vectors exercise chain semantics on top of an assumed-valid cryptographic substrate; tamper of the chain entries themselves is covered in cat-02.",
+      "vectors": [
+        {
+          "id": "08-01-clean-parent-child",
+          "title": "Valid root + child with envelope subset and expiry within parent",
+          "expected_result": "PASS",
+          "status": "scaffolded",
+          "spec_references": [
+            "spec/permit-chain-v1.md §7.1",
+            "spec/permit-chain-v1.md §10.6"
+          ],
+          "priority": "mvp_v0_1"
+        },
+        {
+          "id": "08-02-child-violates-subset",
+          "title": "Child's authority_envelope.actions includes an action not in parent's",
+          "expected_result": "FAIL",
+          "expected_failure_codes": [
+            "WALK_PERMIT_CHAIN_ENVELOPE_VIOLATION"
+          ],
+          "status": "scaffolded",
+          "spec_references": [
+            "spec/permit-chain-v1.md §3",
+            "spec/permit-chain-v1.md §7.1",
+            "spec/permit-chain-v1.md §11"
+          ],
+          "priority": "mvp_v0_1"
+        },
+        {
+          "id": "08-03-child-violates-expiry",
+          "title": "Child's expires_at exceeds parent's",
+          "expected_result": "FAIL",
+          "expected_failure_codes": [
+            "WALK_PERMIT_CHAIN_EXPIRY_VIOLATION"
+          ],
+          "status": "scaffolded",
+          "spec_references": [
+            "spec/permit-chain-v1.md §7.1",
+            "spec/permit-chain-v1.md §11"
+          ],
+          "priority": "mvp_v0_1"
+        },
+        {
+          "id": "08-04-unknown-envelope-version",
+          "title": "Permit declares an unsupported authority_envelope_version",
+          "expected_result": "UNVERIFIABLE_SCOPE",
+          "expected_failure_codes": [
+            "WALK_PERMIT_CHAIN_UNKNOWN_ENVELOPE_VERSION"
+          ],
+          "status": "scaffolded",
+          "spec_references": [
+            "spec/permit-chain-v1.md §3.4",
+            "spec/permit-chain-v1.md §10.6",
+            "spec/permit-chain-v1.md §11"
+          ],
+          "priority": "mvp_v0_1"
+        },
+        {
+          "id": "08-05-missing-comparator",
+          "title": "Pack lacks the comparator registry for the declared envelope version",
+          "expected_result": "INSUFFICIENT_EVIDENCE",
+          "expected_failure_codes": [
+            "WALK_PERMIT_CHAIN_MISSING_COMPARATOR"
+          ],
+          "status": "scaffolded",
+          "spec_references": [
+            "spec/permit-chain-v1.md §4.2",
+            "spec/permit-chain-v1.md §10.6",
+            "spec/permit-chain-v1.md §11"
+          ],
+          "priority": "mvp_v0_1"
+        }
+      ]
     }
   ],
   "summary": {
-    "total_categories": 7,
-    "total_planned_vectors": 31,
-    "mvp_v0_1_count": 9,
+    "total_categories": 8,
+    "total_planned_vectors": 36,
+    "mvp_v0_1_count": 14,
     "deferred_post_v0_1_count": 22,
-    "scaffolded": 2,
+    "scaffolded": 7,
     "todo": 29
   },
   "conformance_levels": {

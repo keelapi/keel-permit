@@ -1,0 +1,22 @@
+{
+  "claim_type": "permit_lineage_internally_consistent",
+  "claim_scope": {
+    "permit_id": "00000000-0000-0003-0000-000000000002"
+  },
+  "status": "disproved",
+  "failure_code": "WALK_PERMIT_CHAIN_EXPIRY_VIOLATION",
+  "failure_detail": {
+    "parent_permit_id": "00000000-0000-0003-0000-000000000001",
+    "child_permit_id": "00000000-0000-0003-0000-000000000002",
+    "parent_expires_at": "2027-01-01T00:00:00Z",
+    "child_expires_at": "2027-06-01T00:00:00Z"
+  },
+  "supported_checks": [
+    "claim_scope_within_export_scope",
+    "comparator_registry_resolved",
+    "envelope_version_supported",
+    "envelope_subset_check_passed"
+  ],
+  "missing_requirements": [],
+  "supported_envelope_versions": ["authority-envelope.v0"]
+}

@@ -1,0 +1,108 @@
+{
+  "scenario": "03-child-violates-expiry",
+  "spec_section": "permit-chain-v1.md §7.1 rule 4",
+  "narrative": "Root permit expires 2027-01-01. Child permit expires 2027-06-01 — exceeds parent. Expiry rule violated.",
+  "comparator_registry": {
+    "version": "authority-envelope.v0",
+    "fields": {
+      "actions": {"type": "set<string>", "order": "subset", "canonicalization": "sorted_unique_strings"},
+      "tools": {"type": "set<string>", "order": "subset", "canonicalization": "sorted_unique_strings"},
+      "providers": {"type": "set<string>", "order": "subset", "canonicalization": "sorted_unique_strings"},
+      "models": {"type": "set<string>", "order": "subset", "canonicalization": "sorted_unique_strings"},
+      "data_classes": {"type": "set<string>", "order": "subset", "canonicalization": "sorted_unique_strings"},
+      "regions": {"type": "set<string>", "order": "subset", "canonicalization": "sorted_unique_strings"},
+      "expires_at": {"type": "timestamp", "order": "less_than_or_equal", "canonicalization": "rfc_3339_utc"}
+    }
+  },
+  "permits": [
+    {
+      "id": "00000000-0000-0003-0000-000000000001",
+      "project_id": "00000000-0000-0000-0000-000000000001",
+      "decision": "allow",
+      "reason": "root permit",
+      "actions_json": [],
+      "subject_type": "spiffe",
+      "subject_id": "spiffe://example.com/agents/root",
+      "action_name": "permit.issue",
+      "resource_provider": "internal",
+      "resource_model": "permit-issuance",
+      "estimated_input_tokens": 0,
+      "estimated_output_tokens": 0,
+      "request_fingerprint": "0000000000000000000000000000000000000000000000000000000000000005",
+      "idempotency_key": "issue-root-vec03",
+      "policy_id": "issuance-policy",
+      "policy_version": "1.0.0",
+      "created_at": "2026-05-15T10:00:00Z",
+      "expires_at": "2027-01-01T00:00:00Z",
+      "delegation_depth": 0,
+      "authority_envelope": {
+        "actions": ["execute_query", "read_data"],
+        "tools": [],
+        "providers": ["openai"],
+        "models": [],
+        "data_classes": ["public", "internal"],
+        "regions": ["us-east-1"],
+        "expires_at": "2027-01-01T00:00:00Z"
+      },
+      "authority_envelope_version": "authority-envelope.v0",
+      "actor_ref": {
+        "issuer": "spiffe",
+        "subject": "spiffe://example.com/agents/root"
+      },
+      "policy_version_or_hash": "sha256:0000000000000000000000000000000000000000000000000000000000001111"
+    },
+    {
+      "id": "00000000-0000-0003-0000-000000000002",
+      "project_id": "00000000-0000-0000-0000-000000000001",
+      "decision": "allow",
+      "reason": "child permit (will be detected as expiring after parent)",
+      "actions_json": [],
+      "subject_type": "spiffe",
+      "subject_id": "spiffe://example.com/agents/child",
+      "action_name": "permit.issue",
+      "resource_provider": "internal",
+      "resource_model": "permit-issuance",
+      "estimated_input_tokens": 0,
+      "estimated_output_tokens": 0,
+      "request_fingerprint": "0000000000000000000000000000000000000000000000000000000000000006",
+      "idempotency_key": "issue-child-vec03",
+      "policy_id": "issuance-policy",
+      "policy_version": "1.0.0",
+      "created_at": "2026-05-15T10:05:00Z",
+      "expires_at": "2027-06-01T00:00:00Z",
+      "parent_permit_id": "00000000-0000-0003-0000-000000000001",
+      "delegation_depth": 1,
+      "authority_envelope": {
+        "actions": ["read_data"],
+        "tools": [],
+        "providers": ["openai"],
+        "models": [],
+        "data_classes": ["public"],
+        "regions": ["us-east-1"],
+        "expires_at": "2027-06-01T00:00:00Z"
+      },
+      "authority_envelope_version": "authority-envelope.v0",
+      "actor_ref": {
+        "issuer": "spiffe",
+        "subject": "spiffe://example.com/agents/child"
+      },
+      "policy_version_or_hash": "sha256:0000000000000000000000000000000000000000000000000000000000001111"
+    }
+  ],
+  "manifest": {
+    "project_id": "00000000-0000-0000-0000-000000000001",
+    "export_scope": {
+      "permit_ids": [
+        "00000000-0000-0003-0000-000000000001",
+        "00000000-0000-0003-0000-000000000002"
+      ]
+    },
+    "completeness_claim": "all_issuance_events_for_listed_permits"
+  },
+  "claim": {
+    "claim_type": "permit_lineage_internally_consistent",
+    "claim_scope": {
+      "permit_id": "00000000-0000-0003-0000-000000000002"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "claim_type": "permit_lineage_internally_consistent",
+  "claim_scope": {
+    "permit_id": "00000000-0000-0005-0000-000000000002"
+  },
+  "status": "insufficient_evidence",
+  "failure_code": "WALK_PERMIT_CHAIN_MISSING_COMPARATOR",
+  "supported_checks": [
+    "claim_scope_within_export_scope",
+    "envelope_version_supported"
+  ],
+  "missing_requirements": [
+    "comparator_registry_for_authority-envelope.v0"
+  ],
+  "supported_envelope_versions": ["authority-envelope.v0"]
+}
