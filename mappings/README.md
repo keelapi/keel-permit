@@ -1,6 +1,6 @@
 # Permit v1 → Control Framework Mappings
 
-Machine-readable mapping from Permit v1 wire-format fields and audit-export-bundle artifacts to specific control IDs in major AI / security / privacy frameworks. Use this when you need to answer "which Permit field satisfies which control evidence requirement?"
+Machine-readable mapping from Permit v1 wire-format fields and audit-export-bundle artifacts to specific control IDs in major AI / security / privacy frameworks. Use this when you need to answer "which Permit field supports which control evidence need?"
 
 ## Status
 
@@ -74,11 +74,24 @@ This is the kind of error that gets caught only by reading the authoritative AIC
 
 ## Critical scoping notes
 
+## Control sufficiency and audit boundary
+
+Keel artifacts are evidence inputs, not audit opinions. They record
+authorization, policy decision context, chain/checkpoint integrity context, and
+export verification material. Customers own control design and operation, and
+auditors determine whether the customer's controls meet SOC 2, ISO, EU AI Act,
+NIST, FedRAMP, PCI, CIS, or other framework expectations.
+
+Keel does not make customers compliant. Keel also does not prove fairness,
+model correctness, model accuracy, or absence of bias. Where mappings touch AI
+governance frameworks, they are limited to authorization records, policy
+context, runtime evidence, and integrity artifacts.
+
 ### What §7152 covers (FINAL ADOPTED text)
 
 A risk assessment under 11 CCR §7152 is required when a business uses Automated Decisionmaking Technology (ADMT) to **replace or substantially replace human decisionmaking** for a "significant decision" (financial/lending, housing, insurance, education, employment, healthcare, essential goods, criminal justice — §7150(b)(3)), OR trains ADMT for those uses or for facial-recognition / emotion-recognition / identity-verifying / biological-identification or profiling technology (§7150(b)(6)).
 
-Pure copilots and recommendation systems with meaningful human review (where the reviewer satisfies the §7001(e)(1) human-involvement test) are **NOT** in scope.
+Pure copilots and recommendation systems with meaningful human review (where the reviewer meets the §7001(e)(1) human-involvement test) are **NOT** in scope.
 
 ### What was REMOVED from proposed → final adopted text
 
@@ -128,9 +141,12 @@ The JSON file structure:
 ```
 
 `evidence_type` is one of:
-- **necessary** — the field is required to satisfy the control but may need additional evidence to be sufficient
-- **sufficient** — the field directly satisfies the control
-- **partial** — the field contributes evidence but is not necessary nor sufficient on its own
+- **necessary** — the field is an expected evidence input but needs additional
+  customer-owned evidence and control operation
+- **direct_support** — the field or artifact directly supports the named
+  evidence need within Permit scope; the customer and auditor determine control
+  sufficiency
+- **partial** — the field contributes evidence but is not enough on its own
 
 ## FedRAMP — mandatory framing discipline
 
@@ -151,7 +167,7 @@ The FedRAMP mapping in this artifact describes how Keel-produced evidence (Permi
 ❌ "Keel is FedRAMP authorized" — false
 ❌ "Keel is FedRAMP compliant" — false; only authorized CSOs are 'compliant'
 ❌ "Keel supports FedRAMP High" — ambiguous; correct: "Keel evidence supports customers operating under FedRAMP High baseline"
-❌ "Use Keel to satisfy FedRAMP" — false; Keel does not satisfy any FedRAMP requirement on its own
+❌ "Use Keel to complete FedRAMP" — false; Keel evidence is only one customer-side input
 ❌ "Keel is on the FedRAMP Marketplace" — false
 
 ### Coverage scope
@@ -191,7 +207,7 @@ For these cases, Permit substrate maps to:
 
 | Requirement | Permit fit | Notes |
 |---|---|---|
-| **Req 10** Log and monitor all access to system components and cardholder data | **Sufficient** | Hash chain + signed exports + TSA = tamper-evident audit logging satisfying Req 10.5. Enterprise tier (365d retention) recommended for PCI 12-month floor. |
+| **Req 10** Log and monitor all access to system components and cardholder data | **Direct support** | Hash chain + signed exports + TSA provide tamper-evident audit logging evidence for Req 10.5. Enterprise tier (365d retention) recommended for PCI 12-month floor. |
 | Req 6 Develop and maintain secure systems and software | Partial | policy_id + policy_version + policy diff tracking |
 | Req 7 Restrict access by business need to know | Partial | Permit gating at AI-action boundary |
 | Req 12 Support information security with organizational policies and programs | Partial | Permit policies are documented |
@@ -214,7 +230,7 @@ CIS Controls v8.1 (May 2024) is a voluntary framework with 18 controls. Permit s
 
 | Control | Permit fit | Notes |
 |---|---|---|
-| **Control 8** Audit Log Management | **Sufficient** | Strongest CIS fit — hash chain + signed exports + TSA satisfies safeguards 8.2, 8.3, 8.10, 8.11 |
+| **Control 8** Audit Log Management | **Direct support** | Strongest CIS fit — hash chain + signed exports + TSA support safeguards 8.2, 8.3, 8.10, 8.11 |
 | Control 3 Data Protection | Partial | AI-decision audit evidence at rest |
 | Control 4 Secure Configuration of Enterprise Assets and Software | Partial | policy_id is config-as-code for AI |
 | Control 6 Access Control Management | Partial | AI-action access control boundary |
@@ -238,7 +254,7 @@ Explicitly out of scope: Reconnaissance, Discovery, Persistence, Lateral Movemen
 
 ### OWASP API Security Top 10 (2023) — 8 of 10 items mapped
 
-Mapped: API1 (BOLA), API2 (Broken Auth — necessary identity context), API3 (Property-level Authz), API4 (Resource Consumption — sufficient via budgets), API5 (Function-level Authz — sufficient), API6 (Sensitive Business Flows), API9 (Inventory), API10 (Unsafe Consumption of APIs).
+Mapped: API1 (BOLA), API2 (Broken Auth — necessary identity context), API3 (Property-level Authz), API4 (Resource Consumption — direct budget evidence), API5 (Function-level Authz — direct authorization evidence), API6 (Sensitive Business Flows), API9 (Inventory), API10 (Unsafe Consumption of APIs).
 
 Explicit non-mappings: **API7 Server Side Request Forgery** (network-layer concern), **API8 Security Misconfiguration** (deployment/config baseline concern). Both are listed in `explicit_non_mappings`.
 

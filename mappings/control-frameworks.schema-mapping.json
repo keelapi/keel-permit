@@ -2,14 +2,14 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/keelapi/keel-permit/blob/main/mappings/control-frameworks.schema-mapping.json",
   "title": "Permit v1 → Control Framework Mappings",
-  "description": "Mapping from Permit v1 wire-format fields and audit-export-bundle artifacts to specific control IDs in major AI / security / privacy frameworks. Auditor-and-procurement-friendly: a buyer reads which Permit fields satisfy which control evidence requirements. Honesty over coverage: 'sufficient' / 'partial' / 'necessary' labels reflect the actual evidentiary weight of the field for that control.",
+  "description": "Mapping from Permit v1 wire-format fields and audit-export-bundle artifacts to specific control IDs in major AI / security / privacy frameworks. Auditor-and-procurement-friendly: a buyer reads which Permit fields support which control evidence needs. Honesty over coverage: 'direct_support' / 'partial' / 'necessary' labels describe the evidentiary role of the field or artifact for that control.",
   "version": "0.1.0-draft",
   "generated_at": "2026-05-10",
   "spec_repository": "github.com/keelapi/keel-permit",
   "license": "Apache-2.0",
 
   "verification_status": {
-    "summary": "Selected citations directly verified via WebFetch of official sources or local copies of authoritative publications on 2026-05-10. AICPA SOC 2 TSC criteria verified verbatim from a local copy of the AICPA-published TSP Section 100 (2017 TSC with Revised Points of Focus — 2022). Other framework citations are draft mappings carried over from internal evidence-map work that have NOT been separately verified in this artifact. Verify each citation against the canonical published source before customer-facing publication.",
+    "summary": "Framework citation titles listed in the verification arrays were checked via official sources, authoritative previews, source mirrors, or local copies on 2026-05-10 unless otherwise noted. AICPA SOC 2 TSC criteria were verified verbatim from a local copy of the AICPA-published TSP Section 100 (2017 TSC with Revised Points of Focus — 2022). Verification covers citation identity and wording; it does not mean Keel artifacts complete a customer control, create a legal conclusion, or remove the need for customer/auditor review before customer-facing publication.",
     "verified_2026_05_10": [
       "California Civil Code §1798.105(d)(2) — verbatim from leginfo.legislature.ca.gov",
       "California Civil Code §1798.105(d)(8) — verbatim from leginfo.legislature.ca.gov",
@@ -30,7 +30,7 @@
       "OWASP Application Security Verification Standard v5.0.0 — all 17 chapter IDs (V1 through V17) and verbatim titles verified from github.com/OWASP/ASVS/tree/master/5.0/en on 2026-05-10. ASVS v5.0.0 was released May 30, 2025 at Global AppSec EU Barcelona. Chapter numbering is NOT backwards-compatible with v4 — always include the v5 version qualifier in customer-facing citations. Permit primitive natural mappings: V4, V8, V11, V13, V14, V16.",
       "FedRAMP / NIST SP 800-53 Rev 5 — control titles for AU-2, AU-3, AU-4, AU-6, AU-7, AU-8, AU-9, AU-9(2), AU-9(3), AU-10, AU-11, AU-12, AC-3, AC-6, CM-3, CM-8, CA-7, IR-4, IR-5, SI-7, SI-12, SC-13, SC-28 verified verbatim from csf.tools NIST-content mirror on 2026-05-10. NIST SP 800-53 Rev 5 (originally September 2020, latest release 5.2.0 issued August 27, 2025) is the canonical control catalog FedRAMP Rev 5 baselines (Low/Moderate/High/LI-SaaS) are built on. CRITICAL: Keel is NOT FedRAMP authorized — mappings describe how Keel-produced evidence supports a customer's NIST 800-53 control implementations within the customer's existing FedRAMP boundary, NOT a claim that Keel is FedRAMP-authorized in its own right. See frameworks.fedramp.CRITICAL_FRAMING_DISCIPLINE for the framing guardrails that must be applied to any customer-facing use of these mappings.",
       "CIS Critical Security Controls v8.1 — all 18 control titles verified verbatim from cisecurity.org blog post on 2026-05-10. v8.1 is the current published version (v8 originally May 2021, v8.1 published May 2024). Permit substrate maps to ~6 of 18 controls — Control 8 (Audit Log Management) is the strongest fit; Controls 3, 4, 6, 15, 16, 17 are partial. The other 12 controls (asset inventory, software inventory, account management, vulnerability management, email/browser, malware, data recovery, network, training, penetration testing) are entirely out-of-scope for Permit substrate.",
-      "PCI DSS v4.0.1 — all 12 requirement titles verified verbatim from Wikipedia summary cross-referenced to PCI SSC document library on 2026-05-10. v4.0.1 is the current published version (June 2024 release; v4.0 was released March 2022 with full enforcement starting April 1, 2024). NARROW SCOPE: PCI DSS applies only to entities handling cardholder data within a defined Cardholder Data Environment (CDE). Most B2B SaaS AI workloads do NOT touch CDE — for those cases PCI is entirely out-of-scope. When AI workloads DO touch CDE, Permit substrate maps to Requirement 10 (sufficient) and Requirements 6, 7, 12 (partial). Keel is NOT a PCI-DSS-validated service provider; see frameworks.pci_dss.FRAMING_DISCIPLINE for guardrails."
+      "PCI DSS v4.0.1 — all 12 requirement titles verified verbatim from Wikipedia summary cross-referenced to PCI SSC document library on 2026-05-10. v4.0.1 is the current published version (June 2024 release; v4.0 was released March 2022 with full enforcement starting April 1, 2024). NARROW SCOPE: PCI DSS applies only to entities handling cardholder data within a defined Cardholder Data Environment (CDE). Most B2B SaaS AI workloads do NOT touch CDE — for those cases PCI is entirely out-of-scope. When AI workloads DO touch CDE, Permit substrate maps to Requirement 10 (direct support) and Requirements 6, 7, 12 (partial). Keel is NOT a PCI-DSS-validated service provider; see frameworks.pci_dss.FRAMING_DISCIPLINE for guardrails."
     ],
     "verified_pre_2026_05_10": [
       "EU AI Act Article 26(6) — verbatim from artificialintelligenceact.eu (per project_dsar_legal_positioning_2026-05-08)",
@@ -64,7 +64,7 @@
       "name": "European Union Artificial Intelligence Act (Regulation (EU) 2024/1689)",
       "scope": "AI systems placed on the market or put into service in the EU; high-risk AI systems addressed in Articles 8-29",
       "source": "https://artificialintelligenceact.eu/",
-      "effective_status": "Article 12 (logging) and Article 26(6) (deployer log retention ≥6mo) effective for new high-risk AI Aug 2 2026; legacy systems Aug 2 2027",
+      "effective_status": "Article 12 (logging) and Article 26(6) (deployer log retention for an adequate period, as determined by customer counsel) effective for new high-risk AI Aug 2 2026; legacy systems Aug 2 2027",
       "verification": "Article 26(6) verbatim verified per existing internal memo"
     },
     "gdpr": {
@@ -406,7 +406,7 @@
           "'Keel is FedRAMP authorized' — false",
           "'Keel is FedRAMP compliant' — false; only authorized CSOs are 'compliant'",
           "'Keel supports FedRAMP High' — ambiguous; correct: 'Keel evidence can support customers operating under FedRAMP High baseline'",
-          "'Use Keel to satisfy FedRAMP' — false; Keel does not satisfy any FedRAMP requirement on its own",
+          "'Use Keel to complete FedRAMP' — false; Keel evidence is only one customer-side input",
           "'Keel is on the FedRAMP Marketplace' — false"
         ],
         "future_path": "If Keel itself pursues FedRAMP authorization in the future, the process is: (1) work with a FedRAMP 3PAO (Third Party Assessment Organization), (2) develop System Security Plan (SSP) mapping all required controls, (3) undergo Security Assessment, (4) seek either Agency ATO sponsorship OR JAB Provisional Authorization. Timeline: typically 12-18 months; cost: $250K-$1M+ depending on baseline. This is the post-revenue, post-design-partner-validation work — not pre-revenue."
@@ -464,11 +464,11 @@
       "FRAMING_DISCIPLINE": {
         "what_keel_is_NOT": "Keel API, Inc. is NOT a PCI-DSS-validated service provider. Keel has NO Attestation of Compliance (AOC), NO Report on Compliance (ROC), and is NOT listed as a PCI-DSS-validated service provider as of 2026-05-10. Statements claiming Keel is 'PCI compliant' or 'PCI certified' would be FALSE.",
         "what_keel_DOES_provide": "Keel provides tamper-evident audit evidence (per-project hash chain, Ed25519 signed exports, RFC 3161 timestamps) that can support a customer's PCI Requirement 10 (Log and monitor all access) for AI-decision events when AI workloads touch the customer's CDE. The customer remains the PCI-validated entity; Keel is supporting evidence substrate.",
-        "correct_framing": "'Keel evidence supports PCI DSS Requirement 10 (audit logging and monitoring) for AI workloads that touch your Cardholder Data Environment.' OR 'Keel's tamper-evident audit substrate satisfies PCI Req 10.5 protection-of-audit-trail requirements for AI-decision events.'",
+        "correct_framing": "'Keel evidence supports PCI DSS Requirement 10 (audit logging and monitoring) for AI workloads that touch your Cardholder Data Environment.' OR 'Keel's tamper-evident audit substrate can support PCI Req 10.5 protection-of-audit-trail evidence for AI-decision events.'",
         "incorrect_framing_to_avoid": [
           "'Keel is PCI DSS compliant' — false",
           "'Keel is PCI certified' — false",
-          "'Use Keel to meet PCI' — false; Keel does not satisfy any PCI requirement on its own",
+          "'Use Keel to meet PCI' — false; Keel does not complete any PCI requirement on its own",
           "'Keel is a PCI-validated service provider' — false"
         ]
       }
@@ -517,7 +517,7 @@
           "framework": "soc2",
           "control_id": "CC7.3 (System Operations — incident detection/identification)",
           "evidence_type": "partial",
-          "rationale": "Unique permit identifier supports incident reconstruction; not sufficient on its own."
+          "rationale": "Unique permit identifier supports incident reconstruction; not enough on its own."
         }
       ]
     },
@@ -538,7 +538,7 @@
         {
           "framework": "cppa_admt_regs",
           "control_id": "11 CCR §7152(a)(3)(G)(ii)",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "rationale": "For ADMT used in significant decisions per §7150(b)(3), the risk assessment must identify the output of the ADMT and how the business will use the output to make a significant decision. The permit's decision field IS that output."
         },
         {
@@ -566,7 +566,7 @@
         {
           "framework": "cppa_admt_regs",
           "control_id": "11 CCR §7152(a)(3)(G)(i)",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "rationale": "The decision_details code + reason captures the ADMT's logic at evaluation time, including assumptions/limitations expressed as policy rules."
         }
       ]
@@ -713,7 +713,7 @@
           "framework": "eu_ai_act",
           "control_id": "Article 26(6)",
           "evidence_type": "necessary",
-          "rationale": "Article 26(6) requires high-risk AI deployer logs to be kept ≥6 months; created_at is the anchor for that retention window."
+          "rationale": "Article 26(6) requires high-risk AI deployer logs to be retained for an adequate period determined by applicable law and counsel review; created_at is the anchor for whatever retention window the customer applies."
         },
         {
           "framework": "ccpa",
@@ -754,14 +754,14 @@
         {
           "framework": "cppa_admt_regs",
           "control_id": "11 CCR §7155(a)(2)",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "rationale": "Risk assessments must be retained, reviewed and updated at least every 3 years. Signed export bundle is a tamper-evident retention artifact supporting that obligation."
         },
         {
           "framework": "eu_ai_act",
           "control_id": "Article 26(6)",
-          "evidence_type": "sufficient",
-          "rationale": "Provides the cryptographically verifiable retention substrate for high-risk AI deployer logs to be kept under deployer control for ≥6 months."
+          "evidence_type": "direct_support",
+          "rationale": "Provides a cryptographically verifiable retention substrate for high-risk AI deployer logs kept under deployer control for the customer-defined, legally reviewed retention period."
         }
       ]
     },
@@ -809,7 +809,7 @@
           "policy_id + policy_version + permit decision_details establish the transparent connection from policy → decision",
           "Hash chain provides tamper-evident outcomes"
         ],
-        "evidence_type": "sufficient"
+        "evidence_type": "direct_support"
       },
       {
         "subcategory": "GOVERN 1.5",
@@ -827,7 +827,7 @@
           "resource_provider + resource_model on every Permit forms a queryable inventory of every AI system the organization has used",
           "permit lineage (parent_permit_id + delegation_depth) tracks compositional AI system use"
         ],
-        "evidence_type": "sufficient"
+        "evidence_type": "direct_support"
       },
       {
         "subcategory": "GOVERN 4.2",
@@ -860,19 +860,19 @@
         "subcategory": "MAP 2.2",
         "verbatim": "Information about the AI system's knowledge limits and how system output may be utilized and overseen by humans is documented. Documentation provides sufficient information to assist relevant AI actors when making decisions and taking subsequent actions.",
         "permit_evidence": [
-          "decision_details captures the AI system's reasoning and limits at decision time",
-          "actions_json documents how the output is used; closure record binds the actual output"
+          "decision_details captures Keel authorization reasoning and policy limits at decision time, not model reasoning or model knowledge limits",
+          "actions_json documents intended action context; closure records can bind managed-execution bytes within closure scope"
         ],
-        "evidence_type": "sufficient"
+        "evidence_type": "partial"
       },
       {
         "subcategory": "MEASURE 2.4",
         "verbatim": "The functionality and behavior of the AI system and its components — as identified in the MAP function — are monitored when in production.",
         "permit_evidence": [
-          "Every production AI call produces a Permit; closure record binds actual production behavior",
-          "Replay enables continuous-monitoring comparison of intended vs actual decisions"
+          "Every governed production AI call produces a Permit; closure records bind managed-execution behavior only within closure scope",
+          "Replay enables comparison of policy decisions over time; it does not validate model output quality"
         ],
-        "evidence_type": "sufficient"
+        "evidence_type": "partial"
       },
       {
         "subcategory": "MEASURE 2.7",
@@ -890,23 +890,23 @@
           "Audit exports + offline verifier provide vendor-independent transparency",
           "Three trust-root channels (Keel API, PyPI, GitHub) make accountability evidence verifiable post-vendor"
         ],
-        "evidence_type": "sufficient"
+        "evidence_type": "direct_support"
       },
       {
         "subcategory": "MEASURE 2.9",
         "verbatim": "The AI model is explained, validated, and documented, and AI system output is interpreted within its context — as identified in the MAP function — to inform responsible use and governance.",
         "permit_evidence": [
-          "decision_details + closure record document the model output within its decision context",
-          "Replay validates that the documented decision still reproduces under the recorded snapshot"
+          "decision_details and closure records document authorization and execution context; they do not explain or validate the model itself",
+          "Replay checks policy-decision reproducibility under recorded snapshots; it does not prove model correctness, factuality, accuracy, or safety"
         ],
-        "evidence_type": "necessary"
+        "evidence_type": "partial"
       },
       {
         "subcategory": "MEASURE 2.11",
         "verbatim": "Fairness and bias — as identified in the MAP function — are evaluated and results are documented.",
         "permit_evidence": [
-          "Replay drift detection identifies whether decisions become biased over time",
-          "Audit exports retain the evaluation evidence under cryptographic integrity"
+          "Keel does not evaluate fairness or bias; authorization records can help scope which governed decisions a customer includes in fairness or bias review",
+          "Audit exports can retain customer-supplied evaluation artifacts when the customer attaches them, but the customer owns the evaluation"
         ],
         "evidence_type": "partial"
       },
@@ -946,7 +946,7 @@
           "resource_provider + resource_model identify the specific AI supply-chain component used for each decision",
           "Permit policy_id can encode supply-chain governance rules (allowlist of providers, model versions, etc.)"
         ],
-        "evidence_type": "sufficient"
+        "evidence_type": "direct_support"
       },
       {
         "item": "LLM05:2025",
@@ -965,7 +965,7 @@
           "actions_json + constraints_json define the bounds of authorized agency for each decision",
           "Permit lineage (parent_permit_id, delegation_depth) tracks delegated agency across multi-step workflows"
         ],
-        "evidence_type": "sufficient"
+        "evidence_type": "direct_support"
       },
       {
         "item": "LLM07:2025",
@@ -1000,7 +1000,7 @@
           "Permit budgets_json + constraints_json enforce per-call consumption limits at pre-execution",
           "actual_input_tokens + actual_output_tokens + actual_cost_usd_micros provide consumption telemetry; usage_ledger supports budget reconciliation"
         ],
-        "evidence_type": "sufficient"
+        "evidence_type": "direct_support"
       }
     ],
     "soc2_category_level": {
@@ -1033,7 +1033,7 @@
       "clause_mappings": [
         {
           "clause": "6 (Planning)",
-          "permit_evidence": "Permit policy_id + policy_version on every decision documents the planned AI policies that satisfy Clause 6.1 (actions to address risks and opportunities) and Clause 6.2 (AI management system objectives). Policy diff tracking supports 6.3 (planning of changes)."
+          "permit_evidence": "Permit policy_id + policy_version on every decision documents the planned AI policies that support Clause 6.1 (actions to address risks and opportunities) and Clause 6.2 (AI management system objectives). Policy diff tracking supports 6.3 (planning of changes)."
         },
         {
           "clause": "8 (Operation)",
@@ -1053,14 +1053,14 @@
           "control_id": "A.6.2.8",
           "control_title": "AI-System Recording of Event Logs",
           "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
-          "evidence_type": "sufficient",
-          "permit_evidence": "Keel IS this control. Per-project hash chain with Ed25519 signed exports + RFC 3161 timestamps provides cryptographically verifiable AI-system event logging. Verifier checks chain continuity + record integrity offline."
+          "evidence_type": "direct_support",
+          "permit_evidence": "Per-project hash chain with Ed25519 signed exports and RFC 3161 timestamps provides tamper-evident AI-system event logging evidence. Verifier checks chain continuity and record integrity offline; the customer and auditor determine control sufficiency."
         },
         {
           "control_id": "A.6.2.6",
           "control_title": "AI-System Operation and Monitoring",
           "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Every production AI call produces a Permit (operation evidence) and closure record (monitoring evidence). Replay drift detection identifies behavioral changes over time."
         },
         {
@@ -1088,7 +1088,7 @@
           "control_id": "A.7.5",
           "control_title": "Data Provenance",
           "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Permit request_fingerprint + binding_request_hash + closure record digests provide cryptographic provenance: from input bytes through dispatch to provider response to client delivery."
         },
         {
@@ -1116,7 +1116,7 @@
           "control_id": "A.10.3",
           "control_title": "Suppliers",
           "verification": "two-source corroborated (ISMS.online + Mindsetcyber, semantic match; exact verbatim style medium-confidence pending official Annex A)",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "resource_provider + resource_model on every Permit forms a queryable inventory of AI suppliers used across the organization, with cryptographic linkage to specific transactions."
         }
       ],
@@ -1158,7 +1158,7 @@
           "technique_id": "AML.T0040",
           "technique_name": "AI Model Inference API Access",
           "tactic": "AML.TA0000 AI Model Access",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Permit primitive IS the pre-execution authorization for inference API access. Every call produces a decision artifact (allow/deny/challenge) bound to subject_id, resource_provider, and resource_model. Audit chain provides post-hoc evidence of every authorized inference."
         },
         {
@@ -1166,7 +1166,7 @@
           "technique_name": "Full AI Model Access",
           "tactic": "AML.TA0000 AI Model Access",
           "evidence_type": "necessary",
-          "permit_evidence": "Permit policy_id can encode allowlist of approved model surfaces; resource_provider + resource_model identify the specific model boundary on every decision. Permit alone does not control credentials or infrastructure access — necessary but not sufficient."
+          "permit_evidence": "Permit policy_id can encode allowlist of approved model surfaces; resource_provider + resource_model identify the specific model boundary on every decision. Permit alone does not control credentials or infrastructure access — necessary but not enough on its own."
         },
         {
           "technique_id": "AML.T0047",
@@ -1186,7 +1186,7 @@
           "technique_id": "AML.T0050",
           "technique_name": "Command and Scripting Interpreter",
           "tactic": "AML.TA0005 Execution",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Permit gates action_name and actions_json — agents can only invoke commands/scripts the policy authorizes. Permit lineage (parent_permit_id) tracks compositional script execution. Denied permits log attempted unauthorized invocations."
         },
         {
@@ -1200,7 +1200,7 @@
           "technique_id": "AML.T0053",
           "technique_name": "AI Agent Tool Invocation",
           "tactic": "AML.TA0005 Execution / AML.TA0012 Privilege Escalation",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Every agent tool invocation requires a Permit. action_name identifies the tool; actions_json captures parameters; subject_id binds the invoking agent. Constraints/budgets prevent escalation via legitimate tools."
         },
         {
@@ -1228,14 +1228,14 @@
           "technique_id": "AML.T0029",
           "technique_name": "Denial of AI Service",
           "tactic": "AML.TA0011 Impact",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Permit budgets_json enforces per-subject rate and cost limits at pre-execution — directly prevents cost-based and request-volume DoS. Quota envelope denies further calls when limits are hit, with full denial audit trail."
         },
         {
           "technique_id": "AML.T0034",
           "technique_name": "Cost Harvesting",
           "tactic": "AML.TA0011 Impact",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "budgets_json is the direct control for cost harvesting. usage_ledger reconciles authorized vs actual cost; denied permits log attempted budget overruns. Replay enables forensic attribution of cost-harvesting attempts."
         },
         {
@@ -1271,20 +1271,20 @@
         {
           "item": "API4:2023",
           "name": "Unrestricted Resource Consumption",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Permit budgets_json enforces per-subject, per-project, and per-window consumption limits at pre-execution. usage_ledger reconciles authorized vs actual; denials log attempted overruns. This is the direct mapping — Permit is purpose-built for AI resource consumption governance."
         },
         {
           "item": "API5:2023",
           "name": "Broken Function Level Authorization",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Permit action_name + policy_id gate which functions/actions a subject can invoke. Every authorized function call produces an audit record; denials log attempted unauthorized invocations."
         },
         {
           "item": "API6:2023",
           "name": "Unrestricted Access to Sensitive Business Flows",
           "evidence_type": "necessary",
-          "permit_evidence": "Permit policy can encode business-flow-level constraints (e.g., per-flow budgets, per-flow subject restrictions). policy_id stamps the flow that authorized the action. Necessary for flow-level governance; sufficient only when paired with business-flow policy authoring."
+          "permit_evidence": "Permit policy can encode business-flow-level constraints (e.g., per-flow budgets, per-flow subject restrictions). policy_id stamps the flow that authorized the action. Necessary for flow-level governance; direct support only when paired with business-flow policy authoring."
         },
         {
           "item": "API9:2023",
@@ -1302,18 +1302,18 @@
     },
     "fedramp": {
       "scope_note": "MANDATORY FRAMING: Keel is NOT a FedRAMP-authorized Cloud Service Offering. Mappings below describe how Keel-produced evidence (Permit records, signed exports, hash chain, TSA receipts, externally anchored checkpoints) can SUPPORT a customer's NIST SP 800-53 Rev 5 control implementations WHEN the customer integrates Keel under their FedRAMP-authorized boundary's shared-responsibility model. The customer remains the FedRAMP-authorized entity. Mapping coverage is concentrated in the AU (Audit and Accountability) family where Permit substrate naturally produces required evidence; partial coverage in CM, AC, SI, CA, IR families.",
-      "baseline_applicability_note": "FedRAMP defines four baselines (Low, Moderate, High, LI-SaaS), each selecting a different subset of NIST 800-53 Rev 5 controls. The mappings below indicate which NIST 800-53 control IDs the Permit substrate supports; whether a given control is REQUIRED depends on the customer's selected baseline (e.g., AU-10 Non-repudiation is required in High and Moderate, not in Low). Customers should consult their selected FedRAMP baseline workbook to determine applicability.",
+      "baseline_applicability_note": "FedRAMP defines four baselines (Low, Moderate, High, LI-SaaS), each selecting a different subset of NIST 800-53 Rev 5 controls. The mappings below indicate which NIST 800-53 control IDs the Permit substrate supports; whether a given control is REQUIRED depends on the customer's selected baseline (for example, AU-10 is required in High and Moderate, not in Low). Customers should consult their selected FedRAMP baseline workbook to determine applicability.",
       "control_mappings": [
         {
           "control_id": "AU-2",
           "control_title": "Event Logging",
-          "evidence_type": "sufficient",
-          "permit_evidence": "Every Permit decision is an event log entry. Per-project hash chain ensures organization-defined event types are captured. resource_provider + resource_model + action_name + subject_id form the event description. Permit substrate captures ALL AI-decision events emitted; AU-2 organization-defined-list of events is satisfied at the AI-action boundary."
+          "evidence_type": "direct_support",
+          "permit_evidence": "Every Permit decision is an event log entry. Per-project hash chain makes captured event continuity verifiable. resource_provider + resource_model + action_name + subject_id form the event description. Permit substrate captures governed AI-decision events emitted by Keel and supports AU-2 evidence at the AI-action boundary."
         },
         {
           "control_id": "AU-3",
           "control_title": "Content of Audit Records",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Permit decision_details + closure_v2 capture: what type of event occurred (action_name), when (created_at + TSA timestamp), where (resource_provider + resource_model), source (subject_id + project_id), outcome (decision: allow/deny/challenge), identity (subject_id), and additional context (policy_id + policy_version). Exceeds AU-3 minimum content requirements for the AI-action surface."
         },
         {
@@ -1337,49 +1337,49 @@
         {
           "control_id": "AU-8",
           "control_title": "Time Stamps",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Every Permit carries created_at server timestamp. Enterprise-tier integration with RFC 3161 Time-Stamp Authority (FreeTSA.org default, or any RFC 3161 TSA) provides independent third-party time witness on integrity checkpoints. TSA receipts bind the audit chain state to externally verifiable time, exceeding AU-8 'organization-defined granularity' for AI-action timestamps."
         },
         {
           "control_id": "AU-9",
           "control_title": "Protection of Audit Information",
-          "evidence_type": "sufficient",
-          "permit_evidence": "Per-project hash chain prevents tampering with audit records (each record cryptographically bound to predecessor via SHA-256). Ed25519 signed exports prevent post-export tampering. AU-9 'protect audit information and audit logging tools from unauthorized access, modification, and deletion' is satisfied via cryptographic primitives, not just access controls."
+          "evidence_type": "direct_support",
+          "permit_evidence": "Per-project hash chain detects unauthorized modification of covered audit records because each record is cryptographically bound to its predecessor via SHA-256. Ed25519 signed exports detect post-export modification. These primitives support AU-9 audit-information integrity evidence; customer access-control design remains separate."
         },
         {
           "control_id": "AU-9(2)",
           "control_title": "Protection of Audit Information | Store on Separate Physical Systems or Components",
-          "evidence_type": "sufficient",
-          "permit_evidence": "External checkpoint anchoring publishes signed chain snapshots to S3-compatible storage (Cloudflare R2 by default, or customer-controlled bucket) every 5 minutes via cron. Checkpoints are byte-identical to primary chain state but stored on infrastructure separate from the Keel service. Satisfies AU-9(2) 'store audit logs on a different system' for the Permit substrate."
+          "evidence_type": "direct_support",
+          "permit_evidence": "External checkpoint anchoring publishes signed chain snapshots to S3-compatible storage (Cloudflare R2 by default, or customer-controlled bucket) every 5 minutes via cron. Checkpoints are byte-identical to primary chain state but stored on infrastructure separate from the Keel service. This supports AU-9(2) evidence for the Permit substrate."
         },
         {
           "control_id": "AU-9(3)",
           "control_title": "Protection of Audit Information | Cryptographic Protection",
-          "evidence_type": "sufficient",
-          "permit_evidence": "Hash chain (SHA-256), Ed25519 signed exports, RFC 3161 TSA receipts. Three cryptographic protection mechanisms layered: chain integrity, export authenticity, and time-witnessing. AU-9(3) 'implement cryptographic mechanisms to protect the integrity of audit information' is satisfied with named, auditable primitives."
+          "evidence_type": "direct_support",
+          "permit_evidence": "Hash chain (SHA-256), Ed25519 signed exports, RFC 3161 TSA receipts. Three cryptographic protection mechanisms are layered: chain integrity, export authenticity, and time-witnessing. These named, auditable primitives support AU-9(3) cryptographic-integrity evidence."
         },
         {
           "control_id": "AU-10",
           "control_title": "Non-repudiation",
-          "evidence_type": "sufficient",
-          "permit_evidence": "Ed25519 signed exports bind audit content to a specific signing key under Keel's control. Signing key rotation history (migration 0146) preserves verification across key rotations via active-windows in the public manifest. RFC 3161 TSA receipts add independent time witness. Customer's verifier CLI reproduces signature verification without Keel-side access. AU-10 non-repudiation is satisfied for the AI-action surface."
+          "evidence_type": "direct_support",
+          "permit_evidence": "Ed25519 signed exports bind audit content to a specific signing key under Keel's control. Signing key rotation history (migration 0146) preserves verification across key rotations via active-windows in the public manifest. RFC 3161 TSA receipts add independent time witness. Customer's verifier CLI reproduces signature verification without Keel-side access. This is scoped signature-attribution evidence for exported AI-action records, not a broad non-repudiation claim."
         },
         {
           "control_id": "AU-11",
           "control_title": "Audit Record Retention",
           "evidence_type": "partial",
-          "permit_evidence": "Production 180d retention exceeds EU AI Act Art 26(6) ≥6mo floor. Enterprise 365d retention. Retention is plan-tier-gated and enforced at the database layer (RLS-protected). Customer should specify their organization-defined retention period and select Keel tier accordingly; for FedRAMP-typical 3-year audit retention, Enterprise tier + customer-side archive of monthly signed exports is the supported pattern."
+          "permit_evidence": "Production 180d retention and Enterprise 365d retention are plan-tier-gated and enforced at the database layer (RLS-protected). EU AI Act Art 26(6) retention should be treated as an adequate-period legal determination, not a fixed value in this mapping. Customer should specify their organization-defined retention period and select Keel tier accordingly; for FedRAMP-typical 3-year audit retention, Enterprise tier plus customer-side archive of monthly signed exports is the supported pattern."
         },
         {
           "control_id": "AU-12",
           "control_title": "Audit Record Generation",
-          "evidence_type": "sufficient",
-          "permit_evidence": "Permit primitive IS the audit record generation mechanism for AI-action events. Hash chain ensures records cannot be silently dropped (chain continuity is verifiable). Every Permit produces a record; record generation cannot be selectively bypassed without breaking chain verification."
+          "evidence_type": "direct_support",
+          "permit_evidence": "The Permit primitive generates AI-action audit records for governed requests. Hash-chain continuity makes covered record deletion or reordering detectable. Every governed Permit produces a record; bypassed traffic outside Keel is out of scope."
         },
         {
           "control_id": "AC-3",
           "control_title": "Access Enforcement",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Permit is the AI-action access enforcement mechanism. policy_id + policy_version stamp the enforcement rule; subject_id binds the requesting identity. Denied permits log unauthorized-access attempts. Note: AC-3 covers system access broadly; Permit enforces at the AI-action boundary only — system-level access enforcement remains customer responsibility."
         },
         {
@@ -1392,7 +1392,7 @@
           "control_id": "CM-3",
           "control_title": "Configuration Change Control",
           "evidence_type": "necessary",
-          "permit_evidence": "policy_id + policy_version stamped on every Permit binds each AI decision to a specific configuration version. Policy diff tracking (migration 0147) provides change-management traceability with content-addressed snapshots. Necessary for customer demonstrating CM-3 compliance for AI policy changes; not sufficient for general system configuration change control."
+          "permit_evidence": "policy_id + policy_version stamped on every Permit binds each AI decision to a specific configuration version. Policy diff tracking (migration 0147) provides change-management traceability with content-addressed snapshots. Necessary for customer CM-3 evidence for AI policy changes; not enough for general system configuration change control."
         },
         {
           "control_id": "CM-8",
@@ -1421,8 +1421,8 @@
         {
           "control_id": "SI-7",
           "control_title": "Software, Firmware, and Information Integrity",
-          "evidence_type": "sufficient",
-          "permit_evidence": "Hash chain integrity + Ed25519 signed exports + RFC 3161 timestamps provide cryptographic integrity for AI-decision information. Build SHA stamped on every governance event provides code-level traceability. Verifier CLI checks integrity without vendor access. SI-7 'integrity verification tools' is satisfied for the Permit substrate."
+          "evidence_type": "direct_support",
+          "permit_evidence": "Hash chain integrity + Ed25519 signed exports + RFC 3161 timestamps provide cryptographic integrity evidence for AI-decision information. Build SHA stamped on every governance event provides code-level traceability. Verifier CLI checks integrity without vendor access. These artifacts support SI-7 integrity-verification evidence for the Permit substrate."
         },
         {
           "control_id": "SI-12",
@@ -1433,7 +1433,7 @@
         {
           "control_id": "SC-13",
           "control_title": "Cryptographic Protection",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Named cryptographic primitives used: SHA-256 (chain), Ed25519 (signatures), AES-256-GCM (provider key encryption), RFC 3161 (timestamping). All NIST-approved or industry-standard primitives. Cryptographic protection is design-level not bolt-on."
         },
         {
@@ -1488,8 +1488,8 @@
         {
           "control": "Control 8",
           "name": "Audit Log Management",
-          "evidence_type": "sufficient",
-          "permit_evidence": "Strongest fit. Per-project hash chain ensures audit log integrity (Control 8 safeguard 8.2: 'Collect Audit Logs'). Tier-gated retention (Production 180d, Enterprise 365d) addresses 8.3 ('Ensure Adequate Audit Log Storage'). Ed25519 signed exports + RFC 3161 timestamps address 8.10 ('Retain Audit Logs') and 8.11 ('Conduct Audit Log Reviews') — the audit evidence is preserved in tamper-evident form for review without vendor dependency."
+          "evidence_type": "direct_support",
+          "permit_evidence": "Strongest fit. Per-project hash chain provides tamper-evident audit log integrity evidence (Control 8 safeguard 8.2: 'Collect Audit Logs'). Tier-gated retention (Production 180d, Enterprise 365d) addresses 8.3 ('Ensure Adequate Audit Log Storage'). Ed25519 signed exports + RFC 3161 timestamps support 8.10 ('Retain Audit Logs') and 8.11 ('Conduct Audit Log Reviews') — the audit evidence is preserved in tamper-evident form for review without vendor dependency."
         },
         {
           "control": "Control 15",
@@ -1542,7 +1542,7 @@
         {
           "requirement": "Requirement 10",
           "name": "Log and monitor all access to system components and cardholder data",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Primary Permit fit for PCI. Hash-chained audit records (Req 10.5 'Audit logs are protected from destruction and unauthorized modifications' — cryptographically satisfied). Tier-gated retention (Production 180d, Enterprise 365d) addresses 10.7 ('Audit logs are retained for at least 12 months'... Enterprise tier meets the standard 12-month floor; longer windows available on request). RFC 3161 timestamps support 10.6 ('Time-synchronization mechanisms support consistent time settings'). Ed25519 signed exports + verifier CLI enable Req 10.4 review processes without vendor dependency. Note: Production 180d retention falls SHORT of PCI 12-month floor — Enterprise tier is the recommended tier for PCI-in-scope AI workloads."
         },
         {
@@ -1569,17 +1569,17 @@
       "chapter_mappings": [
         {
           "chapter": "V4 API and Web Service",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Permit primitive is API governance: every AI API call requires a decision, with subject + resource + action attribution. Signed exports + closure records provide tamper-evident API-call evidence. Use as primary chapter for ASVS-aligned coverage claims."
         },
         {
           "chapter": "V8 Authorization",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Permit IS the AI-action authorization layer. policy_id + policy_version stamp the authorization rule; subject_id + resource binding produces the decision record. Denied permits log unauthorized-attempt evidence."
         },
         {
           "chapter": "V11 Cryptography",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Hash-chain integrity, Ed25519 signed exports, RFC 3161 third-party timestamps, externally anchored checkpoints — the entire Keel evidence substrate is purpose-built around verifiable cryptographic primitives. Key rotation is documented in the signed manifest with active-windows per key."
         },
         {
@@ -1590,11 +1590,11 @@
         {
           "chapter": "V14 Data Protection",
           "evidence_type": "necessary",
-          "permit_evidence": "Permit closure record + signed exports protect AI evidence at rest with cryptographic integrity. Audit-export retention windows are tier-gated (180d Production, 365d Enterprise) and policy-enforced. Necessary for AI-evidence data protection; not sufficient for general data-protection compliance."
+          "permit_evidence": "Permit closure record + signed exports protect AI evidence at rest with cryptographic integrity. Audit-export retention windows are tier-gated (180d Production, 365d Enterprise) and policy-enforced. Necessary for AI-evidence data protection; not enough for general data-protection compliance."
         },
         {
           "chapter": "V16 Security Logging and Error Handling",
-          "evidence_type": "sufficient",
+          "evidence_type": "direct_support",
           "permit_evidence": "Per-project hash chain + Ed25519 signatures + RFC 3161 timestamps provide tamper-evident security logging for the AI surface. Tampering-detection codes (WALK_RECORD_HASH_MISMATCH, etc.) provide specific error classification. Independent verifier CLI enables verification without vendor account."
         }
       ]
@@ -1660,7 +1660,7 @@
       "framework": "fedramp",
       "control_id": "FedRAMP program participation (entirely)",
       "status": "KEEL IS NOT FEDRAMP AUTHORIZED",
-      "rationale": "Keel API, Inc. is NOT a FedRAMP-authorized Cloud Service Offering. Keel has NO Joint Authorization Board (JAB) Provisional Authorization, NO Agency Authorization to Operate (ATO), and is NOT listed on the FedRAMP Marketplace as of 2026-05-10. Customer-facing material claiming Keel is 'FedRAMP authorized', 'FedRAMP compliant', 'FedRAMP certified', or 'FedRAMP-listed' would be FALSE. Mappings in framework_overlays.fedramp describe how Keel-produced evidence can SUPPORT a customer's NIST 800-53 control implementations within the customer's existing FedRAMP-authorized boundary — Keel does not itself satisfy any FedRAMP requirement as a standalone service."
+      "rationale": "Keel API, Inc. is NOT a FedRAMP-authorized Cloud Service Offering. Keel has NO Joint Authorization Board (JAB) Provisional Authorization, NO Agency Authorization to Operate (ATO), and is NOT listed on the FedRAMP Marketplace as of 2026-05-10. Customer-facing material claiming Keel is 'FedRAMP authorized', 'FedRAMP compliant', 'FedRAMP certified', or 'FedRAMP-listed' would be FALSE. Mappings in framework_overlays.fedramp describe how Keel-produced evidence can SUPPORT a customer's NIST 800-53 control implementations within the customer's existing FedRAMP-authorized boundary — Keel does not itself complete any FedRAMP requirement as a standalone service."
     },
     {
       "framework": "fedramp",
@@ -1690,7 +1690,7 @@
       "framework": "cis_controls",
       "control_id": "Controls 1, 2, 5, 7, 9, 10, 11, 12, 13, 14, 18 (12 of 18 controls)",
       "status": "OUT OF SCOPE FOR PERMIT SUBSTRATE",
-      "rationale": "Of the 18 CIS Controls v8.1, 12 are entirely outside Permit substrate scope (asset inventory, software inventory, account management, vulnerability management, email/browser, malware defense, data recovery, network management, network monitoring, training, penetration testing). Permit substrate covers ~6 of 18 with varying strength; CIS Control 8 (Audit Log Management) is the only sufficient-fit; Controls 3, 4, 6, 15, 16, 17 have partial alignment."
+      "rationale": "Of the 18 CIS Controls v8.1, 12 are entirely outside Permit substrate scope (asset inventory, software inventory, account management, vulnerability management, email/browser, malware defense, data recovery, network management, network monitoring, training, penetration testing). Permit substrate covers ~6 of 18 with varying strength; CIS Control 8 (Audit Log Management) is the only direct-support fit; Controls 3, 4, 6, 15, 16, 17 have partial alignment."
     }
   ]
 }
