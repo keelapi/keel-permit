@@ -1,0 +1,29 @@
+{
+  "compressed": false,
+  "content_hash": "sha256:2bab8f6d7ab24878ad2a9a84233d0007689719a188aa05c0bd2cbdedcb68718b",
+  "export_id": "export_vanta_001",
+  "export_type": "vanta_evidence",
+  "format": "json",
+  "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
+  "project_id": "00000000-0000-0000-0000-000000000001",
+  "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+  "record_count": 1,
+  "sibling_artifacts": {
+    "workflow_evidence": {
+      "schema": "keel.vanta.workflow_evidence/v1",
+      "workflow_evidence": {
+        "amendment_count": 1,
+        "content_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "declaration_count": 1,
+        "file_name": "workflow_evidence.json",
+        "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
+        "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+        "signature": "ed25519:SEJGJn/OJfmhSnArXnU6yWQEiuu6dpvwoHA2HtMzp7mkYMovzdwodf9ZARB7wtFjYiM7WicwcM7O1MHOQUH3DA==",
+        "signed_at": "2026-05-07T12:10:00Z"
+      },
+      "workflow_evidence_file": "workflow_evidence.json"
+    }
+  },
+  "signature": "ed25519:Yty9TfIhLVPhTwWcO4d5++jXz18vKTniuYTEVjwwPeVga63MKiFrNiVMh84uF6i9T8EHHh8VTPG51ZNNeOzjDw==",
+  "signed_at": "2026-05-07T12:00:00Z"
+}

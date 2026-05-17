@@ -1,0 +1,7 @@
+{
+  "content_hash": "sha256:4b5f32fba1e86d45c947b24d19661fd29f8cb005b97e79f05ffdca2475d84ae4",
+  "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
+  "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+  "signature": "ed25519:DOK+k+39w/YtplYNq/VmfAx4LfictmdCmgSkXDToIzMSrTkq6jSTKy880ADgXOQnhD0vNi0SCCAoXwA7SeKaCQ==",
+  "signed_at": "2026-05-07T12:00:00Z"
+}

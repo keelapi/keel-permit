@@ -1,0 +1,823 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "claim_registry": {
+    "path": "../../../claim_registry/v0.json",
+    "spec": "../../../spec/verifier-claims-v0.md",
+    "version": "verifier-claims.v0"
+  },
+  "corpus_version": "verifier-claims-v0-golden-2026-05-17",
+  "current_verifier_granularity": "Current verifiers expose whole-pack PASS/FAIL plus reason classes. Per-claim doctrine verdicts remain in each record for the P1-M structured verdict upgrade.",
+  "records": [
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_identity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "valid-export-hash-signature",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/valid-export-hash-signature/pack/export.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/valid-export-hash-signature/pack/manifest.json"
+      },
+      "title": "Valid signed export manifest and payload content hash"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "governance_chain.local_continuity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "valid-governance-events-json",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/valid-governance-events-json/pack/governance_events.json",
+        "features": [
+          "walk_events"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/valid-governance-events-json/pack/manifest.json"
+      },
+      "title": "Valid direct governance_events JSON chain walk"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "governance_chain.local_continuity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "valid-governance-events-jsonl",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/valid-governance-events-jsonl/pack/governance_events.jsonl",
+        "features": [
+          "walk_events"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/valid-governance-events-jsonl/pack/manifest.json"
+      },
+      "title": "Valid direct governance_events JSONL chain walk"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "governance_chain.local_continuity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "valid-governance-events-jsonl-gzip",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/valid-governance-events-jsonl-gzip/pack/governance_events.jsonl.gz",
+        "features": [
+          "walk_events"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/valid-governance-events-jsonl-gzip/pack/manifest.json"
+      },
+      "title": "Valid direct governance_events JSONL gzip chain walk"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "governance_chain.local_continuity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "valid-audit-bundle-per-record-chain",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/valid-audit-bundle-per-record-chain/pack/export.json",
+        "features": [
+          "walk_events"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/valid-audit-bundle-per-record-chain/pack/manifest.json"
+      },
+      "title": "Valid audit bundle with per-record chain_entries"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "governance_chain.local_continuity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "valid-audit-bundle-bundle-level-chain",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/valid-audit-bundle-bundle-level-chain/pack/export.json",
+        "features": [
+          "walk_events"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/valid-audit-bundle-bundle-level-chain/pack/manifest.json"
+      },
+      "title": "Valid audit bundle with bundle-level chain_entries"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "closure.signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "closure.digest_consistency.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "valid-closure-v1",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/valid-closure-v1/pack/export.json",
+        "features": [
+          "verify_closure"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/valid-closure-v1/pack/manifest.json"
+      },
+      "title": "Valid closure_v1 signature and digest consistency"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "closure.signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "closure.digest_consistency.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "closure.dispatch_binding.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "valid-closure-v2-dispatch-binding",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/valid-closure-v2-dispatch-binding/pack/export.json",
+        "features": [
+          "walk_events",
+          "verify_closure"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/valid-closure-v2-dispatch-binding/pack/manifest.json"
+      },
+      "title": "Valid closure_v2 signature, response digests, and dispatch binding"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "closure.signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "closure.digest_consistency.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "closure.dispatch_binding.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "valid-closure-execution-completed-alias",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/valid-closure-execution-completed-alias/pack/export.json",
+        "features": [
+          "verify_closure"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/valid-closure-execution-completed-alias/pack/manifest.json"
+      },
+      "title": "Valid closure digest consistency using execution.completed digest-carrier alias"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "workflow_evidence.sibling_integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.declaration_signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.amendment_signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.effective_intent_hash.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.permit_snapshot.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "valid-vanta-workflow-sibling",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/valid-vanta-workflow-sibling/pack/export.json",
+        "features": [
+          "verify_workflows"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/valid-vanta-workflow-sibling/pack/manifest.json"
+      },
+      "title": "Valid Vanta workflow evidence sibling with declaration, amendment, and permit snapshot"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "incident.bundle_manifest.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.declaration_signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.amendment_signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.effective_intent_hash.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.permit_snapshot.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "valid-incident-v2-bundle",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/valid-incident-v2-bundle/pack/incident.zip",
+        "features": [
+          "verify_workflows"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/valid-incident-v2-bundle/pack/manifest.json"
+      },
+      "title": "Valid incident manifest v2 bundle with full required file set"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.composite_hash.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.tsa_imprint.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "valid-checkpoint-legacy-single-tsa",
+      "kind": "checkpoint",
+      "pack": {
+        "checkpoint_file": "fixtures/valid-checkpoint-legacy-single-tsa/pack/checkpoint.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json"
+      },
+      "title": "Valid checkpoint with legacy single tsa receipt"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.composite_hash.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.tsa_imprint.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "valid-checkpoint-multi-tsa-receipts",
+      "kind": "checkpoint",
+      "pack": {
+        "checkpoint_file": "fixtures/valid-checkpoint-multi-tsa-receipts/pack/checkpoint.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json"
+      },
+      "title": "Valid checkpoint with multiple tsa_receipts entries"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "disproved",
+          "name": "governance_chain.local_continuity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "WALK_RECORD_HASH_MISMATCH"
+        ]
+      },
+      "id": "neg-chain-record-hash-altered",
+      "kind": "export",
+      "negative": {
+        "delta": "Changed chain_entries[1].record_hash to 64 zeroes and resealed the export manifest so only local continuity is under test.",
+        "parent_fixture": "valid-audit-bundle-per-record-chain"
+      },
+      "pack": {
+        "export_file": "fixtures/neg-chain-record-hash-altered/pack/export.json",
+        "features": [
+          "walk_events"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/neg-chain-record-hash-altered/pack/manifest.json"
+      },
+      "title": "Tampered chain record hash is rejected"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "disproved",
+          "name": "governance_chain.local_continuity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "WALK_PREV_HASH_DISCONTINUITY"
+        ]
+      },
+      "id": "neg-chain-dropped-interior-event",
+      "kind": "export",
+      "negative": {
+        "delta": "Removed chain entry evt_002 while preserving evt_003.prev_hash, then resealed the export manifest.",
+        "parent_fixture": "valid-audit-bundle-per-record-chain"
+      },
+      "pack": {
+        "export_file": "fixtures/neg-chain-dropped-interior-event/pack/export.json",
+        "features": [
+          "walk_events"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/neg-chain-dropped-interior-event/pack/manifest.json"
+      },
+      "title": "Dropped interior chain event breaks prev_hash continuity"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "disproved",
+          "name": "export.integrity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "SIGNATURE_VERIFICATION_FAILED"
+        ]
+      },
+      "id": "neg-export-forged-manifest-signature",
+      "kind": "export",
+      "negative": {
+        "delta": "Replaced manifest.signature with a syntactically valid Ed25519-sized zero signature without changing export bytes or content_hash.",
+        "parent_fixture": "valid-export-hash-signature"
+      },
+      "pack": {
+        "export_file": "fixtures/neg-export-forged-manifest-signature/pack/export.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/neg-export-forged-manifest-signature/pack/manifest.json"
+      },
+      "title": "Forged export manifest signature is rejected"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "disproved",
+          "name": "closure.digest_consistency.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "WALK_CLOSURE_DIGEST_MISMATCH"
+        ]
+      },
+      "id": "neg-closure-provider-digest-mismatch",
+      "kind": "export",
+      "negative": {
+        "delta": "Changed the signed closure provider_response_digest_v1 away from the provider.response.received event digest and resealed the closure plus export manifest.",
+        "parent_fixture": "valid-closure-v2-dispatch-binding"
+      },
+      "pack": {
+        "export_file": "fixtures/neg-closure-provider-digest-mismatch/pack/export.json",
+        "features": [
+          "verify_closure"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/neg-closure-provider-digest-mismatch/pack/manifest.json"
+      },
+      "title": "Closure provider response digest mismatch is rejected"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "closure.digest_consistency.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "WALK_CLOSURE_DIGEST_MISSING"
+        ]
+      },
+      "id": "neg-execution-completed-missing-digest-fields",
+      "kind": "export",
+      "negative": {
+        "delta": "Removed provider_response_digest_v1 and client_response_digest_v1 from the execution.completed payload and resealed the export manifest.",
+        "parent_fixture": "valid-closure-execution-completed-alias"
+      },
+      "pack": {
+        "export_file": "fixtures/neg-execution-completed-missing-digest-fields/pack/export.json",
+        "features": [
+          "verify_closure"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/neg-execution-completed-missing-digest-fields/pack/manifest.json"
+      },
+      "title": "execution.completed alias without digest fields is insufficient"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "disproved",
+          "name": "closure.dispatch_binding.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "WALK_CLOSURE_DISPATCH_DIGEST_MISMATCH"
+        ]
+      },
+      "id": "neg-closure-dispatch-binding-mismatch",
+      "kind": "export",
+      "negative": {
+        "delta": "Changed the signed closure dispatch_request_digest_v1 while leaving the permit binding_request_hash at the valid parent value.",
+        "parent_fixture": "valid-closure-v2-dispatch-binding"
+      },
+      "pack": {
+        "export_file": "fixtures/neg-closure-dispatch-binding-mismatch/pack/export.json",
+        "features": [
+          "verify_closure"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/neg-closure-dispatch-binding-mismatch/pack/manifest.json"
+      },
+      "title": "closure_v2 dispatch digest mismatch is rejected"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "disproved",
+          "name": "closure.signature.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "WALK_CLOSURE_SIGNATURE_INVALID"
+        ]
+      },
+      "id": "neg-closure-invalid-signature",
+      "kind": "export",
+      "negative": {
+        "delta": "Replaced closure_signature_b64 with an Ed25519-sized invalid signature and resealed the export manifest.",
+        "parent_fixture": "valid-closure-v2-dispatch-binding"
+      },
+      "pack": {
+        "export_file": "fixtures/neg-closure-invalid-signature/pack/export.json",
+        "features": [
+          "verify_closure"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/neg-closure-invalid-signature/pack/manifest.json"
+      },
+      "title": "Closure binding signature is rejected"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "workflow.declaration_signature.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "WORKFLOW_EVIDENCE_SCHEMA_INVALID"
+        ]
+      },
+      "id": "neg-incident-missing-declaration-signed-at",
+      "kind": "export",
+      "negative": {
+        "delta": "Removed declaration_signed_at from workflow_declarations.jsonl and resealed the incident zip/export manifest.",
+        "parent_fixture": "valid-incident-v2-bundle"
+      },
+      "pack": {
+        "export_file": "fixtures/neg-incident-missing-declaration-signed-at/pack/incident.zip",
+        "features": [
+          "verify_workflows"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/neg-incident-missing-declaration-signed-at/pack/manifest.json"
+      },
+      "title": "Incident v2 declaration missing declaration_signed_at is insufficient"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "disproved",
+          "name": "incident.bundle_manifest.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "INCIDENT_MANIFEST_SCHEMA_INVALID"
+        ]
+      },
+      "id": "neg-incident-v2-incomplete-file-set",
+      "kind": "export",
+      "negative": {
+        "delta": "Removed admin_actions.jsonl from both the manifest file list and the zip payload.",
+        "parent_fixture": "valid-incident-v2-bundle"
+      },
+      "pack": {
+        "export_file": "fixtures/neg-incident-v2-incomplete-file-set/pack/incident.zip",
+        "features": [
+          "verify_workflows"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/neg-incident-v2-incomplete-file-set/pack/manifest.json"
+      },
+      "title": "Incident v2 bundle missing required file is rejected"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "disproved",
+          "name": "workflow_evidence.sibling_integrity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "WORKFLOW_EVIDENCE_SCHEMA_INVALID"
+        ]
+      },
+      "id": "neg-vanta-workflow-sibling-content-hash-mismatch",
+      "kind": "export",
+      "negative": {
+        "delta": "Changed sibling_artifacts.workflow_evidence.workflow_evidence.content_hash to sha256:000... while leaving workflow_evidence.json bytes intact.",
+        "parent_fixture": "valid-vanta-workflow-sibling"
+      },
+      "pack": {
+        "export_file": "fixtures/neg-vanta-workflow-sibling-content-hash-mismatch/pack/export.json",
+        "features": [
+          "verify_workflows"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/neg-vanta-workflow-sibling-content-hash-mismatch/pack/manifest.json"
+      },
+      "title": "Vanta workflow sibling content_hash mismatch is rejected"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "disproved",
+          "name": "workflow.permit_snapshot.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "WORKFLOW_EFFECTIVE_INTENT_HASH_MISMATCH"
+        ]
+      },
+      "id": "neg-vanta-permit-snapshot-effective-hash-mismatch",
+      "kind": "export",
+      "negative": {
+        "delta": "Changed the main export permit workflow_state_json.effective_intent_hash to 64 zeroes and resealed the export manifest.",
+        "parent_fixture": "valid-vanta-workflow-sibling"
+      },
+      "pack": {
+        "export_file": "fixtures/neg-vanta-permit-snapshot-effective-hash-mismatch/pack/export.json",
+        "features": [
+          "verify_workflows"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/neg-vanta-permit-snapshot-effective-hash-mismatch/pack/manifest.json"
+      },
+      "title": "Vanta permit snapshot effective intent hash mismatch is rejected"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "disproved",
+          "name": "checkpoint.composite_hash.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "CHECKPOINT_COMPOSITE_HASH_MISMATCH"
+        ]
+      },
+      "id": "neg-checkpoint-composite-hash-mismatch",
+      "kind": "checkpoint",
+      "negative": {
+        "delta": "Changed one chain_heads last_record_hash nibble while preserving the original composite_hash and signature.",
+        "parent_fixture": "valid-checkpoint-legacy-single-tsa"
+      },
+      "pack": {
+        "checkpoint_file": "fixtures/neg-checkpoint-composite-hash-mismatch/pack/checkpoint.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json"
+      },
+      "title": "Checkpoint composite_hash mismatch is rejected"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "disproved",
+          "name": "checkpoint.signature.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "SIGNATURE_VERIFICATION_FAILED"
+        ]
+      },
+      "id": "neg-checkpoint-forged-signature",
+      "kind": "checkpoint",
+      "negative": {
+        "delta": "Replaced checkpoint.signature with a syntactically valid Ed25519-sized zero signature while preserving chain_heads, composite_hash, public_key, key_id, and TSA receipt.",
+        "parent_fixture": "valid-checkpoint-legacy-single-tsa"
+      },
+      "pack": {
+        "checkpoint_file": "fixtures/neg-checkpoint-forged-signature/pack/checkpoint.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json"
+      },
+      "title": "Checkpoint signature forgery is rejected"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "disproved",
+          "name": "checkpoint.tsa_imprint.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "CHECKPOINT_TSA_IMPRINT_MISMATCH"
+        ]
+      },
+      "id": "neg-checkpoint-tsa-imprint-mismatch",
+      "kind": "checkpoint",
+      "negative": {
+        "delta": "Replaced tsa.receipt_b64 with a receipt whose MessageImprint does not equal composite_hash.",
+        "parent_fixture": "valid-checkpoint-legacy-single-tsa"
+      },
+      "pack": {
+        "checkpoint_file": "fixtures/neg-checkpoint-tsa-imprint-mismatch/pack/checkpoint.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json"
+      },
+      "title": "Checkpoint TSA imprint mismatch is rejected"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "checkpoint.signature.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "TRUST_ROOT_UNRESOLVABLE"
+        ]
+      },
+      "id": "neg-checkpoint-missing-trust-root",
+      "kind": "checkpoint",
+      "negative": {
+        "delta": "Kept checkpoint bytes unchanged but supplied a trust root that has no integrity_checkpoint entry for the checkpoint key_id.",
+        "parent_fixture": "valid-checkpoint-legacy-single-tsa"
+      },
+      "pack": {
+        "checkpoint_file": "fixtures/neg-checkpoint-missing-trust-root/pack/checkpoint.json",
+        "features": [],
+        "key_manifest": "trust_roots/missing-checkpoint-key-root.json"
+      },
+      "title": "Checkpoint signature cannot verify without a resolvable trust root"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "unverifiable_scope",
+          "name": "governance_chain.local_continuity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "EXPORT_STRUCTURE_INVALID"
+        ]
+      },
+      "id": "edge-governance-events-csv-unwalked",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/edge-governance-events-csv-unwalked/pack/governance_events.csv",
+        "features": [
+          "walk_events"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/edge-governance-events-csv-unwalked/pack/manifest.json"
+      },
+      "title": "CSV serialized governance_events are signed but not walkable by current verifiers"
+    }
+  ],
+  "soundness_rule": "Expected doctrine verdicts are derived from claim_registry/v0.json and spec/verifier-claims-v0.md, never from current verifier output."
+}
