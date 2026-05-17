@@ -1,0 +1,48 @@
+{
+  "compressed": true,
+  "content_hash": "sha256:984a59d1cfe75acd33b9af3572e1965bbe9b8296049a60926c92fa4d30fe4e6a",
+  "export_id": "export_incident_001",
+  "export_type": "incident_evidence",
+  "files": [
+    {
+      "name": "admin_actions.jsonl",
+      "schema": "keel.admin_actions/v1"
+    },
+    {
+      "name": "bracket_checkpoints.json",
+      "schema": "keel.bracket_checkpoints/v1"
+    },
+    {
+      "name": "governance_events.jsonl",
+      "schema": "keel.governance_events/v1"
+    },
+    {
+      "name": "incident_metadata.json",
+      "schema": "keel.incident_metadata/v1"
+    },
+    {
+      "name": "permits.jsonl",
+      "schema": "keel.permits/v1"
+    },
+    {
+      "name": "workflow_declarations.jsonl",
+      "schema": "keel.workflow_declarations/v1"
+    },
+    {
+      "name": "workflow_amendments.jsonl",
+      "schema": "keel.workflow_amendments/v1"
+    },
+    {
+      "name": "mcp_tool_decisions.jsonl",
+      "schema": "keel.mcp_tool_decisions/v1"
+    }
+  ],
+  "format": "zip",
+  "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
+  "manifest_version": 2,
+  "project_id": "00000000-0000-0000-0000-000000000001",
+  "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+  "record_count": 1,
+  "signature": "ed25519:ZcdeUugMT2z3G04wYtfIg1L9vqKapaT1wWoeyUu2asRP7rtEofZ8Vg/dxST8h6Lm8rUK8FNBLBj+X8mmI2PrDw==",
+  "signed_at": "2026-05-07T12:00:00Z"
+}

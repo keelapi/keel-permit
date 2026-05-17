@@ -1,0 +1,11 @@
+{
+  "compressed": false,
+  "content_hash": "sha256:f198b955f486b59bce2e37bfec1c03ca393eba2e155258352dcc05ad715518f9",
+  "export_type": "governance_events",
+  "format": "csv",
+  "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
+  "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+  "record_count": 2,
+  "signature": "ed25519:6Ztwg9rq8Q8MABW4va/sIyG6VypLNyHmYhe7gE81X0azr5pnw8INPSqrXUVU0vo/vwNZwoqRcyihzQhyH2i/BQ==",
+  "signed_at": "2026-05-07T12:00:00Z"
+}

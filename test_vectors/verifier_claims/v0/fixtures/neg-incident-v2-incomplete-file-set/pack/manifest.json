@@ -1,0 +1,44 @@
+{
+  "compressed": true,
+  "content_hash": "sha256:90ba5a56cd7283bee395cbad989098eb7af5f164154b4a5a3e1382db585d96a8",
+  "export_id": "export_incident_001",
+  "export_type": "incident_evidence",
+  "files": [
+    {
+      "name": "bracket_checkpoints.json",
+      "schema": "keel.bracket_checkpoints/v1"
+    },
+    {
+      "name": "governance_events.jsonl",
+      "schema": "keel.governance_events/v1"
+    },
+    {
+      "name": "incident_metadata.json",
+      "schema": "keel.incident_metadata/v1"
+    },
+    {
+      "name": "permits.jsonl",
+      "schema": "keel.permits/v1"
+    },
+    {
+      "name": "workflow_declarations.jsonl",
+      "schema": "keel.workflow_declarations/v1"
+    },
+    {
+      "name": "workflow_amendments.jsonl",
+      "schema": "keel.workflow_amendments/v1"
+    },
+    {
+      "name": "mcp_tool_decisions.jsonl",
+      "schema": "keel.mcp_tool_decisions/v1"
+    }
+  ],
+  "format": "zip",
+  "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
+  "manifest_version": 2,
+  "project_id": "00000000-0000-0000-0000-000000000001",
+  "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+  "record_count": 1,
+  "signature": "ed25519:l2hMPlbW9F0DmeXehpPKJ7+hjyaIDt+5SSTBeDL1TvFXDsX8FlG4zC9ZjRBA3hI8gGpxNBB82TqjACuwknt+Bw==",
+  "signed_at": "2026-05-07T12:00:00Z"
+}

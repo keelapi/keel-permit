@@ -1,0 +1,11 @@
+{
+  "compressed": false,
+  "content_hash": "sha256:8b8f7d8375a459a9f644f29e11c69a2724814f8c4cb195a980202e7cbfbc97dd",
+  "export_type": "audit_export_bundle",
+  "format": "json",
+  "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
+  "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+  "record_count": 1,
+  "signature": "ed25519:X5rZBRi72eyDfL8vyrpJNkfIXdlWWI1zeRrAqV5yTA0V+RoETEhAH7P40ugqOQOIYTMMNXR6jRpVH1AUI3zwDw==",
+  "signed_at": "2026-05-07T12:00:00Z"
+}

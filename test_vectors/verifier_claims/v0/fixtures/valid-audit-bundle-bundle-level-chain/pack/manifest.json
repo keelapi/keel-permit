@@ -1,0 +1,13 @@
+{
+  "compressed": false,
+  "content_hash": "sha256:de5b9c9b6715e4c021e6e0d81d3e1bf75bc6f3137b2a745f97dabf16fb7d9211",
+  "export_id": "export_valid-audit-bundle-bundle-level-chain",
+  "export_type": "audit_export_bundle",
+  "format": "json",
+  "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
+  "project_id": "00000000-0000-0000-0000-000000000001",
+  "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+  "record_count": 1,
+  "signature": "ed25519:ZG8npxkHilHfoZta3+xtYkqfmWxU+UV5vh/B1tufzJSjp0u4cLg1RI+UUkwK+4TSJygHFJquhZ0pKBOUQjZjDQ==",
+  "signed_at": "2026-05-07T12:00:00Z"
+}

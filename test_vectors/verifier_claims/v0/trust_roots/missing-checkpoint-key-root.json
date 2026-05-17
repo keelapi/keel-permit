@@ -1,0 +1,15 @@
+{
+  "generated_at": "2026-05-07T12:00:00Z",
+  "keys": [
+    {
+      "algorithm": "ed25519",
+      "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
+      "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+      "purpose": "export_signing",
+      "status": "active",
+      "valid_from": "2026-01-01T00:00:00Z",
+      "valid_to": null
+    }
+  ],
+  "schema_version": 1
+}

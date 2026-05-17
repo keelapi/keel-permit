@@ -1,0 +1,33 @@
+{
+  "generated_at": "2026-05-07T12:00:00Z",
+  "keys": [
+    {
+      "algorithm": "ed25519",
+      "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
+      "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+      "purpose": "export_signing",
+      "status": "active",
+      "valid_from": "2026-01-01T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "algorithm": "ed25519",
+      "key_id": "9a19fc9f345c9fde",
+      "public_key": "ed25519:6NpjpAymh8h8/OBcskp4bH51zEnHDbVXPwJvHGqGzqo=",
+      "purpose": "permit_binding_signing",
+      "status": "active",
+      "valid_from": "2026-01-01T00:00:00Z",
+      "valid_to": null
+    },
+    {
+      "algorithm": "ed25519",
+      "key_id": "sha256:1a6eb20e308c021dea0c6ee28ad78bfb",
+      "public_key": "ed25519:CvfKyK/t8oZZogxSp61fYXNuGj/Hyz6gwfw5axcR2/Y=",
+      "purpose": "integrity_checkpoint",
+      "status": "active",
+      "valid_from": "2026-01-01T00:00:00Z",
+      "valid_to": null
+    }
+  ],
+  "schema_version": 1
+}
