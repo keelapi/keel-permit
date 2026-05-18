@@ -101,3 +101,61 @@ the corresponding `provider_response_digest_v1` and
 `client_response_digest_v1` fields. This clarification is part of local v0
 finalization before publication; after publication, semantic changes require a
 new registry version.
+
+## 7. `permit_chain.delegation_denied_correctly.v1`
+
+This claim adjudicates whether a supplied `permit.delegated_denied` governance
+event was correctly denied under pinned permit-chain semantics. The verifier
+MUST evaluate this claim with the pinned `keel.governance_chain.record_hash.v1`,
+`keel.governance_event.integrity_digest.v1`, and `authority-envelope.v0`
+artifacts. Missing pins resolve before claim logic as
+`insufficient_evidence`; unknown artifact hashes resolve as
+`unverifiable_scope`.
+
+Required evidence inputs:
+
+- A `permit.delegated_denied` governance event, or an event collection containing
+  one. If more than one denied event is supplied, the caller MUST provide
+  `event_id`.
+- Strict supplied chain fields for every event in the evidence collection:
+  `event_id`, `event_type`, `severity`, `occurred_at`, `sequence_number`,
+  `record_hash`, and `prev_hash`.
+- A contiguous supplied prefix per `chain_scope`, starting at sequence `1` with
+  the genesis prev_hash `sha256("keel-audit-chain-genesis-v1")` as lowercase
+  hex without prefix. Each next event's `prev_hash` MUST equal the previous
+  event's `record_hash`.
+- An `audit.integrity_digest` event whose payload covers the target denied
+  event with `covered_events`, `covered_event_count`, and `batch_hash` under the
+  pinned governance-event integrity-digest recipe.
+- Target payload fields: `authority_envelope_version`,
+  `child_requested_authority_envelope`, `failed_fields`, and `reason_code`.
+  `parent_authority_envelope` is required except for
+  `reason_code == "authority_envelope.parent_missing"` with
+  `failed_fields` containing `authority_envelope`.
+
+Verdict schema:
+
+- `supported`: the strict chain prefix verifies, the integrity digest covers the
+  target payload, and rerunning the pinned authority-envelope comparator proves
+  the recorded denial.
+- `disproved`: the chain or integrity digest is tampered, the comparator allows
+  the child authority, or recorded `failed_fields` differ from comparator output.
+- `unverifiable_scope`: the evidence names an authority envelope version or
+  semantic artifact hash outside the verifier's allowlist.
+- `insufficient_evidence`: required chain fields, integrity-digest coverage,
+  semantic pins, version fields, comparable envelopes, or disambiguating
+  `event_id` are missing or malformed.
+
+Result shape for the public claim helper is a JSON object with
+`claim_type: "delegation_denied_correctly"`, `status`, `supported_checks`,
+`missing_requirements`, `errors`, `supported_envelope_versions`, and, when
+applicable, `event_id`, `failed_fields`, `comparison_details`,
+`expected_failed_fields`, and `event_failed_fields`.
+
+Failure modes include `chain_events`, `chain_field:<field>`,
+`contiguous_chain_prefix`, `prev_hash_mismatch`, `record_hash_mismatch`,
+`payload_integrity_digest`, `payload_integrity_mismatch`,
+`integrity_digest_batch_hash_mismatch`, `integrity_digest_resource_mismatch`,
+`integrity_digest_count_mismatch`, `unsupported_authority_envelope_version`,
+`comparable_authority_envelopes`, `comparator_allows_child_authority`, and
+`failed_fields_mismatch`.

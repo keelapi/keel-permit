@@ -5,7 +5,7 @@
     "spec": "../../../spec/verifier-claims-v0.md",
     "version": "verifier-claims.v0"
   },
-  "corpus_version": "verifier-claims-v0-golden-2026-05-17",
+  "corpus_version": "verifier-claims-v0-golden-2026-05-18",
   "current_verifier_granularity": "Current verifiers expose whole-pack PASS/FAIL plus reason classes. Per-claim doctrine verdicts remain in each record for the P1-M structured verdict upgrade.",
   "records": [
     {
@@ -1182,6 +1182,166 @@
         "parent_fixture": "valid-export-hash-signature"
       },
       "title": "Pinned export fixture whose semantic artifact bytes do not match declared hash"
+    },
+    {
+      "claim": "delegation_denied_correctly",
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "permit_chain.delegation_denied_correctly.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "expected_mode": "pinned",
+      "id": "permit-chain-supported-denial",
+      "kind": "claim",
+      "pack": {
+        "evidence_file": "fixtures/permit-chain-supported-denial/pack/evidence.json"
+      },
+      "title": "Supported permit-chain delegation denial"
+    },
+    {
+      "claim": "delegation_denied_correctly",
+      "claims": [
+        {
+          "expected_verdict": "disproved",
+          "name": "permit_chain.delegation_denied_correctly.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": []
+      },
+      "expected_mode": "pinned",
+      "id": "permit-chain-false-denial",
+      "kind": "claim",
+      "pack": {
+        "evidence_file": "fixtures/permit-chain-false-denial/pack/evidence.json"
+      },
+      "title": "False denial where child authority is permitted"
+    },
+    {
+      "claim": "delegation_denied_correctly",
+      "claims": [
+        {
+          "expected_verdict": "disproved",
+          "name": "permit_chain.delegation_denied_correctly.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": []
+      },
+      "expected_mode": "pinned",
+      "id": "permit-chain-tampered-payload",
+      "kind": "claim",
+      "pack": {
+        "evidence_file": "fixtures/permit-chain-tampered-payload/pack/evidence.json"
+      },
+      "title": "Tampered denied-event payload after integrity digest capture"
+    },
+    {
+      "claim": "delegation_denied_correctly",
+      "claims": [
+        {
+          "expected_verdict": "unverifiable_scope",
+          "name": "permit_chain.delegation_denied_correctly.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": []
+      },
+      "expected_mode": "pinned",
+      "id": "permit-chain-unknown-envelope-version",
+      "kind": "claim",
+      "pack": {
+        "evidence_file": "fixtures/permit-chain-unknown-envelope-version/pack/evidence.json"
+      },
+      "title": "Unknown authority-envelope version"
+    },
+    {
+      "claim": "delegation_denied_correctly",
+      "claims": [
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "permit_chain.delegation_denied_correctly.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": []
+      },
+      "expected_mode": "pinned",
+      "id": "permit-chain-missing-digest",
+      "kind": "claim",
+      "pack": {
+        "evidence_file": "fixtures/permit-chain-missing-digest/pack/evidence.json"
+      },
+      "title": "Missing audit.integrity_digest coverage"
+    },
+    {
+      "claim": "delegation_denied_correctly",
+      "claims": [
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "permit_chain.delegation_denied_correctly.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": []
+      },
+      "expected_mode": "pinned",
+      "id": "permit-chain-unknown-parent-key",
+      "kind": "claim",
+      "pack": {
+        "evidence_file": "fixtures/permit-chain-unknown-parent-key/pack/evidence.json"
+      },
+      "title": "Unknown parent authority-envelope key"
+    },
+    {
+      "claim": "delegation_denied_correctly",
+      "claims": [
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "permit_chain.delegation_denied_correctly.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": []
+      },
+      "expected_mode": "pinned",
+      "id": "permit-chain-unknown-child-key",
+      "kind": "claim",
+      "pack": {
+        "evidence_file": "fixtures/permit-chain-unknown-child-key/pack/evidence.json"
+      },
+      "title": "Unknown child authority-envelope key"
+    },
+    {
+      "claim": "delegation_denied_correctly",
+      "claims": [
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "permit_chain.delegation_denied_correctly.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": []
+      },
+      "expected_mode": "pinned",
+      "id": "permit-chain-malformed-parent-missing-child",
+      "kind": "claim",
+      "pack": {
+        "evidence_file": "fixtures/permit-chain-malformed-parent-missing-child/pack/evidence.json"
+      },
+      "title": "Malformed child envelope for parent-missing denial"
     }
   ],
   "soundness_rule": "Expected doctrine verdicts are derived from claim_registry/v0.json and spec/verifier-claims-v0.md, never from current verifier output."
