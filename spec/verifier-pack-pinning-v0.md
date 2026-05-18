@@ -60,18 +60,18 @@ Pinned packs carry both `claim_set` and `semantics_pins`.
     "mode": "pinned",
     "profile": {
       "id": "keel.pre_pinning_default.v0",
-      "hash": "sha256:847a0ac48f8c68ea6c904d98312886405d986e52b7cbba099c157dbee8fccdf8",
+      "hash": "sha256:b7b31f30a91a50517693494d9a868c781ae5dbd82bd06228fd34e0d517b5a153",
       "path": "semantics/profiles/pre_pinning_default_v0.json"
     },
     "artifacts": [
       {
         "id": "keel.export_manifest.integrity.v1",
-        "hash": "sha256:821e41a50a15bbbee3850134539c9de8cde04d3b2f347a470290a04ccc8c3807",
+        "hash": "sha256:d1d67dca7eb9a662d26463c3dec841f47f8791df2fafb21e911dd26a83dabb76",
         "path": "semantics/export_manifest/integrity_v1.json"
       },
       {
         "id": "keel.closure.format.v2",
-        "hash": "sha256:73a7b518c852ca38bd24bb56498213d0ef2e166dbc6e97b2ca073c2385384a84",
+        "hash": "sha256:476b9aaf8f1b3e0fd46b9cfae522062e803ecbb1c24fdbb6ec60775b979d59f1",
         "path": "semantics/closure/format_v2.json"
       },
       {
@@ -119,23 +119,23 @@ An evidence pack with no `claim_set` and no `semantics_pins` is evaluated under
 
 The profile artifact is
 `semantics/profiles/pre_pinning_default_v0.json` with hash
-`sha256:847a0ac48f8c68ea6c904d98312886405d986e52b7cbba099c157dbee8fccdf8`.
+`sha256:b7b31f30a91a50517693494d9a868c781ae5dbd82bd06228fd34e0d517b5a153`.
 It expands to these base components:
 
 | ID | Hash |
 | --- | --- |
 | `keel.verifier_claim_registry.v0` | `sha256:b315ef722a8e4fafe3d3807bc7c8ccaafd601cab0e7d7985230da8248124337b` |
-| `keel.export_manifest.integrity.v1` | `sha256:821e41a50a15bbbee3850134539c9de8cde04d3b2f347a470290a04ccc8c3807` |
+| `keel.export_manifest.integrity.v1` | `sha256:d1d67dca7eb9a662d26463c3dec841f47f8791df2fafb21e911dd26a83dabb76` |
 | `keel.governance_chain.record_hash.v1` | `sha256:a3213706c9e9531a74cd2355f2f05e537c7a70604cb869b7b76c65cba4a2b707` |
-| `keel.closure.format.v1` | `sha256:1127f26c2521cf05631ecf3950433dd6b1a45a54fe69a3e256dd7d15311e0538` |
-| `keel.closure.format.v2` | `sha256:73a7b518c852ca38bd24bb56498213d0ef2e166dbc6e97b2ca073c2385384a84` |
+| `keel.closure.format.v1` | `sha256:b208b82fbf8187ecdc85410630fbfa30f86f34c4da28d4b418c5788a8ec893ba` |
+| `keel.closure.format.v2` | `sha256:476b9aaf8f1b3e0fd46b9cfae522062e803ecbb1c24fdbb6ec60775b979d59f1` |
 | `keel.closure.digest_rules.v1` | `sha256:eca06d960a9e16468a622938a17b77244d487b58459be4dce3e55ef006f29454` |
 | `keel.permit_binding.canonical_request.v1` | `sha256:59633003ed97b2a65e756007fddd6f525a8c056de57a1cd40971034fa044f0ac` |
-| `keel.workflow.canonicalization.v1` | `sha256:0dc80dcce727e3f0b6a35c6747dea2a7f3215f3d2ec5e283b073c5a6e15c9ca1` |
-| `keel.workflow_evidence.sibling_integrity.v1` | `sha256:91d6ce619940be2de57a61406e59534f3a830a566b4aa0baeafe89aa52130acd` |
+| `keel.workflow.canonicalization.v1` | `sha256:b7359ae11dc1d8cfad51bf3e6fec32a0209bf38097a01fa4f878e3a068184501` |
+| `keel.workflow_evidence.sibling_integrity.v1` | `sha256:c4e99745893e6c66afa89ad46602b0cf1931530f78875e18387381fca8c2a5aa` |
 | `keel.incident.bundle_manifest.v2` | `sha256:ed112e365985d79192a4cb7c3248625d8294d2d2c5210ce31960eb7d55f4b9eb` |
 | `keel.checkpoint.composite_hash.v1` | `sha256:68aafa26d6f1c8cf5ba83c7596209888d8e529d81f1a2c58f31e2fc41fc136de` |
-| `keel.checkpoint.signature.v1` | `sha256:4e7e39196e67547f0530f2a0b282d86a13eaa27ba420c4e2705c013e750ff00e` |
+| `keel.checkpoint.signature.v1` | `sha256:af16c66e8a0b295cd2e5e436169bf0e3d628c1fc4901b6eba6596e86e3ad256b` |
 | `keel.checkpoint.tsa_imprint.v1` | `sha256:a4e02133537a190c3795737beb4bb2ddf823cd09d5b6dcba43c682fb9e37d79e` |
 
 Permit-chain claims that request authority-envelope comparison additionally

@@ -3,7 +3,7 @@
   "captured_from": {
     "repository": "keel-verifier",
     "source": "keel_verifier/verifier.py:_verify_signed_workflow_sibling",
-    "commit_hint": "keel-verifier 55056eca5d95912b18bc682f7ba621e03938ca40"
+    "commit_hint": "keel-verifier 16519ed80b6b485166bf3fc5035ce9e0a2fe7917"
   },
   "input": {
     "manifest_path": "test_vectors/verifier_claims/v0/fixtures/valid-vanta-workflow-sibling/pack/manifest.json",
