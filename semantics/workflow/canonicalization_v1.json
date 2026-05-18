@@ -74,7 +74,7 @@
           "self_attested_effect": "self_attested disables key_manifest_source but provides no embedded artifact key, so current closure/workflow verification cannot resolve a trust key in that mode",
           "manifest_key_id_rule": "if artifact key_id is present, select the first manifest key with matching purpose and key_id",
           "legacy_no_key_id_rule": "if no key_id and signing time is parseable, require exactly one purpose-matching manifest entry active at signing time; if signing time is absent/unparseable, require exactly one purpose-matching entry total",
-          "active_window_rule": "valid_from and valid_to parse with parse_iso_or_none; missing or unparseable bound is open"
+          "active_window_rule": "An absent or null valid_from/valid_to is open-ended; a present non-null value that does not parse to a valid timestamp makes the manifest entry malformed and excludes it from matching any signing_time (fail-closed)."
         }
       },
       "canonical_hash_match": "record canonical hash must equal one of the candidate payload hashes",

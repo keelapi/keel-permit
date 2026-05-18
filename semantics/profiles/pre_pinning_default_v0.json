@@ -15,7 +15,7 @@
       },
       {
         "id": "keel.export_manifest.integrity.v1",
-        "hash": "sha256:821e41a50a15bbbee3850134539c9de8cde04d3b2f347a470290a04ccc8c3807",
+        "hash": "sha256:d1d67dca7eb9a662d26463c3dec841f47f8791df2fafb21e911dd26a83dabb76",
         "path": "semantics/export_manifest/integrity_v1.json"
       },
       {
@@ -25,12 +25,12 @@
       },
       {
         "id": "keel.closure.format.v1",
-        "hash": "sha256:1127f26c2521cf05631ecf3950433dd6b1a45a54fe69a3e256dd7d15311e0538",
+        "hash": "sha256:b208b82fbf8187ecdc85410630fbfa30f86f34c4da28d4b418c5788a8ec893ba",
         "path": "semantics/closure/format_v1.json"
       },
       {
         "id": "keel.closure.format.v2",
-        "hash": "sha256:73a7b518c852ca38bd24bb56498213d0ef2e166dbc6e97b2ca073c2385384a84",
+        "hash": "sha256:476b9aaf8f1b3e0fd46b9cfae522062e803ecbb1c24fdbb6ec60775b979d59f1",
         "path": "semantics/closure/format_v2.json"
       },
       {
@@ -45,12 +45,12 @@
       },
       {
         "id": "keel.workflow.canonicalization.v1",
-        "hash": "sha256:0dc80dcce727e3f0b6a35c6747dea2a7f3215f3d2ec5e283b073c5a6e15c9ca1",
+        "hash": "sha256:b7359ae11dc1d8cfad51bf3e6fec32a0209bf38097a01fa4f878e3a068184501",
         "path": "semantics/workflow/canonicalization_v1.json"
       },
       {
         "id": "keel.workflow_evidence.sibling_integrity.v1",
-        "hash": "sha256:91d6ce619940be2de57a61406e59534f3a830a566b4aa0baeafe89aa52130acd",
+        "hash": "sha256:c4e99745893e6c66afa89ad46602b0cf1931530f78875e18387381fca8c2a5aa",
         "path": "semantics/workflow_evidence/sibling_integrity_v1.json"
       },
       {
@@ -65,7 +65,7 @@
       },
       {
         "id": "keel.checkpoint.signature.v1",
-        "hash": "sha256:4e7e39196e67547f0530f2a0b282d86a13eaa27ba420c4e2705c013e750ff00e",
+        "hash": "sha256:af16c66e8a0b295cd2e5e436169bf0e3d628c1fc4901b6eba6596e86e3ad256b",
         "path": "semantics/checkpoint/signature_v1.json"
       },
       {

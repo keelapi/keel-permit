@@ -3,7 +3,7 @@
   "captured_from": {
     "repository": "keel-verifier",
     "source": "keel_verifier/verifier.py:_resolve_trust_key,_verify_ed25519",
-    "commit_hint": "keel-verifier 55056eca5d95912b18bc682f7ba621e03938ca40"
+    "commit_hint": "keel-verifier 16519ed80b6b485166bf3fc5035ce9e0a2fe7917"
   },
   "input": {
     "checkpoint": {
