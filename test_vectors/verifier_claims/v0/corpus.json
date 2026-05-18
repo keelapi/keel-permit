@@ -817,6 +817,371 @@
         "manifest": "fixtures/edge-governance-events-csv-unwalked/pack/manifest.json"
       },
       "title": "CSV serialized governance_events are signed but not walkable by current verifiers"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_identity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "pinned-valid-export-integrity",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/pinned-valid-export-integrity/pack/export.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/pinned-valid-export-integrity/pack/manifest.json"
+      },
+      "pinned": {
+        "mode": "pinned",
+        "parent_fixture": "valid-export-hash-signature"
+      },
+      "title": "Pinned valid export integrity and scope identity"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "governance_chain.local_continuity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "pinned-valid-governance-chain",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/pinned-valid-governance-chain/pack/governance_events.json",
+        "features": [
+          "walk_events"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/pinned-valid-governance-chain/pack/manifest.json"
+      },
+      "pinned": {
+        "mode": "pinned",
+        "parent_fixture": "valid-governance-events-json"
+      },
+      "title": "Pinned valid governance chain continuity"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "closure.signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "closure.digest_consistency.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "pinned-valid-closure-v1",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/pinned-valid-closure-v1/pack/export.json",
+        "features": [
+          "verify_closure"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/pinned-valid-closure-v1/pack/manifest.json"
+      },
+      "pinned": {
+        "mode": "pinned",
+        "parent_fixture": "valid-closure-v1"
+      },
+      "title": "Pinned valid closure_v1 signature and digest consistency"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "closure.signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "closure.digest_consistency.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "closure.dispatch_binding.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "pinned-valid-closure-v2-dispatch-binding",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/pinned-valid-closure-v2-dispatch-binding/pack/export.json",
+        "features": [
+          "verify_closure"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/pinned-valid-closure-v2-dispatch-binding/pack/manifest.json"
+      },
+      "pinned": {
+        "mode": "pinned",
+        "parent_fixture": "valid-closure-v2-dispatch-binding"
+      },
+      "title": "Pinned valid closure_v2 dispatch binding"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "workflow_evidence.sibling_integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.declaration_signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.amendment_signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.effective_intent_hash.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.permit_snapshot.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "pinned-valid-workflow-evidence-sibling",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/pinned-valid-workflow-evidence-sibling/pack/export.json",
+        "features": [
+          "verify_workflows"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/pinned-valid-workflow-evidence-sibling/pack/manifest.json"
+      },
+      "pinned": {
+        "mode": "pinned",
+        "parent_fixture": "valid-vanta-workflow-sibling"
+      },
+      "title": "Pinned valid Vanta workflow evidence sibling"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "incident.bundle_manifest.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.declaration_signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.amendment_signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.effective_intent_hash.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "workflow.permit_snapshot.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "pinned-valid-incident-v2-bundle",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/pinned-valid-incident-v2-bundle/pack/incident.zip",
+        "features": [
+          "verify_workflows"
+        ],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/pinned-valid-incident-v2-bundle/pack/manifest.json"
+      },
+      "pinned": {
+        "mode": "pinned",
+        "parent_fixture": "valid-incident-v2-bundle"
+      },
+      "title": "Pinned valid incident manifest v2 bundle"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.composite_hash.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.tsa_imprint.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "pinned-valid-checkpoint-legacy-single-tsa",
+      "kind": "checkpoint",
+      "pack": {
+        "checkpoint_file": "fixtures/pinned-valid-checkpoint-legacy-single-tsa/pack/checkpoint.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json"
+      },
+      "pinned": {
+        "mode": "pinned",
+        "parent_fixture": "valid-checkpoint-legacy-single-tsa"
+      },
+      "title": "Pinned valid checkpoint with legacy single tsa receipt"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.composite_hash.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.signature.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.tsa_imprint.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "pinned-valid-checkpoint-multi-tsa-receipts",
+      "kind": "checkpoint",
+      "pack": {
+        "checkpoint_file": "fixtures/pinned-valid-checkpoint-multi-tsa-receipts/pack/checkpoint.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json"
+      },
+      "pinned": {
+        "mode": "pinned",
+        "parent_fixture": "valid-checkpoint-multi-tsa-receipts"
+      },
+      "title": "Pinned valid checkpoint with multiple tsa_receipts entries"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "export.integrity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "SEMANTIC_PIN_MISSING"
+        ]
+      },
+      "id": "pinned-neg-required-semantic-pin-missing",
+      "kind": "export",
+      "negative": {
+        "delta": "Added claim_set for export.integrity.v1 but omitted the required export-manifest semantic artifact from semantics_pins.",
+        "parent_fixture": "valid-export-hash-signature"
+      },
+      "pack": {
+        "export_file": "fixtures/pinned-neg-required-semantic-pin-missing/pack/export.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/pinned-neg-required-semantic-pin-missing/pack/manifest.json"
+      },
+      "pinned": {
+        "mode": "pinned",
+        "parent_fixture": "valid-export-hash-signature"
+      },
+      "title": "Pinned export fixture missing required semantic pin"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "unverifiable_scope",
+          "name": "export.integrity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "SEMANTIC_PIN_NOT_ALLOWLISTED"
+        ]
+      },
+      "id": "pinned-neg-semantic-pin-not-allowlisted",
+      "kind": "export",
+      "negative": {
+        "delta": "Pinned a well-formed keel.export_manifest.integrity.v1 artifact whose bytes self-hash correctly but whose (id, hash) pair is not in the permanent allowlist.",
+        "parent_fixture": "valid-export-hash-signature"
+      },
+      "pack": {
+        "export_file": "fixtures/pinned-neg-semantic-pin-not-allowlisted/pack/export.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/pinned-neg-semantic-pin-not-allowlisted/pack/manifest.json"
+      },
+      "pinned": {
+        "mode": "pinned",
+        "parent_fixture": "valid-export-hash-signature"
+      },
+      "title": "Pinned export fixture with non-allowlisted semantic artifact hash"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "export.integrity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "SEMANTIC_PIN_HASH_MISMATCH"
+        ]
+      },
+      "id": "pinned-neg-semantic-pin-hash-mismatch",
+      "kind": "export",
+      "negative": {
+        "delta": "Pinned the released export-manifest semantic artifact bytes while declaring an all-zero sha256 hash, producing a top-level integrity error.",
+        "parent_fixture": "valid-export-hash-signature"
+      },
+      "pack": {
+        "export_file": "fixtures/pinned-neg-semantic-pin-hash-mismatch/pack/export.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/pinned-neg-semantic-pin-hash-mismatch/pack/manifest.json"
+      },
+      "pinned": {
+        "mode": "pinned",
+        "parent_fixture": "valid-export-hash-signature"
+      },
+      "title": "Pinned export fixture whose semantic artifact bytes do not match declared hash"
     }
   ],
   "soundness_rule": "Expected doctrine verdicts are derived from claim_registry/v0.json and spec/verifier-claims-v0.md, never from current verifier output."
