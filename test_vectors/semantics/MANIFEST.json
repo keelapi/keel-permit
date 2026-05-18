@@ -1,0 +1,53 @@
+{
+  "schema": "keel.semantics.conformance_manifest/v0",
+  "records": [
+    {
+      "semantic_artifact_id": "keel.checkpoint.composite_hash.v1",
+      "path": "test_vectors/semantics/checkpoint_composite_hash_v1.json"
+    },
+    {
+      "semantic_artifact_id": "keel.checkpoint.signature.v1",
+      "path": "test_vectors/semantics/checkpoint_signature_v1.json"
+    },
+    {
+      "semantic_artifact_id": "keel.checkpoint.tsa_imprint.v1",
+      "path": "test_vectors/semantics/checkpoint_tsa_imprint_v1.json"
+    },
+    {
+      "semantic_artifact_id": "keel.closure.digest_rules.v1",
+      "path": "test_vectors/semantics/closure_digest_rules_v1.json"
+    },
+    {
+      "semantic_artifact_id": "keel.closure.format.v1",
+      "path": "test_vectors/semantics/closure_format_v1.json"
+    },
+    {
+      "semantic_artifact_id": "keel.closure.format.v2",
+      "path": "test_vectors/semantics/closure_format_v2.json"
+    },
+    {
+      "semantic_artifact_id": "keel.export_manifest.integrity.v1",
+      "path": "test_vectors/semantics/export_manifest_integrity_v1.json"
+    },
+    {
+      "semantic_artifact_id": "keel.governance_chain.record_hash.v1",
+      "path": "test_vectors/semantics/governance_chain_record_hash_v1.json"
+    },
+    {
+      "semantic_artifact_id": "keel.incident.bundle_manifest.v2",
+      "path": "test_vectors/semantics/incident_bundle_manifest_v2.json"
+    },
+    {
+      "semantic_artifact_id": "keel.permit_binding.canonical_request.v1",
+      "path": "test_vectors/semantics/permit_binding_canonical_request_v1.json"
+    },
+    {
+      "semantic_artifact_id": "keel.workflow.canonicalization.v1",
+      "path": "test_vectors/semantics/workflow_canonicalization_v1.json"
+    },
+    {
+      "semantic_artifact_id": "keel.workflow_evidence.sibling_integrity.v1",
+      "path": "test_vectors/semantics/workflow_evidence_sibling_integrity_v1.json"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "semantic_artifact_id": "keel.permit_binding.canonical_request.v1",
+  "captured_from": {
+    "repository": "keel-verifier",
+    "source": "keel_verifier/verifier.py:_verify_closure_dispatch_digest_reference",
+    "commit_hint": "keel-verifier 55056eca5d95912b18bc682f7ba621e03938ca40"
+  },
+  "input": {
+    "closure_payload": {
+      "closure_status": "closed",
+      "dispatch_request_digest_v1": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "closure_context": {
+      "record_binding_request_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "permit_id": "permit_123"
+  },
+  "output": {
+    "dispatch_binding_check": {
+      "return": null,
+      "stdout": "",
+      "stderr": ""
+    }
+  }
+}

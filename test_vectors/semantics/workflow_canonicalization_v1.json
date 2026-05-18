@@ -1,0 +1,55 @@
+{
+  "semantic_artifact_id": "keel.workflow.canonicalization.v1",
+  "captured_from": {
+    "repository": "keel-verifier",
+    "source": "keel_verifier/verifier.py:_canonical_workflow_json,_workflow_declaration_intent,_workflow_amendment_delta,_compute_effective_intent_hash_from_records",
+    "commit_hint": "keel-verifier 55056eca5d95912b18bc682f7ba621e03938ca40"
+  },
+  "input": {
+    "declaration": {
+      "workflow_id": "wf_123",
+      "workflow_declaration_id": "10000000-0000-0000-0000-000000000001",
+      "project_id": "00000000-0000-0000-0000-000000000001",
+      "status": "active",
+      "intent_json": {
+        "expected_calls": 2,
+        "max_calls": 5,
+        "expected_model": "gpt-4o-mini"
+      },
+      "version": 2,
+      "declaration_signed_at": "2026-05-07T12:00:00+00:00"
+    },
+    "amendments": [
+      {
+        "workflow_amendment_id": "30000000-0000-0000-0000-000000000001",
+        "workflow_declaration_id": "10000000-0000-0000-0000-000000000001",
+        "project_id": "00000000-0000-0000-0000-000000000001",
+        "applied_against_version": 1,
+        "previous_max_calls": 5,
+        "new_max_calls": 7,
+        "previous_expected_calls": 2,
+        "new_expected_calls": 4,
+        "reason_provided": "raise cap during incident run",
+        "created_at": "2026-05-07T12:05:00+00:00"
+      }
+    ]
+  },
+  "output": {
+    "declaration_intent": {
+      "expected_calls": 2,
+      "max_calls": 5,
+      "expected_model": "gpt-4o-mini"
+    },
+    "declaration_intent_canonical_json": "{\"expected_calls\":2,\"expected_model\":\"gpt-4o-mini\",\"max_calls\":5}",
+    "amendment_delta": {
+      "applied_against_version": 1,
+      "previous_max_calls": 5,
+      "new_max_calls": 7,
+      "previous_expected_calls": 2,
+      "new_expected_calls": 4,
+      "reason_provided": "raise cap during incident run"
+    },
+    "amendment_delta_canonical_json": "{\"applied_against_version\":1,\"new_expected_calls\":4,\"new_max_calls\":7,\"previous_expected_calls\":2,\"previous_max_calls\":5,\"reason_provided\":\"raise cap during incident run\"}",
+    "effective_intent_hash": "59a7fe4e96399e729d2a472214ea74ab50bcc2d4ab54d2060fd8efe13b45fbc6"
+  }
+}

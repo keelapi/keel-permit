@@ -1,0 +1,62 @@
+{
+  "semantic_artifact_id": "keel.closure.format.v2",
+  "captured_from": {
+    "repository": "keel-verifier",
+    "source": "keel_verifier/verifier.py:_closure_v2_signed_payload,_canonical_json,_compute_canonical_binding_hash",
+    "commit_hint": "keel-verifier 55056eca5d95912b18bc682f7ba621e03938ca40"
+  },
+  "input": {
+    "payload": {
+      "binding_version": "closure_v2",
+      "permit_id": "permit_123",
+      "execution_id": "exec_123",
+      "correlation_id": "corr_123",
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "provider_response_digest_v1": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "client_response_digest_v1": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "closure_status": "closed",
+      "status_code": 200,
+      "provider_response_id": "resp_123",
+      "provider_response_digest_semantics": "provider_bytes_received_by_keel",
+      "client_response_digest_semantics": "response_bytes_handed_to_asgi_not_tcp_receipt",
+      "request_created_at": "2026-05-07T12:34:50Z",
+      "started_at": "2026-05-07T12:34:51Z",
+      "completed_at": "2026-05-07T12:34:55Z",
+      "provider_response_received_at": "2026-05-07T12:34:54Z",
+      "client_response_delivered_at": "2026-05-07T12:34:55Z",
+      "closure_signed_at": "2026-05-07T12:34:56Z",
+      "binding_key_id": "abcd1234abcd1234",
+      "dispatch_request_digest_v1": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "dispatch_request_digest_semantics": "approved_request_body_bytes_at_dispatch_time"
+    }
+  },
+  "output": {
+    "signed_payload": {
+      "binding_version": "closure_v2",
+      "permit_id": "permit_123",
+      "execution_id": "exec_123",
+      "correlation_id": "corr_123",
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "dispatch_request_digest_v1": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "provider_response_digest_v1": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "client_response_digest_v1": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "closure_status": "closed",
+      "status_code": 200,
+      "provider_response_id": "resp_123",
+      "dispatch_request_digest_semantics": "approved_request_body_bytes_at_dispatch_time",
+      "provider_response_digest_semantics": "provider_bytes_received_by_keel",
+      "client_response_digest_semantics": "response_bytes_handed_to_asgi_not_tcp_receipt",
+      "request_created_at": "2026-05-07T12:34:50Z",
+      "started_at": "2026-05-07T12:34:51Z",
+      "completed_at": "2026-05-07T12:34:55Z",
+      "provider_response_received_at": "2026-05-07T12:34:54Z",
+      "client_response_delivered_at": "2026-05-07T12:34:55Z",
+      "closure_signed_at": "2026-05-07T12:34:56Z",
+      "binding_key_id": "abcd1234abcd1234"
+    },
+    "canonical_json": "{\"binding_key_id\":\"abcd1234abcd1234\",\"binding_version\":\"closure_v2\",\"client_response_delivered_at\":\"2026-05-07T12:34:55Z\",\"client_response_digest_semantics\":\"response_bytes_handed_to_asgi_not_tcp_receipt\",\"client_response_digest_v1\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"closure_signed_at\":\"2026-05-07T12:34:56Z\",\"closure_status\":\"closed\",\"completed_at\":\"2026-05-07T12:34:55Z\",\"correlation_id\":\"corr_123\",\"dispatch_request_digest_semantics\":\"approved_request_body_bytes_at_dispatch_time\",\"dispatch_request_digest_v1\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"execution_id\":\"exec_123\",\"model\":\"gpt-4o-mini\",\"permit_id\":\"permit_123\",\"provider\":\"openai\",\"provider_response_digest_semantics\":\"provider_bytes_received_by_keel\",\"provider_response_digest_v1\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"provider_response_id\":\"resp_123\",\"provider_response_received_at\":\"2026-05-07T12:34:54Z\",\"request_created_at\":\"2026-05-07T12:34:50Z\",\"started_at\":\"2026-05-07T12:34:51Z\",\"status_code\":200}",
+    "canonical_hash": "f8c5eb7635180e662351af2f7aad47c27d478bdc57ca25e9708660a6273083dc"
+  }
+}
