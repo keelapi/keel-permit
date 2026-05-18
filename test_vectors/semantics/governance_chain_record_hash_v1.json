@@ -1,0 +1,36 @@
+{
+  "semantic_artifact_id": "keel.governance_chain.record_hash.v1",
+  "captured_from": {
+    "repository": "keel-verifier",
+    "source": "keel_verifier/verifier.py:_compute_record_hash_v1",
+    "commit_hint": "keel-verifier 55056eca5d95912b18bc682f7ba621e03938ca40"
+  },
+  "input": {
+    "record_one": {
+      "event_id": "evt_001",
+      "event_type": "permit.created",
+      "resource_type": "permit",
+      "resource_id": "permit_001",
+      "outcome": "approved",
+      "severity": "info",
+      "created_at": "2026-05-07T12:34:56.789123Z",
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sequence_number": 1
+    },
+    "record_two": {
+      "event_id": "evt_002",
+      "event_type": "provider.response.received",
+      "resource_type": null,
+      "resource_id": null,
+      "outcome": null,
+      "severity": "warning",
+      "created_at": "2026-05-07T12:34:57.000001+00:00",
+      "prev_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "sequence_number": 2
+    }
+  },
+  "output": {
+    "record_one_hash": "649d339d4da8efbff5ffe9737d0acba8d58623111baeece16195d9b36cd2b7c1",
+    "record_two_hash": "935ae82c362544389f187e4b6a233046b1f287dc45fe0813a410baeadd45f376"
+  }
+}

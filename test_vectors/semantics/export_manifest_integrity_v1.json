@@ -1,0 +1,32 @@
+{
+  "semantic_artifact_id": "keel.export_manifest.integrity.v1",
+  "captured_from": {
+    "repository": "keel-verifier",
+    "source": "keel_verifier/verifier.py:_content_hash,_resolve_trust_key,_verify_ed25519",
+    "commit_hint": "keel-verifier 55056eca5d95912b18bc682f7ba621e03938ca40"
+  },
+  "input": {
+    "payload_utf8": "{\"project_id\":\"00000000-0000-0000-0000-000000000001\",\"records\":[{\"decision\":\"allow\",\"id\":\"record_001\"}],\"schema\":\"keel.audit_export/v1\"}\n",
+    "manifest": {
+      "compressed": false,
+      "content_hash": "sha256:6ce2d7833a851e1ddc17d40ee5e4201554f1272290b4e2df50e1ec924bc8368b",
+      "export_id": "export_valid_001",
+      "export_type": "audit_export",
+      "format": "json",
+      "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
+      "project_id": "00000000-0000-0000-0000-000000000001",
+      "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+      "record_count": 1,
+      "signature": "ed25519:5UsmFMktTd9yE6y8q/Y6uhPAdevqI8kgW+0pgBmiWfawl+xC63jOva6RjVbi4PJOSiGDEq7cuUOwgjnXI6BbCA==",
+      "signed_at": "2026-05-07T12:00:00Z"
+    },
+    "key_manifest": "test_vectors/verifier_claims/v0/trust_roots/golden-trust-root.json"
+  },
+  "output": {
+    "content_hash": "sha256:6ce2d7833a851e1ddc17d40ee5e4201554f1272290b4e2df50e1ec924bc8368b",
+    "trusted_public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+    "trust_source": "key manifest (/Users/cmunoz/Desktop/Business/Keel/Product/keel-permit/test_vectors/verifier_claims/v0/trust_roots/golden-trust-root.json) key_id=sha256:10ba682c8ad13513971e8b56881aab8b status=active",
+    "trust_error": null,
+    "signature_valid": true
+  }
+}

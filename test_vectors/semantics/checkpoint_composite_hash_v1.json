@@ -1,0 +1,27 @@
+{
+  "semantic_artifact_id": "keel.checkpoint.composite_hash.v1",
+  "captured_from": {
+    "repository": "keel-verifier",
+    "source": "keel_verifier/verifier.py:_composite_hash",
+    "commit_hint": "keel-verifier 55056eca5d95912b18bc682f7ba621e03938ca40"
+  },
+  "input": {
+    "chain_heads": {
+      "admin:global": {
+        "last_record_hash": "c75b144d356352b707b765f9f0fb30a9d7e2c64ef44dc3da2831f7ef8921cf40",
+        "sequence_number": 1024
+      },
+      "project:00000000-0000-0000-0000-000000000001": {
+        "last_record_hash": "e3cd0e7d0c8bed8ecb8fd490ba6e62c848dd875f8641c358558eed6157e4aaf2",
+        "sequence_number": 247
+      },
+      "project:00000000-0000-0000-0000-000000000002": {
+        "last_record_hash": "0037fc594d38b990175efe72ad13c6de32ef2b18bdd2ecc4d62b4c8932f12540",
+        "sequence_number": 91
+      }
+    }
+  },
+  "output": {
+    "composite_hash": "sha256:bf13a31ec6d0357288e60f1cbe6ff4ab6369f84797fc598fc834f2ea82d591d7"
+  }
+}

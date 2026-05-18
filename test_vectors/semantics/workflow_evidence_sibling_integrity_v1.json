@@ -1,0 +1,30 @@
+{
+  "semantic_artifact_id": "keel.workflow_evidence.sibling_integrity.v1",
+  "captured_from": {
+    "repository": "keel-verifier",
+    "source": "keel_verifier/verifier.py:_verify_signed_workflow_sibling",
+    "commit_hint": "keel-verifier 55056eca5d95912b18bc682f7ba621e03938ca40"
+  },
+  "input": {
+    "manifest_path": "test_vectors/verifier_claims/v0/fixtures/valid-vanta-workflow-sibling/pack/manifest.json",
+    "export_path": "test_vectors/verifier_claims/v0/fixtures/valid-vanta-workflow-sibling/pack/export.json",
+    "workflow_path": "test_vectors/verifier_claims/v0/fixtures/valid-vanta-workflow-sibling/pack/workflow_evidence.json",
+    "descriptor": {
+      "amendment_count": 1,
+      "content_hash": "sha256:3c7907b4f056ec9896058f0944c9b84f33f86b64cc0dd91213c4c71a70774f3b",
+      "declaration_count": 1,
+      "file_name": "workflow_evidence.json",
+      "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
+      "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+      "signature": "ed25519:4bbaPjzEMfmrmGiiZyo4J3EBjChEMYLUSVrduxlEzW2qcrLvjlOM8yav8uqtdzo4k29DcY8+goi+ySYXSXzVDw==",
+      "signed_at": "2026-05-07T12:10:00Z"
+    }
+  },
+  "output": {
+    "actual_content_hash": "sha256:3c7907b4f056ec9896058f0944c9b84f33f86b64cc0dd91213c4c71a70774f3b",
+    "failure": null,
+    "document_schema": "keel.vanta.workflow_evidence/v1",
+    "declaration_count": 1,
+    "amendment_count": 1
+  }
+}

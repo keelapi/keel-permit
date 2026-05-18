@@ -33,12 +33,49 @@ definitions they pinned when they were produced.
 
 ## 4. Pack-pinned semantics
 
-Evidence packs that assert `verifier-claims.v0` claims MUST either inline the
-claim registry artifact or hash-address it in the bundle manifest. The same
-rule applies to comparator, serialization, canonicalization, and digest
-semantics required by a claim. A verifier MUST evaluate the claim against the
-semantics pinned by the pack, not against mutable defaults from the verifier
-build.
+Pinned evidence packs that assert `verifier-claims.v0` claims MUST carry two
+top-level manifest blocks: `claim_set` and `semantics_pins`.
+
+`claim_set` MUST be a JSON object with:
+
+- `version`: exactly `verifier-claims.v0`.
+- `registry`: an artifact reference whose `id` is
+  `keel.verifier_claim_registry.v0` and whose `hash` is the `sha256:<hex>` hash
+  of the exact UTF-8 bytes of `claim_registry/v0.json`.
+- `claims`: a non-empty array of objects. Each object MUST have `name` matching
+  a claim in the resolved registry and `required` as a boolean.
+
+`semantics_pins` MUST be a JSON object with:
+
+- `version`: exactly `keel-semantics-pins.v0`.
+- `mode`: exactly `pinned`.
+- `artifacts`: an array of artifact references for every non-registry semantic
+  required by the requested claims.
+
+Artifact references MUST name `id` and `hash`. They MUST also provide a way to
+resolve the exact artifact bytes, either inline with `content_b64` or by a
+hash-addressed path/reference supplied with the pack or an explicit local
+registry bundle. The hash is computed over the resolved bytes before JSON
+parsing. A verifier MUST NOT hash a parsed or reserialized JSON object.
+
+The same pinning rule applies to comparator, serialization, canonicalization,
+digest, and artifact-format semantics required by a claim. The
+`authority-envelope.v0` comparator is a semantic artifact and MUST be pinned
+when a requested claim depends on authority-envelope comparison.
+
+A verifier MUST evaluate claims against the semantics pinned by the pack, not
+against mutable defaults from the verifier build. Resolution failures are
+mapped before claim logic runs:
+
+- Required claim registry missing or unresolved -> `insufficient_evidence`.
+- Required semantic pin missing or unresolved -> `insufficient_evidence`.
+- Resolved artifact bytes do not match the declared hash ->
+  `insufficient_evidence`.
+- `(id, hash)` not in the verifier's permanent allowlist ->
+  `unverifiable_scope`.
+
+If either `claim_set` or `semantics_pins` is present, the verifier MUST NOT
+partially fall back to `keel.pre_pinning_default.v0`.
 
 ## 5. Unpinned legacy packs
 
