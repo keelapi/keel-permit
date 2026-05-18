@@ -34,6 +34,10 @@
       "path": "test_vectors/semantics/governance_chain_record_hash_v1.json"
     },
     {
+      "semantic_artifact_id": "keel.governance_event.integrity_digest.v1",
+      "path": "test_vectors/semantics/governance_event_integrity_digest_v1.json"
+    },
+    {
       "semantic_artifact_id": "keel.incident.bundle_manifest.v2",
       "path": "test_vectors/semantics/incident_bundle_manifest_v2.json"
     },

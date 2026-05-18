@@ -1,0 +1,53 @@
+{
+  "semantic_artifact_id": "keel.governance_event.integrity_digest.v1",
+  "captured_from": {
+    "commit_hint": "pre-publication Tier 2 permit-chain verifier port",
+    "repository": "keel-verifier",
+    "source": "keel_verifier/verifier.py:_compute_governance_event_integrity_hash and _compute_integrity_batch_hash"
+  },
+  "input": {
+    "covered_events": [
+      {
+        "event_hash": "a220e2d4fe2c1d728c124e5db2a7fdd9ae3e2ca64f81d40d76f434987b96658e",
+        "event_id": "gev_integrity_001",
+        "event_type": "permit.delegated_denied"
+      }
+    ],
+    "event": {
+      "actor_id": "actor_123",
+      "actor_type": "api_key",
+      "category": "permit",
+      "decision": "deny",
+      "event_id": "gev_integrity_001",
+      "event_type": "permit.delegated_denied",
+      "lineage_type": null,
+      "model": "gpt-4o-mini",
+      "occurred_at": "2026-05-20T12:00:00.000000+00:00",
+      "operation": "ai.generate.summary",
+      "outcome": "denied",
+      "payload_json": {
+        "failed_fields": [
+          "providers"
+        ],
+        "reason_code": "authority_envelope.scope_broadened"
+      },
+      "permit_id": "permit_123",
+      "project_id": "00000000-0000-0000-0000-000000000001",
+      "project_name": "Keel test project",
+      "provider": "openai",
+      "request_id": "req_123",
+      "resource_id": "delegation_123",
+      "resource_type": "permit_delegation",
+      "schema_version": 1,
+      "severity": "warning",
+      "source_stage": "permit",
+      "span_id": "span_123",
+      "surface": "api",
+      "trace_id": "trace_123"
+    }
+  },
+  "output": {
+    "batch_hash": "a830fa71d4952935c2ced364be49ea2065b2db52f748a35ddf5435a64d6150b0",
+    "event_hash": "a220e2d4fe2c1d728c124e5db2a7fdd9ae3e2ca64f81d40d76f434987b96658e"
+  }
+}

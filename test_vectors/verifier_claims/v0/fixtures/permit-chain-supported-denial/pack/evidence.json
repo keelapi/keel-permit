@@ -2,7 +2,7 @@
   "claim_set": {
     "claims": [
       {
-        "name": "governance_chain.local_continuity.v1",
+        "name": "permit_chain.delegation_denied_correctly.v1",
         "required": true
       }
     ],
@@ -13,26 +13,119 @@
     },
     "version": "verifier-claims.v0"
   },
-  "compressed": false,
-  "content_hash": "sha256:823b56e0c250bf9815fc16f46b75ee8e8a67469c8704aed21fe7de0c5f750b92",
-  "export_id": "export_valid-governance-events-json",
-  "export_type": "governance_events",
-  "format": "json",
-  "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
-  "project_id": "00000000-0000-0000-0000-000000000001",
-  "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
-  "record_count": 2,
+  "events": [
+    {
+      "category": "permit",
+      "chain_scope": "project:11111111-1111-1111-1111-111111111111",
+      "decision": "deny",
+      "event_id": "gev_permit_chain_test",
+      "event_type": "permit.delegated_denied",
+      "occurred_at": "2026-05-20T12:00:00.000000+00:00",
+      "outcome": "denied",
+      "payload_json": {
+        "authority_envelope_version": "authority-envelope.v0",
+        "child_requested_authority_envelope": {
+          "actions": [
+            "ai.generate.summary"
+          ],
+          "data_classes": [
+            "public"
+          ],
+          "expires_at": "2026-05-20T11:30:00Z",
+          "models": [
+            "gpt-4o-mini"
+          ],
+          "providers": [
+            "openai",
+            "anthropic"
+          ],
+          "regions": [
+            "us"
+          ],
+          "tools": []
+        },
+        "failed_fields": [
+          "providers"
+        ],
+        "parent_authority_envelope": {
+          "actions": [
+            "ai.generate.summary"
+          ],
+          "data_classes": [
+            "public"
+          ],
+          "expires_at": "2026-05-20T12:00:00Z",
+          "models": [
+            "gpt-4o-mini"
+          ],
+          "providers": [
+            "openai"
+          ],
+          "regions": [
+            "us"
+          ],
+          "tools": []
+        },
+        "reason_code": "authority_envelope.scope_broadened"
+      },
+      "prev_hash": "b4f9ddb0e1cfb80310d7203a4bad5bc1ff29e931b21918c2fc4b01b26035d7c6",
+      "record_hash": "28800dd03871adcbdd58bd2f0b6a35a4578879abdfd814d9af4d1f423d1f27bf",
+      "resource_id": "22222222-2222-2222-2222-222222222222",
+      "resource_type": "permit_delegation",
+      "schema_version": 1,
+      "sequence_number": 1,
+      "severity": "warning",
+      "source_stage": "permit"
+    },
+    {
+      "category": "audit",
+      "chain_scope": "project:11111111-1111-1111-1111-111111111111",
+      "event_id": "gev_permit_chain_digest",
+      "event_type": "audit.integrity_digest",
+      "occurred_at": "2026-05-20T12:00:01.000000+00:00",
+      "outcome": "success",
+      "payload_json": {
+        "batch_hash": "e0ffa7c0caf694c06aa5f129ed47436b4aabd2c71934ca85f25ad31de180a6ca",
+        "coverage_mode": "commit_batch",
+        "coverage_type": "unchained_governance_events",
+        "covered_event_count": 1,
+        "covered_events": [
+          {
+            "event_hash": "a33fee797f0720fe680f60fc3917c39b84a9ef11142f37180052a9d4dcacd870",
+            "event_id": "gev_permit_chain_test",
+            "event_type": "permit.delegated_denied"
+          }
+        ]
+      },
+      "prev_hash": "28800dd03871adcbdd58bd2f0b6a35a4578879abdfd814d9af4d1f423d1f27bf",
+      "record_hash": "17f1d54abe2fbcf865fa989ea7d5b0337a81e3139ae4e367425b2fa6a6641c9d",
+      "resource_id": "e0ffa7c0caf694c06aa5f129ed47436b",
+      "resource_type": "governance_event_batch",
+      "schema_version": 2,
+      "sequence_number": 2,
+      "severity": "info",
+      "source_stage": "audit"
+    }
+  ],
   "semantics_pins": {
     "artifacts": [
       {
         "content_b64": "ewogICJpZCI6ICJrZWVsLmdvdmVybmFuY2VfY2hhaW4ucmVjb3JkX2hhc2gudjEiLAogICJ2ZXJzaW9uIjogInYxIiwKICAia2luZCI6ICJnb3Zlcm5hbmNlX2NoYWluX3JlY29yZF9oYXNoX3JlY2lwZSIsCiAgInN0YXR1cyI6ICJyZWxlYXNlZCIsCiAgImJvZHkiOiB7CiAgICAicmVjb3JkX2hhc2giOiB7CiAgICAgICJhbGdvcml0aG0iOiAic2hhMjU2X2hleF93aXRob3V0X3ByZWZpeCIsCiAgICAgICJ0aW1lc3RhbXAiOiB7CiAgICAgICAgImlucHV0X3R5cGUiOiAic3RyaW5nX29yX2RhdGV0aW1lIiwKICAgICAgICAic3RyaW5nX3ByZXByb2Nlc3MiOiBbCiAgICAgICAgICAic3RyaXBfb3V0ZXJfd2hpdGVzcGFjZSIsCiAgICAgICAgICAicmVwbGFjZV90ZXJtaW5hbF9aX3dpdGhfKzAwOjAwIgogICAgICAgIF0sCiAgICAgICAgInBhcnNlciI6ICJkYXRldGltZS5mcm9taXNvZm9ybWF0IiwKICAgICAgICAibmFpdmVfcG9saWN5IjogImFzc3VtZV9leGlzdGluZ19uYWl2ZV92YWx1ZSIsCiAgICAgICAgImF3YXJlX3BvbGljeSI6ICJkcm9wX3R6aW5mb193aXRob3V0X3RpbWV6b25lX2NvbnZlcnNpb24iLAogICAgICAgICJmb3JtYXR0ZXIiOiAiJVktJW0tJWRUJUg6JU06JVMuJWYiCiAgICAgIH0sCiAgICAgICJpbnB1dF9vcmRlciI6IFsKICAgICAgICAiZXZlbnRfaWQiLAogICAgICAgICJldmVudF90eXBlIiwKICAgICAgICAicmVzb3VyY2VfdHlwZSIsCiAgICAgICAgInJlc291cmNlX2lkIiwKICAgICAgICAib3V0Y29tZSIsCiAgICAgICAgInNldmVyaXR5IiwKICAgICAgICAiY3JlYXRlZF9hdCIsCiAgICAgICAgInByZXZfaGFzaCIsCiAgICAgICAgInNlcXVlbmNlX251bWJlciIKICAgICAgXSwKICAgICAgIm51bGxfc3RyaW5nX2ZpZWxkcyI6IFsKICAgICAgICAicmVzb3VyY2VfdHlwZSIsCiAgICAgICAgInJlc291cmNlX2lkIiwKICAgICAgICAib3V0Y29tZSIKICAgICAgXSwKICAgICAgImpvaW5lciI6ICJ8IiwKICAgICAgInNlcXVlbmNlX251bWJlcl9zdHJpbmciOiAic3RyKHNlcXVlbmNlX251bWJlcikiLAogICAgICAiYnl0ZV9lbmNvZGluZyI6ICJ1dGYtOCIKICAgIH0sCiAgICAiYWNjZXB0ZWRfY2hhaW5fZm9ybWF0X3ZlcnNpb25zIjogewogICAgICAidjEiOiAicmVjb3JkX2hhc2ggcmVjaXBlIGluIHRoaXMgYXJ0aWZhY3QiCiAgICB9LAogICAgImVudHJ5X3NvdXJjZXMiOiB7CiAgICAgICJhdWRpdF9leHBvcnRfYnVuZGxlX3YyIjogWwogICAgICAgICJ0b3AtbGV2ZWwgY2hhaW5fZW50cmllcyBsaXN0IiwKICAgICAgICAicmVjb3Jkc1tdLmNoYWluX2VudHJpZXMgbGlzdHMiCiAgICAgIF0sCiAgICAgICJnb3Zlcm5hbmNlX2V2ZW50c19leHBvcnQiOiAic2NoZW1hIGtlZWwuZ292ZXJuYW5jZV9ldmVudHMvdjEgaXMgY29udmVydGVkIGludG8gYnVuZGxlIHYyIGVudHJpZXMgd2l0aCBjaGFpbl9mb3JtYXRfdmVyc2lvbiBkZWZhdWx0aW5nIHRvIHYxLCBjcmVhdGVkX2F0IGZyb20gb2NjdXJyZWRfYXQgb3IgY3JlYXRlZF9hdCwgcGF5bG9hZF9qc29uIGZyb20gcGF5bG9hZCB3aGVuIGFic2VudCwgYW5kIGNoYWluX3Njb3BlIGZyb20gcHJvamVjdF9pZCB3aGVuIGFic2VudCIsCiAgICAgICJwYXlsb2FkX2RlY29kaW5nIjogImd6aXAgZGVjb21wcmVzcyBvbmx5IGlmIGV4cG9ydCBieXRlcyBzdGFydCB3aXRoIG1hZ2ljIGJ5dGVzIDFmOGI7IEpTT04gZG9jdW1lbnQgcGFyc2UgZmlyc3QsIEpTT05MIGZhbGxiYWNrIHNraXBzIGJsYW5rIGxpbmVzIGFuZCByZXF1aXJlcyBlYWNoIG5vbmJsYW5rIGxpbmUgdG8gYmUgYSBKU09OIG9iamVjdCIKICAgIH0sCiAgICAid2Fsa19ydWxlcyI6IHsKICAgICAgImdyb3VwX2J5IjogImVudHJ5LmNoYWluX3Njb3BlLCBwcmVzZXJ2aW5nIE5vbmUgYXMgYSBzY29wZSIsCiAgICAgICJhcnJheV9vcmRlcl9jaGVjayI6ICJ3aXRoaW4gZWFjaCBvcmlnaW5hbCBidW5kbGUtbGV2ZWwgb3IgcGVyLXJlY29yZCBjaGFpbl9lbnRyaWVzIGFycmF5LCBpZiB0d28gYWRqYWNlbnQgZW50cmllcyBib3RoIGhhdmUgc2VxdWVuY2VfbnVtYmVyIGFuZCBjdXJyZW50IDwgcHJldmlvdXMsIGZhaWwgV0FMS19TRVFVRU5DRV9JTlZFUlNJT04iLAogICAgICAiZHVwbGljYXRlX3NlcXVlbmNlX2NoZWNrIjogIndpdGhpbiBlYWNoIGNoYWluX3Njb3BlLCBkdXBsaWNhdGUgbm9uLW51bGwgc2VxdWVuY2VfbnVtYmVyIGZhaWxzIFdBTEtfU0VRVUVOQ0VfSU5WRVJTSU9OIiwKICAgICAgInNvcnRfZm9yX3dhbGsiOiAic29ydCBlbnRyaWVzIHBlciBzY29wZSBieSAoc2VxdWVuY2VfbnVtYmVyIGlzIE5vbmUsIHNlcXVlbmNlX251bWJlciBvciAwKSIsCiAgICAgICJyZXF1aXJlZF9maWVsZHNfZm9yX2hhc2giOiBbCiAgICAgICAgInNlcXVlbmNlX251bWJlciBpbnQgYW5kIG5vdCBib29sIiwKICAgICAgICAicmVjb3JkX2hhc2ggbm9uLWVtcHR5IHN0cmluZyIsCiAgICAgICAgInByZXZfaGFzaCBub24tZW1wdHkgc3RyaW5nIiwKICAgICAgICAiZXZlbnRfaWQgbm9uLWVtcHR5IHN0cmluZyIsCiAgICAgICAgImV2ZW50X3R5cGUgbm9uLWVtcHR5IHN0cmluZyIsCiAgICAgICAgInNldmVyaXR5IG5vbi1lbXB0eSBzdHJpbmciCiAgICAgIF0sCiAgICAgICJvcHRpb25hbF9maWVsZHNfZm9yX2hhc2giOiBbCiAgICAgICAgInJlc291cmNlX3R5cGUgc3RyaW5nIG9yIG51bGwiLAogICAgICAgICJyZXNvdXJjZV9pZCBzdHJpbmcgb3IgbnVsbCIsCiAgICAgICAgIm91dGNvbWUgc3RyaW5nIG9yIG51bGwiCiAgICAgIF0sCiAgICAgICJmaXJzdF9lbnRyeV9wcmV2X2hhc2giOiAibm90IHZlcmlmaWVkIGFnYWluc3QgY2hhaW4gc3RhdGUgb3V0c2lkZSB0aGUgc3VwcGxpZWQgYnVuZGxlIHdpbmRvdyIsCiAgICAgICJzdWJzZXF1ZW50X3ByZXZfaGFzaCI6ICJtdXN0IGVxdWFsIGltbWVkaWF0ZWx5IHByZXZpb3VzIHdhbGtlZCBlbnRyeSByZWNvcmRfaGFzaCIsCiAgICAgICJzdWJzZXF1ZW50X3NlcXVlbmNlIjogIm11c3QgYmUgc3RyaWN0bHkgZ3JlYXRlciB0aGFuIHByZXZpb3VzIHdhbGtlZCBzZXF1ZW5jZV9udW1iZXIiCiAgICB9CiAgfQp9Cg==",
         "hash": "sha256:a3213706c9e9531a74cd2355f2f05e537c7a70604cb869b7b76c65cba4a2b707",
         "id": "keel.governance_chain.record_hash.v1"
+      },
+      {
+        "content_b64": "ewogICJpZCI6ICJrZWVsLmdvdmVybmFuY2VfZXZlbnQuaW50ZWdyaXR5X2RpZ2VzdC52MSIsCiAgInZlcnNpb24iOiAidjEiLAogICJraW5kIjogImdvdmVybmFuY2VfZXZlbnRfaW50ZWdyaXR5X2RpZ2VzdF9yZWNpcGUiLAogICJzdGF0dXMiOiAicmVsZWFzZWQiLAogICJib2R5IjogewogICAgImV2ZW50X2ludGVncml0eV9oYXNoIjogewogICAgICAiYWxnb3JpdGhtIjogInNoYTI1Nl9oZXhfd2l0aG91dF9wcmVmaXgiLAogICAgICAiY2Fub25pY2FsX2pzb24iOiB7CiAgICAgICAgImVuY29kaW5nIjogInV0Zi04IiwKICAgICAgICAiZW5zdXJlX2FzY2lpIjogZmFsc2UsCiAgICAgICAgInNlcGFyYXRvcnMiOiBbCiAgICAgICAgICAiLCIsCiAgICAgICAgICAiOiIKICAgICAgICBdLAogICAgICAgICJzZXJpYWxpemVyIjogInB5dGhvbl9qc29uX2R1bXBzIiwKICAgICAgICAic29ydF9rZXlzIjogdHJ1ZQogICAgICB9LAogICAgICAibWF0ZXJpYWxfb3JkZXIiOiBbCiAgICAgICAgImV2ZW50X2lkIiwKICAgICAgICAicHJvamVjdF9pZCIsCiAgICAgICAgInByb2plY3RfbmFtZSIsCiAgICAgICAgInJlcXVlc3RfaWQiLAogICAgICAgICJwZXJtaXRfaWQiLAogICAgICAgICJjYXRlZ29yeSIsCiAgICAgICAgImV2ZW50X3R5cGUiLAogICAgICAgICJzZXZlcml0eSIsCiAgICAgICAgInBheWxvYWRfanNvbiIsCiAgICAgICAgInNvdXJjZV9zdGFnZSIsCiAgICAgICAgImxpbmVhZ2VfdHlwZSIsCiAgICAgICAgInByb3ZpZGVyIiwKICAgICAgICAibW9kZWwiLAogICAgICAgICJvcGVyYXRpb24iLAogICAgICAgICJkZWNpc2lvbiIsCiAgICAgICAgInN1cmZhY2UiLAogICAgICAgICJ0cmFjZV9pZCIsCiAgICAgICAgInNwYW5faWQiLAogICAgICAgICJvY2N1cnJlZF9hdCIsCiAgICAgICAgInNjaGVtYV92ZXJzaW9uIiwKICAgICAgICAiYWN0b3JfaWQiLAogICAgICAgICJhY3Rvcl90eXBlIiwKICAgICAgICAib3V0Y29tZSIsCiAgICAgICAgInJlc291cmNlX3R5cGUiLAogICAgICAgICJyZXNvdXJjZV9pZCIKICAgICAgXSwKICAgICAgIm1pc3NpbmdfZmllbGRzIjogImluY2x1ZGVkIGFzIEpTT04gbnVsbCBleGNlcHQgcGF5bG9hZF9qc29uLCB3aGljaCBpcyB7fSB3aGVuIGFic2VudCBvciBub24tb2JqZWN0IiwKICAgICAgInBheWxvYWRfc291cmNlIjogInBheWxvYWRfanNvbiB3aGVuIGl0IGlzIGFuIG9iamVjdCwgZWxzZSBwYXlsb2FkIHdoZW4gaXQgaXMgYW4gb2JqZWN0LCBlbHNlIGVtcHR5IG9iamVjdCIsCiAgICAgICJzdHJpbmdfb3Jfbm9uZV9maWVsZHMiOiBbCiAgICAgICAgInByb2plY3RfaWQiLAogICAgICAgICJwZXJtaXRfaWQiCiAgICAgIF0KICAgIH0sCiAgICAiYXVkaXRfaW50ZWdyaXR5X2RpZ2VzdCI6IHsKICAgICAgImJhdGNoX2hhc2giOiB7CiAgICAgICAgImFsZ29yaXRobSI6ICJzaGEyNTZfaGV4X3dpdGhvdXRfcHJlZml4IiwKICAgICAgICAiY29tcGFyZV90byI6ICJwYXlsb2FkLmJhdGNoX2hhc2ggZXhhY3Qgc3RyaW5nIGVxdWFsaXR5IiwKICAgICAgICAiaW5wdXQiOiAiY2Fub25pY2FsIEpTT04gYnl0ZXMgb2YgdGhlIG9yZGVyZWQgY292ZXJlZF9ldmVudHMgbGlzdCBhZnRlciByZWR1Y2luZyBlYWNoIGVudHJ5IHRvIGV2ZW50X2lkLCBldmVudF90eXBlLCBldmVudF9oYXNoIHN0cmluZ3MiCiAgICAgIH0sCiAgICAgICJjb3ZlcmVkX2V2ZW50X2NvdW50X3J1bGUiOiAiaWYgcGF5bG9hZC5jb3ZlcmVkX2V2ZW50X2NvdW50IGlzIHByZXNlbnQsIGludCh2YWx1ZSkgbXVzdCBlcXVhbCBsZW4oY292ZXJlZF9ldmVudHMpIiwKICAgICAgImNvdmVyZWRfZXZlbnRzIjogInBheWxvYWQuY292ZXJlZF9ldmVudHMgbXVzdCBiZSBhIGxpc3Qgb2Ygb2JqZWN0cyB3aXRoIG5vbi1lbXB0eSBldmVudF9pZCwgZXZlbnRfdHlwZSwgYW5kIGV2ZW50X2hhc2ggc3RyaW5ncyIsCiAgICAgICJldmVudF90eXBlIjogImF1ZGl0LmludGVncml0eV9kaWdlc3QiLAogICAgICAicGF5bG9hZF9zb3VyY2UiOiAicGF5bG9hZF9qc29uIHdoZW4gb2JqZWN0LCBlbHNlIHBheWxvYWQgd2hlbiBvYmplY3QsIGVsc2UgZW1wdHkgb2JqZWN0IiwKICAgICAgInJlc291cmNlX2lkX3J1bGUiOiAiaWYgYXVkaXQuaW50ZWdyaXR5X2RpZ2VzdC5yZXNvdXJjZV9pZCBpcyBwcmVzZW50IGFuZCBub24tZW1wdHksIGl0IG11c3QgZXF1YWwgdGhlIGZpcnN0IDMyIGhleCBjaGFyYWN0ZXJzIG9mIGJhdGNoX2hhc2giLAogICAgICAidGFyZ2V0X21hdGNoX3J1bGUiOiAiYXQgbGVhc3Qgb25lIGNvdmVyZWRfZXZlbnRzIGVudHJ5IHdpdGggbWF0Y2hpbmcgdGFyZ2V0IGV2ZW50X2lkIG11c3QgaGF2ZSB0aGUgdGFyZ2V0IGV2ZW50X3R5cGUgYW5kIGV2ZW50X2hhc2ggZXF1YWwgdG8gdGhlIHJlY29tcHV0ZWQgZXZlbnRfaW50ZWdyaXR5X2hhc2giCiAgICB9CiAgfQp9Cg==",
+        "hash": "sha256:7d3f447e215ca53dd5add04b4a62b4223d28ad22210b5a3df8fcbc85f5dbe440",
+        "id": "keel.governance_event.integrity_digest.v1"
+      },
+      {
+        "content_b64": "ewogICIkc2NoZW1hIjogImh0dHBzOi8vanNvbi1zY2hlbWEub3JnL2RyYWZ0LzIwMjAtMTIvc2NoZW1hIiwKICAiJGlkIjogImh0dHBzOi8vZ2l0aHViLmNvbS9rZWVsYXBpL2tlZWwtcGVybWl0L2Jsb2IvbWFpbi9jb21wYXJhdG9yX3JlZ2lzdHJ5L3YwLmpzb24iLAogICJ0aXRsZSI6ICJBdXRob3JpdHkgRW52ZWxvcGUgQ29tcGFyYXRvciBSZWdpc3RyeSDigJQgdjAiLAogICJ2ZXJzaW9uIjogImF1dGhvcml0eS1lbnZlbG9wZS52MCIsCiAgImRlc2NyaXB0aW9uIjogIlZlcnNpb25lZCBzZW1hbnRpY3MgZm9yIGF1dGhvcml0eV9lbnZlbG9wZSBmaWVsZCBjb21wYXJhdG9ycy4gU2VlIHNwZWMvcGVybWl0LWNoYWluLXYxLm1kIMKnMy3CpzQuIiwKICAiZmllbGRzIjogewogICAgImFjdGlvbnMiOiB7CiAgICAgICJ0eXBlIjogInNldDxzdHJpbmc+IiwKICAgICAgIm9yZGVyIjogInN1YnNldCIsCiAgICAgICJjYW5vbmljYWxpemF0aW9uIjogInNvcnRlZF91bmlxdWVfc3RyaW5ncyIKICAgIH0sCiAgICAidG9vbHMiOiB7CiAgICAgICJ0eXBlIjogInNldDxzdHJpbmc+IiwKICAgICAgIm9yZGVyIjogInN1YnNldCIsCiAgICAgICJjYW5vbmljYWxpemF0aW9uIjogInNvcnRlZF91bmlxdWVfc3RyaW5ncyIKICAgIH0sCiAgICAicHJvdmlkZXJzIjogewogICAgICAidHlwZSI6ICJzZXQ8c3RyaW5nPiIsCiAgICAgICJvcmRlciI6ICJzdWJzZXQiLAogICAgICAiY2Fub25pY2FsaXphdGlvbiI6ICJzb3J0ZWRfdW5pcXVlX3N0cmluZ3MiCiAgICB9LAogICAgIm1vZGVscyI6IHsKICAgICAgInR5cGUiOiAic2V0PHN0cmluZz4iLAogICAgICAib3JkZXIiOiAic3Vic2V0IiwKICAgICAgImNhbm9uaWNhbGl6YXRpb24iOiAic29ydGVkX3VuaXF1ZV9zdHJpbmdzIgogICAgfSwKICAgICJkYXRhX2NsYXNzZXMiOiB7CiAgICAgICJ0eXBlIjogInNldDxzdHJpbmc+IiwKICAgICAgIm9yZGVyIjogInN1YnNldCIsCiAgICAgICJjYW5vbmljYWxpemF0aW9uIjogInNvcnRlZF91bmlxdWVfc3RyaW5ncyIKICAgIH0sCiAgICAicmVnaW9ucyI6IHsKICAgICAgInR5cGUiOiAic2V0PHN0cmluZz4iLAogICAgICAib3JkZXIiOiAic3Vic2V0IiwKICAgICAgImNhbm9uaWNhbGl6YXRpb24iOiAic29ydGVkX3VuaXF1ZV9zdHJpbmdzIgogICAgfSwKICAgICJleHBpcmVzX2F0IjogewogICAgICAidHlwZSI6ICJ0aW1lc3RhbXAiLAogICAgICAib3JkZXIiOiAibGVzc190aGFuX29yX2VxdWFsIiwKICAgICAgImNhbm9uaWNhbGl6YXRpb24iOiAicmZjXzMzMzlfdXRjIgogICAgfQogIH0KfQo=",
+        "hash": "sha256:a2505ac94f27c1d0096fa977f25be699fa00a9ff507a0c4cbe0d1edf2e44cee2",
+        "id": "authority-envelope.v0"
       }
     ],
     "mode": "pinned",
     "version": "keel-semantics-pins.v0"
-  },
-  "signature": "ed25519:Ea9YeLBzq5YVqmJn5SgCuEZnojm3a8zFBNrx0UfYyLPoJduhfZ1f1XcfcuZvMEsGAPknHMofU8CJyRK07OslDw==",
-  "signed_at": "2026-05-07T12:00:00Z"
+  }
 }

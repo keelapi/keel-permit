@@ -41,7 +41,7 @@ Pinned packs carry both `claim_set` and `semantics_pins`.
     "version": "verifier-claims.v0",
     "registry": {
       "id": "keel.verifier_claim_registry.v0",
-      "hash": "sha256:b315ef722a8e4fafe3d3807bc7c8ccaafd601cab0e7d7985230da8248124337b",
+      "hash": "sha256:d4ff07076f823d3f6a9bd7ce17f6096b035ca466b8ec71996d5417e4957ec7c8",
       "path": "claim_registry/v0.json"
     },
     "claims": [
@@ -60,7 +60,7 @@ Pinned packs carry both `claim_set` and `semantics_pins`.
     "mode": "pinned",
     "profile": {
       "id": "keel.pre_pinning_default.v0",
-      "hash": "sha256:b7b31f30a91a50517693494d9a868c781ae5dbd82bd06228fd34e0d517b5a153",
+      "hash": "sha256:8475b44ef4141b58687dd04ef3a59cc39619a7ab1083a629192b57ac5cf084fe",
       "path": "semantics/profiles/pre_pinning_default_v0.json"
     },
     "artifacts": [
@@ -119,14 +119,15 @@ An evidence pack with no `claim_set` and no `semantics_pins` is evaluated under
 
 The profile artifact is
 `semantics/profiles/pre_pinning_default_v0.json` with hash
-`sha256:b7b31f30a91a50517693494d9a868c781ae5dbd82bd06228fd34e0d517b5a153`.
+`sha256:8475b44ef4141b58687dd04ef3a59cc39619a7ab1083a629192b57ac5cf084fe`.
 It expands to these base components:
 
 | ID | Hash |
 | --- | --- |
-| `keel.verifier_claim_registry.v0` | `sha256:b315ef722a8e4fafe3d3807bc7c8ccaafd601cab0e7d7985230da8248124337b` |
+| `keel.verifier_claim_registry.v0` | `sha256:d4ff07076f823d3f6a9bd7ce17f6096b035ca466b8ec71996d5417e4957ec7c8` |
 | `keel.export_manifest.integrity.v1` | `sha256:d1d67dca7eb9a662d26463c3dec841f47f8791df2fafb21e911dd26a83dabb76` |
 | `keel.governance_chain.record_hash.v1` | `sha256:a3213706c9e9531a74cd2355f2f05e537c7a70604cb869b7b76c65cba4a2b707` |
+| `keel.governance_event.integrity_digest.v1` | `sha256:7d3f447e215ca53dd5add04b4a62b4223d28ad22210b5a3df8fcbc85f5dbe440` |
 | `keel.closure.format.v1` | `sha256:b208b82fbf8187ecdc85410630fbfa30f86f34c4da28d4b418c5788a8ec893ba` |
 | `keel.closure.format.v2` | `sha256:476b9aaf8f1b3e0fd46b9cfae522062e803ecbb1c24fdbb6ec60775b979d59f1` |
 | `keel.closure.digest_rules.v1` | `sha256:eca06d960a9e16468a622938a17b77244d487b58459be4dce3e55ef006f29454` |
@@ -137,11 +138,9 @@ It expands to these base components:
 | `keel.checkpoint.composite_hash.v1` | `sha256:68aafa26d6f1c8cf5ba83c7596209888d8e529d81f1a2c58f31e2fc41fc136de` |
 | `keel.checkpoint.signature.v1` | `sha256:af16c66e8a0b295cd2e5e436169bf0e3d628c1fc4901b6eba6596e86e3ad256b` |
 | `keel.checkpoint.tsa_imprint.v1` | `sha256:a4e02133537a190c3795737beb4bb2ddf823cd09d5b6dcba43c682fb9e37d79e` |
+| `authority-envelope.v0` | `sha256:a2505ac94f27c1d0096fa977f25be699fa00a9ff507a0c4cbe0d1edf2e44cee2` |
 
-Permit-chain claims that request authority-envelope comparison additionally
-require the existing `authority-envelope.v0` comparator at
-`comparator_registry/v0.json` with hash
-`sha256:a2505ac94f27c1d0096fa977f25be699fa00a9ff507a0c4cbe0d1edf2e44cee2`.
+Permit-chain delegation-denial verification requires both `keel.governance_event.integrity_digest.v1` and the existing `authority-envelope.v0` comparator as real semantic dependencies. The comparator bytes live at `comparator_registry/v0.json` and are allowlisted under the hash listed above.
 
 ## 6. Resolver failure mapping
 
