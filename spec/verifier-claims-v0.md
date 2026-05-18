@@ -40,7 +40,22 @@ semantics required by a claim. A verifier MUST evaluate the claim against the
 semantics pinned by the pack, not against mutable defaults from the verifier
 build.
 
-## 5. Pre-publication claim clarifications
+## 5. Unpinned legacy packs
+
+A pack with no `claim_set` and no `semantics_pins` MUST be evaluated under the
+explicit legacy semantic profile `keel.pre_pinning_default.v0`.
+
+The absence of pins MUST NOT be interpreted as permission to evaluate against
+mutable verifier build defaults. `keel.pre_pinning_default.v0` is the stable
+profile label for pre-pinning v0 evidence packs, including the frozen
+verifier-claim corpus.
+
+If either `claim_set` or `semantics_pins` is present, the pack is no longer an
+unpinned legacy pack. A verifier MUST NOT partially fall back to
+`keel.pre_pinning_default.v0` for malformed or incomplete pinned-pack
+semantics.
+
+## 6. Pre-publication claim clarifications
 
 For `closure.digest_consistency.v1`, catalog-approved provider/client digest
 evidence is either the specific `provider.response.received` and
