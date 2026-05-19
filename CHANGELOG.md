@@ -4,6 +4,15 @@ All notable changes to this specification are documented here.
 
 The spec document follows [Semantic Versioning](https://semver.org/). Wire formats (Permit `v1`, `closure_v1`, `closure_v2`, chain entry `v1`) version independently and are not bumped by spec-document revisions.
 
+## [1.2.0] — 2026-05-19
+
+Adds verifier-claim and pinned-semantics artifacts for reproducible adjudication by the public verifier. Permit `v1`, closure formats, and chain entry `v1` are unchanged.
+
+- Add `claim_registry/v0.json` as the stable verifier-claim registry artifact, including the four claim verdict statuses `supported`, `disproved`, `insufficient_evidence`, and `unverifiable_scope`.
+- Add pinned semantic artifacts for verifier dispatch, including hash-addressed semantics used by the public verifier for export manifests, governance chain records, closure formats, checkpoints, workflow evidence, and permit-binding canonical requests.
+- Consolidate the golden verifier-claim corpus and semantic-artifact conformance records under `test-vectors/`, including `test-vectors/verifier_claims/` and `test-vectors/semantics/`.
+- Add the `permit_chain.delegation_denied_correctly.v1` claim and its permit-chain specification, covering `permit.delegated_denied` adjudication under pinned `authority-envelope.v0` comparator semantics.
+
 ## [1.1.0] — 2026-05-13
 
 Adds Permit composition with workflow_intent. Wire format `v1` is unchanged for callers that do not declare workflows; new fields are optional.
