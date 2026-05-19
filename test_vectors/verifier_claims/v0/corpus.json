@@ -850,6 +850,37 @@
     {
       "claims": [
         {
+          "expected_verdict": "insufficient_evidence",
+          "name": "permit_chain.delegation_denied_correctly.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "REQUIRED_CLAIM_NOT_ADJUDICATED"
+        ]
+      },
+      "id": "pinned-neg-required-permit-chain-no-evidence",
+      "kind": "export",
+      "negative": {
+        "delta": "claim_set requires permit_chain.delegation_denied_correctly.v1 but the signed export carries no permit-chain evidence path.",
+        "parent_fixture": "pinned-valid-export-integrity"
+      },
+      "pack": {
+        "export_file": "fixtures/pinned-neg-required-permit-chain-no-evidence/pack/export.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json",
+        "manifest": "fixtures/pinned-neg-required-permit-chain-no-evidence/pack/manifest.json"
+      },
+      "pinned": {
+        "mode": "pinned",
+        "parent_fixture": "pinned-valid-export-integrity"
+      },
+      "title": "Pinned export requiring permit-chain claim without evidence"
+    },
+    {
+      "claims": [
+        {
           "expected_verdict": "supported",
           "name": "governance_chain.local_continuity.v1"
         }
@@ -1089,6 +1120,44 @@
         "parent_fixture": "valid-checkpoint-multi-tsa-receipts"
       },
       "title": "Pinned valid checkpoint with multiple tsa_receipts entries"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.composite_hash.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.signature.v1"
+        },
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "checkpoint.tsa_imprint.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "REQUIRED_CLAIM_NOT_ADJUDICATED"
+        ]
+      },
+      "id": "pinned-neg-required-checkpoint-tsa-no-receipt",
+      "kind": "checkpoint",
+      "negative": {
+        "delta": "claim_set requires checkpoint.tsa_imprint.v1 but the checkpoint carries no TSA receipt.",
+        "parent_fixture": "pinned-valid-checkpoint-legacy-single-tsa"
+      },
+      "pack": {
+        "checkpoint_file": "fixtures/pinned-neg-required-checkpoint-tsa-no-receipt/pack/checkpoint.json",
+        "features": [],
+        "key_manifest": "trust_roots/golden-trust-root.json"
+      },
+      "pinned": {
+        "mode": "pinned",
+        "parent_fixture": "pinned-valid-checkpoint-legacy-single-tsa"
+      },
+      "title": "Pinned checkpoint requiring TSA imprint without receipt"
     },
     {
       "claims": [
