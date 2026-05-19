@@ -4,6 +4,17 @@ All notable changes to this specification are documented here.
 
 The spec document follows [Semantic Versioning](https://semver.org/). Wire formats (Permit `v1`, `closure_v1`, `closure_v2`, chain entry `v1`) version independently and are not bumped by spec-document revisions.
 
+## [1.3.0] — 2026-05-19
+
+Adds public-repo hardening, schema/spec consistency fixes, and conformance metadata cleanup. Permit wire format `v1`, closure formats, and chain entry `v1` are unchanged.
+
+- Add optional Permit Chain fields to the closed Permit v1 schemas and schema export post-processing, aligning `spec/permit-chain-v1.md` with schema validation.
+- Add `schemas/audit-export-manifest.schema.json` for the signed audit-export manifest sidecar.
+- Align planned test-vector failure codes with `spec/failure-codes.md` and expand the taxonomy for manifest, signing-key, Permit Chain, closure-orphan, and permit dispatch-binding failures.
+- Refresh README presentation with badges, a "why this exists" paragraph, current vs. planned conformance-artifact framing, newer spec links, and released artifact directories.
+- Add public hygiene and repo-integrity checks, plus CI wiring.
+- Add `SECURITY.md` and `CONTRIBUTING.md`.
+
 ## [1.2.0] — 2026-05-19
 
 Adds verifier-claim and pinned-semantics artifacts for reproducible adjudication by the public verifier. Permit `v1`, closure formats, and chain entry `v1` are unchanged.

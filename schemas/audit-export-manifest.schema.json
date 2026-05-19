@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keelapi/keel-permit/blob/main/schemas/audit-export-manifest.schema.json",
+  "title": "Audit Export Manifest",
+  "description": "Companion manifest sidecar for a signed audit export bundle per spec/audit-export-bundle.md.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "export_id",
+    "export_type",
+    "format",
+    "compressed",
+    "record_count",
+    "content_hash",
+    "signature",
+    "public_key",
+    "key_id",
+    "signed_at"
+  ],
+  "properties": {
+    "export_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "project_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "export_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "format": {
+      "type": "string",
+      "minLength": 1
+    },
+    "compressed": {
+      "type": "boolean"
+    },
+    "record_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^ed25519:[A-Za-z0-9+/]+={0,2}$"
+    },
+    "public_key": {
+      "type": "string",
+      "pattern": "^ed25519:[A-Za-z0-9+/]+={0,2}$"
+    },
+    "key_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "signed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "keel_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "chain_integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verified_at",
+        "chain_length",
+        "last_verified_hash",
+        "error"
+      ],
+      "properties": {
+        "verified_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "chain_length": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "last_verified_hash": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "filters_hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  }
+}

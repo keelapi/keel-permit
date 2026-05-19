@@ -20,7 +20,23 @@ MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD NOT, RECOMMENDED, MAY
 | `WALK_CLOSURE_DIGEST_MISSING` | closure | A digest required by the digest-presence matrix for the recorded `closure_status` is absent. |
 | `WALK_CLOSURE_DIGEST_MISMATCH` | closure | A `provider_response_digest_v1` or `client_response_digest_v1` in the closure does not match the corresponding chain event payload. |
 | `WALK_CLOSURE_DISPATCH_DIGEST_MISMATCH` | closure | A `closure_v2` `dispatch_request_digest_v1` does not equal the permit's `binding_request_hash`. |
+| `WALK_CLOSURE_ORPHAN` | closure | A closure record references a `permit_id` that is not present in the verified evidence scope. |
 | `WALK_UNKNOWN_CLOSURE_FORMAT` | closure | A closure record carries an unrecognized `binding_version`. |
+| `WALK_PERMIT_DISPATCH_BINDING_MISMATCH` | permit | A permit's `binding_request_hash` does not match the canonical dispatched provider/tool request bytes. |
+| `MANIFEST_PARSE_ERROR` | manifest | A required manifest file is not parseable JSON. |
+| `MANIFEST_HASH_MISMATCH` | manifest | A manifest `content_hash` does not match the referenced artifact bytes. |
+| `MANIFEST_SIGNATURE_MISSING` | manifest | A required manifest signature is absent. |
+| `MANIFEST_SIGNATURE_INVALID` | manifest | A manifest signature is present but does not verify against the resolved signing key. |
+| `UNKNOWN_SIGNING_KEY` | key manifest | A referenced signing `key_id` cannot be resolved in the applicable trust root or key manifest. |
+| `KEY_EXPIRED_AT_SIGNING_TIME` | key manifest | The signing key was not valid at the artifact's recorded signing time. |
+| `SIGNING_KEY_REVOKED` | key manifest | The signing key was revoked or marked compromised for the artifact's trust policy. |
+| `WALK_PERMIT_CHAIN_ENVELOPE_VIOLATION` | permit chain | A child Permit's `authority_envelope` is not a subset of its parent's under the declared envelope version. |
+| `WALK_PERMIT_CHAIN_EXPIRY_VIOLATION` | permit chain | A child Permit's `expires_at` exceeds the parent's. |
+| `WALK_PERMIT_CHAIN_UNKNOWN_ENVELOPE_VERSION` | permit chain | The `authority_envelope_version` is not in the verifier's supported set. |
+| `WALK_PERMIT_CHAIN_MISSING_COMPARATOR` | permit chain | The comparator registry is not resolvable from the evidence pack. |
+| `WALK_PERMIT_CHAIN_ENVELOPE_INCONSISTENT` | permit chain | A Permit's top-level `expires_at` and `authority_envelope.expires_at` disagree. |
+| `WALK_PERMIT_CHAIN_RECEIPT_MISSING` | permit chain | A claim required an execution receipt and none is present. |
+| `WALK_PERMIT_CHAIN_ANCESTOR_MISSING` | permit chain | Lineage does not reach a root within the supplied pack and no completeness checkpoint covers the ancestor scope. |
 
 A verifier MUST emit exactly one of these codes per detected violation. Implementations MAY emit multiple codes when a single artifact contains multiple independent violations.
 
@@ -99,11 +115,29 @@ A verifier MUST emit exactly one of these codes per detected violation. Implemen
 
 **Verifier action**: report the `permit_id` and the unrecognized `binding_version`. The verifier MUST NOT attempt to verify under a different format's rules.
 
-## 12. Code stability
+## 12. Manifest, key, and profile codes
+
+### 12.1 Manifest and signing-key codes
+
+`MANIFEST_PARSE_ERROR`, `MANIFEST_HASH_MISMATCH`, `MANIFEST_SIGNATURE_MISSING`, `MANIFEST_SIGNATURE_INVALID`, `UNKNOWN_SIGNING_KEY`, `KEY_EXPIRED_AT_SIGNING_TIME`, and `SIGNING_KEY_REVOKED` apply to signed evidence-pack verification as defined in [`audit-export-bundle.md`](audit-export-bundle.md) §5-§6.
+
+**Verifier action**: report the manifest or trust-root artifact, the referenced `key_id` when applicable, and the specific sub-failure. A verifier MUST NOT continue to claim artifact integrity when a required manifest hash, signature, or signing-key validity check fails.
+
+### 12.2 Permit and Permit Chain profile codes
+
+`WALK_PERMIT_DISPATCH_BINDING_MISMATCH` applies when a verifier has the dispatched provider/tool request bytes and the permit's `binding_request_hash` does not match their canonical digest.
+
+`WALK_CLOSURE_ORPHAN` applies when a closure record references a `permit_id` outside the verified evidence scope.
+
+`WALK_PERMIT_CHAIN_*` codes apply to the Permit Chain profile defined in [`permit-chain-v1.md`](permit-chain-v1.md). The profile-specific claim statuses remain `supported`, `disproved`, `insufficient_evidence`, and `unverifiable_scope`; these failure codes identify the concrete failed layer.
+
+**Verifier action**: report the relevant `permit_id`, parent/child boundary, envelope version, or missing comparator/receipt requirement. The verifier MUST NOT silently downgrade a semantic Permit Chain failure into a generic chain-walk failure when the cryptographic chain itself is intact.
+
+## 13. Code stability
 
 The codes in this document are **stable identifiers**. New codes MAY be added by future spec revisions; existing codes MUST NOT be renamed, repurposed, or removed. A code's literal string is part of the public contract for downstream tooling (alerting, dashboards, automated incident response).
 
-## 13. Verifier output format
+## 14. Verifier output format
 
 This spec does not constrain how a verifier surfaces failure codes — JSON, structured logs, exit codes, human-readable text are all permitted. The MUST is that the literal code strings appear unchanged.
 

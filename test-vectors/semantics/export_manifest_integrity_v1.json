@@ -25,7 +25,7 @@
   "output": {
     "content_hash": "sha256:6ce2d7833a851e1ddc17d40ee5e4201554f1272290b4e2df50e1ec924bc8368b",
     "trusted_public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
-    "trust_source": "key manifest (/Users/cmunoz/Desktop/Business/Keel/Product/keel-permit/test-vectors/verifier_claims/v0/trust_roots/golden-trust-root.json) key_id=sha256:10ba682c8ad13513971e8b56881aab8b status=active",
+    "trust_source": "key manifest (test-vectors/verifier_claims/v0/trust_roots/golden-trust-root.json) key_id=sha256:10ba682c8ad13513971e8b56881aab8b status=active",
     "trust_error": null,
     "signature_valid": true
   }

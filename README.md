@@ -1,14 +1,20 @@
 # Permit Specification
 
+[![License](https://img.shields.io/github/license/keelapi/keel-permit)](LICENSE)
+[![Latest release](https://img.shields.io/github/v/release/keelapi/keel-permit?label=release)](https://github.com/keelapi/keel-permit/releases)
+![Spec version](https://img.shields.io/badge/spec-1.3.0-blue)
+
 A pre-execution decision record for AI agent systems. A Permit records that an action was evaluated and decided, and, for dispatched allow executions, can be bound to the final provider or tool request. A Permit JSON object alone is not self-authenticating; verification is performed from signed export artifacts and the relevant public keys or key manifest. Those artifacts are verifiable without contacting the issuer when the verifier has the signed export artifacts and relevant public keys/key manifest.
 
 This repository contains the wire-format specification, JSON schemas, and verification rules for **Permit v1**.
+
+AI agents increasingly act before humans can review every step. Permit gives systems a standard way to record what was authorized before execution and prove it later from signed, offline-verifiable evidence.
 
 ## Status
 
 | | |
 |---|---|
-| Spec document version | 1.2.0 |
+| Spec document version | 1.3.0 |
 | Permit wire format | `v1` |
 | Closure record format | `closure_v1`, `closure_v2` |
 | Chain entry hash format | `v1` |
@@ -40,10 +46,19 @@ This repository contains the wire-format specification, JSON schemas, and verifi
 - [`spec/audit-export-bundle.md`](spec/audit-export-bundle.md) — Evidence bundle format
 - [`spec/canonical-json.md`](spec/canonical-json.md) — Canonicalization rules
 - [`spec/failure-codes.md`](spec/failure-codes.md) — Verification failure taxonomy
+- [`spec/permit-chain-v1.md`](spec/permit-chain-v1.md) — Delegated Permit Chain semantics
+- [`spec/verifier-claims-v0.md`](spec/verifier-claims-v0.md) — Verifier claim model
+- [`spec/verifier-pack-pinning-v0.md`](spec/verifier-pack-pinning-v0.md) — Pinned semantics for evidence packs
 
 ## Schemas
 
-Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated from the reference implementation's Pydantic models and then post-processed with public wire-format constraints. Regenerate with [`tools/export_schemas.py`](tools/export_schemas.py). `schemas/closure-v2.schema.json` is hand-maintained because the reference implementation builds closure envelopes dynamically rather than from a Pydantic model.
+Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated from the reference implementation's Pydantic models and then post-processed with public wire-format constraints. Regenerate with [`tools/export_schemas.py`](tools/export_schemas.py). `schemas/closure-v2.schema.json` and `schemas/audit-export-manifest.schema.json` are hand-maintained because the reference implementation builds those envelopes dynamically rather than from Pydantic models.
+
+## Released artifacts
+
+- [`claim_registry/`](claim_registry/) — stable verifier-claim registry artifacts.
+- [`comparator_registry/`](comparator_registry/) — authority-envelope comparator semantics for Permit Chains.
+- [`semantics/`](semantics/) — pinned semantic artifacts consumed by verifiers for export manifests, governance chains, closure records, checkpoints, workflows, and Permit binding.
 
 ## Examples
 
@@ -59,9 +74,9 @@ See [`mappings/README.md`](mappings/README.md) for verification methodology, fra
 
 [`test-vectors/`](test-vectors/) — a versioned conformance fixture set that any verifier (Keel's reference verifier or independent third-party implementations) can be tested against. Each fixture has an `expected.json` defining the required outcome; a verifier that disagrees on any fixture is non-conforming.
 
-7 categories planned (baseline, tamper-chain, tamper-signature, closure-binding, canonicalization, key-rotation, bundle-format) with ~30 fixtures total. Scaffolding committed; fixture-generator tool and complete byte-level fixtures are follow-up work. See [`test-vectors/README.md`](test-vectors/README.md) and [`test-vectors/CONFORMANCE.md`](test-vectors/CONFORMANCE.md).
+Current conformance artifacts include the pinned-semantics golden corpus in [`test-vectors/verifier_claims/`](test-vectors/verifier_claims/), semantic-artifact conformance records in [`test-vectors/semantics/`](test-vectors/semantics/), and self-contained Permit Chain semantic vectors under [`test-vectors/vectors/cat-08-permit-chains/`](test-vectors/vectors/cat-08-permit-chains/).
 
-`test-vectors/` also contains [`verifier_claims/`](test-vectors/verifier_claims/) for the pinned-semantics golden corpus and [`semantics/`](test-vectors/semantics/) for semantic-artifact conformance records.
+Planned expansion covers 8 categories (baseline, tamper-chain, tamper-signature, closure-binding, canonicalization, key-rotation, bundle-format, Permit Chains) with 36 fixtures total. The v0.1 MVP scope is 14 vectors; 22 are deferred. The fixture-generator tool and complete byte-level fixtures for the original cryptographic categories are follow-up work. See [`test-vectors/README.md`](test-vectors/README.md) and [`test-vectors/CONFORMANCE.md`](test-vectors/CONFORMANCE.md).
 
 ## Versioning
 
