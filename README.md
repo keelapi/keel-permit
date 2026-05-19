@@ -8,7 +8,7 @@ This repository contains the wire-format specification, JSON schemas, and verifi
 
 | | |
 |---|---|
-| Spec document version | 1.0.0 |
+| Spec document version | 1.2.0 |
 | Permit wire format | `v1` |
 | Closure record format | `closure_v1`, `closure_v2` |
 | Chain entry hash format | `v1` |
