@@ -145,9 +145,10 @@ A verifier whose output satisfies all 6 is conforming on that vector.
 | **Level 1 (Baseline)** | Passes all `cat-01-baseline` and `cat-02-tamper-chain` vectors. |
 | **Level 2 (Signed)** | Level 1 + passes all `cat-03-tamper-signature` and `cat-04-closure-binding` vectors. |
 | **Level 3 (Canonical)** | Level 2 + passes all `cat-05-canonicalization` vectors. |
-| **Level 4 (Full)** | All categories pass, including key rotation and bundle-format edge cases. |
+| **Level 4 (Full Cryptographic)** | Level 3 + passes `cat-06-key-rotation` and `cat-07-bundle-format` vectors. |
+| **Level 5 (Permit Chains)** | Level 4 + passes `cat-08-permit-chains` semantic vectors. |
 
-A verifier MUST declare which level it conforms to. A Level 1 verifier is useful but not sufficient for tamper-evident audit use; Level 4 is the bar for production audit.
+A verifier MUST declare which level it conforms to. A Level 1 verifier is useful but not sufficient for tamper-evident audit use. Level 4 preserves the original full cryptographic conformance target for the `cat-01` through `cat-07` suite; Level 5 adds Permit Chain claim semantics without redefining existing Level 4 claims.
 
 ## What a conforming verifier MUST do per failure code
 
@@ -189,7 +190,7 @@ A verifier that has run the test vector set should publish a `verifier-conforman
   "verifier_version": "<impl-version>",
   "test_vectors_version": "0.1.0-draft",
   "permit_spec_version": "1.0.0",
-  "conformance_level_claimed": 1 | 2 | 3 | 4,
+  "conformance_level_claimed": 1 | 2 | 3 | 4 | 5,
   "vectors": [
     {
       "test_vector_id": "<id>",

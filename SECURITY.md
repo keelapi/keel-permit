@@ -11,7 +11,9 @@ Report privately to `security@keelapi.com` with:
 - Reproduction steps or a minimal fixture when possible.
 - Whether the issue may affect already-published evidence packs or verifier results.
 
-Keel API will acknowledge actionable reports and coordinate disclosure timing when a fix requires a spec, schema, verifier, or artifact update.
+We aim to acknowledge actionable reports within 3 business days and provide status updates as investigation progresses. Some reports require coordination across spec text, schemas, verifier behavior, and published artifacts; timelines may vary by impact and release complexity.
+
+When a fix requires a public spec, schema, verifier, or artifact update, Keel API will coordinate disclosure timing with the reporter when practical. We may publish an advisory, release note, or changelog entry depending on severity and user impact.
 
 ## Scope
 
