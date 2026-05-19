@@ -35,11 +35,11 @@
         "url": "https://example-tsa.invalid/tsr"
       }
     },
-    "key_manifest": "test_vectors/verifier_claims/v0/trust_roots/golden-trust-root.json"
+    "key_manifest": "test-vectors/verifier_claims/v0/trust_roots/golden-trust-root.json"
   },
   "output": {
     "trusted_public_key": "ed25519:CvfKyK/t8oZZogxSp61fYXNuGj/Hyz6gwfw5axcR2/Y=",
-    "trust_source": "key manifest (/Users/cmunoz/Desktop/Business/Keel/Product/keel-permit/test_vectors/verifier_claims/v0/trust_roots/golden-trust-root.json) key_id=sha256:1a6eb20e308c021dea0c6ee28ad78bfb status=active",
+    "trust_source": "key manifest (/Users/cmunoz/Desktop/Business/Keel/Product/keel-permit/test-vectors/verifier_claims/v0/trust_roots/golden-trust-root.json) key_id=sha256:1a6eb20e308c021dea0c6ee28ad78bfb status=active",
     "trust_error": null,
     "signature_valid": true
   }
