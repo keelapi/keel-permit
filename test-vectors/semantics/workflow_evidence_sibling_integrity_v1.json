@@ -6,9 +6,9 @@
     "commit_hint": "keel-verifier 16519ed80b6b485166bf3fc5035ce9e0a2fe7917"
   },
   "input": {
-    "manifest_path": "test_vectors/verifier_claims/v0/fixtures/valid-vanta-workflow-sibling/pack/manifest.json",
-    "export_path": "test_vectors/verifier_claims/v0/fixtures/valid-vanta-workflow-sibling/pack/export.json",
-    "workflow_path": "test_vectors/verifier_claims/v0/fixtures/valid-vanta-workflow-sibling/pack/workflow_evidence.json",
+    "manifest_path": "test-vectors/verifier_claims/v0/fixtures/valid-vanta-workflow-sibling/pack/manifest.json",
+    "export_path": "test-vectors/verifier_claims/v0/fixtures/valid-vanta-workflow-sibling/pack/export.json",
+    "workflow_path": "test-vectors/verifier_claims/v0/fixtures/valid-vanta-workflow-sibling/pack/workflow_evidence.json",
     "descriptor": {
       "amendment_count": 1,
       "content_hash": "sha256:3c7907b4f056ec9896058f0944c9b84f33f86b64cc0dd91213c4c71a70774f3b",

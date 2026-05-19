@@ -61,6 +61,8 @@ See [`mappings/README.md`](mappings/README.md) for verification methodology, fra
 
 7 categories planned (baseline, tamper-chain, tamper-signature, closure-binding, canonicalization, key-rotation, bundle-format) with ~30 fixtures total. Scaffolding committed; fixture-generator tool and complete byte-level fixtures are follow-up work. See [`test-vectors/README.md`](test-vectors/README.md) and [`test-vectors/CONFORMANCE.md`](test-vectors/CONFORMANCE.md).
 
+`test-vectors/` also contains [`verifier_claims/`](test-vectors/verifier_claims/) for the pinned-semantics golden corpus and [`semantics/`](test-vectors/semantics/) for semantic-artifact conformance records.
+
 ## Versioning
 
 Three orthogonal version axes:

@@ -6,7 +6,7 @@
     "commit_hint": "keel-verifier 55056eca5d95912b18bc682f7ba621e03938ca40"
   },
   "input": {
-    "export_path": "test_vectors/verifier_claims/v0/fixtures/valid-incident-v2-bundle/pack/incident.zip",
+    "export_path": "test-vectors/verifier_claims/v0/fixtures/valid-incident-v2-bundle/pack/incident.zip",
     "manifest": {
       "compressed": true,
       "content_hash": "sha256:984a59d1cfe75acd33b9af3572e1965bbe9b8296049a60926c92fa4d30fe4e6a",

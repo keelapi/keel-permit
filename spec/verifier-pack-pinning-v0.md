@@ -161,7 +161,7 @@ If either `claim_set` or `semantics_pins` is present, a verifier MUST NOT use
 ## 7. Conformance records
 
 Each recipe artifact has a small conformance record under
-`../test_vectors/semantics/`. Those records contain minimal inputs and exact
+`../test-vectors/semantics/`. Those records contain minimal inputs and exact
 outputs captured from the current `keel-verifier` functions. Pinned verifier
 implementations MUST reproduce those outputs before they are wired to the
 permanent allowlist.
