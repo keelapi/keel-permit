@@ -27,6 +27,8 @@ For Permit Spec, this enables:
 
 **Version:** `0.1.0-draft` (initially pinned to Permit Spec v1.0.0; newer semantic artifacts may cite later spec-document revisions while preserving Permit wire format `v1`).
 
+`MANIFEST.json` uses `permit_spec_version` to record the fixture suite's original Permit Spec baseline, not the current repository release. Individual semantic artifacts and fixtures may carry their own version references when they exercise later spec-document additions.
+
 ### Current conformance artifacts
 
 - `verifier_claims/v0/` contains the pinned-semantics golden corpus consumed by the public verifier.
@@ -102,6 +104,8 @@ If you are evaluating two verifiers for cross-verification of the same export bu
 | **cat-08-permit-chains** | Permit Chain semantic claims — envelope subset, expiry, unsupported envelope versions, missing comparator registry. | 5 |
 
 Total planned: 36 fixtures (14 in v0.1 MVP scope, 22 deferred to post-v0.1). Current scaffolded count: see `MANIFEST.json`.
+
+The original conformance levels cover the cryptographic fixture categories (`cat-01` through `cat-07`). Permit Chain semantics are additive: `CONFORMANCE.md` defines Level 5 for `cat-08` so existing Level 4 claims keep their original meaning.
 
 ## Adding a new test vector
 

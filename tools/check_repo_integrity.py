@@ -15,6 +15,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 CODE_RE = re.compile(r"`([A-Z][A-Z0-9_]+)`")
+SEMVER_RE = re.compile(r"\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?")
 
 EXAMPLE_SCHEMA_PAIRS = [
     ("examples/permit-allow.json", "schemas/permit-v1.schema.json"),
@@ -132,6 +133,43 @@ def check_manifest_summary(errors: list[str]) -> None:
         extra = sorted(milestone_mvp - priority_mvp)
         fail(errors, f"v0.1 milestone mismatch; missing={missing}, extra={extra}")
 
+    category_ids = {category["id"] for category in categories}
+    for level, level_categories in manifest.get("conformance_levels", {}).items():
+        unknown = sorted(set(level_categories) - category_ids)
+        if unknown:
+            fail(errors, f"conformance level {level} references unknown categories: {unknown}")
+    level_5 = set(manifest.get("conformance_levels", {}).get("level_5_permit_chains", []))
+    if "cat-08-permit-chains" in category_ids and "cat-08-permit-chains" not in level_5:
+        fail(errors, "cat-08-permit-chains exists but is not included in level_5_permit_chains")
+
+
+def check_version_metadata(errors: list[str]) -> None:
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    manifest = json.loads((ROOT / "test-vectors/MANIFEST.json").read_text(encoding="utf-8"))
+
+    badge_match = re.search(r"img\.shields\.io/badge/spec-([0-9A-Za-z.-]+)-blue", readme)
+    status_match = re.search(r"\| Spec document version \| ([0-9A-Za-z.-]+) \|", readme)
+    latest_changelog_match = re.search(r"^## \[([0-9A-Za-z.-]+)\]", changelog, re.MULTILINE)
+
+    if not badge_match:
+        fail(errors, "README spec badge version is missing")
+    if not status_match:
+        fail(errors, "README status table spec document version is missing")
+    if not latest_changelog_match:
+        fail(errors, "CHANGELOG latest released version heading is missing")
+
+    if badge_match and status_match and badge_match.group(1) != status_match.group(1):
+        fail(errors, f"README spec badge {badge_match.group(1)} does not match status table {status_match.group(1)}")
+    if status_match and latest_changelog_match and status_match.group(1) != latest_changelog_match.group(1):
+        fail(errors, f"README spec version {status_match.group(1)} does not match latest CHANGELOG version {latest_changelog_match.group(1)}")
+
+    permit_spec_version = manifest.get("permit_spec_version")
+    if not isinstance(permit_spec_version, str) or not permit_spec_version:
+        fail(errors, "test-vectors/MANIFEST.json permit_spec_version is missing")
+    elif not SEMVER_RE.fullmatch(permit_spec_version):
+        fail(errors, f"test-vectors/MANIFEST.json permit_spec_version is not semver-like: {permit_spec_version!r}")
+
 
 def check_examples_against_schemas(require_jsonschema: bool, errors: list[str]) -> None:
     try:
@@ -165,6 +203,7 @@ def main() -> int:
     check_markdown_links(files, errors)
     check_failure_codes(files, errors)
     check_manifest_summary(errors)
+    check_version_metadata(errors)
     check_examples_against_schemas(args.require_jsonschema, errors)
 
     if errors:

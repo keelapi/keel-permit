@@ -8,8 +8,6 @@ A pre-execution decision record for AI agent systems. A Permit records that an a
 
 This repository contains the wire-format specification, JSON schemas, and verification rules for **Permit v1**.
 
-AI agents increasingly act before humans can review every step. Permit gives systems a standard way to record what was authorized before execution and prove it later from signed, offline-verifiable evidence.
-
 ## Status
 
 | | |
@@ -20,6 +18,20 @@ AI agents increasingly act before humans can review every step. Permit gives sys
 | Chain entry hash format | `v1` |
 | Reference implementation | [keel-api](https://github.com/keelapi/keel-api) |
 | Reference verifier | [keel-verifier](https://github.com/keelapi/keel-verifier) (`pip install keel-verifier`) |
+
+## Why this exists
+
+AI agents increasingly act faster than humans can review every step. Permit gives systems a standard way to record what was authorized before execution and prove it later from signed, offline-verifiable evidence.
+
+```mermaid
+flowchart LR
+  Agent["Agent"] --> Policy["Policy evaluation"]
+  Policy --> Permit["Permit issued"]
+  Permit --> Dispatch["Dispatch"]
+  Dispatch --> Closure["Closure record"]
+  Closure --> Export["Signed export bundle"]
+  Export --> Verifier["Offline verifier"]
+```
 
 ## What this specifies
 

@@ -548,6 +548,16 @@
       "cat-05-canonicalization",
       "cat-06-key-rotation",
       "cat-07-bundle-format"
+    ],
+    "level_5_permit_chains": [
+      "cat-01-baseline",
+      "cat-02-tamper-chain",
+      "cat-03-tamper-signature",
+      "cat-04-closure-binding",
+      "cat-05-canonicalization",
+      "cat-06-key-rotation",
+      "cat-07-bundle-format",
+      "cat-08-permit-chains"
     ]
   },
   "license": "Apache-2.0",
