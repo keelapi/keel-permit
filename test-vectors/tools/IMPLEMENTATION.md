@@ -235,11 +235,11 @@ After Phase 2 lands:
 
 ### 7.3 Error precedence ambiguity
 
-**Risk:** External verifier processes vector 02-04 differently — checks chain_linkage before chain_sequence, reports `WALK_CHAIN_LINK_MISMATCH` instead of `WALK_CHAIN_GAP`. Both verifiers are "right" by some reading.
+**Risk:** External verifier processes vector 02-04 differently — checks chain linkage before sequence monotonicity, reports `WALK_PREV_HASH_DISCONTINUITY` before `WALK_SEQUENCE_INVERSION`. Both verifiers are "right" by some reading.
 
 **Mitigation:**
 - Per-vector `expected.json` documents `primary_failure_code` AND `acceptable_secondary_codes`. If a code is acceptable, the spec must enumerate it explicitly.
-- For 02-04 specifically: the fixture is constructed so the chain linkage is also broken at the gap (entry 5 → entry 7's prev_hash cannot be entry 5's record_hash). Verifier may emit either `WALK_CHAIN_GAP` or `WALK_CHAIN_LINK_MISMATCH` and both are acceptable; `expected.json` MUST list both.
+- For 02-04 specifically: the fixture is constructed so the chain linkage is also broken at the gap (entry 5 → entry 7's prev_hash cannot be entry 5's record_hash). Verifier may emit either `WALK_PREV_HASH_DISCONTINUITY` or `WALK_SEQUENCE_INVERSION`; `expected.json` MUST list the non-primary code under `acceptable_secondary_codes`.
 
 ### 7.4 Spec version skew
 

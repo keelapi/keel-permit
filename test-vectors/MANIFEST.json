@@ -78,7 +78,7 @@
           "title": "Single chain entry's prev_hash field modified",
           "expected_result": "FAIL",
           "expected_failure_codes": [
-            "WALK_CHAIN_LINK_MISMATCH"
+            "WALK_PREV_HASH_DISCONTINUITY"
           ],
           "status": "TODO",
           "spec_references": [
@@ -105,7 +105,7 @@
           "title": "Chain entries jump from sequence 5 directly to sequence 7",
           "expected_result": "FAIL",
           "expected_failure_codes": [
-            "WALK_CHAIN_GAP"
+            "WALK_PREV_HASH_DISCONTINUITY"
           ],
           "status": "TODO",
           "spec_references": [
@@ -118,7 +118,7 @@
           "title": "Chain entries delivered in non-monotonic order",
           "expected_result": "FAIL",
           "expected_failure_codes": [
-            "WALK_CHAIN_ORDER"
+            "WALK_SEQUENCE_INVERSION"
           ],
           "status": "TODO",
           "spec_references": [
@@ -218,7 +218,7 @@
           "title": "Closure record's dispatch_digest does not match dispatched payload bytes",
           "expected_result": "FAIL",
           "expected_failure_codes": [
-            "CLOSURE_DISPATCH_DIGEST_MISMATCH"
+            "WALK_CLOSURE_DISPATCH_DIGEST_MISMATCH"
           ],
           "status": "TODO",
           "spec_references": [
@@ -232,7 +232,7 @@
           "title": "Closure record's provider_response_digest_v1 does not match recorded provider bytes",
           "expected_result": "FAIL",
           "expected_failure_codes": [
-            "CLOSURE_PROVIDER_DIGEST_MISMATCH"
+            "WALK_CLOSURE_DIGEST_MISMATCH"
           ],
           "status": "TODO",
           "spec_references": [
@@ -246,7 +246,7 @@
           "title": "Closure record's client_response_digest_v1 does not match delivered client bytes",
           "expected_result": "FAIL",
           "expected_failure_codes": [
-            "CLOSURE_CLIENT_DIGEST_MISMATCH"
+            "WALK_CLOSURE_DIGEST_MISMATCH"
           ],
           "status": "TODO",
           "spec_references": [
@@ -260,7 +260,7 @@
           "title": "Closure record references permit_id not present in export bundle",
           "expected_result": "FAIL",
           "expected_failure_codes": [
-            "CLOSURE_ORPHAN"
+            "WALK_CLOSURE_ORPHAN"
           ],
           "status": "TODO",
           "spec_references": [
@@ -273,7 +273,7 @@
           "title": "Permit's binding_request_hash does not match the dispatched request's canonical hash",
           "expected_result": "FAIL",
           "expected_failure_codes": [
-            "PERMIT_DISPATCH_BINDING_MISMATCH"
+            "WALK_PERMIT_DISPATCH_BINDING_MISMATCH"
           ],
           "status": "TODO",
           "spec_references": [
@@ -302,7 +302,7 @@
         {
           "id": "05-02-non-canonical-similar",
           "title": "Two visually similar JSON documents MUST NOT canonicalize to identical bytes",
-          "purpose_note": "Negative canonicalization test \u2014 prevents an over-aggressive canonicalizer from collapsing semantically distinct inputs. Per ChatGPT design review 2026-05-10: prevents the failure mode where two inputs that should hash differently are accidentally collapsed by an implementer's canonicalizer.",
+          "purpose_note": "Negative canonicalization test \u2014 prevents an over-aggressive canonicalizer from collapsing semantically distinct inputs that should hash differently.",
           "expected_result": "PASS_DIFFERENT_HASHES",
           "status": "TODO",
           "spec_references": [
@@ -447,8 +447,8 @@
           "expected_result": "PASS",
           "status": "scaffolded",
           "spec_references": [
-            "spec/permit-chain-v1.md §7.1",
-            "spec/permit-chain-v1.md §10.6"
+            "spec/permit-chain-v1.md \u00a77.1",
+            "spec/permit-chain-v1.md \u00a710.6"
           ],
           "priority": "mvp_v0_1"
         },
@@ -461,9 +461,9 @@
           ],
           "status": "scaffolded",
           "spec_references": [
-            "spec/permit-chain-v1.md §3",
-            "spec/permit-chain-v1.md §7.1",
-            "spec/permit-chain-v1.md §11"
+            "spec/permit-chain-v1.md \u00a73",
+            "spec/permit-chain-v1.md \u00a77.1",
+            "spec/permit-chain-v1.md \u00a711"
           ],
           "priority": "mvp_v0_1"
         },
@@ -476,8 +476,8 @@
           ],
           "status": "scaffolded",
           "spec_references": [
-            "spec/permit-chain-v1.md §7.1",
-            "spec/permit-chain-v1.md §11"
+            "spec/permit-chain-v1.md \u00a77.1",
+            "spec/permit-chain-v1.md \u00a711"
           ],
           "priority": "mvp_v0_1"
         },
@@ -490,9 +490,9 @@
           ],
           "status": "scaffolded",
           "spec_references": [
-            "spec/permit-chain-v1.md §3.4",
-            "spec/permit-chain-v1.md §10.6",
-            "spec/permit-chain-v1.md §11"
+            "spec/permit-chain-v1.md \u00a73.4",
+            "spec/permit-chain-v1.md \u00a710.6",
+            "spec/permit-chain-v1.md \u00a711"
           ],
           "priority": "mvp_v0_1"
         },
@@ -505,9 +505,9 @@
           ],
           "status": "scaffolded",
           "spec_references": [
-            "spec/permit-chain-v1.md §4.2",
-            "spec/permit-chain-v1.md §10.6",
-            "spec/permit-chain-v1.md §11"
+            "spec/permit-chain-v1.md \u00a74.2",
+            "spec/permit-chain-v1.md \u00a710.6",
+            "spec/permit-chain-v1.md \u00a711"
           ],
           "priority": "mvp_v0_1"
         }
@@ -553,7 +553,7 @@
   "license": "Apache-2.0",
   "version_milestones": {
     "v0.1": {
-      "scope": "MVP \u2014 9 vectors providing minimum coverage across all 7 categories. Sufficient to unblock external verifier implementations and demonstrate the conformance model end-to-end.",
+      "scope": "MVP \u2014 14 vectors providing minimum coverage across all 8 categories. Sufficient to unblock external verifier implementations and demonstrate the conformance model end-to-end.",
       "vector_ids": [
         "cat-01-baseline/01-01-valid-permit-export",
         "cat-02-tamper-chain/02-01-record-hash-modified",
@@ -563,9 +563,14 @@
         "cat-05-canonicalization/05-01-key-reorder-equivalent",
         "cat-05-canonicalization/05-02-non-canonical-similar",
         "cat-06-key-rotation/06-01-retired-key-still-verifies",
-        "cat-07-bundle-format/07-01-empty-bundle"
+        "cat-07-bundle-format/07-01-empty-bundle",
+        "cat-08-permit-chains/08-01-clean-parent-child",
+        "cat-08-permit-chains/08-02-child-violates-subset",
+        "cat-08-permit-chains/08-03-child-violates-expiry",
+        "cat-08-permit-chains/08-04-unknown-envelope-version",
+        "cat-08-permit-chains/08-05-missing-comparator"
       ],
-      "rationale": "Per ChatGPT design review 2026-05-10: smoke-test minimum that exercises all 7 categories. Populating all 30+ vectors before any are usable would be over-engineering; populating 9 unblocks parallel implementation work."
+      "rationale": "Smoke-test minimum that exercises the original 7 cryptographic conformance categories plus the Permit Chain semantic category. Populating all planned vectors before any are usable would delay independent verifier work; populating this subset first unblocks parallel implementation."
     },
     "v1.0": {
       "scope": "Full corpus \u2014 all enumerated vectors populated with deterministic byte-level fixtures, generator tool committed, conformance runner CLI shipped.",

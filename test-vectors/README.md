@@ -25,11 +25,20 @@ For Permit Spec, this enables:
 
 ## Status
 
-**Version:** `0.1.0-draft` (matches Permit Spec v1.0.0).
+**Version:** `0.1.0-draft` (initially pinned to Permit Spec v1.0.0; newer semantic artifacts may cite later spec-document revisions while preserving Permit wire format `v1`).
 
-This is a scaffold, not a complete fixture set. Categories and category structure are enumerated in `MANIFEST.json`; complete fixtures will be added incrementally. The conformance model in `CONFORMANCE.md` is the binding contract for verifier behavior, even where a specific fixture is still TODO.
+### Current conformance artifacts
 
-A **9-vector MVP subset** is marked in `MANIFEST.json` under `version_milestones.v0.1`. These 9 are the smoke-test minimum that exercises all 7 categories at minimum coverage and unblocks independent verifier implementations. The remaining 22 vectors are marked `priority: "deferred_post_v0_1"` and are populated once v0.1 is solid.
+- `verifier_claims/v0/` contains the pinned-semantics golden corpus consumed by the public verifier.
+- `semantics/` contains semantic-artifact conformance records for export manifests, governance-chain hashing, closures, checkpoints, workflow evidence, and Permit binding.
+- `vectors/cat-08-permit-chains/` contains self-contained Permit Chain semantic vectors. These assume the cryptographic substrate is valid and focus on claim-layer semantics.
+- `vectors/cat-01-baseline/` and `vectors/cat-02-tamper-chain/` contain the first byte-level fixture scaffolds, with placeholder hashes pending the deterministic fixture generator.
+
+### Planned expansion
+
+The original cryptographic conformance suite (`cat-01` through `cat-07`) is still being populated. Categories and category structure are enumerated in `MANIFEST.json`; complete byte-level fixtures will be added incrementally. The conformance model in `CONFORMANCE.md` is the binding contract for verifier behavior, even where a specific fixture is still TODO.
+
+A **14-vector MVP subset** is marked in `MANIFEST.json` under `version_milestones.v0.1`. These 14 vectors exercise all 8 categories at minimum coverage and unblock independent verifier implementations. The remaining 22 vectors are marked `priority: "deferred_post_v0_1"` and are populated once v0.1 is solid.
 
 When a verifier conformance result is published, it MUST cite the test-vector version (`test-vectors-v0.1.0`) so the result is reproducible against the same fixture set.
 
@@ -56,7 +65,8 @@ test-vectors/
 │   ├── cat-04-closure-binding/
 │   ├── cat-05-canonicalization/
 │   ├── cat-06-key-rotation/
-│   └── cat-07-bundle-format/
+│   ├── cat-07-bundle-format/
+│   └── cat-08-permit-chains/
 └── tools/                   — fixture generation + verification scripts
     └── (TODO)
 ```
@@ -89,8 +99,9 @@ If you are evaluating two verifiers for cross-verification of the same export bu
 | **cat-05-canonicalization** | JSON canonicalization edge cases — key reordering, whitespace, Unicode normalization, escape sequence handling, **plus negative cases** (visually-similar JSON that must NOT canonicalize identically). | 6 |
 | **cat-06-key-rotation** | Multi-key trust root scenarios — verifying old artifacts with retired keys, post-rotation freshness. | 3 |
 | **cat-07-bundle-format** | Bundle format edge cases — empty bundle, single-entry bundle, multi-gigabyte bundle reference. | 3 |
+| **cat-08-permit-chains** | Permit Chain semantic claims — envelope subset, expiry, unsupported envelope versions, missing comparator registry. | 5 |
 
-Total planned: 31 fixtures (9 in v0.1 MVP scope, 22 deferred to post-v0.1). Current scaffolded count: see `MANIFEST.json`.
+Total planned: 36 fixtures (14 in v0.1 MVP scope, 22 deferred to post-v0.1). Current scaffolded count: see `MANIFEST.json`.
 
 ## Adding a new test vector
 

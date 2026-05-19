@@ -56,6 +56,12 @@ For `decision == "deny"` and `decision == "challenge"`, `binding_request_hash` M
 |---|---|---|
 | `parent_permit_id` | UUID | Identifier of the permit that delegated to this one, when the permit is part of a multi-step lineage. |
 | `delegation_depth` | integer ≥ 0 | Number of delegation hops from the lineage root. Root permits have `delegation_depth: 0`. |
+| `authority_envelope` | object | Permit Chain bounded-capability envelope, when the permit participates in Permit Chain v1. See [`permit-chain-v1.md`](permit-chain-v1.md) §3. |
+| `authority_envelope_version` | string | Comparator semantics version for `authority_envelope`, when present. Current registered value: `"authority-envelope.v0"`. |
+| `actor_ref` | object | Bring-your-own identity binding for Permit Chain subjects. See [`permit-chain-v1.md`](permit-chain-v1.md) §5.1. |
+| `usage_limits` | object | Permit Chain rivalrous quota metadata enforced by the issuer at the governed boundary. See [`permit-chain-v1.md`](permit-chain-v1.md) §5.3. |
+| `policy_version_or_hash` | string | Content-addressed reference to the resolved policy bundle at Permit Chain issuance time. See [`permit-chain-v1.md`](permit-chain-v1.md) §5.4. |
+| `task_description` | string | Free-form Permit Chain audit context. Not part of authority-envelope comparator input. |
 | `status` | string | Lifecycle status; see §3. |
 | `expires_at` | RFC 3339 timestamp | When the permit's authorization window elapses. |
 | `decision_details` | object | Structured decision detail; see §2.5. |
@@ -74,6 +80,8 @@ For `decision == "deny"` and `decision == "challenge"`, `binding_request_hash` M
 | `workflow_state_json` | object | Decision-time workflow snapshot; see §5. |
 
 Implementations MAY include additional descriptive fields (usage verification metadata, accounting disposition, condition evaluation, budget envelope summary). Such fields are documented in the JSON Schema in `schemas/permit-v1.schema.json` but are not part of the normative wire-format minimum.
+
+The Permit Chain fields above are optional Permit v1 fields. They do not change the required Permit v1 minimum, but they are valid under the closed Permit v1 schema when present. Verifiers that do not implement Permit Chain semantics MAY ignore those fields for non-chain claims; verifiers evaluating Permit Chain claims MUST apply [`permit-chain-v1.md`](permit-chain-v1.md).
 
 ### 2.4 Action object
 
@@ -136,7 +144,7 @@ When a Permit is evaluated in a workflow context, it carries `workflow_declarati
 
 Workflow declaration and amendment records are sibling evidence artifacts to Permit evidence, not replacements for Permits. A verifier that receives a workflow-aware export verifies the Permit object, then verifies `workflow_state_json` against the corresponding `workflow_declarations` and `workflow_amendments` artifacts. If declared intent, amendment order, or decision-time counters are altered after signing, the projected workflow state becomes tamper-evident through an effective-intent-hash or counter mismatch.
 
-The complete `workflow_intent` schema and runtime design are maintained in `/Users/cmunoz/Desktop/Business/Keel/Product/keel-api/docs/_strategy/WORKFLOW_INTENT_DESIGN_2026-05-12.md`.
+Workflow verifier semantics are captured in [`../semantics/workflow/canonicalization_v1.json`](../semantics/workflow/canonicalization_v1.json) and the workflow-related verifier-claim fixtures under [`../test-vectors/verifier_claims/`](../test-vectors/verifier_claims/).
 
 ## 6. Audit-export form
 

@@ -98,7 +98,7 @@ When the bundle is signed, the issuer publishes a companion manifest as a separa
 
 ### 5.1 Manifest fields
 
-This specification defines the companion manifest normatively in prose. This repository does not yet publish a JSON Schema for the manifest sidecar; adding one is reserved for a non-breaking spec-document update. Until then, conforming verifiers MUST enforce the field and signing rules in this section directly.
+This specification defines the companion manifest normatively in prose and publishes a JSON Schema at [`../schemas/audit-export-manifest.schema.json`](../schemas/audit-export-manifest.schema.json). Conforming verifiers MUST enforce the field and signing rules in this section directly; schema validation is necessary but not sufficient for cryptographic verification.
 
 - `content_hash` MUST equal `"sha256:" + hex(SHA-256(bundle_file_bytes))`. The hash is computed over the bundle file as it sits on disk, including any compression — i.e., over the bytes a consumer would run `sha256sum` on.
 - `signature` MUST be `ed25519:` followed by the base64 encoding of the Ed25519 signature over the UTF-8 bytes of `content_hash`.

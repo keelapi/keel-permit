@@ -2,7 +2,7 @@
 
 A **permit chain** is a per-project lineage of Permit objects bound by parent-child references, where each child permit's `authority_envelope` is mechanically constrained to be a subset of its parent's. This document specifies the wire format `v1` of the permit chain extensions and the validity rules a verifier MUST apply when evaluating chain claims.
 
-This profile composes with [`permit-v1.md`](permit-v1.md), [`closure-v2.md`](closure-v2.md), [`chain-entry.md`](chain-entry.md), [`audit-export-bundle.md`](audit-export-bundle.md), [`canonical-json.md`](canonical-json.md), and [`failure-codes.md`](failure-codes.md). It does not modify any of those specs; it activates dormant fields (notably `parent_permit_id`) and adds a new optional top-level `authority_envelope` object plus a small set of new field and event names.
+This profile composes with [`permit-v1.md`](permit-v1.md), [`closure-v2.md`](closure-v2.md), [`chain-entry.md`](chain-entry.md), [`audit-export-bundle.md`](audit-export-bundle.md), [`canonical-json.md`](canonical-json.md), and [`failure-codes.md`](failure-codes.md). Permit Chain uses optional Permit v1 fields defined in [`permit-v1.md`](permit-v1.md) §2.3; deployments that do not use Permit Chains omit those fields.
 
 ---
 
@@ -112,9 +112,9 @@ A verifier walking permit-chain claims MUST resolve the registry artifact from t
 
 Changing comparator semantics for any field — even adding a new field with a new comparator type — REQUIRES bumping the envelope version. The verifier maintains an explicit allowlist of supported envelope versions and MUST reject anything outside it as `unverifiable_scope`.
 
-## 5. Permit chain extensions to Permit v1
+## 5. Permit Chain fields on Permit v1
 
-The following top-level fields are added to the Permit object. All are OPTIONAL at the Permit v1 level; their presence is what makes a Permit part of a chain.
+The following top-level fields are OPTIONAL at the Permit v1 level and are valid under the closed Permit v1 schema. Their presence is what makes a Permit part of a Permit Chain.
 
 ### 5.1 `actor_ref`
 
@@ -392,7 +392,7 @@ This profile reuses the failure-code taxonomy in [`failure-codes.md`](failure-co
 | `WALK_PERMIT_CHAIN_RECEIPT_MISSING` | permit chain | A claim required an execution receipt and none is present. |
 | `WALK_PERMIT_CHAIN_ANCESTOR_MISSING` | permit chain | Lineage does not reach a root within the supplied pack and no completeness checkpoint covers the ancestor scope. |
 
-These codes are stable identifiers per `failure-codes.md` §12.
+These codes are stable identifiers per `failure-codes.md` §13.
 
 ## 12. Reserved field names
 
