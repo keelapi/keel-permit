@@ -1440,6 +1440,204 @@
         "evidence_file": "fixtures/permit-chain-malformed-parent-missing-child/pack/evidence.json"
       },
       "title": "Malformed child envelope for parent-missing denial"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_faithfulness.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "scope-faithfulness-valid-full-chain",
+      "kind": "export",
+      "pack": {
+        "checkpoint_file": "fixtures/scope-faithfulness-valid-full-chain/pack/checkpoint.json",
+        "export_file": "fixtures/scope-faithfulness-valid-full-chain/pack/export.json",
+        "features": [
+          "scope_faithfulness"
+        ],
+        "key_manifest": "trust_roots/step2-scope-faithfulness-trust-root.json",
+        "manifest": "fixtures/scope-faithfulness-valid-full-chain/pack/manifest.json",
+        "sidecar_file": "fixtures/scope-faithfulness-valid-full-chain/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Valid scope-faithful full project chain"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_faithfulness.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "scope-faithfulness-valid-permit-id-sample",
+      "kind": "export",
+      "pack": {
+        "checkpoint_file": "fixtures/scope-faithfulness-valid-permit-id-sample/pack/checkpoint.json",
+        "export_file": "fixtures/scope-faithfulness-valid-permit-id-sample/pack/export.json",
+        "features": [
+          "scope_faithfulness"
+        ],
+        "key_manifest": "trust_roots/step2-scope-faithfulness-trust-root.json",
+        "manifest": "fixtures/scope-faithfulness-valid-permit-id-sample/pack/manifest.json",
+        "sidecar_file": "fixtures/scope-faithfulness-valid-permit-id-sample/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Valid declared sample by permit_id"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_faithfulness.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "scope-faithfulness-valid-event-type",
+      "kind": "export",
+      "pack": {
+        "checkpoint_file": "fixtures/scope-faithfulness-valid-event-type/pack/checkpoint.json",
+        "export_file": "fixtures/scope-faithfulness-valid-event-type/pack/export.json",
+        "features": [
+          "scope_faithfulness"
+        ],
+        "key_manifest": "trust_roots/step2-scope-faithfulness-trust-root.json",
+        "manifest": "fixtures/scope-faithfulness-valid-event-type/pack/manifest.json",
+        "sidecar_file": "fixtures/scope-faithfulness-valid-event-type/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Valid declared sample by event_type"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_faithfulness.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "scope-faithfulness-valid-created-at-range",
+      "kind": "export",
+      "pack": {
+        "checkpoint_file": "fixtures/scope-faithfulness-valid-created-at-range/pack/checkpoint.json",
+        "export_file": "fixtures/scope-faithfulness-valid-created-at-range/pack/export.json",
+        "features": [
+          "scope_faithfulness"
+        ],
+        "key_manifest": "trust_roots/step2-scope-faithfulness-trust-root.json",
+        "manifest": "fixtures/scope-faithfulness-valid-created-at-range/pack/manifest.json",
+        "sidecar_file": "fixtures/scope-faithfulness-valid-created-at-range/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Valid declared sample by created_at range"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_faithfulness.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "scope-faithfulness-valid-provider",
+      "kind": "export",
+      "pack": {
+        "checkpoint_file": "fixtures/scope-faithfulness-valid-provider/pack/checkpoint.json",
+        "export_file": "fixtures/scope-faithfulness-valid-provider/pack/export.json",
+        "features": [
+          "scope_faithfulness"
+        ],
+        "key_manifest": "trust_roots/step2-scope-faithfulness-trust-root.json",
+        "manifest": "fixtures/scope-faithfulness-valid-provider/pack/manifest.json",
+        "sidecar_file": "fixtures/scope-faithfulness-valid-provider/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Valid declared sample by provider"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_faithfulness.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "scope-faithfulness-valid-presentation-policy-restricted",
+      "kind": "export",
+      "pack": {
+        "checkpoint_file": "fixtures/scope-faithfulness-valid-presentation-policy-restricted/pack/checkpoint.json",
+        "export_file": "fixtures/scope-faithfulness-valid-presentation-policy-restricted/pack/export.json",
+        "features": [
+          "scope_faithfulness"
+        ],
+        "key_manifest": "trust_roots/step2-scope-faithfulness-trust-root.json",
+        "manifest": "fixtures/scope-faithfulness-valid-presentation-policy-restricted/pack/manifest.json",
+        "sidecar_file": "fixtures/scope-faithfulness-valid-presentation-policy-restricted/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Valid declared sample with presentation policy redaction"
     }
   ],
   "soundness_rule": "Expected doctrine verdicts are derived from claim_registry/v0.json and spec/verifier-claims-v0.md, never from current verifier output."
