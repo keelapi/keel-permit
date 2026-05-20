@@ -192,6 +192,24 @@ def check_examples_against_schemas(require_jsonschema: bool, errors: list[str]) 
             fail(errors, f"{example_path} fails {schema_path} at {location}: {first.message}")
 
 
+def check_json_schemas_self_validate(require_jsonschema: bool, errors: list[str]) -> None:
+    try:
+        import jsonschema
+    except ImportError:
+        if require_jsonschema:
+            fail(errors, "jsonschema is required but is not installed")
+        else:
+            print("jsonschema not installed; skipping schema self-validation.")
+        return
+
+    for schema_path in sorted((ROOT / "schemas").glob("*.schema.json")):
+        try:
+            schema = json.loads(schema_path.read_text(encoding="utf-8"))
+            jsonschema.Draft202012Validator.check_schema(schema)
+        except Exception as exc:  # noqa: BLE001 - report parser/validator detail.
+            fail(errors, f"{schema_path.relative_to(ROOT)} is not a valid draft-2020-12 schema: {exc}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--require-jsonschema", action="store_true")
@@ -204,6 +222,7 @@ def main() -> int:
     check_failure_codes(files, errors)
     check_manifest_summary(errors)
     check_version_metadata(errors)
+    check_json_schemas_self_validate(args.require_jsonschema, errors)
     check_examples_against_schemas(args.require_jsonschema, errors)
 
     if errors:
