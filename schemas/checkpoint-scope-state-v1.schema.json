@@ -1,0 +1,213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keelapi/keel-permit/schemas/checkpoint-scope-state-v1.schema.json",
+  "title": "Keel checkpoint_scope_state v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_type",
+    "version",
+    "scope_state_id",
+    "checkpoint_id",
+    "chain_scope",
+    "predicate_grammar_version",
+    "predicate_basis",
+    "commitment_profile",
+    "scope_commitments",
+    "tree_size",
+    "signed_at",
+    "signature",
+    "trust_root_reference"
+  ],
+  "properties": {
+    "artifact_type": { "type": "string", "const": "checkpoint_scope_state" },
+    "version": { "type": "string", "const": "checkpoint_scope_state.v1" },
+    "scope_state_id": {
+      "type": "string",
+      "pattern": "^keel\\.scope_state\\.v1:[a-f0-9]{64}:[0-9a-fA-F-]{36}$"
+    },
+    "checkpoint_id": { "type": "string", "format": "uuid" },
+    "chain_scope": { "type": "string", "minLength": 1 },
+    "predicate_grammar_version": {
+      "type": "string",
+      "const": "keel.scope_predicate.v1"
+    },
+    "predicate_basis": { "$ref": "#/$defs/predicate_basis" },
+    "commitment_profile": {
+      "type": "string",
+      "const": "keel.scope_state.merkle.v1"
+    },
+    "scope_commitments": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/scope_commitment" }
+    },
+    "tree_size": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Signed chain-scope state tree size. v1 verifier records it but does not require or compute consistency proofs."
+    },
+    "signed_at": { "type": "string", "format": "date-time" },
+    "signature": { "$ref": "#/$defs/signature_block" },
+    "trust_root_reference": { "$ref": "#/$defs/trust_root_reference" }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "ed25519_signature": {
+      "type": "string",
+      "pattern": "^ed25519:[A-Za-z0-9+/]+={0,2}$"
+    },
+    "predicate_basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalization_profile",
+        "supported_predicate_kinds",
+        "reserved_namespaces"
+      ],
+      "properties": {
+        "canonicalization_profile": {
+          "type": "string",
+          "const": "keel.canonical_json.payload.v1"
+        },
+        "supported_predicate_kinds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "project_id",
+              "permit_id",
+              "request_id",
+              "event_type",
+              "category",
+              "severity",
+              "decision_type",
+              "policy_id",
+              "provider",
+              "sequence_number",
+              "created_at",
+              "occurred_at",
+              "section",
+              "export_type"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "reserved_namespaces": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^keel\\.[A-Za-z0-9_.-]+$" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "scope_commitment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "predicate_value",
+        "predicate_value_hash",
+        "first_matching_sequence",
+        "last_matching_sequence",
+        "matching_count",
+        "membership_root_hash"
+      ],
+      "properties": {
+        "predicate_value": { "$ref": "#/$defs/declared_predicate" },
+        "predicate_value_hash": { "$ref": "#/$defs/hash" },
+        "first_matching_sequence": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1 },
+            { "type": "null" }
+          ]
+        },
+        "last_matching_sequence": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1 },
+            { "type": "null" }
+          ]
+        },
+        "matching_count": { "type": "integer", "minimum": 0 },
+        "membership_root_hash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "declared_predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "operator", "equals", "ranges"],
+      "properties": {
+        "version": { "type": "string", "const": "keel.scope_predicate.v1" },
+        "operator": { "type": "string", "const": "and" },
+        "equals": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "project_id": { "type": "string", "format": "uuid" },
+            "permit_id": { "type": "string" },
+            "request_id": { "type": "string" },
+            "event_type": { "type": "string" },
+            "category": { "type": "string" },
+            "severity": { "type": "string" },
+            "decision_type": { "type": "string" },
+            "policy_id": { "type": "string" },
+            "provider": { "type": "string" },
+            "section": { "type": "string" },
+            "export_type": { "type": "string" }
+          }
+        },
+        "ranges": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sequence_number": { "$ref": "#/$defs/integer_range" },
+            "created_at": { "$ref": "#/$defs/time_range" },
+            "occurred_at": { "$ref": "#/$defs/time_range" }
+          }
+        }
+      }
+    },
+    "integer_range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gte", "lte"],
+      "properties": {
+        "gte": { "type": "integer", "minimum": 1 },
+        "lte": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "time_range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gte", "lt"],
+      "properties": {
+        "gte": { "type": "string", "format": "date-time" },
+        "lt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "signature_block": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "key_id", "signature"],
+      "properties": {
+        "algorithm": { "type": "string", "const": "Ed25519" },
+        "key_id": { "type": "string", "minLength": 1 },
+        "signature": { "$ref": "#/$defs/ed25519_signature" }
+      }
+    },
+    "trust_root_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_version", "purpose", "key_id"],
+      "properties": {
+        "manifest_version": { "type": "string", "const": "keel.public_key_manifest.v1" },
+        "purpose": {
+          "type": "string",
+          "enum": ["integrity_checkpoint", "scope_state"]
+        },
+        "key_id": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

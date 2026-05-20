@@ -1,0 +1,321 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keelapi/keel-permit/schemas/export-scope-faithfulness-v1.schema.json",
+  "title": "Keel export scope-faithfulness additions v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scope_faithfulness"],
+  "properties": {
+    "scope_faithfulness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "segments"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "const": "keel.export_scope_faithfulness.v1"
+        },
+        "segments": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/scope_faithfulness_segment" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "json_value": {
+      "anyOf": [
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "integer" },
+        { "type": "boolean" },
+        { "type": "null" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/$defs/json_value" }
+        },
+        {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/json_value" }
+        }
+      ]
+    },
+    "scope_faithfulness_segment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "segment_id",
+        "declared_scope",
+        "declared_start",
+        "declared_end",
+        "scope_state_reference",
+        "canonical_filters",
+        "chain_evidence"
+      ],
+      "properties": {
+        "segment_id": { "type": "string", "minLength": 1 },
+        "declared_scope": { "$ref": "#/$defs/declared_scope" },
+        "declared_start": { "$ref": "#/$defs/declared_start" },
+        "declared_end": { "$ref": "#/$defs/declared_end" },
+        "scope_state_reference": { "$ref": "#/$defs/scope_state_reference" },
+        "canonical_filters": { "$ref": "#/$defs/canonical_filters" },
+        "chain_evidence": { "$ref": "#/$defs/chain_evidence" }
+      }
+    },
+    "declared_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "scope_kind",
+        "chain_scope",
+        "population_label",
+        "predicate",
+        "presentation_policy"
+      ],
+      "properties": {
+        "version": { "type": "string", "const": "keel.scope_declaration.v1" },
+        "scope_kind": {
+          "type": "string",
+          "enum": ["declared_population", "declared_sample"]
+        },
+        "chain_scope": { "type": "string", "minLength": 1 },
+        "population_label": { "type": "string", "minLength": 1 },
+        "predicate": { "$ref": "#/$defs/declared_predicate" },
+        "presentation_policy": { "$ref": "#/$defs/presentation_policy" }
+      }
+    },
+    "declared_predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "operator", "equals", "ranges"],
+      "properties": {
+        "version": { "type": "string", "const": "keel.scope_predicate.v1" },
+        "operator": { "type": "string", "const": "and" },
+        "equals": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "project_id": { "type": "string", "format": "uuid" },
+            "permit_id": { "type": "string" },
+            "request_id": { "type": "string" },
+            "event_type": { "type": "string" },
+            "category": { "type": "string" },
+            "severity": { "type": "string" },
+            "decision_type": { "type": "string" },
+            "policy_id": { "type": "string" },
+            "provider": { "type": "string" },
+            "section": { "type": "string" },
+            "export_type": { "type": "string" }
+          }
+        },
+        "ranges": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sequence_number": { "$ref": "#/$defs/integer_range" },
+            "created_at": { "$ref": "#/$defs/time_range" },
+            "occurred_at": { "$ref": "#/$defs/time_range" }
+          }
+        }
+      }
+    },
+    "integer_range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gte", "lte"],
+      "properties": {
+        "gte": { "type": "integer", "minimum": 1 },
+        "lte": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "time_range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gte", "lt"],
+      "properties": {
+        "gte": { "type": "string", "format": "date-time" },
+        "lt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "presentation_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "policy_kind", "policy_parameters"],
+      "properties": {
+        "version": { "type": "string", "const": "keel.presentation_policy.v1" },
+        "policy_kind": {
+          "type": "string",
+          "enum": ["none", "plan_tier", "section", "field_redaction"]
+        },
+        "policy_parameters": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/json_value" }
+        }
+      }
+    },
+    "declared_start": {
+      "oneOf": [
+        { "$ref": "#/$defs/declared_start_genesis" },
+        { "$ref": "#/$defs/declared_start_predecessor_proof" },
+        { "$ref": "#/$defs/declared_start_checkpoint_anchor" }
+      ]
+    },
+    "declared_start_genesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "chain_scope", "sequence_number", "genesis_prev_hash"],
+      "properties": {
+        "kind": { "type": "string", "const": "genesis" },
+        "chain_scope": { "type": "string", "minLength": 1 },
+        "sequence_number": { "type": "integer", "const": 1 },
+        "genesis_prev_hash": { "type": "string", "minLength": 1 }
+      }
+    },
+    "declared_start_predecessor_proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "chain_scope",
+        "predecessor_sequence_number",
+        "predecessor_record_hash",
+        "first_evidence_sequence_number"
+      ],
+      "properties": {
+        "kind": { "type": "string", "const": "predecessor_proof" },
+        "chain_scope": { "type": "string", "minLength": 1 },
+        "predecessor_sequence_number": { "type": "integer", "minimum": 1 },
+        "predecessor_record_hash": { "type": "string", "minLength": 1 },
+        "first_evidence_sequence_number": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "declared_start_checkpoint_anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "checkpoint_id",
+        "chain_scope",
+        "sequence_number",
+        "last_record_hash"
+      ],
+      "properties": {
+        "kind": { "type": "string", "const": "checkpoint_anchor" },
+        "checkpoint_id": { "type": "string", "format": "uuid" },
+        "chain_scope": { "type": "string", "minLength": 1 },
+        "sequence_number": { "type": "integer", "minimum": 0 },
+        "last_record_hash": { "type": "string", "minLength": 1 }
+      }
+    },
+    "declared_end": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkpoint_id",
+        "chain_scope",
+        "sequence_number",
+        "last_record_hash",
+        "boundary_policy"
+      ],
+      "properties": {
+        "checkpoint_id": { "type": "string", "format": "uuid" },
+        "chain_scope": { "type": "string", "minLength": 1 },
+        "sequence_number": { "type": "integer", "minimum": 0 },
+        "last_record_hash": { "type": "string", "minLength": 1 },
+        "boundary_policy": {
+          "type": "string",
+          "enum": ["explicit_checkpoint", "latest_checkpoint_at_export"]
+        }
+      }
+    },
+    "scope_state_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_type",
+        "scope_state_id",
+        "checkpoint_id",
+        "chain_scope",
+        "artifact_hash"
+      ],
+      "properties": {
+        "artifact_type": { "type": "string", "const": "checkpoint_scope_state" },
+        "scope_state_id": { "type": "string", "minLength": 1 },
+        "checkpoint_id": { "type": "string", "format": "uuid" },
+        "chain_scope": { "type": "string", "minLength": 1 },
+        "artifact_hash": { "$ref": "#/$defs/hash" },
+        "storage_uri": { "type": "string" }
+      }
+    },
+    "canonical_filters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalization_profile",
+        "raw_filters",
+        "filters_hash"
+      ],
+      "properties": {
+        "canonicalization_profile": {
+          "type": "string",
+          "const": "keel.canonical_json.payload.v1"
+        },
+        "raw_filters": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/json_value" }
+        },
+        "filters_hash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "chain_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["disclosure_records", "proof_bridge_records"],
+      "properties": {
+        "disclosure_records": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/chain_entry_ref" }
+        },
+        "proof_bridge_records": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/chain_entry_ref" }
+        }
+      }
+    },
+    "chain_entry_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "event_type",
+        "chain_scope",
+        "sequence_number",
+        "record_hash",
+        "prev_hash",
+        "created_at",
+        "chain_format_version",
+        "payload_json"
+      ],
+      "properties": {
+        "event_id": { "type": "string", "minLength": 1 },
+        "event_type": { "type": "string", "minLength": 1 },
+        "chain_scope": { "type": "string", "minLength": 1 },
+        "sequence_number": { "type": "integer", "minimum": 1 },
+        "record_hash": { "type": "string", "minLength": 1 },
+        "prev_hash": { "type": "string", "minLength": 1 },
+        "created_at": { "type": "string", "format": "date-time" },
+        "chain_format_version": { "type": "string", "minLength": 1 },
+        "payload_json": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/json_value" }
+        }
+      }
+    }
+  }
+}
