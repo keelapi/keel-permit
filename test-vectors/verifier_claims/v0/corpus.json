@@ -434,6 +434,35 @@
       "claims": [
         {
           "expected_verdict": "disproved",
+          "name": "governance_chain.local_continuity.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "WALK_PREV_HASH_DISCONTINUITY"
+        ]
+      },
+      "id": "neg-evaluated-tamper-vs-execution-completed",
+      "kind": "export",
+      "negative": {
+        "delta": "Changed permit.evaluated decision payload and resource_id after sealing, recomputed only the permit.evaluated record_hash, and left execution.completed.prev_hash at the sealed value.",
+        "parent_fixture": "valid-audit-bundle-per-record-chain"
+      },
+      "pack": {
+        "export_file": "fixtures/neg-evaluated-tamper-vs-execution-completed/pack/export.json",
+        "features": [
+          "walk_events"
+        ],
+        "key_manifest": "trust_roots/step1-cross-event-trust-root.json",
+        "manifest": "fixtures/neg-evaluated-tamper-vs-execution-completed/pack/manifest.json"
+      },
+      "title": "Tampered permit.evaluated record is rejected at execution.completed boundary"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "disproved",
           "name": "export.integrity.v1"
         }
       ],
