@@ -4,6 +4,14 @@ All notable changes to this specification are documented here.
 
 The spec document follows [Semantic Versioning](https://semver.org/). Wire formats (Permit `v1`, `closure_v1`, `closure_v2`, chain entry `v1`) version independently and are not bumped by spec-document revisions.
 
+## [1.3.1] — 2026-05-20
+
+Adds promoted scope-faithfulness negative and edge corpus fixtures for the public verifier contract. Permit wire format `v1`, closure formats, chain entry `v1`, claim registry, and semantic artifacts are unchanged.
+
+- Add 19 `scope-faithfulness-*` verifier-claim corpus fixtures covering Step 2 negative and edge adjudication cases.
+- Add the key-rotation trust root needed by the promoted scope-faithfulness corpus.
+- Add deterministic generation support for the promoted scope-faithfulness negative and edge fixtures.
+
 ## [1.3.0] — 2026-05-19
 
 Adds public-repo hardening, schema/spec consistency fixes, and conformance metadata cleanup. Permit wire format `v1`, closure formats, and chain entry `v1` are unchanged.
