@@ -1,0 +1,49 @@
+{
+  "fixture_id": "permit-decision-allow-valid",
+  "permit_decision": {
+    "artifact_type": "permit_decision_binding",
+    "artifact_version": "permit.decision.v1",
+    "binding_canonical_hash": "5e5bab2006d827941aef14338c0e1234649a4d43a633c3e97202cc11996d4bd8",
+    "binding_issued_at": "2026-05-21T10:00:00.000000Z",
+    "binding_key_id": "6c8f8607dbe87077",
+    "binding_signature": "ed25519:80+M167TlR3tEY3f99MmuxOEAnknWlEDfRSVBhTXCOMwhCi4iNNgWadM+U1ybL94nHjCfsK3RZm9RW3mXFLTDg==",
+    "canonical_payload": {
+      "action_name": "chat.completion",
+      "binding_key_id": "6c8f8607dbe87077",
+      "binding_version": "v1",
+      "constraints": {
+        "max_output_tokens": 512,
+        "temperature_max": 1
+      },
+      "decision": "allow",
+      "expires_at": "2026-05-21T11:00:00.000000Z",
+      "final_request_hash": null,
+      "is_dry_run": false,
+      "issued_at": "2026-05-21T10:00:00.000000Z",
+      "model": "gpt-4o-mini",
+      "operation": "responses.create",
+      "parent_permit_id": null,
+      "permit_id": "10000000-0000-4000-8000-000000000001",
+      "policy_id": "policy:step4-fixture",
+      "policy_snapshot_hash": "768eb822105b994a023efd1f9f5933a51354d08c0c4f1051a7818c394aa32de1",
+      "policy_version": "v2026-05-21",
+      "project_id": "00000000-0000-0000-0000-000000000041",
+      "provider": "openai",
+      "reason": "Fixture allow decision.",
+      "request_fingerprint": "41241ab40ae41f1e7be2430a2b881d1ea7d51a26465937eb80192b2d31d1e210",
+      "routing": {
+        "fallback_chain": [],
+        "fallback_occurred": false,
+        "reason_code": "fixture.primary",
+        "reason_metadata": {},
+        "requested_model": "gpt-4o-mini",
+        "requested_provider": "openai",
+        "selected_model": "gpt-4o-mini",
+        "selected_provider": "openai"
+      }
+    },
+    "expected_decision": "allow"
+  },
+  "project_id": "00000000-0000-0000-0000-000000000041",
+  "schema": "keel.step4.permit_claim_fixture/v1"
+}

@@ -5,7 +5,7 @@
     "spec": "../../../spec/verifier-claims-v0.md",
     "version": "verifier-claims.v0"
   },
-  "corpus_version": "verifier-claims-v0-golden-2026-05-20",
+  "corpus_version": "verifier-claims-v0-golden-2026-05-21-step4",
   "current_verifier_granularity": "Current verifiers expose whole-pack PASS/FAIL plus reason classes. Per-claim doctrine verdicts remain in each record for the P1-M structured verdict upgrade.",
   "records": [
     {
@@ -2141,6 +2141,198 @@
       },
       "payload_hash": "sha256:e1ba5c00b73824598f477e9343dc7088739a219ae995f99724ef44b226fae661",
       "title": "Chain-scope mismatch"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.decision.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "permit-decision-allow-valid",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/permit-decision-allow-valid/pack/export.json",
+        "features": [
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/permit-decision-allow-valid/pack/manifest.json"
+      },
+      "title": "Valid signed permit allow decision"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.decision.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "permit-decision-deny-valid",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/permit-decision-deny-valid/pack/export.json",
+        "features": [
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/permit-decision-deny-valid/pack/manifest.json"
+      },
+      "title": "Valid signed permit deny decision"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.decision.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "permit-decision-challenge-valid",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/permit-decision-challenge-valid/pack/export.json",
+        "features": [
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/permit-decision-challenge-valid/pack/manifest.json"
+      },
+      "title": "Valid signed permit challenge decision"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.revoked.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "permit-revoked-valid",
+      "kind": "export",
+      "pack": {
+        "export_file": "fixtures/permit-revoked-valid/pack/export.json",
+        "features": [
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/permit-revoked-valid/pack/manifest.json"
+      },
+      "title": "Valid signed permit revocation event"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.revoked.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_faithfulness.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.dispatch_absence_after_revocation.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "dispatch-absence-after-revocation-valid-empty-scope",
+      "kind": "export",
+      "pack": {
+        "checkpoint_file": "fixtures/dispatch-absence-after-revocation-valid-empty-scope/pack/checkpoint.json",
+        "export_file": "fixtures/dispatch-absence-after-revocation-valid-empty-scope/pack/export.json",
+        "features": [
+          "scope_faithfulness",
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/dispatch-absence-after-revocation-valid-empty-scope/pack/manifest.json",
+        "sidecar_file": "fixtures/dispatch-absence-after-revocation-valid-empty-scope/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Valid post-revocation dispatch absence with empty matching scope"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.revoked.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_faithfulness.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.dispatch_absence_after_revocation.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "dispatch-absence-after-revocation-valid-with-pre-revocation-dispatch",
+      "kind": "export",
+      "pack": {
+        "checkpoint_file": "fixtures/dispatch-absence-after-revocation-valid-with-pre-revocation-dispatch/pack/checkpoint.json",
+        "export_file": "fixtures/dispatch-absence-after-revocation-valid-with-pre-revocation-dispatch/pack/export.json",
+        "features": [
+          "scope_faithfulness",
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/dispatch-absence-after-revocation-valid-with-pre-revocation-dispatch/pack/manifest.json",
+        "sidecar_file": "fixtures/dispatch-absence-after-revocation-valid-with-pre-revocation-dispatch/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Valid post-revocation dispatch absence with pre-revocation dispatch evidence"
     }
   ],
   "soundness_rule": "Expected doctrine verdicts are derived from claim_registry/v0.json and spec/verifier-claims-v0.md, never from current verifier output."
