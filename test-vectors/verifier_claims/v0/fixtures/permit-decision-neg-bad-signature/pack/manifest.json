@@ -1,0 +1,47 @@
+{
+  "claim_set": {
+    "claims": [
+      {
+        "name": "export.integrity.v1",
+        "required": true
+      },
+      {
+        "name": "permit.decision.v1",
+        "required": true
+      }
+    ],
+    "registry": {
+      "hash": "sha256:8da29094827fda581ee8fb3a1466934182e572a91b7940d2ef1cb3c28c1ec215",
+      "id": "keel.verifier_claim_registry.v0",
+      "path": "claim_registry/v0.json"
+    },
+    "version": "verifier-claims.v0"
+  },
+  "compressed": false,
+  "content_hash": "sha256:d3dc086ef7b3d0e1ead81be62c042a6404e14bd3073e9579b723c137f1611984",
+  "export_id": "permit-decision-neg-bad-signature",
+  "export_type": "audit_export",
+  "format": "json",
+  "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
+  "project_id": "00000000-0000-0000-0000-000000000041",
+  "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+  "record_count": 1,
+  "semantics_pins": {
+    "artifacts": [
+      {
+        "hash": "sha256:d1d67dca7eb9a662d26463c3dec841f47f8791df2fafb21e911dd26a83dabb76",
+        "id": "keel.export_manifest.integrity.v1",
+        "path": "semantics/export_manifest/integrity_v1.json"
+      },
+      {
+        "hash": "sha256:4fad85a1ab652b6ebc5dd15fd3264025eee400914478dcd4f726c480c34ce70c",
+        "id": "keel.permit.decision.v1",
+        "path": "semantics/permit/decision_v1.json"
+      }
+    ],
+    "mode": "pinned",
+    "version": "keel-semantics-pins.v0"
+  },
+  "signature": "ed25519:6r24FXGGSyz16xGUNwrYSmFOuSXugsOFfwTuvjOOhfAz7lC4eqznxXz3MTJ7ZnlD3XMuXstC71xOwvcWarPUDQ==",
+  "signed_at": "2026-05-21T10:00:00.000000Z"
+}

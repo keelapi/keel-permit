@@ -23,6 +23,8 @@ const EMPTY_TREE_HASH = "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934c
 const EXPORT_SEED = Buffer.alloc(32, 0x11);
 const CHECKPOINT_SEED = Buffer.alloc(32, 0x22);
 const PERMIT_BINDING_SEED = Buffer.alloc(32, 0x33);
+const OTHER_PERMIT_BINDING_SEED = Buffer.alloc(32, 0x44);
+const MISMATCHED_PROJECT_ID = "00000000-0000-0000-0000-000000000099";
 
 const DECISION_FIXTURES = [
   {
@@ -45,8 +47,95 @@ const DECISION_FIXTURES = [
   }
 ];
 
+const DECISION_NEGATIVE_FIXTURES = [
+  {
+    id: "permit-decision-neg-bad-signature",
+    permitId: "10000000-0000-4000-8000-000000000101",
+    decision: "allow",
+    mutation: "bad_signature",
+    title: "Permit decision with invalid signature",
+    expectedVerdict: "disproved",
+    expectedReason: "PERMIT_DECISION_SIGNATURE_INVALID",
+    delta: "The binding signature is produced by an untrusted key while the canonical payload still names the trusted key."
+  },
+  {
+    id: "permit-decision-neg-tampered-decision",
+    permitId: "10000000-0000-4000-8000-000000000102",
+    decision: "deny",
+    mutation: "tampered_decision",
+    title: "Permit decision with tampered canonical decision",
+    expectedVerdict: "disproved",
+    expectedReason: "PERMIT_DECISION_CANONICAL_HASH_MISMATCH",
+    delta: "The signed canonical payload decision is changed after the canonical hash and signature are produced."
+  },
+  {
+    id: "permit-decision-neg-untrusted-key",
+    permitId: "10000000-0000-4000-8000-000000000103",
+    decision: "allow",
+    mutation: "untrusted_key",
+    title: "Permit decision signed by untrusted key",
+    expectedVerdict: "insufficient_evidence",
+    expectedReason: "PERMIT_DECISION_UNTRUSTED_KEY",
+    delta: "The binding is internally valid but names a permit-binding key absent from the public trust root."
+  },
+  {
+    id: "permit-decision-neg-canonical-payload-mismatch",
+    permitId: "10000000-0000-4000-8000-000000000104",
+    decision: "allow",
+    expectedDecision: "deny",
+    mutation: "canonical_payload_mismatch",
+    title: "Permit decision canonical payload mismatch",
+    expectedVerdict: "disproved",
+    expectedReason: "PERMIT_DECISION_CANONICAL_PAYLOAD_MISMATCH",
+    delta: "The signed canonical payload is valid, but the requested decision evidence expects a different decision."
+  }
+];
+
 const ABSENCE_PERMIT_ID = "20000000-0000-4000-8000-000000000001";
 const ACTOR_ID = "30000000-0000-4000-8000-000000000001";
+
+const REVOKED_NEGATIVE_FIXTURES = [
+  {
+    id: "permit-revoked-neg-bad-signature",
+    mutation: "bad_signature",
+    title: "Permit revocation with invalid signature",
+    expectedVerdict: "disproved",
+    expectedReason: "PERMIT_REVOKED_SIGNATURE_INVALID",
+    delta: "The revocation event signature is produced by a key outside the public permit-binding trust root."
+  },
+  {
+    id: "permit-revoked-neg-project-mismatch",
+    mutation: "project_mismatch",
+    title: "Permit revocation project mismatch",
+    expectedVerdict: "disproved",
+    expectedReason: "PERMIT_REVOKED_PROJECT_ID_MISMATCH",
+    delta: "The export declares a different project scope than the signed revocation event."
+  },
+  {
+    id: "permit-revoked-neg-effective-at-mismatch",
+    mutation: "effective_at_mismatch",
+    title: "Permit revocation effective_at mismatch",
+    expectedVerdict: "disproved",
+    expectedReason: "PERMIT_REVOKED_EFFECTIVE_AT_MISMATCH",
+    delta: "The signed revocation event uses an effective_at timestamp different from revoked_at, which v1 reserves for future scheduling semantics."
+  },
+  {
+    id: "permit-revoked-neg-missing-field",
+    mutation: "missing_field",
+    title: "Permit revocation missing required field",
+    expectedVerdict: "insufficient_evidence",
+    expectedReason: "PERMIT_REVOKED_EVIDENCE_MISSING",
+    delta: "The required reason_code field is removed from the signed revocation event evidence."
+  },
+  {
+    id: "permit-revoked-neg-actor-pii-detected",
+    mutation: "actor_pii",
+    title: "Permit revocation actor identity contains PII",
+    expectedVerdict: "disproved",
+    expectedReason: "PERMIT_REVOKED_ACTOR_PII_DETECTED",
+    delta: "The signed actor_id uses an email-address shape instead of an opaque UUID."
+  }
+];
 
 const SUPPORTED_PREDICATE_KINDS = [
   "project_id",
@@ -63,6 +152,95 @@ const SUPPORTED_PREDICATE_KINDS = [
   "occurred_at",
   "section",
   "export_type"
+];
+
+const ABSENCE_PROMOTED_FIXTURES = [
+  {
+    id: "dispatch-absence-after-revocation-neg-post-revocation-dispatch-present",
+    title: "Post-revocation dispatch initiation disproves absence",
+    postRevocationDisclosureAt: "2026-05-21T10:06:00.000000Z",
+    expectedVerdict: "disproved",
+    expectedReason: "EXPORT_SCOPE_POST_REVOCATION_DISPATCH_PRESENT",
+    negative: {
+      parent_fixture: "dispatch-absence-after-revocation-valid-empty-scope",
+      delta: "Adds a disclosed dispatch.egress_bound record inside the post-revocation occurred_at range."
+    }
+  },
+  {
+    id: "dispatch-absence-after-revocation-neg-bridge-record-matches-predicate",
+    title: "Bridge record matching dispatch predicate disproves absence",
+    postRevocationBridgeAt: "2026-05-21T10:06:00.000000Z",
+    expectedScopeVerdict: "disproved",
+    expectedVerdict: "disproved",
+    expectedReason: "EXPORT_SCOPE_BRIDGE_RECORD_MATCHES_PREDICATE",
+    negative: {
+      parent_fixture: "dispatch-absence-after-revocation-valid-empty-scope",
+      delta: "Places a post-revocation dispatch.egress_bound record in proof_bridge_records even though it satisfies the declared absence predicate."
+    }
+  },
+  {
+    id: "dispatch-absence-after-revocation-neg-predicate-out-of-grammar",
+    title: "Absence predicate outside permit v1 grammar",
+    predicateMutator: (predicate) => {
+      predicate.equals.provider = "openai";
+    },
+    expectedVerdict: "unverifiable_scope",
+    expectedReason: "EXPORT_SCOPE_PREDICATE_OUT_OF_GRAMMAR",
+    negative: {
+      parent_fixture: "dispatch-absence-after-revocation-valid-empty-scope",
+      delta: "Adds a scope-predicate v1-valid provider equality that is outside the stricter permit absence predicate grammar."
+    }
+  },
+  {
+    id: "dispatch-absence-after-revocation-neg-missing-checkpoint",
+    title: "Missing checkpoint prevents absence adjudication",
+    writeCheckpoint: false,
+    expectedCheckpointVerdict: "insufficient_evidence",
+    expectedScopeVerdict: "insufficient_evidence",
+    expectedVerdict: "insufficient_evidence",
+    expectedReason: "CHECKPOINT_SCOPE_STATE_CHECKPOINT_MISSING",
+    negative: {
+      parent_fixture: "dispatch-absence-after-revocation-valid-empty-scope",
+      delta: "Omits the checkpoint artifact referenced by the scope-faithful absence segment."
+    }
+  },
+  {
+    id: "dispatch-absence-after-revocation-neg-missing-sidecar",
+    title: "Missing scope-state sidecar prevents absence adjudication",
+    writeSidecar: false,
+    expectedCheckpointVerdict: "insufficient_evidence",
+    expectedScopeVerdict: "insufficient_evidence",
+    expectedVerdict: "insufficient_evidence",
+    expectedReason: "CHECKPOINT_SCOPE_STATE_MISSING",
+    negative: {
+      parent_fixture: "dispatch-absence-after-revocation-valid-empty-scope",
+      delta: "Omits the checkpoint scope-state sidecar referenced by the scope-faithful absence segment."
+    }
+  },
+  {
+    id: "dispatch-absence-after-revocation-edge-pre-revocation-dispatch-supported",
+    title: "Pre-revocation dispatch does not disprove post-revocation absence",
+    includePreRevocationDispatch: true,
+    expectedVerdict: "supported",
+    expectedReason: "PERMIT_DISPATCH_ABSENCE_AFTER_REVOCATION_SUPPORTED"
+  },
+  {
+    id: "dispatch-absence-after-revocation-edge-empty-scope-supported",
+    title: "Empty post-revocation dispatch scope is supported",
+    expectedVerdict: "supported",
+    expectedReason: "PERMIT_DISPATCH_ABSENCE_AFTER_REVOCATION_SUPPORTED"
+  },
+  {
+    id: "dispatch-absence-after-revocation-neg-occurred-at-equals-effective-at",
+    title: "Dispatch at revocation effective_at disproves absence",
+    postRevocationDisclosureAt: REVOCATION_TIME,
+    expectedVerdict: "disproved",
+    expectedReason: "EXPORT_SCOPE_POST_REVOCATION_DISPATCH_PRESENT",
+    negative: {
+      parent_fixture: "dispatch-absence-after-revocation-valid-empty-scope",
+      delta: "Adds a disclosed dispatch.egress_bound record whose occurred_at equals the revocation effective_at lower bound."
+    }
+  }
 ];
 
 function sortDeep(value) {
@@ -92,6 +270,10 @@ function writeJson(filePath, value) {
   fs.writeFileSync(filePath, prettyJson(value), "utf8");
 }
 
+function resetFixtureDir(fixtureId) {
+  fs.rmSync(path.join(FIXTURE_ROOT, fixtureId), { recursive: true, force: true });
+}
+
 function writeText(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, value, "utf8");
@@ -99,6 +281,10 @@ function writeText(filePath, value) {
 
 function sha256Hex(input) {
   return crypto.createHash("sha256").update(input).digest("hex");
+}
+
+function sha256Bytes(input) {
+  return crypto.createHash("sha256").update(input).digest();
 }
 
 function sha256Prefixed(input) {
@@ -229,7 +415,10 @@ function buildTrustRoot() {
   });
 }
 
-function decisionCanonicalPayload(spec) {
+function decisionCanonicalPayload(
+  spec,
+  { bindingKeyId = runtimeKeyId(ed25519PrivateKey(PERMIT_BINDING_SEED)) } = {}
+) {
   return {
     binding_version: "v1",
     permit_id: spec.permitId,
@@ -262,43 +451,55 @@ function decisionCanonicalPayload(spec) {
     issued_at: SIGNED_AT,
     expires_at: "2026-05-21T11:00:00.000000Z",
     is_dry_run: false,
-    binding_key_id: runtimeKeyId(ed25519PrivateKey(PERMIT_BINDING_SEED)),
+    binding_key_id: bindingKeyId,
     final_request_hash: null
   };
 }
 
-function decisionEvidence(spec) {
-  const permitKey = ed25519PrivateKey(PERMIT_BINDING_SEED);
-  const payload = decisionCanonicalPayload(spec);
+function decisionEvidence(
+  spec,
+  { privateKey = ed25519PrivateKey(PERMIT_BINDING_SEED) } = {}
+) {
+  const payload = decisionCanonicalPayload(spec, {
+    bindingKeyId: runtimeKeyId(privateKey)
+  });
   const hash = sha256Hex(canonicalJson(payload));
   return {
     artifact_type: "permit_decision_binding",
     artifact_version: "permit.decision.v1",
     canonical_payload: payload,
     binding_canonical_hash: hash,
-    binding_signature: signEd25519(permitKey, hash),
-    binding_key_id: runtimeKeyId(permitKey),
+    binding_signature: signEd25519(privateKey, hash),
+    binding_key_id: runtimeKeyId(privateKey),
     binding_issued_at: SIGNED_AT,
     expected_decision: spec.decision
   };
 }
 
-function revokedEvent({ permitId = ABSENCE_PERMIT_ID, projectId = PROJECT_ID } = {}) {
-  const permitKey = ed25519PrivateKey(PERMIT_BINDING_SEED);
+function revokedEvent({
+  permitId = ABSENCE_PERMIT_ID,
+  projectId = PROJECT_ID,
+  actorId = ACTOR_ID,
+  actorKind = "user",
+  reasonCode = "operator.requested",
+  revokedAt = REVOCATION_TIME,
+  effectiveAt = REVOCATION_TIME,
+  privateKey = ed25519PrivateKey(PERMIT_BINDING_SEED)
+} = {}) {
   const payload = {
     permit_id: permitId,
     project_id: projectId,
-    actor_id: ACTOR_ID,
-    actor_kind: "user",
-    reason_code: "operator.requested",
-    revoked_at: REVOCATION_TIME,
-    effective_at: REVOCATION_TIME
+    actor_id: actorId,
+    actor_kind: actorKind,
+    reason_code: reasonCode,
+    revoked_at: revokedAt,
+    effective_at: effectiveAt
   };
   const hash = sha256Hex(canonicalJson(payload));
   return {
     event: {
       ...payload,
-      signature: signB64(permitKey, hash)
+      signature: signB64(privateKey, hash)
     },
     canonical_hash: hash
   };
@@ -333,6 +534,7 @@ function writeReadme(fixtureId, title, body) {
 }
 
 function writeDecisionFixture(spec) {
+  resetFixtureDir(spec.id);
   const fixtureDir = path.join(FIXTURE_ROOT, spec.id);
   const evidence = decisionEvidence(spec);
   const exportPayload = {
@@ -361,6 +563,73 @@ function writeDecisionFixture(spec) {
     claims: ["export.integrity.v1", "permit.decision.v1"],
     features: ["step4_permit_claims"],
     extraPack: {}
+  });
+}
+
+function writeDecisionNegativeFixture(spec) {
+  resetFixtureDir(spec.id);
+  const fixtureDir = path.join(FIXTURE_ROOT, spec.id);
+  const otherPermitKey = ed25519PrivateKey(OTHER_PERMIT_BINDING_SEED);
+  let evidence = decisionEvidence({
+    id: spec.id,
+    permitId: spec.permitId,
+    decision: spec.decision
+  });
+
+  if (spec.mutation === "bad_signature") {
+    evidence.binding_signature = signEd25519(otherPermitKey, evidence.binding_canonical_hash);
+  } else if (spec.mutation === "tampered_decision") {
+    evidence.canonical_payload.decision = "allow";
+  } else if (spec.mutation === "untrusted_key") {
+    evidence = decisionEvidence(
+      {
+        id: spec.id,
+        permitId: spec.permitId,
+        decision: spec.decision
+      },
+      { privateKey: otherPermitKey }
+    );
+  } else if (spec.mutation === "canonical_payload_mismatch") {
+    evidence.expected_decision = spec.expectedDecision;
+  } else {
+    throw new Error(`unknown decision mutation: ${spec.mutation}`);
+  }
+
+  const exportPayload = {
+    schema: "keel.step4.permit_claim_fixture/v1",
+    fixture_id: spec.id,
+    project_id: PROJECT_ID,
+    permit_decision: evidence
+  };
+  const manifest = buildManifest({
+    fixtureId: spec.id,
+    exportPayload,
+    claims: ["permit.decision.v1"],
+    artifacts: [SEMANTICS.permitDecision],
+    recordCount: 1
+  });
+  writeJson(path.join(fixtureDir, "pack", "export.json"), exportPayload);
+  writeJson(path.join(fixtureDir, "pack", "manifest.json"), manifest);
+  writeReadme(
+    spec.id,
+    spec.title,
+    `## What It Tests\n\nThe pack mutates a signed issuance-time permit decision binding: ${spec.delta}\n\n## Expected Verdict\n\n\`permit.decision.v1\` is expected to return \`${spec.expectedVerdict}\` with \`${spec.expectedReason}\`.`
+  );
+  return corpusExportRecord({
+    id: spec.id,
+    title: spec.title,
+    claims: [
+      "export.integrity.v1",
+      { name: "permit.decision.v1", expected_verdict: spec.expectedVerdict }
+    ],
+    features: ["step4_permit_claims"],
+    extraPack: {},
+    expectedOutcome: "FAIL",
+    reasonClasses: [spec.expectedReason],
+    negative: {
+      parent_fixture: "permit-decision-allow-valid",
+      delta: spec.delta
+    }
   });
 }
 
@@ -402,7 +671,11 @@ function chainEntry({ eventId, eventType, sequenceNumber, prevHash, occurredAt, 
   return entry;
 }
 
-function buildAbsenceChain({ includePreRevocationDispatch }) {
+function buildAbsenceChain({
+  includePreRevocationDispatch,
+  postRevocationDisclosureAt = null,
+  postRevocationBridgeAt = null
+}) {
   const entries = [];
   let prev = GENESIS_PREV_HASH;
   let sequence = 1;
@@ -443,6 +716,28 @@ function buildAbsenceChain({ includePreRevocationDispatch }) {
     }
   });
   entries.push(revoked);
+  prev = revoked.record_hash;
+  sequence += 1;
+  if (postRevocationDisclosureAt !== null || postRevocationBridgeAt !== null) {
+    const occurredAt = postRevocationDisclosureAt || postRevocationBridgeAt;
+    const dispatch = chainEntry({
+      eventId: postRevocationDisclosureAt !== null
+        ? "evt_step4_post_revocation_dispatch_disclosed"
+        : "evt_step4_post_revocation_dispatch_bridge",
+      eventType: "dispatch.egress_bound",
+      sequenceNumber: sequence,
+      prevHash: prev,
+      occurredAt,
+      payloadJson: {
+        project_id: PROJECT_ID,
+        permit_id: ABSENCE_PERMIT_ID,
+        event_type: "dispatch.egress_bound",
+        occurred_at: occurredAt,
+        dispatch_request_digest_v1: sha256Hex(`${occurredAt}:post-revocation-dispatch`)
+      }
+    });
+    entries.push(dispatch);
+  }
   return { entries, revocation };
 }
 
@@ -499,9 +794,47 @@ function absencePredicate() {
   };
 }
 
-function buildSidecar({ entries, predicate }) {
+function merkleRoot(disclosureRecords, predicateValueHash) {
+  if (!disclosureRecords.length) {
+    return EMPTY_TREE_HASH;
+  }
+  const leaves = [...disclosureRecords]
+    .sort((a, b) => {
+      const seq = a.sequence_number - b.sequence_number;
+      if (seq !== 0) return seq;
+      const eventCmp = String(a.event_id).localeCompare(String(b.event_id));
+      if (eventCmp !== 0) return eventCmp;
+      return String(a.record_hash).localeCompare(String(b.record_hash));
+    })
+    .map((record) => {
+      const leafObject = {
+        canonical_predicate_value_hash: predicateValueHash,
+        event_id: record.event_id,
+        record_hash: record.record_hash,
+        sequence_number: record.sequence_number
+      };
+      return sha256Bytes(Buffer.concat([Buffer.from([0]), Buffer.from(canonicalJson(leafObject), "utf8")]));
+    });
+
+  function merkleHash(nodes) {
+    if (nodes.length === 1) {
+      return nodes[0];
+    }
+    const split = 1 << (Math.ceil(Math.log2(nodes.length)) - 1);
+    const left = merkleHash(nodes.slice(0, split));
+    const right = merkleHash(nodes.slice(split));
+    return sha256Bytes(Buffer.concat([Buffer.from([1]), left, right]));
+  }
+
+  return `sha256:${merkleHash(leaves).toString("hex")}`;
+}
+
+function buildSidecar({ entries, predicate, disclosures }) {
   const checkpointKey = ed25519PrivateKey(CHECKPOINT_SEED);
   const predicateHash = sha256Prefixed(Buffer.from(canonicalJson(predicate), "utf8"));
+  const sequences = disclosures.map((record) => record.sequence_number);
+  const firstMatching = sequences.length ? Math.min(...sequences) : null;
+  const lastMatching = sequences.length ? Math.max(...sequences) : null;
   const sidecar = {
     artifact_type: "checkpoint_scope_state",
     version: "checkpoint_scope_state.v1",
@@ -519,10 +852,10 @@ function buildSidecar({ entries, predicate }) {
       {
         predicate_value: predicate,
         predicate_value_hash: predicateHash,
-        first_matching_sequence: null,
-        last_matching_sequence: null,
-        matching_count: 0,
-        membership_root_hash: EMPTY_TREE_HASH
+        first_matching_sequence: firstMatching,
+        last_matching_sequence: lastMatching,
+        matching_count: disclosures.length,
+        membership_root_hash: merkleRoot(disclosures, predicateHash)
       }
     ],
     tree_size: entries.at(-1).sequence_number,
@@ -544,14 +877,40 @@ function buildSidecar({ entries, predicate }) {
   return sidecar;
 }
 
-function buildAbsenceFixture({ id, title, includePreRevocationDispatch }) {
-  const { entries, revocation } = buildAbsenceChain({ includePreRevocationDispatch });
+function buildAbsenceFixture({
+  id,
+  title,
+  includePreRevocationDispatch,
+  postRevocationDisclosureAt = null,
+  postRevocationBridgeAt = null,
+  predicateMutator = null,
+  writeCheckpoint = true,
+  writeSidecar = true,
+  expectedCheckpointVerdict = "supported",
+  expectedScopeVerdict = "supported",
+  expectedVerdict = "supported",
+  expectedReason = "PERMIT_DISPATCH_ABSENCE_AFTER_REVOCATION_SUPPORTED",
+  negative = null
+}) {
+  resetFixtureDir(id);
+  const { entries, revocation } = buildAbsenceChain({
+    includePreRevocationDispatch,
+    postRevocationDisclosureAt,
+    postRevocationBridgeAt
+  });
   const checkpoint = buildCheckpoint(entries);
   const predicate = absencePredicate();
-  const sidecar = buildSidecar({ entries, predicate });
+  if (predicateMutator !== null) {
+    predicateMutator(predicate);
+  }
+  const disclosures = entries.filter((entry) =>
+    postRevocationDisclosureAt !== null && entry.event_type === "dispatch.egress_bound" && entry.occurred_at === postRevocationDisclosureAt
+  );
+  const sidecar = buildSidecar({ entries, predicate, disclosures });
   const sidecarBytes = Buffer.from(prettyJson(sidecar), "utf8");
   const sidecarHash = sha256Prefixed(sidecarBytes);
   const filtersHash = sha256Prefixed(Buffer.from(canonicalJson(predicate), "utf8"));
+  const proofBridgeRecords = entries.filter((entry) => !disclosures.includes(entry));
 
   const segment = {
     segment_id: id,
@@ -595,8 +954,8 @@ function buildAbsenceFixture({ id, title, includePreRevocationDispatch }) {
       filters_hash: filtersHash
     },
     chain_evidence: {
-      disclosure_records: [],
-      proof_bridge_records: entries
+      disclosure_records: disclosures,
+      proof_bridge_records: proofBridgeRecords
     }
   };
 
@@ -636,12 +995,16 @@ function buildAbsenceFixture({ id, title, includePreRevocationDispatch }) {
   const fixtureDir = path.join(FIXTURE_ROOT, id);
   writeJson(path.join(fixtureDir, "pack", "export.json"), exportPayload);
   writeJson(path.join(fixtureDir, "pack", "manifest.json"), manifest);
-  writeJson(path.join(fixtureDir, "pack", "checkpoint.json"), checkpoint);
-  writeJson(path.join(fixtureDir, "sidecars", "checkpoint-scope-state-v1.json"), sidecar);
+  if (writeCheckpoint) {
+    writeJson(path.join(fixtureDir, "pack", "checkpoint.json"), checkpoint);
+  }
+  if (writeSidecar) {
+    writeJson(path.join(fixtureDir, "sidecars", "checkpoint-scope-state-v1.json"), sidecar);
+  }
   writeReadme(
     id,
     title,
-    `## What It Tests\n\nThe pack contains supported revocation evidence and a scope-faithful absence adjudication segment whose post-revocation \`dispatch.egress_bound\` matching count is zero.${includePreRevocationDispatch ? " A pre-revocation `dispatch.egress_bound` record is supplied as bridge evidence and does not match the bounded `occurred_at` range." : ""}\n\n## Expected Verdict\n\n\`permit.dispatch_absence_after_revocation.v1\` is expected to return \`supported\`.`
+    `## What It Tests\n\nThe pack contains supported revocation evidence and a scope-faithful absence adjudication segment for post-revocation \`dispatch.egress_bound\` events.${includePreRevocationDispatch ? " A pre-revocation `dispatch.egress_bound` record is supplied as bridge evidence and does not match the bounded `occurred_at` range." : ""}\n\n## Expected Verdict\n\n\`permit.dispatch_absence_after_revocation.v1\` is expected to return \`${expectedVerdict}\` with \`${expectedReason}\`.`
   );
   return corpusExportRecord({
     id,
@@ -649,20 +1012,33 @@ function buildAbsenceFixture({ id, title, includePreRevocationDispatch }) {
     claims: [
       "export.integrity.v1",
       "permit.revoked.v1",
-      "checkpoint.scope_state.v1",
-      "export.scope_faithfulness.v1",
-      "permit.dispatch_absence_after_revocation.v1"
+      {
+        name: "checkpoint.scope_state.v1",
+        expected_verdict: expectedCheckpointVerdict
+      },
+      {
+        name: "export.scope_faithfulness.v1",
+        expected_verdict: expectedScopeVerdict
+      },
+      {
+        name: "permit.dispatch_absence_after_revocation.v1",
+        expected_verdict: expectedVerdict
+      }
     ],
     features: ["scope_faithfulness", "step4_permit_claims"],
     extraPack: {
-      checkpoint_file: `fixtures/${id}/pack/checkpoint.json`,
-      sidecar_file: `fixtures/${id}/sidecars/checkpoint-scope-state-v1.json`
-    }
+      ...(writeCheckpoint ? { checkpoint_file: `fixtures/${id}/pack/checkpoint.json` } : {}),
+      ...(writeSidecar ? { sidecar_file: `fixtures/${id}/sidecars/checkpoint-scope-state-v1.json` } : {})
+    },
+    expectedOutcome: expectedVerdict === "supported" ? "PASS" : "FAIL",
+    reasonClasses: expectedVerdict === "supported" ? [] : [expectedReason],
+    negative
   });
 }
 
 function writeRevokedFixture() {
   const id = "permit-revoked-valid";
+  resetFixtureDir(id);
   const title = "Valid signed permit revocation event";
   const exportPayload = {
     schema: "keel.step4.permit_claim_fixture/v1",
@@ -695,12 +1071,83 @@ function writeRevokedFixture() {
   });
 }
 
-function corpusExportRecord({ id, title, claims, features, extraPack }) {
-  return {
-    claims: claims.map((name) => ({ expected_verdict: "supported", name })),
+function writeRevokedNegativeFixture(spec) {
+  resetFixtureDir(spec.id);
+  const fixtureDir = path.join(FIXTURE_ROOT, spec.id);
+  const otherPermitKey = ed25519PrivateKey(OTHER_PERMIT_BINDING_SEED);
+  let revocation = revokedEvent();
+  let projectId = PROJECT_ID;
+  if (spec.mutation === "bad_signature") {
+    revocation = revokedEvent({ privateKey: otherPermitKey });
+  } else if (spec.mutation === "project_mismatch") {
+    projectId = MISMATCHED_PROJECT_ID;
+  } else if (spec.mutation === "effective_at_mismatch") {
+    revocation = revokedEvent({ effectiveAt: "2026-05-21T10:06:00.000000Z" });
+  } else if (spec.mutation === "missing_field") {
+    delete revocation.event.reason_code;
+  } else if (spec.mutation === "actor_pii") {
+    revocation = revokedEvent({ actorId: "operator@example.com" });
+  } else {
+    throw new Error(`unknown revocation mutation: ${spec.mutation}`);
+  }
+  const exportPayload = {
+    schema: "keel.step4.permit_claim_fixture/v1",
+    fixture_id: spec.id,
+    project_id: projectId,
+    permit_id: ABSENCE_PERMIT_ID,
+    revocation_event: revocation
+  };
+  const manifest = buildManifest({
+    fixtureId: spec.id,
+    exportPayload,
+    claims: ["permit.revoked.v1"],
+    artifacts: [SEMANTICS.permitRevoked],
+    recordCount: 1
+  });
+  writeJson(path.join(fixtureDir, "pack", "export.json"), exportPayload);
+  writeJson(path.join(fixtureDir, "pack", "manifest.json"), manifest);
+  writeReadme(
+    spec.id,
+    spec.title,
+    `## What It Tests\n\nThe pack mutates signed \`permit.revoked\` evidence: ${spec.delta}\n\n## Expected Verdict\n\n\`permit.revoked.v1\` is expected to return \`${spec.expectedVerdict}\` with \`${spec.expectedReason}\`.`
+  );
+  return corpusExportRecord({
+    id: spec.id,
+    title: spec.title,
+    claims: [
+      "export.integrity.v1",
+      { name: "permit.revoked.v1", expected_verdict: spec.expectedVerdict }
+    ],
+    features: ["step4_permit_claims"],
+    extraPack: {},
+    expectedOutcome: "FAIL",
+    reasonClasses: [spec.expectedReason],
+    negative: {
+      parent_fixture: "permit-revoked-valid",
+      delta: spec.delta
+    }
+  });
+}
+
+function corpusExportRecord({
+  id,
+  title,
+  claims,
+  features,
+  extraPack,
+  expectedOutcome = "PASS",
+  reasonClasses = [],
+  negative = null
+}) {
+  const record = {
+    claims: claims.map((claim) =>
+      typeof claim === "string"
+        ? { expected_verdict: "supported", name: claim }
+        : claim
+    ),
     expected_current: {
-      outcome: "PASS",
-      reason_classes: []
+      outcome: expectedOutcome,
+      reason_classes: reasonClasses
     },
     id,
     kind: "export",
@@ -712,6 +1159,12 @@ function corpusExportRecord({ id, title, claims, features, extraPack }) {
       ...extraPack
     },
     title
+  };
+  if (negative !== null) {
+    record.negative = negative;
+  }
+  return {
+    ...record
   };
 }
 
@@ -728,7 +1181,9 @@ function main() {
   buildTrustRoot();
   const records = [
     ...DECISION_FIXTURES.map(writeDecisionFixture),
+    ...DECISION_NEGATIVE_FIXTURES.map(writeDecisionNegativeFixture),
     writeRevokedFixture(),
+    ...REVOKED_NEGATIVE_FIXTURES.map(writeRevokedNegativeFixture),
     buildAbsenceFixture({
       id: "dispatch-absence-after-revocation-valid-empty-scope",
       title: "Valid post-revocation dispatch absence with empty matching scope",
@@ -738,7 +1193,15 @@ function main() {
       id: "dispatch-absence-after-revocation-valid-with-pre-revocation-dispatch",
       title: "Valid post-revocation dispatch absence with pre-revocation dispatch evidence",
       includePreRevocationDispatch: true
-    })
+    }),
+    ...ABSENCE_PROMOTED_FIXTURES.map((fixture) =>
+      buildAbsenceFixture({
+        includePreRevocationDispatch: false,
+        writeCheckpoint: true,
+        writeSidecar: true,
+        ...fixture
+      })
+    )
   ];
   updateCorpus(records);
   console.log(`Generated ${records.length} Step 4 permit-claim fixtures.`);
