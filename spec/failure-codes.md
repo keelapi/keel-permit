@@ -37,6 +37,15 @@ MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD NOT, RECOMMENDED, MAY
 | `WALK_PERMIT_CHAIN_ENVELOPE_INCONSISTENT` | permit chain | A Permit's top-level `expires_at` and `authority_envelope.expires_at` disagree. |
 | `WALK_PERMIT_CHAIN_RECEIPT_MISSING` | permit chain | A claim required an execution receipt and none is present. |
 | `WALK_PERMIT_CHAIN_ANCESTOR_MISSING` | permit chain | Lineage does not reach a root within the supplied pack and no completeness checkpoint covers the ancestor scope. |
+| `PERMIT_DECISION_SIGNATURE_INVALID` | permit decision | A permit decision binding signature does not verify under the resolved permit-binding key. |
+| `PERMIT_DECISION_CANONICAL_PAYLOAD_MISMATCH` | permit decision | The issuance-time canonical payload does not hash to `binding_canonical_hash`, or the payload decision does not match the adjudicated decision. |
+| `PERMIT_DECISION_KEY_NOT_TRUSTED` | permit decision | No trusted permit-binding key resolves for the decision binding at signing time. |
+| `PERMIT_REVOKED_SIGNATURE_INVALID` | permit revoked | A signed `permit.revoked` event signature does not verify under a trusted permit-binding key. |
+| `PERMIT_REVOKED_PROJECT_ID_MISMATCH` | permit revoked | A signed `permit.revoked` event is presented for a different `project_id` than the claim scope. |
+| `PERMIT_REVOKED_EFFECTIVE_AT_NOT_EQUAL_REVOKED_AT` | permit revoked | A v1 `permit.revoked` event has `effective_at` different from `revoked_at`. |
+| `PERMIT_REVOKED_ACTOR_PII_DETECTED` | permit revoked | A revocation actor value is not an opaque UUID or actor identity fields carry PII-shaped data. |
+| `EXPORT_SCOPE_PREDICATE_OUT_OF_GRAMMAR` | export scope | A declared scope predicate uses an operator or range shape outside scope-predicate v1. |
+| `EXPORT_SCOPE_BRIDGE_RECORD_MATCHES_PREDICATE` | export scope | A bridge, proof, or continuity record satisfies the declared predicate. |
 
 A verifier MUST emit exactly one of these codes per detected violation. Implementations MAY emit multiple codes when a single artifact contains multiple independent violations.
 
@@ -133,13 +142,36 @@ A verifier MUST emit exactly one of these codes per detected violation. Implemen
 
 **Verifier action**: report the relevant `permit_id`, parent/child boundary, envelope version, or missing comparator/receipt requirement. The verifier MUST NOT silently downgrade a semantic Permit Chain failure into a generic chain-walk failure when the cryptographic chain itself is intact.
 
-## 13. Scope-State and Scope-Faithfulness Codes
+## 13. Permit Decision and Revocation Codes
 
 Every code in this section maps to the existing v0 verdict enum: `supported`,
 `disproved`, `insufficient_evidence`, or `unverifiable_scope`. No new verdict
 values are introduced.
 
-### 13.1 Sidecar Codes
+### 13.1 Permit Decision Codes
+
+| Code | Verdict | Trigger |
+|---|---|---|
+| `PERMIT_DECISION_SIGNATURE_INVALID` | `disproved` | `binding_signature` is present but does not verify over `binding_canonical_hash` under the resolved permit-binding key. |
+| `PERMIT_DECISION_CANONICAL_PAYLOAD_MISMATCH` | `disproved` | The supplied issuance-time canonical payload does not hash to `binding_canonical_hash`, the payload `decision` is not the adjudicated decision, or the pack attempts to substitute later mutable row state for issuance-time evidence. |
+| `PERMIT_DECISION_KEY_NOT_TRUSTED` | `insufficient_evidence` | The pack does not supply a trusted permit-binding key active at `binding_issued_at` or the signing time declared for the decision evidence. |
+
+### 13.2 Permit Revoked Codes
+
+| Code | Verdict | Trigger |
+|---|---|---|
+| `PERMIT_REVOKED_SIGNATURE_INVALID` | `disproved` | The `permit.revoked` payload signature does not verify under a trusted permit-binding key active at `revoked_at`. |
+| `PERMIT_REVOKED_PROJECT_ID_MISMATCH` | `disproved` | The signed `project_id` differs from the permit/project scope under adjudication. |
+| `PERMIT_REVOKED_EFFECTIVE_AT_NOT_EQUAL_REVOKED_AT` | `disproved` | The v1 event has `effective_at` different from `revoked_at`. Scheduled revocation is not a v1 behavior. |
+| `PERMIT_REVOKED_ACTOR_PII_DETECTED` | `disproved` | The actor identity is not an opaque UUID, or the event contains actor email, name, display label, or other PII-shaped identity material. Strict v1 payloads reject these fields; this code is a defensive failure for lax or translated evidence inputs. |
+
+## 14. Scope-State and Scope-Faithfulness Codes
+
+Every code in this section maps to the existing v0 verdict enum: `supported`,
+`disproved`, `insufficient_evidence`, or `unverifiable_scope`. No new verdict
+values are introduced.
+
+### 14.1 Sidecar Codes
 
 | Code | Verdict | Trigger |
 |---|---|---|
@@ -158,13 +190,14 @@ values are introduced.
 | `CHECKPOINT_SCOPE_STATE_PREDICATE_HASH_MISMATCH` | `disproved` | `predicate_value_hash` does not match canonical predicate value. |
 | `CHECKPOINT_SCOPE_STATE_COMMITMENT_PREDICATE_DUPLICATE` | `disproved` | Multiple `scope_commitments[]` entries share the same `predicate_value_hash`. |
 
-### 13.2 Export Codes
+### 14.2 Export Codes
 
 | Code | Verdict | Trigger |
 |---|---|---|
 | `EXPORT_SCOPE_DECLARATION_MISSING` | `insufficient_evidence` | Signed export payload has no `scope_faithfulness` block or segment. |
 | `EXPORT_SCOPE_DECLARATION_SCHEMA_INVALID` | `disproved` | Present declaration violates strict v1 schema. |
 | `EXPORT_SCOPE_PREDICATE_UNSUPPORTED` | `unverifiable_scope` | Predicate grammar or predicate kind is outside v1. |
+| `EXPORT_SCOPE_PREDICATE_OUT_OF_GRAMMAR` | `unverifiable_scope` | Predicate uses an operator or range shape outside scope-predicate v1, including `IN`, OR, unsupported range bounds, or an open-ended range. |
 | `EXPORT_SCOPE_PREDICATE_MALFORMED` | `disproved` | Predicate claims v1 but is syntactically invalid. |
 | `EXPORT_SCOPE_PREDICATE_VIOLATED` | `disproved` | A disclosure record does not satisfy the structured predicate. |
 | `EXPORT_PRESENTATION_POLICY_UNSUPPORTED` | `unverifiable_scope` | `presentation_policy.version` or kind is unsupported. |
@@ -184,16 +217,17 @@ values are introduced.
 | `EXPORT_CHAIN_PROOF_MISSING` | `insufficient_evidence` | Required chain entries or proof bridge records are absent. |
 | `EXPORT_CHAIN_PROOF_DISCONTINUITY` | `disproved` | Supplied chain evidence fails local continuity. |
 | `EXPORT_PROOF_BRIDGE_MISCLASSIFIED` | `disproved` | A bridge record is counted as in-scope or a disclosure record is marked bridge-only. |
+| `EXPORT_SCOPE_BRIDGE_RECORD_MATCHES_PREDICATE` | `disproved` | A bridge, proof, or continuity record satisfies the declared predicate; the verifier can evaluate the predicate and the evidence contradicts the claimed empty matching set. |
 | `EXPORT_SCOPE_COMMITMENT_MISSING` | `insufficient_evidence` | Sidecar has no commitment for declared predicate hash. |
 | `EXPORT_SCOPE_CARDINALITY_MISMATCH` | `disproved` | Signed `matching_count` differs from disclosure record count. |
 | `EXPORT_SCOPE_MEMBERSHIP_ROOT_MISMATCH` | `disproved` | Recomputed Merkle root differs from signed sidecar root. |
 | `EXPORT_SCOPE_RANGE_MISMATCH` | `disproved` | Disclosure min/max sequence differs from signed matching range. |
 
-## 14. Code stability
+## 15. Code stability
 
 The codes in this document are **stable identifiers**. New codes MAY be added by future spec revisions; existing codes MUST NOT be renamed, repurposed, or removed. A code's literal string is part of the public contract for downstream tooling (alerting, dashboards, automated incident response).
 
-## 15. Verifier output format
+## 16. Verifier output format
 
 This spec does not constrain how a verifier surfaces failure codes — JSON, structured logs, exit codes, human-readable text are all permitted. The MUST is that the literal code strings appear unchanged.
 

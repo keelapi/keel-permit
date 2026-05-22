@@ -1,0 +1,49 @@
+{
+  "chain_heads": {
+    "project:00000000-0000-0000-0000-000000000041": {
+      "last_record_hash": "da137414bf851df9e30e1f86e95c13b387a36ed6152816452de982c743050b7d",
+      "sequence_number": 1
+    }
+  },
+  "checkpoint_id": "40000000-0000-4000-8000-000000000001",
+  "claim_set": {
+    "claims": [
+      {
+        "name": "checkpoint.composite_hash.v1",
+        "required": true
+      },
+      {
+        "name": "checkpoint.signature.v1",
+        "required": true
+      }
+    ],
+    "registry": {
+      "hash": "sha256:8da29094827fda581ee8fb3a1466934182e572a91b7940d2ef1cb3c28c1ec215",
+      "id": "keel.verifier_claim_registry.v0",
+      "path": "claim_registry/v0.json"
+    },
+    "version": "verifier-claims.v0"
+  },
+  "composite_hash": "sha256:3fd43b6a0911bd5da20e720090f87f8ef106dee0ba2383ea2ad2d51488f83ba4",
+  "computed_at": "2026-05-21T10:10:00.000000Z",
+  "keel_version": "step4-permit-claims-fixtures",
+  "key_id": "sha256:1325b850c2871916eae203f0efc3c898",
+  "public_key": "ed25519:oJql9HpnWYAv+VX43C0qFKXJnSO+l/hkEn/5ODRVpPA=",
+  "semantics_pins": {
+    "artifacts": [
+      {
+        "hash": "sha256:68aafa26d6f1c8cf5ba83c7596209888d8e529d81f1a2c58f31e2fc41fc136de",
+        "id": "keel.checkpoint.composite_hash.v1",
+        "path": "semantics/checkpoint/composite_hash_v1.json"
+      },
+      {
+        "hash": "sha256:af16c66e8a0b295cd2e5e436169bf0e3d628c1fc4901b6eba6596e86e3ad256b",
+        "id": "keel.checkpoint.signature.v1",
+        "path": "semantics/checkpoint/signature_v1.json"
+      }
+    ],
+    "mode": "pinned",
+    "version": "keel-semantics-pins.v0"
+  },
+  "signature": "ed25519:RysiE3TOSHVFkxliH9NJlo4XdZc3J+xaI/MADBiFuYrQatXmCWQJ2aKBS7sIGfypK8FJDRa9sqngG5T5mF+UDw=="
+}

@@ -4,6 +4,15 @@ All notable changes to this specification are documented here.
 
 The spec document follows [Semantic Versioning](https://semver.org/). Wire formats (Permit `v1`, `closure_v1`, `closure_v2`, chain entry `v1`) version independently and are not bumped by spec-document revisions.
 
+## [1.4.0] — 2026-05-21
+
+Adds Step 4 claim contracts for signed permit decisions, signed permit
+revocations, and scope-faithful absence adjudication for post-revocation
+dispatch initiation. Permit wire format `v1`, closure formats, and chain entry
+`v1` are unchanged.
+
+- Add Step 4 claim contracts (`permit.decision.v1`, `permit.revoked.v1`, `permit.dispatch_absence_after_revocation.v1`) per multi-model design pass 2026-05-21. Scope-faithful absence adjudication, falsifiability-oriented trust model. Reserved `non_membership_profile` namespace for future SMT/NMT native non-membership. PR 1 of Step 4; emission + adjudication land in PR 2 + PR 3.
+
 ## [1.3.1] — 2026-05-20
 
 Adds promoted scope-faithfulness negative and edge corpus fixtures for the public verifier contract. Permit wire format `v1`, closure formats, chain entry `v1`, claim registry, and semantic artifacts are unchanged.
