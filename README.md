@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/github/license/keelapi/keel-permit)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/keelapi/keel-permit?label=release)](https://github.com/keelapi/keel-permit/releases)
-![Spec version](https://img.shields.io/badge/spec-1.3.1-blue)
+![Spec version](https://img.shields.io/badge/spec-1.4.0-blue)
 
 A pre-execution decision record for AI agent systems. A Permit records that an action was evaluated and decided, and, for dispatched allow executions, can be bound to the final provider or tool request. A Permit JSON object alone is not self-authenticating; verification is performed from signed export artifacts and the relevant public keys or key manifest. Those artifacts are verifiable without contacting the issuer when the verifier has the signed export artifacts and relevant public keys/key manifest.
 
@@ -12,7 +12,7 @@ This repository contains the wire-format specification, JSON schemas, and verifi
 
 | | |
 |---|---|
-| Spec document version | 1.3.1 |
+| Spec document version | 1.4.0 |
 | Permit wire format | `v1` |
 | Closure record format | `closure_v1`, `closure_v2` |
 | Chain entry hash format | `v1` |
@@ -61,6 +61,8 @@ flowchart LR
 - [`spec/permit-chain-v1.md`](spec/permit-chain-v1.md) — Delegated Permit Chain semantics
 - [`spec/verifier-claims-v0.md`](spec/verifier-claims-v0.md) — Verifier claim model
 - [`spec/verifier-pack-pinning-v0.md`](spec/verifier-pack-pinning-v0.md) — Pinned semantics for evidence packs
+- [`spec/permit-revoked-event-v1.md`](spec/permit-revoked-event-v1.md) — Signed permit revocation event
+- [`spec/dispatch-absence-after-revocation-v1.md`](spec/dispatch-absence-after-revocation-v1.md) — Scope-faithful absence adjudication after revocation
 
 ## Schemas
 
