@@ -1,0 +1,94 @@
+{
+  "claim_set": {
+    "claims": [
+      {
+        "name": "export.integrity.v1",
+        "required": true
+      },
+      {
+        "name": "permit.revoked.v1",
+        "required": true
+      },
+      {
+        "name": "checkpoint.scope_state.v1",
+        "required": true
+      },
+      {
+        "name": "export.scope_faithfulness.v1",
+        "required": true
+      },
+      {
+        "name": "permit.dispatch_absence_after_revocation.v1",
+        "required": true
+      }
+    ],
+    "registry": {
+      "hash": "sha256:8da29094827fda581ee8fb3a1466934182e572a91b7940d2ef1cb3c28c1ec215",
+      "id": "keel.verifier_claim_registry.v0",
+      "path": "claim_registry/v0.json"
+    },
+    "version": "verifier-claims.v0"
+  },
+  "compressed": false,
+  "content_hash": "sha256:5ec668937bb69888ad8affa6a9469eb0b551c71fff9995baa9bd17eca07feb49",
+  "export_id": "dispatch-absence-after-revocation-valid-with-pre-revocation-dispatch",
+  "export_type": "audit_export",
+  "format": "json",
+  "key_id": "sha256:10ba682c8ad13513971e8b56881aab8b",
+  "project_id": "00000000-0000-0000-0000-000000000041",
+  "public_key": "ed25519:0EqyMnQrtKs6E2i9RhXk5tAiSrcaAWuvhSCjMsl3hzc=",
+  "record_count": 0,
+  "semantics_pins": {
+    "artifacts": [
+      {
+        "hash": "sha256:d1d67dca7eb9a662d26463c3dec841f47f8791df2fafb21e911dd26a83dabb76",
+        "id": "keel.export_manifest.integrity.v1",
+        "path": "semantics/export_manifest/integrity_v1.json"
+      },
+      {
+        "hash": "sha256:5b7416b11a4a94a2f9f876b2337e118267ab5eb928165cc15f01abaff8639229",
+        "id": "keel.permit.revoked_event.v1",
+        "path": "semantics/permit/revoked_event_v1.json"
+      },
+      {
+        "hash": "sha256:68aafa26d6f1c8cf5ba83c7596209888d8e529d81f1a2c58f31e2fc41fc136de",
+        "id": "keel.checkpoint.composite_hash.v1",
+        "path": "semantics/checkpoint/composite_hash_v1.json"
+      },
+      {
+        "hash": "sha256:af16c66e8a0b295cd2e5e436169bf0e3d628c1fc4901b6eba6596e86e3ad256b",
+        "id": "keel.checkpoint.signature.v1",
+        "path": "semantics/checkpoint/signature_v1.json"
+      },
+      {
+        "hash": "sha256:a3213706c9e9531a74cd2355f2f05e537c7a70604cb869b7b76c65cba4a2b707",
+        "id": "keel.governance_chain.record_hash.v1",
+        "path": "semantics/governance_chain/record_hash_v1.json"
+      },
+      {
+        "hash": "sha256:7fc40790b6d8552b8bff63bbfa69cdd53f744a98be97c217e832ea3299e7b528",
+        "id": "keel.scope_state.merkle.v1",
+        "path": "semantics/scope_state/merkle_v1.json"
+      },
+      {
+        "hash": "sha256:f54ac8a8a0c9fb26ee5870e9aded865376af9dde4899026542e97df5d9f454fd",
+        "id": "keel.scope_state.sidecar_format.v1",
+        "path": "semantics/scope_state/sidecar_format_v1.json"
+      },
+      {
+        "hash": "sha256:478150048a5135ebba4550806a814b27ced491a1198c41ad5a40390045a1435b",
+        "id": "keel.export.scope_faithfulness.v1",
+        "path": "semantics/export/scope_faithfulness_v1.json"
+      },
+      {
+        "hash": "sha256:529f17bf4de5ab0ae4a85b89dd66894ddc65923825defae41d5e8af57d0cc0c4",
+        "id": "keel.permit.dispatch_absence_after_revocation.v1",
+        "path": "semantics/permit/dispatch_absence_after_revocation_v1.json"
+      }
+    ],
+    "mode": "pinned",
+    "version": "keel-semantics-pins.v0"
+  },
+  "signature": "ed25519:BRxJdYcqeV+wb8CoPbEws/Zaz38wHc61d+qoFk1DB9qGGADWl2gM1E1VnTmieFnPoyp8de4LZsg59AEcox6NDQ==",
+  "signed_at": "2026-05-21T10:00:00.000000Z"
+}

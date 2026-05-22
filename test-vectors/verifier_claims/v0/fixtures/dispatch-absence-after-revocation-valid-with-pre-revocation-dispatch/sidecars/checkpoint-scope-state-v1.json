@@ -1,0 +1,68 @@
+{
+  "artifact_type": "checkpoint_scope_state",
+  "chain_scope": "project:00000000-0000-0000-0000-000000000041",
+  "checkpoint_id": "40000000-0000-4000-8000-000000000001",
+  "commitment_profile": "keel.scope_state.merkle.v1",
+  "predicate_basis": {
+    "canonicalization_profile": "keel.canonical_json.payload.v1",
+    "reserved_namespaces": [
+      "keel.scope_predicate.reserved.v1",
+      "non_membership_profile"
+    ],
+    "supported_predicate_kinds": [
+      "project_id",
+      "permit_id",
+      "request_id",
+      "event_type",
+      "category",
+      "severity",
+      "decision_type",
+      "policy_id",
+      "provider",
+      "sequence_number",
+      "created_at",
+      "occurred_at",
+      "section",
+      "export_type"
+    ]
+  },
+  "predicate_grammar_version": "keel.scope_predicate.v1",
+  "scope_commitments": [
+    {
+      "first_matching_sequence": null,
+      "last_matching_sequence": null,
+      "matching_count": 0,
+      "membership_root_hash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "predicate_value": {
+        "equals": {
+          "event_type": "dispatch.egress_bound",
+          "permit_id": "20000000-0000-4000-8000-000000000001",
+          "project_id": "00000000-0000-0000-0000-000000000041"
+        },
+        "operator": "and",
+        "ranges": {
+          "occurred_at": {
+            "gte": "2026-05-21T10:05:00.000000Z",
+            "lt": "2026-05-21T10:10:00.000000Z"
+          }
+        },
+        "version": "keel.scope_predicate.v1"
+      },
+      "predicate_value_hash": "sha256:ce17beeb939a1868b176abcce5003a0dc3f6344d4cdaf3fd47a98eb3a4d067ad"
+    }
+  ],
+  "scope_state_id": "keel.scope_state.v1:bd32ee1f1b8934ffc3688db3454a7049ebd808e866d2338d9fce48943abc7a92:40000000-0000-4000-8000-000000000001",
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "sha256:1325b850c2871916eae203f0efc3c898",
+    "signature": "ed25519:uJkbrHfqF8DdWba5c9I7QTajEuoyXSHiTEKCkH5wXbUpEqv8JfgsLrlgYF7M+zYwCY1JM9idC45NyRRbNzrvDg=="
+  },
+  "signed_at": "2026-05-21T10:00:00.000000Z",
+  "tree_size": 2,
+  "trust_root_reference": {
+    "key_id": "sha256:1325b850c2871916eae203f0efc3c898",
+    "manifest_version": "keel.public_key_manifest.v1",
+    "purpose": "scope_state"
+  },
+  "version": "checkpoint_scope_state.v1"
+}
