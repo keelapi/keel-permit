@@ -1,6 +1,6 @@
-# dispatch-absence-after-revocation-valid-empty-scope
+# dispatch-absence-after-revocation-edge-empty-scope-supported
 
-Valid post-revocation dispatch absence with empty matching scope.
+Empty post-revocation dispatch scope is supported.
 
 ## What It Tests
 

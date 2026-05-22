@@ -1,0 +1,19 @@
+{
+  "fixture_id": "permit-revoked-neg-actor-pii-detected",
+  "permit_id": "20000000-0000-4000-8000-000000000001",
+  "project_id": "00000000-0000-0000-0000-000000000041",
+  "revocation_event": {
+    "canonical_hash": "c3fa0e5eb2b8182e1e9cbb2a939839fbd5727727e7fd5d1784e7cb65a1edeba0",
+    "event": {
+      "actor_id": "operator@example.com",
+      "actor_kind": "user",
+      "effective_at": "2026-05-21T10:05:00.000000Z",
+      "permit_id": "20000000-0000-4000-8000-000000000001",
+      "project_id": "00000000-0000-0000-0000-000000000041",
+      "reason_code": "operator.requested",
+      "revoked_at": "2026-05-21T10:05:00.000000Z",
+      "signature": "z5EHy72KgFFyQdhakI97l6XzTfAdFfrb4zdSnV4Mxg/TLjNE70R+VIfwCR9Guj+PYFKqsZVR6zjDeAka6AO2BA=="
+    }
+  },
+  "schema": "keel.step4.permit_claim_fixture/v1"
+}

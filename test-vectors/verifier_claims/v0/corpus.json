@@ -2230,6 +2230,138 @@
           "name": "export.integrity.v1"
         },
         {
+          "expected_verdict": "disproved",
+          "name": "permit.decision.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "PERMIT_DECISION_SIGNATURE_INVALID"
+        ]
+      },
+      "id": "permit-decision-neg-bad-signature",
+      "kind": "export",
+      "negative": {
+        "delta": "The binding signature is produced by an untrusted key while the canonical payload still names the trusted key.",
+        "parent_fixture": "permit-decision-allow-valid"
+      },
+      "pack": {
+        "export_file": "fixtures/permit-decision-neg-bad-signature/pack/export.json",
+        "features": [
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/permit-decision-neg-bad-signature/pack/manifest.json"
+      },
+      "title": "Permit decision with invalid signature"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "disproved",
+          "name": "permit.decision.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "PERMIT_DECISION_CANONICAL_HASH_MISMATCH"
+        ]
+      },
+      "id": "permit-decision-neg-tampered-decision",
+      "kind": "export",
+      "negative": {
+        "delta": "The signed canonical payload decision is changed after the canonical hash and signature are produced.",
+        "parent_fixture": "permit-decision-allow-valid"
+      },
+      "pack": {
+        "export_file": "fixtures/permit-decision-neg-tampered-decision/pack/export.json",
+        "features": [
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/permit-decision-neg-tampered-decision/pack/manifest.json"
+      },
+      "title": "Permit decision with tampered canonical decision"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "permit.decision.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "PERMIT_DECISION_UNTRUSTED_KEY"
+        ]
+      },
+      "id": "permit-decision-neg-untrusted-key",
+      "kind": "export",
+      "negative": {
+        "delta": "The binding is internally valid but names a permit-binding key absent from the public trust root.",
+        "parent_fixture": "permit-decision-allow-valid"
+      },
+      "pack": {
+        "export_file": "fixtures/permit-decision-neg-untrusted-key/pack/export.json",
+        "features": [
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/permit-decision-neg-untrusted-key/pack/manifest.json"
+      },
+      "title": "Permit decision signed by untrusted key"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "disproved",
+          "name": "permit.decision.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "PERMIT_DECISION_CANONICAL_PAYLOAD_MISMATCH"
+        ]
+      },
+      "id": "permit-decision-neg-canonical-payload-mismatch",
+      "kind": "export",
+      "negative": {
+        "delta": "The signed canonical payload is valid, but the requested decision evidence expects a different decision.",
+        "parent_fixture": "permit-decision-allow-valid"
+      },
+      "pack": {
+        "export_file": "fixtures/permit-decision-neg-canonical-payload-mismatch/pack/export.json",
+        "features": [
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/permit-decision-neg-canonical-payload-mismatch/pack/manifest.json"
+      },
+      "title": "Permit decision canonical payload mismatch"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
           "expected_verdict": "supported",
           "name": "permit.revoked.v1"
         }
@@ -2249,6 +2381,171 @@
         "manifest": "fixtures/permit-revoked-valid/pack/manifest.json"
       },
       "title": "Valid signed permit revocation event"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "disproved",
+          "name": "permit.revoked.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "PERMIT_REVOKED_SIGNATURE_INVALID"
+        ]
+      },
+      "id": "permit-revoked-neg-bad-signature",
+      "kind": "export",
+      "negative": {
+        "delta": "The revocation event signature is produced by a key outside the public permit-binding trust root.",
+        "parent_fixture": "permit-revoked-valid"
+      },
+      "pack": {
+        "export_file": "fixtures/permit-revoked-neg-bad-signature/pack/export.json",
+        "features": [
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/permit-revoked-neg-bad-signature/pack/manifest.json"
+      },
+      "title": "Permit revocation with invalid signature"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "disproved",
+          "name": "permit.revoked.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "PERMIT_REVOKED_PROJECT_ID_MISMATCH"
+        ]
+      },
+      "id": "permit-revoked-neg-project-mismatch",
+      "kind": "export",
+      "negative": {
+        "delta": "The export declares a different project scope than the signed revocation event.",
+        "parent_fixture": "permit-revoked-valid"
+      },
+      "pack": {
+        "export_file": "fixtures/permit-revoked-neg-project-mismatch/pack/export.json",
+        "features": [
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/permit-revoked-neg-project-mismatch/pack/manifest.json"
+      },
+      "title": "Permit revocation project mismatch"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "disproved",
+          "name": "permit.revoked.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "PERMIT_REVOKED_EFFECTIVE_AT_MISMATCH"
+        ]
+      },
+      "id": "permit-revoked-neg-effective-at-mismatch",
+      "kind": "export",
+      "negative": {
+        "delta": "The signed revocation event uses an effective_at timestamp different from revoked_at, which v1 reserves for future scheduling semantics.",
+        "parent_fixture": "permit-revoked-valid"
+      },
+      "pack": {
+        "export_file": "fixtures/permit-revoked-neg-effective-at-mismatch/pack/export.json",
+        "features": [
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/permit-revoked-neg-effective-at-mismatch/pack/manifest.json"
+      },
+      "title": "Permit revocation effective_at mismatch"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "permit.revoked.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "PERMIT_REVOKED_EVIDENCE_MISSING"
+        ]
+      },
+      "id": "permit-revoked-neg-missing-field",
+      "kind": "export",
+      "negative": {
+        "delta": "The required reason_code field is removed from the signed revocation event evidence.",
+        "parent_fixture": "permit-revoked-valid"
+      },
+      "pack": {
+        "export_file": "fixtures/permit-revoked-neg-missing-field/pack/export.json",
+        "features": [
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/permit-revoked-neg-missing-field/pack/manifest.json"
+      },
+      "title": "Permit revocation missing required field"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "disproved",
+          "name": "permit.revoked.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "PERMIT_REVOKED_ACTOR_PII_DETECTED"
+        ]
+      },
+      "id": "permit-revoked-neg-actor-pii-detected",
+      "kind": "export",
+      "negative": {
+        "delta": "The signed actor_id uses an email-address shape instead of an opaque UUID.",
+        "parent_fixture": "permit-revoked-valid"
+      },
+      "pack": {
+        "export_file": "fixtures/permit-revoked-neg-actor-pii-detected/pack/export.json",
+        "features": [
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/permit-revoked-neg-actor-pii-detected/pack/manifest.json"
+      },
+      "title": "Permit revocation actor identity contains PII"
     },
     {
       "claims": [
@@ -2333,6 +2630,376 @@
         "sidecar_file": "fixtures/dispatch-absence-after-revocation-valid-with-pre-revocation-dispatch/sidecars/checkpoint-scope-state-v1.json"
       },
       "title": "Valid post-revocation dispatch absence with pre-revocation dispatch evidence"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.revoked.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_faithfulness.v1"
+        },
+        {
+          "expected_verdict": "disproved",
+          "name": "permit.dispatch_absence_after_revocation.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "EXPORT_SCOPE_POST_REVOCATION_DISPATCH_PRESENT"
+        ]
+      },
+      "id": "dispatch-absence-after-revocation-neg-post-revocation-dispatch-present",
+      "kind": "export",
+      "negative": {
+        "delta": "Adds a disclosed dispatch.egress_bound record inside the post-revocation occurred_at range.",
+        "parent_fixture": "dispatch-absence-after-revocation-valid-empty-scope"
+      },
+      "pack": {
+        "checkpoint_file": "fixtures/dispatch-absence-after-revocation-neg-post-revocation-dispatch-present/pack/checkpoint.json",
+        "export_file": "fixtures/dispatch-absence-after-revocation-neg-post-revocation-dispatch-present/pack/export.json",
+        "features": [
+          "scope_faithfulness",
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/dispatch-absence-after-revocation-neg-post-revocation-dispatch-present/pack/manifest.json",
+        "sidecar_file": "fixtures/dispatch-absence-after-revocation-neg-post-revocation-dispatch-present/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Post-revocation dispatch initiation disproves absence"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.revoked.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "disproved",
+          "name": "export.scope_faithfulness.v1"
+        },
+        {
+          "expected_verdict": "disproved",
+          "name": "permit.dispatch_absence_after_revocation.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "EXPORT_SCOPE_BRIDGE_RECORD_MATCHES_PREDICATE"
+        ]
+      },
+      "id": "dispatch-absence-after-revocation-neg-bridge-record-matches-predicate",
+      "kind": "export",
+      "negative": {
+        "delta": "Places a post-revocation dispatch.egress_bound record in proof_bridge_records even though it satisfies the declared absence predicate.",
+        "parent_fixture": "dispatch-absence-after-revocation-valid-empty-scope"
+      },
+      "pack": {
+        "checkpoint_file": "fixtures/dispatch-absence-after-revocation-neg-bridge-record-matches-predicate/pack/checkpoint.json",
+        "export_file": "fixtures/dispatch-absence-after-revocation-neg-bridge-record-matches-predicate/pack/export.json",
+        "features": [
+          "scope_faithfulness",
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/dispatch-absence-after-revocation-neg-bridge-record-matches-predicate/pack/manifest.json",
+        "sidecar_file": "fixtures/dispatch-absence-after-revocation-neg-bridge-record-matches-predicate/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Bridge record matching dispatch predicate disproves absence"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.revoked.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_faithfulness.v1"
+        },
+        {
+          "expected_verdict": "unverifiable_scope",
+          "name": "permit.dispatch_absence_after_revocation.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "EXPORT_SCOPE_PREDICATE_OUT_OF_GRAMMAR"
+        ]
+      },
+      "id": "dispatch-absence-after-revocation-neg-predicate-out-of-grammar",
+      "kind": "export",
+      "negative": {
+        "delta": "Adds a scope-predicate v1-valid provider equality that is outside the stricter permit absence predicate grammar.",
+        "parent_fixture": "dispatch-absence-after-revocation-valid-empty-scope"
+      },
+      "pack": {
+        "checkpoint_file": "fixtures/dispatch-absence-after-revocation-neg-predicate-out-of-grammar/pack/checkpoint.json",
+        "export_file": "fixtures/dispatch-absence-after-revocation-neg-predicate-out-of-grammar/pack/export.json",
+        "features": [
+          "scope_faithfulness",
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/dispatch-absence-after-revocation-neg-predicate-out-of-grammar/pack/manifest.json",
+        "sidecar_file": "fixtures/dispatch-absence-after-revocation-neg-predicate-out-of-grammar/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Absence predicate outside permit v1 grammar"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.revoked.v1"
+        },
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "export.scope_faithfulness.v1"
+        },
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "permit.dispatch_absence_after_revocation.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "CHECKPOINT_SCOPE_STATE_CHECKPOINT_MISSING"
+        ]
+      },
+      "id": "dispatch-absence-after-revocation-neg-missing-checkpoint",
+      "kind": "export",
+      "negative": {
+        "delta": "Omits the checkpoint artifact referenced by the scope-faithful absence segment.",
+        "parent_fixture": "dispatch-absence-after-revocation-valid-empty-scope"
+      },
+      "pack": {
+        "export_file": "fixtures/dispatch-absence-after-revocation-neg-missing-checkpoint/pack/export.json",
+        "features": [
+          "scope_faithfulness",
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/dispatch-absence-after-revocation-neg-missing-checkpoint/pack/manifest.json",
+        "sidecar_file": "fixtures/dispatch-absence-after-revocation-neg-missing-checkpoint/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Missing checkpoint prevents absence adjudication"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.revoked.v1"
+        },
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "export.scope_faithfulness.v1"
+        },
+        {
+          "expected_verdict": "insufficient_evidence",
+          "name": "permit.dispatch_absence_after_revocation.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "CHECKPOINT_SCOPE_STATE_MISSING"
+        ]
+      },
+      "id": "dispatch-absence-after-revocation-neg-missing-sidecar",
+      "kind": "export",
+      "negative": {
+        "delta": "Omits the checkpoint scope-state sidecar referenced by the scope-faithful absence segment.",
+        "parent_fixture": "dispatch-absence-after-revocation-valid-empty-scope"
+      },
+      "pack": {
+        "checkpoint_file": "fixtures/dispatch-absence-after-revocation-neg-missing-sidecar/pack/checkpoint.json",
+        "export_file": "fixtures/dispatch-absence-after-revocation-neg-missing-sidecar/pack/export.json",
+        "features": [
+          "scope_faithfulness",
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/dispatch-absence-after-revocation-neg-missing-sidecar/pack/manifest.json"
+      },
+      "title": "Missing scope-state sidecar prevents absence adjudication"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.revoked.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_faithfulness.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.dispatch_absence_after_revocation.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "dispatch-absence-after-revocation-edge-pre-revocation-dispatch-supported",
+      "kind": "export",
+      "pack": {
+        "checkpoint_file": "fixtures/dispatch-absence-after-revocation-edge-pre-revocation-dispatch-supported/pack/checkpoint.json",
+        "export_file": "fixtures/dispatch-absence-after-revocation-edge-pre-revocation-dispatch-supported/pack/export.json",
+        "features": [
+          "scope_faithfulness",
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/dispatch-absence-after-revocation-edge-pre-revocation-dispatch-supported/pack/manifest.json",
+        "sidecar_file": "fixtures/dispatch-absence-after-revocation-edge-pre-revocation-dispatch-supported/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Pre-revocation dispatch does not disprove post-revocation absence"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.revoked.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_faithfulness.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.dispatch_absence_after_revocation.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "PASS",
+        "reason_classes": []
+      },
+      "id": "dispatch-absence-after-revocation-edge-empty-scope-supported",
+      "kind": "export",
+      "pack": {
+        "checkpoint_file": "fixtures/dispatch-absence-after-revocation-edge-empty-scope-supported/pack/checkpoint.json",
+        "export_file": "fixtures/dispatch-absence-after-revocation-edge-empty-scope-supported/pack/export.json",
+        "features": [
+          "scope_faithfulness",
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/dispatch-absence-after-revocation-edge-empty-scope-supported/pack/manifest.json",
+        "sidecar_file": "fixtures/dispatch-absence-after-revocation-edge-empty-scope-supported/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Empty post-revocation dispatch scope is supported"
+    },
+    {
+      "claims": [
+        {
+          "expected_verdict": "supported",
+          "name": "export.integrity.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "permit.revoked.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "checkpoint.scope_state.v1"
+        },
+        {
+          "expected_verdict": "supported",
+          "name": "export.scope_faithfulness.v1"
+        },
+        {
+          "expected_verdict": "disproved",
+          "name": "permit.dispatch_absence_after_revocation.v1"
+        }
+      ],
+      "expected_current": {
+        "outcome": "FAIL",
+        "reason_classes": [
+          "EXPORT_SCOPE_POST_REVOCATION_DISPATCH_PRESENT"
+        ]
+      },
+      "id": "dispatch-absence-after-revocation-neg-occurred-at-equals-effective-at",
+      "kind": "export",
+      "negative": {
+        "delta": "Adds a disclosed dispatch.egress_bound record whose occurred_at equals the revocation effective_at lower bound.",
+        "parent_fixture": "dispatch-absence-after-revocation-valid-empty-scope"
+      },
+      "pack": {
+        "checkpoint_file": "fixtures/dispatch-absence-after-revocation-neg-occurred-at-equals-effective-at/pack/checkpoint.json",
+        "export_file": "fixtures/dispatch-absence-after-revocation-neg-occurred-at-equals-effective-at/pack/export.json",
+        "features": [
+          "scope_faithfulness",
+          "step4_permit_claims"
+        ],
+        "key_manifest": "trust_roots/step4-permit-claims-trust-root.json",
+        "manifest": "fixtures/dispatch-absence-after-revocation-neg-occurred-at-equals-effective-at/pack/manifest.json",
+        "sidecar_file": "fixtures/dispatch-absence-after-revocation-neg-occurred-at-equals-effective-at/sidecars/checkpoint-scope-state-v1.json"
+      },
+      "title": "Dispatch at revocation effective_at disproves absence"
     }
   ],
   "soundness_rule": "Expected doctrine verdicts are derived from claim_registry/v0.json and spec/verifier-claims-v0.md, never from current verifier output."
