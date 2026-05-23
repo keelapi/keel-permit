@@ -4,6 +4,16 @@ All notable changes to this specification are documented here.
 
 The spec document follows [Semantic Versioning](https://semver.org/). Wire formats (Permit `v1`, `closure_v1`, `closure_v2`, chain entry `v1`) version independently and are not bumped by spec-document revisions.
 
+## [1.4.1] — 2026-05-22
+
+Promotes the Step 4 verifier adjudication corpus into the canonical public
+verifier-claims corpus. Permit wire format `v1`, closure formats, chain entry
+`v1`, claim registry `v0`, and pinned semantic artifacts are unchanged.
+
+- Add 17 Step 4 permit-claim corpus fixtures covering signed permit-decision negatives, signed permit-revocation negatives, and scope-faithful absence adjudication negatives/edges for post-revocation dispatch initiation.
+- Record dependency verdicts for bridge-record and missing-artifact absence cases so the public corpus captures both the target permit claim result and the supporting scope-state/export-scope adjudication result.
+- Keep doctrine language on scope-faithful absence adjudication and avoid native non-membership overclaims.
+
 ## [1.4.0] — 2026-05-21
 
 Adds Step 4 claim contracts for signed permit decisions, signed permit

@@ -1,0 +1,125 @@
+{
+  "fixture_id": "dispatch-absence-after-revocation-neg-missing-checkpoint",
+  "permit_id": "20000000-0000-4000-8000-000000000001",
+  "project_id": "00000000-0000-0000-0000-000000000041",
+  "revocation_event": {
+    "canonical_hash": "988d47a4ae347d0b4f49866fc2414acec0139c4be103f3491ae53fd6f2cfe2b2",
+    "event": {
+      "actor_id": "30000000-0000-4000-8000-000000000001",
+      "actor_kind": "user",
+      "effective_at": "2026-05-21T10:05:00.000000Z",
+      "permit_id": "20000000-0000-4000-8000-000000000001",
+      "project_id": "00000000-0000-0000-0000-000000000041",
+      "reason_code": "operator.requested",
+      "revoked_at": "2026-05-21T10:05:00.000000Z",
+      "signature": "ULWxnis0lPSVXh3Hw2di7GUwu/KPflmoKX2PsTkXua2IF53KPduIdYwXy7SkPyERq/FhiEecHBU0qDV0DBVHBw=="
+    }
+  },
+  "schema": "keel.step4.permit_claim_fixture/v1",
+  "scope_faithfulness": {
+    "segments": [
+      {
+        "canonical_filters": {
+          "canonicalization_profile": "keel.canonical_json.payload.v1",
+          "filters_hash": "sha256:ce17beeb939a1868b176abcce5003a0dc3f6344d4cdaf3fd47a98eb3a4d067ad",
+          "raw_filters": {
+            "equals": {
+              "event_type": "dispatch.egress_bound",
+              "permit_id": "20000000-0000-4000-8000-000000000001",
+              "project_id": "00000000-0000-0000-0000-000000000041"
+            },
+            "operator": "and",
+            "ranges": {
+              "occurred_at": {
+                "gte": "2026-05-21T10:05:00.000000Z",
+                "lt": "2026-05-21T10:10:00.000000Z"
+              }
+            },
+            "version": "keel.scope_predicate.v1"
+          }
+        },
+        "chain_evidence": {
+          "disclosure_records": [],
+          "proof_bridge_records": [
+            {
+              "chain_format_version": "v1",
+              "chain_scope": "project:00000000-0000-0000-0000-000000000041",
+              "created_at": "2026-05-21T10:05:00.000000Z",
+              "event_id": "evt_step4_permit_revoked",
+              "event_type": "permit.revoked",
+              "occurred_at": "2026-05-21T10:05:00.000000Z",
+              "outcome": "success",
+              "payload_json": {
+                "effective_at": "2026-05-21T10:05:00.000000Z",
+                "event_type": "permit.revoked",
+                "occurred_at": "2026-05-21T10:05:00.000000Z",
+                "permit_id": "20000000-0000-4000-8000-000000000001",
+                "project_id": "00000000-0000-0000-0000-000000000041",
+                "reason_code": "operator.requested",
+                "revoked_at": "2026-05-21T10:05:00.000000Z"
+              },
+              "permit_id": "20000000-0000-4000-8000-000000000001",
+              "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+              "project_id": "00000000-0000-0000-0000-000000000041",
+              "record_hash": "da137414bf851df9e30e1f86e95c13b387a36ed6152816452de982c743050b7d",
+              "resource_id": "20000000-0000-4000-8000-000000000001",
+              "resource_type": "permit",
+              "sequence_number": 1,
+              "severity": "info"
+            }
+          ]
+        },
+        "declared_end": {
+          "boundary_policy": "explicit_checkpoint",
+          "chain_scope": "project:00000000-0000-0000-0000-000000000041",
+          "checkpoint_boundary": "2026-05-21T10:10:00.000000Z",
+          "checkpoint_id": "40000000-0000-4000-8000-000000000001",
+          "last_record_hash": "da137414bf851df9e30e1f86e95c13b387a36ed6152816452de982c743050b7d",
+          "sequence_number": 1
+        },
+        "declared_scope": {
+          "chain_scope": "project:00000000-0000-0000-0000-000000000041",
+          "population_label": "Post-revocation dispatch.egress_bound events for one permit",
+          "predicate": {
+            "equals": {
+              "event_type": "dispatch.egress_bound",
+              "permit_id": "20000000-0000-4000-8000-000000000001",
+              "project_id": "00000000-0000-0000-0000-000000000041"
+            },
+            "operator": "and",
+            "ranges": {
+              "occurred_at": {
+                "gte": "2026-05-21T10:05:00.000000Z",
+                "lt": "2026-05-21T10:10:00.000000Z"
+              }
+            },
+            "version": "keel.scope_predicate.v1"
+          },
+          "presentation_policy": {
+            "policy_kind": "none",
+            "policy_parameters": {},
+            "version": "keel.presentation_policy.v1"
+          },
+          "scope_kind": "declared_sample",
+          "version": "keel.scope_declaration.v1"
+        },
+        "declared_start": {
+          "chain_scope": "project:00000000-0000-0000-0000-000000000041",
+          "genesis_prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "kind": "genesis",
+          "sequence_number": 1
+        },
+        "scope_state_reference": {
+          "artifact_hash": "sha256:de0471fad67c81de5d25ff14aa3ffa49332f889bcbb1589e4042205db2cb736b",
+          "artifact_type": "checkpoint_scope_state",
+          "chain_scope": "project:00000000-0000-0000-0000-000000000041",
+          "checkpoint_id": "40000000-0000-4000-8000-000000000001",
+          "scope_state_id": "keel.scope_state.v1:bd32ee1f1b8934ffc3688db3454a7049ebd808e866d2338d9fce48943abc7a92:40000000-0000-4000-8000-000000000001",
+          "storage_uri": "scope-state/v1/bd32ee1f1b8934ffc3688db3454a7049ebd808e866d2338d9fce48943abc7a92/40000000-0000-4000-8000-000000000001/checkpoint-scope-state-v1.json"
+        },
+        "segment_id": "dispatch-absence-after-revocation-neg-missing-checkpoint"
+      }
+    ],
+    "version": "keel.export_scope_faithfulness.v1"
+  }
+}

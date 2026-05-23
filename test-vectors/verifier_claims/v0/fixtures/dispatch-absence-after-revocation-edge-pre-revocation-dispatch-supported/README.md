@@ -1,6 +1,6 @@
-# dispatch-absence-after-revocation-valid-with-pre-revocation-dispatch
+# dispatch-absence-after-revocation-edge-pre-revocation-dispatch-supported
 
-Valid post-revocation dispatch absence with pre-revocation dispatch evidence.
+Pre-revocation dispatch does not disprove post-revocation absence.
 
 ## What It Tests
 

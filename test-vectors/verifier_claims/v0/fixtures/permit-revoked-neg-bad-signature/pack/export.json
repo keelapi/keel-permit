@@ -1,0 +1,19 @@
+{
+  "fixture_id": "permit-revoked-neg-bad-signature",
+  "permit_id": "20000000-0000-4000-8000-000000000001",
+  "project_id": "00000000-0000-0000-0000-000000000041",
+  "revocation_event": {
+    "canonical_hash": "988d47a4ae347d0b4f49866fc2414acec0139c4be103f3491ae53fd6f2cfe2b2",
+    "event": {
+      "actor_id": "30000000-0000-4000-8000-000000000001",
+      "actor_kind": "user",
+      "effective_at": "2026-05-21T10:05:00.000000Z",
+      "permit_id": "20000000-0000-4000-8000-000000000001",
+      "project_id": "00000000-0000-0000-0000-000000000041",
+      "reason_code": "operator.requested",
+      "revoked_at": "2026-05-21T10:05:00.000000Z",
+      "signature": "4B8/G3eghrx9bMlsCWWsWIrIaEUpKkTH2A7xWKaSSODrhL4S/4DSMotLyszqdAh4vRnqt+bukdZPJVLHQ9xiBw=="
+    }
+  },
+  "schema": "keel.step4.permit_claim_fixture/v1"
+}
