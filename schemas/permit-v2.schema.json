@@ -1,0 +1,1397 @@
+{
+  "$defs": {
+    "AuditAttestationSignature": {
+      "additionalProperties": false,
+      "properties": {
+        "batch_id": {
+          "minLength": 1,
+          "title": "Batch Id",
+          "type": "string"
+        },
+        "key_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Key Id",
+          "type": "string"
+        },
+        "payload_type": {
+          "const": "permit.audit_attestation.v1",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "signature": {
+          "pattern": "^[A-Za-z0-9+/]{86}==$",
+          "title": "Signature",
+          "type": "string"
+        },
+        "signed_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{6}Z$",
+          "title": "Signed At",
+          "type": "string"
+        },
+        "signed_payload_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Signed Payload Hash",
+          "type": "string"
+        },
+        "signer_id": {
+          "format": "uuid",
+          "title": "Signer Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "payload_type",
+        "signer_id",
+        "key_id",
+        "signed_at",
+        "signed_payload_hash",
+        "signature",
+        "batch_id"
+      ],
+      "title": "AuditAttestationSignature",
+      "type": "object"
+    },
+    "BudgetEnvelopeSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "correction_usd_micros": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Correction Usd Micros"
+        },
+        "envelope_id": {
+          "format": "uuid",
+          "title": "Envelope Id",
+          "type": "string"
+        },
+        "estimated_cost_usd_micros": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Estimated Cost Usd Micros"
+        },
+        "remaining_budget_usd_micros": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Remaining Budget Usd Micros"
+        },
+        "reservation_status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reservation Status"
+        },
+        "reserved_budget_usd_micros": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reserved Budget Usd Micros"
+        },
+        "spent_budget_usd_micros": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Spent Budget Usd Micros"
+        },
+        "total_budget_usd_micros": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Budget Usd Micros"
+        }
+      },
+      "required": [
+        "envelope_id"
+      ],
+      "title": "BudgetEnvelopeSummary",
+      "type": "object"
+    },
+    "CounterSignature": {
+      "additionalProperties": false,
+      "properties": {
+        "execution_intent_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Execution Intent Hash",
+          "type": "string"
+        },
+        "key_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Key Id",
+          "type": "string"
+        },
+        "payload_type": {
+          "const": "permit.counter_signature.v1",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "signature": {
+          "pattern": "^[A-Za-z0-9+/]{86}==$",
+          "title": "Signature",
+          "type": "string"
+        },
+        "signed_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{6}Z$",
+          "title": "Signed At",
+          "type": "string"
+        },
+        "signed_payload_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Signed Payload Hash",
+          "type": "string"
+        },
+        "signer_id": {
+          "format": "uuid",
+          "title": "Signer Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "payload_type",
+        "signer_id",
+        "key_id",
+        "signed_at",
+        "signed_payload_hash",
+        "signature",
+        "execution_intent_hash"
+      ],
+      "title": "CounterSignature",
+      "type": "object"
+    },
+    "IssuerSignature": {
+      "additionalProperties": false,
+      "properties": {
+        "key_id": {
+          "minLength": 1,
+          "title": "Key Id",
+          "type": "string"
+        },
+        "signature": {
+          "pattern": "^[A-Za-z0-9+/]{86}==$",
+          "title": "Signature",
+          "type": "string"
+        },
+        "signed_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{6}Z$",
+          "title": "Signed At",
+          "type": "string"
+        },
+        "signed_payload_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Signed Payload Hash",
+          "type": "string"
+        },
+        "signer_id": {
+          "format": "uuid",
+          "title": "Signer Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "signer_id",
+        "key_id",
+        "signed_at",
+        "signed_payload_hash",
+        "signature"
+      ],
+      "title": "IssuerSignature",
+      "type": "object"
+    },
+    "OperatorApprovalSignature": {
+      "additionalProperties": false,
+      "properties": {
+        "key_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Key Id",
+          "type": "string"
+        },
+        "payload_type": {
+          "const": "permit.operator_approval.v1",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "signature": {
+          "pattern": "^[A-Za-z0-9+/]{86}==$",
+          "title": "Signature",
+          "type": "string"
+        },
+        "signed_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{6}Z$",
+          "title": "Signed At",
+          "type": "string"
+        },
+        "signed_payload_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Signed Payload Hash",
+          "type": "string"
+        },
+        "signer_id": {
+          "format": "uuid",
+          "title": "Signer Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "payload_type",
+        "signer_id",
+        "key_id",
+        "signed_at",
+        "signed_payload_hash",
+        "signature"
+      ],
+      "title": "OperatorApprovalSignature",
+      "type": "object"
+    },
+    "PermitConditionEvaluation": {
+      "additionalProperties": false,
+      "properties": {
+        "actual_value": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actual Value"
+        },
+        "code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Code"
+        },
+        "evaluated_at": {
+          "format": "date-time",
+          "title": "Evaluated At",
+          "type": "string"
+        },
+        "expected_value": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Value"
+        },
+        "failed_rule_index": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failed Rule Index"
+        },
+        "field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Field"
+        },
+        "match": {
+          "enum": [
+            "all",
+            "any"
+          ],
+          "title": "Match",
+          "type": "string"
+        },
+        "message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Message"
+        },
+        "operator": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Operator"
+        },
+        "outcome": {
+          "enum": [
+            "allow",
+            "deny",
+            "indeterminate"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "rule_count": {
+          "minimum": 0,
+          "title": "Rule Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "outcome",
+        "evaluated_at",
+        "match",
+        "rule_count"
+      ],
+      "title": "PermitConditionEvaluation",
+      "type": "object"
+    },
+    "PermitConditionRule": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "maxLength": 255,
+          "minLength": 1,
+          "title": "Field",
+          "type": "string"
+        },
+        "operator": {
+          "maxLength": 32,
+          "minLength": 1,
+          "title": "Operator",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "field",
+        "operator"
+      ],
+      "title": "PermitConditionRule",
+      "type": "object"
+    },
+    "PermitConditions": {
+      "additionalProperties": false,
+      "properties": {
+        "match": {
+          "default": "all",
+          "enum": [
+            "all",
+            "any"
+          ],
+          "title": "Match",
+          "type": "string"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/PermitConditionRule"
+          },
+          "minItems": 1,
+          "title": "Rules",
+          "type": "array"
+        }
+      },
+      "required": [
+        "rules"
+      ],
+      "title": "PermitConditions",
+      "type": "object"
+    },
+    "PermitDecisionDetails": {
+      "additionalProperties": true,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "decision": {
+          "enum": [
+            "allow",
+            "deny",
+            "challenge"
+          ],
+          "title": "Decision",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "decision",
+        "code",
+        "reason"
+      ],
+      "title": "PermitDecisionDetails",
+      "type": "object"
+    },
+    "RoutingDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "decided_at": {
+          "format": "date-time",
+          "title": "Decided At",
+          "type": "string"
+        },
+        "decision_id": {
+          "maxLength": 26,
+          "minLength": 1,
+          "title": "Decision Id",
+          "type": "string"
+        },
+        "estimated_cost_usd_micros": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Estimated Cost Usd Micros"
+        },
+        "fallback_chain": {
+          "items": {
+            "$ref": "#/$defs/RoutingTarget"
+          },
+          "title": "Fallback Chain",
+          "type": "array"
+        },
+        "fallback_occurred": {
+          "default": false,
+          "title": "Fallback Occurred",
+          "type": "boolean"
+        },
+        "latency_target_ms": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Latency Target Ms"
+        },
+        "policy_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Policy Id"
+        },
+        "policy_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Policy Version"
+        },
+        "priority": {
+          "anyOf": [
+            {
+              "enum": [
+                "cheap",
+                "balanced",
+                "quality"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Priority"
+        },
+        "reason_code": {
+          "enum": [
+            "explicit_request",
+            "policy_preference",
+            "cost_optimization",
+            "quality_preference",
+            "routing_fitness",
+            "fallback_after_error"
+          ],
+          "title": "Reason Code",
+          "type": "string"
+        },
+        "reason_metadata": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Supplemental routing diagnostics. Issuer-defined; readers MUST treat unknown fields as opaque.",
+          "title": "Reason Metadata"
+        },
+        "requested_model": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Requested Model",
+          "type": "string"
+        },
+        "requested_provider": {
+          "enum": [
+            "openai",
+            "anthropic",
+            "google",
+            "xai",
+            "meta",
+            "mcp"
+          ],
+          "title": "Requested Provider",
+          "type": "string"
+        },
+        "selected_model": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Selected Model",
+          "type": "string"
+        },
+        "selected_provider": {
+          "enum": [
+            "openai",
+            "anthropic",
+            "google",
+            "xai",
+            "meta",
+            "mcp"
+          ],
+          "title": "Selected Provider",
+          "type": "string"
+        },
+        "task_type": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Task Type"
+        }
+      },
+      "required": [
+        "requested_provider",
+        "requested_model",
+        "selected_provider",
+        "selected_model",
+        "reason_code"
+      ],
+      "title": "RoutingDecision",
+      "type": "object"
+    },
+    "RoutingTarget": {
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Model",
+          "type": "string"
+        },
+        "provider": {
+          "enum": [
+            "openai",
+            "anthropic",
+            "google",
+            "xai",
+            "meta",
+            "mcp"
+          ],
+          "title": "Provider",
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "model"
+      ],
+      "title": "RoutingTarget",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "accounting_disposition": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Accounting Disposition"
+    },
+    "action_name": {
+      "title": "Action Name",
+      "type": "string"
+    },
+    "actions_json": {
+      "items": {
+        "type": "object"
+      },
+      "title": "Actions Json",
+      "type": "array"
+    },
+    "actor_ref": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "display_label": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "issuer": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "subject": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "issuer",
+            "subject"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Actor Ref"
+    },
+    "actual_cost_usd_micros": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Actual Cost Usd Micros"
+    },
+    "actual_input_tokens": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Actual Input Tokens"
+    },
+    "actual_output_tokens": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Actual Output Tokens"
+    },
+    "actual_total_tokens": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Actual Total Tokens"
+    },
+    "actual_usage_json": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Actual Usage Json"
+    },
+    "authority_envelope": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "actions": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "data_classes": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "expires_at": {
+              "format": "date-time",
+              "type": "string"
+            },
+            "models": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "providers": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "regions": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "tools": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "actions",
+            "tools",
+            "providers",
+            "models",
+            "data_classes",
+            "regions",
+            "expires_at"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Authority Envelope"
+    },
+    "authority_envelope_version": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Authority Envelope Version"
+    },
+    "audit_attestation": {
+      "$ref": "#/$defs/AuditAttestationSignature"
+    },
+    "binding_request_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Binding Request Hash"
+    },
+    "budget_envelope": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/BudgetEnvelopeSummary"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "budgets_json": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Budgets Json"
+    },
+    "condition_evaluation": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PermitConditionEvaluation"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "conditions": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PermitConditions"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "constraints_json": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Constraints Json"
+    },
+    "counter_signature": {
+      "$ref": "#/$defs/CounterSignature"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "decision": {
+      "enum": [
+        "allow",
+        "deny",
+        "challenge"
+      ],
+      "title": "Decision",
+      "type": "string"
+    },
+    "decision_details": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PermitDecisionDetails"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "delegation_depth": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Delegation Depth",
+      "type": "integer"
+    },
+    "estimated_input_tokens": {
+      "minimum": 0,
+      "title": "Estimated Input Tokens",
+      "type": "integer"
+    },
+    "estimated_output_tokens": {
+      "minimum": 0,
+      "title": "Estimated Output Tokens",
+      "type": "integer"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Expires At"
+    },
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "idempotency_key": {
+      "title": "Idempotency Key",
+      "type": "string"
+    },
+    "max_output_tokens_requested": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Max Output Tokens Requested"
+    },
+    "operator_approval": {
+      "$ref": "#/$defs/OperatorApprovalSignature"
+    },
+    "parent_permit_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parent Permit Id"
+    },
+    "permit_format_version": {
+      "const": "v2",
+      "title": "Permit Format Version",
+      "type": "string"
+    },
+    "policy_id": {
+      "title": "Policy Id",
+      "type": "string"
+    },
+    "policy_version": {
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "policy_version_or_hash": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Policy Version Or Hash"
+    },
+    "project_id": {
+      "format": "uuid",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    },
+    "request_fingerprint": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Request Fingerprint",
+      "type": "string"
+    },
+    "resource_attributes_json": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Resource Attributes Json"
+    },
+    "resource_inputs_json": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Resource Inputs Json"
+    },
+    "resource_modality": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Resource Modality"
+    },
+    "resource_model": {
+      "title": "Resource Model",
+      "type": "string"
+    },
+    "resource_operation": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Resource Operation"
+    },
+    "resource_provider": {
+      "title": "Resource Provider",
+      "type": "string"
+    },
+    "routing": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RoutingDecision"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "signature": {
+      "$ref": "#/$defs/IssuerSignature"
+    },
+    "status": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Status"
+    },
+    "subject_id": {
+      "title": "Subject Id",
+      "type": "string"
+    },
+    "subject_type": {
+      "title": "Subject Type",
+      "type": "string"
+    },
+    "task_description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Task Description"
+    },
+    "usage_idempotency_key": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Usage Idempotency Key"
+    },
+    "usage_limits": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Usage Limits"
+    },
+    "usage_reported_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Usage Reported At"
+    },
+    "usage_source": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Usage Source"
+    },
+    "usage_verification_method": {
+      "anyOf": [
+        {
+          "enum": [
+            "caller_report",
+            "provider_receipt",
+            "signed_callback",
+            "manual_reconciliation"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Usage Verification Method"
+    },
+    "usage_verification_status": {
+      "anyOf": [
+        {
+          "enum": [
+            "unverified",
+            "pending",
+            "verified",
+            "rejected",
+            "reconciled"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Usage Verification Status"
+    },
+    "usage_verification_updated_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Usage Verification Updated At"
+    },
+    "workflow_declaration_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Workflow Declaration Id"
+    },
+    "workflow_id": {
+      "anyOf": [
+        {
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]{1,255}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Workflow Id"
+    },
+    "workflow_state_json": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Workflow State Json"
+    }
+  },
+  "required": [
+    "id",
+    "project_id",
+    "subject_type",
+    "subject_id",
+    "action_name",
+    "resource_provider",
+    "resource_model",
+    "estimated_input_tokens",
+    "estimated_output_tokens",
+    "decision",
+    "reason",
+    "actions_json",
+    "policy_id",
+    "policy_version",
+    "idempotency_key",
+    "request_fingerprint",
+    "created_at",
+    "permit_format_version"
+  ],
+  "title": "AuditExportPermitV2Source",
+  "type": "object"
+}

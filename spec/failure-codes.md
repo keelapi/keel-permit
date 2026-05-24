@@ -44,6 +44,18 @@ MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD NOT, RECOMMENDED, MAY
 | `PERMIT_REVOKED_PROJECT_ID_MISMATCH` | permit revoked | A signed `permit.revoked` event is presented for a different `project_id` than the claim scope. |
 | `PERMIT_REVOKED_EFFECTIVE_AT_NOT_EQUAL_REVOKED_AT` | permit revoked | A v1 `permit.revoked` event has `effective_at` different from `revoked_at`. |
 | `PERMIT_REVOKED_ACTOR_PII_DETECTED` | permit revoked | A revocation actor value is not an opaque UUID or actor identity fields carry PII-shaped data. |
+| `PERMIT_OPERATOR_APPROVAL_INVALID` | permit v2 signature | An `operator_approval` signature, payload hash, or envelope shape is invalid. |
+| `PERMIT_OPERATOR_APPROVAL_KEY_NOT_TRUSTED` | permit v2 signature | No issuer-organization operator key resolves at the approval signing time. |
+| `PERMIT_OPERATOR_APPROVAL_SIGNER_MISMATCH` | permit v2 signature | The `operator_approval.signer_id` does not match the signed `operator_id`. |
+| `PERMIT_COUNTER_SIGNATURE_INVALID` | permit v2 signature | A `counter_signature` signature, payload hash, or envelope shape is invalid. |
+| `PERMIT_COUNTER_SIGNATURE_KEY_NOT_TRUSTED` | permit v2 signature | No buyer-principal key resolves at the counter-signature signing time. |
+| `PERMIT_COUNTER_SIGNATURE_SIGNER_MISMATCH` | permit v2 signature | The `counter_signature.signer_id` does not match the signed `buyer_principal_id`. |
+| `PERMIT_COUNTER_SIGNATURE_INTENT_MISMATCH` | permit v2 signature | The envelope `execution_intent_hash` does not match the signed counter-signature payload. |
+| `PERMIT_AUDIT_ATTESTATION_INVALID` | permit v2 signature | An `audit_attestation` signature, payload hash, or envelope shape is invalid. |
+| `PERMIT_AUDIT_ATTESTATION_KEY_NOT_TRUSTED` | permit v2 signature | No buyer-principal key resolves at the audit-attestation signing time. |
+| `PERMIT_AUDIT_ATTESTATION_SIGNER_MISMATCH` | permit v2 signature | The `audit_attestation.signer_id` does not match the signed `buyer_principal_id`. |
+| `PERMIT_AUDIT_ATTESTATION_BATCH_MISMATCH` | permit v2 signature | The envelope `batch_id` does not match the signed audit-attestation payload. |
+| `PAYLOAD_TYPE_MISMATCH` | permit v2 signature | A v2 signature slot carries or signs a `payload_type` outside the slot's registered domain. |
 | `EXPORT_SCOPE_PREDICATE_OUT_OF_GRAMMAR` | export scope | A declared scope predicate uses an operator or range shape outside scope-predicate v1. |
 | `EXPORT_SCOPE_BRIDGE_RECORD_MATCHES_PREDICATE` | export scope | A bridge, proof, or continuity record satisfies the declared predicate. |
 
@@ -164,6 +176,27 @@ values are introduced.
 | `PERMIT_REVOKED_PROJECT_ID_MISMATCH` | `disproved` | The signed `project_id` differs from the permit/project scope under adjudication. |
 | `PERMIT_REVOKED_EFFECTIVE_AT_NOT_EQUAL_REVOKED_AT` | `disproved` | The v1 event has `effective_at` different from `revoked_at`. Scheduled revocation is not a v1 behavior. |
 | `PERMIT_REVOKED_ACTOR_PII_DETECTED` | `disproved` | The actor identity is not an opaque UUID, or the event contains actor email, name, display label, or other PII-shaped identity material. Strict v1 payloads reject these fields; this code is a defensive failure for lax or translated evidence inputs. |
+
+### 13.3 Permit v2 Signature Envelope Codes
+
+Every code in this section maps to the existing v0 verdict enum: `supported`,
+`disproved`, `insufficient_evidence`, or `unverifiable_scope`. No new verdict
+values are introduced.
+
+| Code | Verdict | Trigger |
+|---|---|---|
+| `PERMIT_OPERATOR_APPROVAL_INVALID` | `disproved` | The `operator_approval` sub-object is malformed, its `signed_payload_hash` does not equal the canonical operator-approval payload hash, or its Ed25519 signature does not verify. |
+| `PERMIT_OPERATOR_APPROVAL_KEY_NOT_TRUSTED` | `insufficient_evidence` | The verifier cannot resolve an issuer-organization operator key for `(account_id, key_id)` that was active at `operator_approval.signed_at`. |
+| `PERMIT_OPERATOR_APPROVAL_SIGNER_MISMATCH` | `disproved` | `operator_approval.signer_id` differs from the `operator_id` in the signed operator-approval payload. |
+| `PERMIT_COUNTER_SIGNATURE_INVALID` | `disproved` | The `counter_signature` sub-object is malformed, its `signed_payload_hash` does not equal the canonical counter-signature payload hash, or its Ed25519 signature does not verify. |
+| `PERMIT_COUNTER_SIGNATURE_KEY_NOT_TRUSTED` | `insufficient_evidence` | The verifier cannot resolve a buyer-principal key for `(account_id, key_id)` that was active at `counter_signature.signed_at`. |
+| `PERMIT_COUNTER_SIGNATURE_SIGNER_MISMATCH` | `disproved` | `counter_signature.signer_id` differs from the `buyer_principal_id` in the signed counter-signature payload. |
+| `PERMIT_COUNTER_SIGNATURE_INTENT_MISMATCH` | `disproved` | `counter_signature.execution_intent_hash` differs from the `execution_intent_hash` in the signed counter-signature payload. |
+| `PERMIT_AUDIT_ATTESTATION_INVALID` | `disproved` | The `audit_attestation` sub-object is malformed, its `signed_payload_hash` does not equal the canonical audit-attestation payload hash, or its Ed25519 signature does not verify. |
+| `PERMIT_AUDIT_ATTESTATION_KEY_NOT_TRUSTED` | `insufficient_evidence` | The verifier cannot resolve a buyer-principal key for `(account_id, key_id)` that was active at `audit_attestation.signed_at`. |
+| `PERMIT_AUDIT_ATTESTATION_SIGNER_MISMATCH` | `disproved` | `audit_attestation.signer_id` differs from the `buyer_principal_id` in the signed audit-attestation payload. |
+| `PERMIT_AUDIT_ATTESTATION_BATCH_MISMATCH` | `disproved` | `audit_attestation.batch_id` differs from the `batch_id` in the signed audit-attestation payload. |
+| `PAYLOAD_TYPE_MISMATCH` | `disproved` | The signature slot or signed payload carries a `payload_type` that does not exactly match the registered value for that slot: `permit.operator_approval.v1`, `permit.counter_signature.v1`, or `permit.audit_attestation.v1`. |
 
 ## 14. Scope-State and Scope-Faithfulness Codes
 
