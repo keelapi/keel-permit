@@ -31,7 +31,7 @@ LEAK_PATTERNS = [
     ("Linux home path", re.compile(r"/home/[A-Za-z0-9._-]+/")),
     ("Windows user path", re.compile(r"[A-Za-z]:\\\\Users\\\\[^\\\\]+\\\\")),
     ("local Desktop path", re.compile(r"\bDesktop/(?:Business|Personal|Downloads)?")),
-    ("internal design-review attribution", re.compile(r"\bChatGPT design review\b")),
+    ("AI-assistant design-review attribution", re.compile(r"\b(?:AI assistant|LLM) design review\b", re.IGNORECASE)),
 ]
 
 

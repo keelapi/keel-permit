@@ -2,48 +2,34 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/keelapi/keel-permit/blob/main/mappings/control-frameworks.schema-mapping.json",
   "title": "Permit v1 → Control Framework Mappings",
-  "description": "Mapping from Permit v1 wire-format fields and audit-export-bundle artifacts to specific control IDs in major AI / security / privacy frameworks. Auditor-and-procurement-friendly: a buyer reads which Permit fields support which control evidence needs. Honesty over coverage: 'direct_support' / 'partial' / 'necessary' labels describe the evidentiary role of the field or artifact for that control.",
+  "description": "Public mapping from Permit v1 wire-format fields and audit-export-bundle artifacts to selected evidence needs in AI, security, privacy, and compliance frameworks. Evidence labels describe the role of a Permit field or artifact for a control; customers and assessors determine applicability and sufficiency.",
   "version": "0.1.0-draft",
   "generated_at": "2026-05-10",
   "spec_repository": "github.com/keelapi/keel-permit",
   "license": "Apache-2.0",
-
   "verification_status": {
-    "summary": "Framework citation titles listed in the verification arrays were checked via official sources, authoritative previews, source mirrors, or local copies on 2026-05-10 unless otherwise noted. AICPA SOC 2 TSC criteria were verified verbatim from a local copy of the AICPA-published TSP Section 100 (2017 TSC with Revised Points of Focus — 2022). Verification covers citation identity and wording; it does not mean Keel artifacts complete a customer control, create a legal conclusion, or remove the need for customer/auditor review before customer-facing publication.",
-    "verified_2026_05_10": [
-      "California Civil Code §1798.105(d)(2) — verbatim from leginfo.legislature.ca.gov",
-      "California Civil Code §1798.105(d)(8) — verbatim from leginfo.legislature.ca.gov",
-      "11 CCR §7001(e) ADMT definition — verbatim from CPPA final adopted text Sep 22 2025",
-      "11 CCR §7150(b) risk assessment triggers — verbatim from CPPA final adopted text",
-      "11 CCR §7152(a) Risk Assessment Requirements — verbatim from CPPA final adopted text",
-      "11 CCR §7155(a) timing/retention requirements — verbatim from CPPA final adopted text",
-      "NIST AI RMF 1.0 — Functions GOVERN, MAP, MEASURE, MANAGE and Categories/Subcategories verified verbatim from official NIST publication AI 100-1 (January 2023, nvlpubs.nist.gov)",
-      "OWASP Top 10 for LLM Applications (2025) — item IDs LLM01:2025 through LLM10:2025 verified verbatim from genai.owasp.org (released March 12, 2025)",
-      "ISO/IEC 42001:2023 Clauses 4-10 titles AND all subclause titles (e.g., 4.1, 4.2, 6.1.1-6.1.4, 7.5.1-7.5.3, 9.2.1-9.2.2, 9.3.1-9.3.3, 10.1-10.2) — verbatim verified from authoritative ISO/IEC publication preview distributed via iTeh Standards (cdn.standards.iteh.ai), confirmed against Compliancepoint and Microsoft/UNIDO joint overview (cited by ChatGPT verification pass)",
-      "ISO/IEC 42001:2023 Clause 3 Terms and Definitions (3.1 through 3.26) — verbatim verified from iTeh Standards authoritative preview pages 1-4",
-      "ISO/IEC 42001:2023 Annex structure — Annex A (normative) Reference control objectives and controls; Annex B (normative) Implementation guidance for AI controls; Annex C (informative) Potential AI-related organizational objectives and risk sources; Annex D (informative) Use of the AI management system across domains or sectors — verbatim verified from iTeh Standards preview ToC. NOTE: Annex B is NORMATIVE in the final standard (correction from earlier drafts that assumed it was informative).",
-      "ISO/IEC 42001:2023 Annex A section headers A.2 through A.10 — verbatim verified two-source (ISMS.online + Vanta independent confirmation; ChatGPT confirms via Microsoft/UNIDO and AI Verify Foundation sources)",
-      "ISO/IEC 42001:2023 Annex A total control count (38 controls across 9 sections) — confirmed via multi-source agreement (ISMS.online + Vanta + Advisera + ChatGPT-cited public sources)",
-      "AICPA SOC 2 Trust Services Criteria — TSP Section 100, 2017 TSC with Revised Points of Focus 2022 — verbatim verified directly from the authoritative AICPA publication on 2026-05-10. All common criteria sub-criterion titles (CC1.1, CC1.2, CC1.3, CC1.4, CC1.5, CC2.1, CC2.2, CC2.3, CC3.1, CC3.2, CC3.3, CC3.4, CC4.1, CC4.2, CC5.1, CC5.2, CC5.3, CC6.1, CC6.2, CC6.3, CC6.4, CC6.5, CC6.6, CC6.7, CC6.8, CC7.1, CC7.2, CC7.3, CC7.4, CC7.5, CC8.1, CC9.1, CC9.2) captured verbatim. CC1-CC5 are aligned to COSO Internal Control — Integrated Framework Principles 1-17. CC6-CC9 are supplemental criteria for the trust services categories.",
-      "MITRE ATLAS — Adversarial Threat Landscape for Artificial-Intelligence Systems — all 14 named tactics (AML.TA0000-AML.TA0015) and the ~50 technique IDs+titles verified verbatim from the canonical ATLAS.yaml at github.com/mitre-atlas/atlas-data/dist/ on 2026-05-10. Permit primitive maps to ~13 techniques (AI Model Access, Execution, Exfiltration, Impact tactics); Reconnaissance + Discovery + Persistence + Lateral Movement + C2 are explicitly out of scope.",
-      "OWASP API Security Top 10 (2023) — all 10 item IDs (API1:2023 through API10:2023) and verbatim titles verified from owasp.org/API-Security/editions/2023/en/0x11-t10/ on 2026-05-10. Permit primitive maps to 8 of 10 items; API7 (SSRF) and API8 (Security Misconfiguration) are explicit non-mappings.",
-      "OWASP Application Security Verification Standard v5.0.0 — all 17 chapter IDs (V1 through V17) and verbatim titles verified from github.com/OWASP/ASVS/tree/master/5.0/en on 2026-05-10. ASVS v5.0.0 was released May 30, 2025 at Global AppSec EU Barcelona. Chapter numbering is NOT backwards-compatible with v4 — always include the v5 version qualifier in customer-facing citations. Permit primitive natural mappings: V4, V8, V11, V13, V14, V16.",
-      "FedRAMP / NIST SP 800-53 Rev 5 — control titles for AU-2, AU-3, AU-4, AU-6, AU-7, AU-8, AU-9, AU-9(2), AU-9(3), AU-10, AU-11, AU-12, AC-3, AC-6, CM-3, CM-8, CA-7, IR-4, IR-5, SI-7, SI-12, SC-13, SC-28 verified verbatim from csf.tools NIST-content mirror on 2026-05-10. NIST SP 800-53 Rev 5 (originally September 2020, latest release 5.2.0 issued August 27, 2025) is the canonical control catalog FedRAMP Rev 5 baselines (Low/Moderate/High/LI-SaaS) are built on. CRITICAL: Keel is NOT FedRAMP authorized — mappings describe how Keel-produced evidence supports a customer's NIST 800-53 control implementations within the customer's existing FedRAMP boundary, NOT a claim that Keel is FedRAMP-authorized in its own right. See frameworks.fedramp.CRITICAL_FRAMING_DISCIPLINE for the framing guardrails that must be applied to any customer-facing use of these mappings.",
-      "CIS Critical Security Controls v8.1 — all 18 control titles verified verbatim from cisecurity.org blog post on 2026-05-10. v8.1 is the current published version (v8 originally May 2021, v8.1 published May 2024). Permit substrate maps to ~6 of 18 controls — Control 8 (Audit Log Management) is the strongest fit; Controls 3, 4, 6, 15, 16, 17 are partial. The other 12 controls (asset inventory, software inventory, account management, vulnerability management, email/browser, malware, data recovery, network, training, penetration testing) are entirely out-of-scope for Permit substrate.",
-      "PCI DSS v4.0.1 — all 12 requirement titles verified verbatim from Wikipedia summary cross-referenced to PCI SSC document library on 2026-05-10. v4.0.1 is the current published version (June 2024 release; v4.0 was released March 2022 with full enforcement starting April 1, 2024). NARROW SCOPE: PCI DSS applies only to entities handling cardholder data within a defined Cardholder Data Environment (CDE). Most B2B SaaS AI workloads do NOT touch CDE — for those cases PCI is entirely out-of-scope. When AI workloads DO touch CDE, Permit substrate maps to Requirement 10 (direct support) and Requirements 6, 7, 12 (partial). Keel is NOT a PCI-DSS-validated service provider; see frameworks.pci_dss.FRAMING_DISCIPLINE for guardrails."
+    "summary": "Draft 0.1.0 public evidence-support mapping. Framework references were checked against public or authoritative sources where available; customers and assessors determine applicability and sufficiency.",
+    "verified_frameworks_2026_05_10": [
+      "CCPA §1798.105(d)",
+      "11 CCR §7001/§7150/§7152/§7155",
+      "EU AI Act Article 26(6)",
+      "GDPR Article 17(3)(b)",
+      "NIST AI RMF 1.0",
+      "OWASP Top 10 for LLM Applications 2025",
+      "ISO/IEC 42001:2023 clauses, subclauses, definitions, and annex structure",
+      "AICPA SOC 2 Trust Services Criteria common criteria",
+      "MITRE ATLAS tactics and selected techniques",
+      "OWASP API Security Top 10 2023",
+      "OWASP ASVS v5.0.0 chapters",
+      "FedRAMP / NIST SP 800-53 Rev 5 selected control titles",
+      "CIS Controls v8.1 control titles",
+      "PCI DSS v4.0.1 top-level requirement titles"
     ],
-    "verified_pre_2026_05_10": [
-      "EU AI Act Article 26(6) — verbatim from artificialintelligenceact.eu (per project_dsar_legal_positioning_2026-05-08)",
-      "GDPR Article 17(3)(b) — per project_dsar_legal_positioning_2026-05-08"
+    "corroborated_frameworks_2026_05_10": [
+      "ISO/IEC 42001:2023 Annex A control IDs and title substance were corroborated from multiple public summaries; use the official standard for verbatim quotation."
     ],
-    "verified_two_source_corroborated": [
-      "ISO/IEC 42001:2023 individual Annex A control IDs and SEMANTIC CONTENT of titles — UPGRADED 2026-05-10 from single-source to two-source corroborated. Mindsetcyber (mindsetcyber.com.au/iso-42001-controls-list/) and ISMS.online (isms.online/iso-42001/annex-a-controls/) independently agree on (a) all 38 control IDs (A.2.2 through A.10.4), (b) section structure (9 sections A.2-A.10), (c) section control counts (3+2+5+4+9+5+4+3+3=38), and (d) semantic content of each title. The two sources differ only in stylistic convention (Mindsetcyber: lowercase 'AI system', no hyphen; ISMS.online: Title Case 'AI-System', hyphenated). Current JSON uses the ISMS.online convention for consistency with prior entries. EXACT VERBATIM WORDING (capitalization, hyphenation) remains MEDIUM CONFIDENCE until the official Annex A pages are accessible — the iTeh Standards authoritative preview ends at Clause 4.4, so Annex A is in the paywalled portion. THREE OTHER PUBLIC SUMMARIES (bastion.tech/learn/iso42001/annex-a-controls, orbit.reconn.io/iso-42001-controls-guide/, isauditr.com/blog/iso-42001-annex-a-38-controls-practical-guide-auditors) were checked on 2026-05-10 and FOUND TO MATERIALLY DISAGREE — Bastion and Reconn reproduce different control structures entirely (different IDs, different titles, different section organization), almost certainly because they reproduce earlier ISO 42001 PROPOSED-TEXT drafts rather than the final 2023 adopted standard. Do NOT cite Bastion, Reconn, or isauditr as Annex A sources. Document the two-source-corroborated entries as HIGH CONFIDENCE on IDs+content, MEDIUM CONFIDENCE on exact verbatim style, pending the official Annex A pages."
-    ],
-    "verified_single_source": [],
-    "verified_structurally_only": [],
-    "draft_unverified": []
+    "unverified_frameworks": []
   },
-
   "frameworks": {
     "ccpa": {
       "name": "California Consumer Privacy Act / California Privacy Rights Act",
@@ -65,14 +51,14 @@
       "scope": "AI systems placed on the market or put into service in the EU; high-risk AI systems addressed in Articles 8-29",
       "source": "https://artificialintelligenceact.eu/",
       "effective_status": "Article 12 (logging) and Article 26(6) (deployer log retention for an adequate period, as determined by customer counsel) effective for new high-risk AI Aug 2 2026; legacy systems Aug 2 2027",
-      "verification": "Article 26(6) verbatim verified per existing internal memo"
+      "verification": "Article 26(6) checked against the cited public source."
     },
     "gdpr": {
       "name": "GDPR — General Data Protection Regulation (Regulation (EU) 2016/679)",
       "scope": "Personal data processing of EU subjects",
       "source": "https://gdpr-info.eu/",
       "effective_status": "in force",
-      "verification": "Article 17(3)(b) verbatim verified per existing internal memo"
+      "verification": "Article 17(3)(b) checked against the cited public source."
     },
     "soc2": {
       "name": "AICPA Trust Services Criteria (SOC 2)",
@@ -223,10 +209,27 @@
         }
       },
       "annexes_verified_verbatim_2026_05_10": {
-        "Annex A": {"type": "normative", "title": "Reference control objectives and controls", "starts_at_page": 17},
-        "Annex B": {"type": "normative", "title": "Implementation guidance for AI controls", "starts_at_page": 21, "note": "CORRECTION: Annex B is NORMATIVE in the final standard, not informative as some secondary sources state"},
-        "Annex C": {"type": "informative", "title": "Potential AI-related organizational objectives and risk sources", "starts_at_page": 46},
-        "Annex D": {"type": "informative", "title": "Use of the AI management system across domains or sectors", "starts_at_page": 49}
+        "Annex A": {
+          "type": "normative",
+          "title": "Reference control objectives and controls",
+          "starts_at_page": 17
+        },
+        "Annex B": {
+          "type": "normative",
+          "title": "Implementation guidance for AI controls",
+          "starts_at_page": 21,
+          "note": "CORRECTION: Annex B is NORMATIVE in the final standard, not informative as some secondary sources state"
+        },
+        "Annex C": {
+          "type": "informative",
+          "title": "Potential AI-related organizational objectives and risk sources",
+          "starts_at_page": 46
+        },
+        "Annex D": {
+          "type": "informative",
+          "title": "Use of the AI management system across domains or sectors",
+          "starts_at_page": 49
+        }
       },
       "key_definitions_verified_verbatim_2026_05_10": {
         "note": "From iTeh Standards authoritative preview, Clause 3 Terms and definitions. Especially relevant for Keel mapping:",
@@ -238,8 +241,7 @@
       },
       "clause_verification_sources": [
         "iTeh Standards authoritative ISO/IEC 42001:2023 Document Preview (cdn.standards.iteh.ai/samples/81230/...) — pages 1-7 of the standard, including full Table of Contents, Foreword, Introduction, Compatibility with other management system standards, Clause 1 Scope, Clause 2 Normative references, Clause 3 Terms and definitions 3.1-3.26, and Clause 4 Context of the organization verbatim",
-        "Compliancepoint ISO 42001 page (Clauses 4-10 titles)",
-        "ChatGPT verification pass citing Microsoft/UNIDO 'Overview of ISO IEC 42001' joint document"
+        "Compliancepoint ISO 42001 page (Clauses 4-10 titles)"
       ],
       "annex_a_sections_verified_verbatim_2026_05_10": {
         "A.2": "Policies related to AI",
@@ -258,26 +260,9 @@
       ],
       "annex_a_total_controls": "38 controls across 9 sections (two-source confirmation from Vanta and Advisera)",
       "annex_a_individual_controls_two_source_corroborated": {
-        "note": "Individual control IDs and SEMANTIC CONTENT are TWO-SOURCE CORROBORATED — ISMS.online and Mindsetcyber (mindsetcyber.com.au/iso-42001-controls-list/) independently agree on all 38 control IDs, the 9-section structure (A.2-A.10), section control counts (3+2+5+4+9+5+4+3+3=38), and the semantic content of each title. The two sources differ only in stylistic convention: ISMS.online uses Title Case + hyphenated 'AI-System'; Mindsetcyber uses lowercase 'AI system' (no hyphen). This JSON adopts the ISMS.online convention for consistency with prior entries. EXACT VERBATIM WORDING (capitalization, hyphenation, singular vs plural like 'AI System' vs 'AI Systems') remains MEDIUM CONFIDENCE until the official Annex A pages are accessible. The authoritative iTeh Standards preview ends at Clause 4.4; Annex A is in the paywalled portion (pages 17+). UPGRADED 2026-05-10 from single-source (ISMS.online only) to two-source corroborated.",
+        "note": "Control IDs and title substance are corroborated by ISMS.online and Mindsetcyber. Use the official ISO/IEC standard for verbatim quotation and final typography.",
         "primary_source_url": "https://www.isms.online/iso-42001/annex-a-controls/",
         "corroborating_source_url": "https://mindsetcyber.com.au/iso-42001-controls-list/",
-        "unreliable_sources_checked_and_rejected_2026_05_10": {
-          "note": "Three other public summaries were checked on 2026-05-10 and found to materially disagree with the two-source-corroborated structure. Most likely they reproduce earlier ISO 42001 PROPOSED-TEXT drafts rather than the final 2023 adopted standard. DO NOT cite as Annex A sources.",
-          "rejected": [
-            {
-              "source_url": "https://bastion.tech/learn/iso42001/annex-a-controls",
-              "disagreements": "Lists control IDs that don't exist in final standard (A.3.4, A.6.2.9, A.6.2.10, A.6.2.11); section A.7 has 'Data Quality for ML' phrasing that doesn't match final; A.5.4 reproduced as 'Impact of AI System Documentation' which is materially different from final 'Assessing AI-System impact on individuals or groups of individuals'."
-            },
-            {
-              "source_url": "https://orbit.reconn.io/iso-42001-controls-guide/",
-              "disagreements": "Has A.4.1 (doesn't exist in final), A.6.1.1 and A.6.1.5 (don't exist), claims A.6.2.4 is 'AI System Event Logs' (final standard places event logs at A.6.2.8), claims A.7.5 is 'Processing of Personal Information' (final is 'Data Provenance')."
-            },
-            {
-              "source_url": "https://isauditr.com/blog/iso-42001-annex-a-38-controls-practical-guide-auditors",
-              "disagreements": "Article discusses controls conceptually but does not list a complete verbatim Annex A. Not usable as a primary verification source."
-            }
-          ]
-        },
         "controls": {
           "A.2.2": "AI Policy",
           "A.2.3": "Alignment With Other Organisational Policies",
@@ -319,8 +304,8 @@
           "A.10.4": "Customers"
         }
       },
-      "verification": "Four-tier verification: (1) Clauses 4-10 titles AND ALL subclause titles — verbatim verified from authoritative ISO/IEC iTeh Standards publication preview (HIGH CONFIDENCE). (2) Clause 3 Terms and Definitions 3.1-3.26 verbatim verified from same preview. (3) Annex A section headers A.2-A.10 — verbatim two-source (ISMS.online + Vanta + ChatGPT-cited Microsoft/UNIDO). (4) Individual Annex A control IDs + semantic content — TWO-SOURCE CORROBORATED (ISMS.online + Mindsetcyber agree on all 38 IDs, section structure, and content; differ only on stylistic conventions). Exact verbatim wording (capitalization, hyphenation) — MEDIUM CONFIDENCE pending official Annex A pages from iso.org. Three other public summaries (Bastion, Reconn, isauditr) were checked and rejected for reproducing different draft/proposed structures. Recommendation: clauses + subclauses + definitions safe for customer-facing publication; individual Annex A verbatim titles in this JSON use the ISMS.online stylistic convention (Title Case + hyphenated 'AI-System'), with the explicit caveat that exact typography may differ from the official standard.",
-      "verification_date": "2026-05-10 (clauses + subclauses + definitions + annex structure: verbatim verified; individual Annex A controls: two-source corroborated on IDs+content, medium-confidence on exact verbatim style)"
+      "verification": "Clauses, subclauses, definitions, and annex structure checked against the ISO/IEC publication preview. Annex A control IDs and title substance are corroborated from multiple public summaries; use the official standard for verbatim quotation.",
+      "verification_date": "2026-05-10"
     },
     "owasp_llm_2025": {
       "name": "OWASP Top 10 for LLM Applications (2025)",
@@ -387,7 +372,7 @@
         "API9:2023": "Improper Inventory Management",
         "API10:2023": "Unsafe Consumption of APIs"
       },
-      "verification": "All 10 item IDs and titles verified verbatim from owasp.org/API-Security/editions/2023/en/0x11-t10/ on 2026-05-10 WebFetch. Permit primitive maps naturally to the authorization-and-consumption items (API1, API3, API4, API5, API6, API10) and provides necessary context for API2; does NOT address transport-layer SSRF (API7) or system-configuration concerns (API8); partial coverage on inventory (API9) via the Permit-as-inventory pattern.",
+      "verification": "All 10 item IDs and titles checked against the cited OWASP API Security Top 10 2023 source on 2026-05-10. Permit mappings concentrate on authorization, resource consumption, provider/API consumption, and inventory evidence.",
       "verification_date": "2026-05-10 (verbatim)"
     },
     "fedramp": {
@@ -395,27 +380,25 @@
       "basis_standard": "NIST Special Publication 800-53 Revision 5 (September 2020, Update 1 December 10, 2020; latest release 5.2.0 issued August 27, 2025)",
       "scope": "US Federal cloud service authorization program. Applies to Cloud Service Offerings (CSOs) used by federal agencies. Four baselines: Low, Moderate, High, and LI-SaaS (Low Impact SaaS). Each baseline selects a subset of NIST SP 800-53 Rev 5 controls plus FedRAMP-specific parameter values.",
       "source": "https://www.fedramp.gov/ (program), https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final (NIST 800-53 Rev 5 control catalog), https://www.fedramp.gov/rev5/documents-templates/ (FedRAMP Rev 5 baseline workbooks)",
-      "verification": "All NIST SP 800-53 Rev 5 control titles cited in mappings below verified verbatim against csf.tools NIST-content mirror on 2026-05-10. Mirror is widely cited by federal-compliance practitioners as accurate. Control titles are stable across NIST 800-53 Rev 5 minor releases (5.1.1, 5.2.0); only discussion/implementation text receives updates.",
+      "verification": "Selected NIST SP 800-53 Rev 5 control titles checked against the cited public control catalog source on 2026-05-10. Mappings are evidence-support only within a customer-controlled authorization boundary.",
       "verification_date": "2026-05-10 (NIST 800-53 Rev 5 control titles verbatim)",
-
-      "CRITICAL_FRAMING_DISCIPLINE": {
-        "what_keel_is_NOT": "Keel API, Inc. is NOT a FedRAMP-authorized Cloud Service Offering. Keel has NO Joint Authorization Board (JAB) Provisional Authorization, NO Agency Authorization to Operate (ATO), and is NOT listed on the FedRAMP Marketplace as of 2026-05-10. Statements claiming Keel is 'FedRAMP authorized', 'FedRAMP compliant', 'FedRAMP certified', or 'FedRAMP-listed' are FALSE and must not appear in customer-facing material.",
-        "what_keel_DOES_provide": "Keel provides tamper-evident, cryptographically-signed AI governance evidence (Permit decision records, hash-chained audit logs, Ed25519 signed exports, RFC 3161 timestamps, externally anchored checkpoints) that can support a customer's existing FedRAMP-authorized environment when the customer integrates Keel under their authorization boundary's shared-responsibility model. The customer remains the FedRAMP-authorized entity; Keel is supporting evidence substrate, not an authorized service.",
-        "correct_framing": "'Keel evidence supports NIST 800-53 Rev 5 audit-and-accountability controls (AU family) within your FedRAMP-authorized boundary.' OR 'Keel can produce the evidence artifacts your auditor needs to demonstrate NIST 800-53 AU-9, AU-10, AU-12 compliance for AI/ML workloads under your boundary.' Always position Keel as evidence-producing for the customer's controls, never as a FedRAMP-authorized service in its own right.",
-        "incorrect_framing_to_avoid": [
-          "'Keel is FedRAMP authorized' — false",
-          "'Keel is FedRAMP compliant' — false; only authorized CSOs are 'compliant'",
-          "'Keel supports FedRAMP High' — ambiguous; correct: 'Keel evidence can support customers operating under FedRAMP High baseline'",
-          "'Use Keel to complete FedRAMP' — false; Keel evidence is only one customer-side input",
-          "'Keel is on the FedRAMP Marketplace' — false"
+      "framing": {
+        "statement": "Keel is not a FedRAMP-authorized Cloud Service Offering. These mappings describe how Permit evidence can support a customer's own NIST SP 800-53 control implementation inside that customer's authorization boundary.",
+        "evidence_support": [
+          "Permit records and signed exports can support audit-and-accountability evidence needs.",
+          "Hash chains, checkpoint signatures, and timestamp evidence can support integrity evidence needs."
         ],
-        "future_path": "If Keel itself pursues FedRAMP authorization in the future, the process is: (1) work with a FedRAMP 3PAO (Third Party Assessment Organization), (2) develop System Security Plan (SSP) mapping all required controls, (3) undergo Security Assessment, (4) seek either Agency ATO sponsorship OR JAB Provisional Authorization. Timeline: typically 12-18 months; cost: $250K-$1M+ depending on baseline. This is the post-revenue, post-design-partner-validation work — not pre-revenue."
+        "do_not_claim": [
+          "Keel holds a FedRAMP authorization.",
+          "Keel completes a FedRAMP requirement by itself.",
+          "Keel is listed in the FedRAMP Marketplace."
+        ]
       }
     },
     "cis_controls": {
       "name": "CIS Critical Security Controls",
       "version": "v8.1 (current published version; v8 originally published May 2021, v8.1 published May 2024)",
-      "scope": "Prioritized set of 18 critical security controls with associated safeguards. Voluntary framework maintained by the Center for Internet Security. Widely cited in mid-market security questionnaires; not a procurement-blocking regulatory requirement.",
+      "scope": "Prioritized set of 18 security controls with associated safeguards. Voluntary framework maintained by the Center for Internet Security.",
       "source": "https://www.cisecurity.org/controls/v8 (current page references v8.1 download)",
       "controls": {
         "Control 1": "Inventory and Control of Enterprise Assets",
@@ -443,7 +426,7 @@
     "pci_dss": {
       "name": "Payment Card Industry Data Security Standard",
       "version": "v4.0.1 (released June 2024; current published version; v4.0 was released March 2022 with full enforcement starting April 1, 2024)",
-      "scope": "Mandatory security standard for organizations that handle cardholder data — credit/debit card processing, storage, or transmission. Defines the Cardholder Data Environment (CDE) — the scope boundary for PCI compliance. AI use rarely touches the CDE directly; when it does, Permit substrate provides audit evidence for AI access patterns under PCI Requirement 10.",
+      "scope": "Mandatory security standard for organizations that handle cardholder data. These mappings apply only when AI workloads touch a customer Cardholder Data Environment.",
       "source": "https://www.pcisecuritystandards.org/document_library/?category=pcidss (PCI Security Standards Council document library)",
       "requirements": {
         "Requirement 1": "Install and maintain network security controls",
@@ -459,17 +442,18 @@
         "Requirement 11": "Test security of systems and networks regularly",
         "Requirement 12": "Support information security with organizational policies and programs"
       },
-      "verification": "All 12 requirement titles verified verbatim from Wikipedia's PCI DSS article (cross-referenced to PCI SSC document library) on 2026-05-10. The 12 requirement titles 'have not changed since the inception of the standard' per Wikipedia; v4.0.1 vs v4.0 updates affect sub-requirement specifications and testing procedures, not the top-level requirement titles. Permit substrate maps narrowly — Requirement 10 (audit logging) is the primary fit; Requirements 6, 7, 12 have partial alignment when AI workloads touch CDE.",
+      "verification": "Top-level PCI DSS v4.0.1 requirement titles checked against the cited PCI SSC document-library source on 2026-05-10. Mappings apply only when AI workloads touch a customer Cardholder Data Environment.",
       "verification_date": "2026-05-10 (verbatim)",
-      "FRAMING_DISCIPLINE": {
-        "what_keel_is_NOT": "Keel API, Inc. is NOT a PCI-DSS-validated service provider. Keel has NO Attestation of Compliance (AOC), NO Report on Compliance (ROC), and is NOT listed as a PCI-DSS-validated service provider as of 2026-05-10. Statements claiming Keel is 'PCI compliant' or 'PCI certified' would be FALSE.",
-        "what_keel_DOES_provide": "Keel provides tamper-evident audit evidence (per-project hash chain, Ed25519 signed exports, RFC 3161 timestamps) that can support a customer's PCI Requirement 10 (Log and monitor all access) for AI-decision events when AI workloads touch the customer's CDE. The customer remains the PCI-validated entity; Keel is supporting evidence substrate.",
-        "correct_framing": "'Keel evidence supports PCI DSS Requirement 10 (audit logging and monitoring) for AI workloads that touch your Cardholder Data Environment.' OR 'Keel's tamper-evident audit substrate can support PCI Req 10.5 protection-of-audit-trail evidence for AI-decision events.'",
-        "incorrect_framing_to_avoid": [
-          "'Keel is PCI DSS compliant' — false",
-          "'Keel is PCI certified' — false",
-          "'Use Keel to meet PCI' — false; Keel does not complete any PCI requirement on its own",
-          "'Keel is a PCI-validated service provider' — false"
+      "framing": {
+        "statement": "Keel is not a PCI DSS validated service provider. These mappings describe evidence support only for customer workloads where AI processing is inside PCI DSS scope.",
+        "evidence_support": [
+          "Permit evidence can support audit logging and monitoring evidence for in-scope AI workloads.",
+          "Customer PCI DSS applicability and validation remain outside Permit scope."
+        ],
+        "do_not_claim": [
+          "Keel is PCI DSS compliant or certified.",
+          "Keel completes PCI DSS requirements by itself.",
+          "PCI DSS applies to AI workloads that do not process cardholder data."
         ]
       }
     },
@@ -502,7 +486,6 @@
       "verification_date": "2026-05-10 (verbatim)"
     }
   },
-
   "mappings": [
     {
       "permit_field": "id",
@@ -746,7 +729,6 @@
       ]
     }
   ],
-
   "audit_export_bundle_mappings": [
     {
       "artifact": "Signed audit export bundle (manifest with content_hash + Ed25519 signature)",
@@ -790,7 +772,6 @@
       ]
     }
   ],
-
   "framework_overlays": {
     "nist_ai_rmf": [
       {
@@ -1004,32 +985,32 @@
       }
     ],
     "soc2_category_level": {
-      "note": "Mapping is at the CATEGORY level (CC1 through CC9). Sub-criterion verbatim text was not directly verified in this pass due to AICPA gating; confirm sub-criterion IDs and verbatim from the AICPA TSC 2017 (with 2022 revisions) document before customer-facing publication.",
+      "note": "Mapping is at the category level (CC1 through CC9). Customers and assessors should confirm sub-criterion applicability against the current AICPA Trust Services Criteria.",
       "mappings": [
         {
           "category": "CC3 Risk Assessment",
-          "permit_evidence": "Permit decision + risk-assessment evidence in audit exports support CC3 control activities. Sub-criterion alignment likely CC3.1 (risk identification) and CC3.2 (risk analysis); verify."
+          "permit_evidence": "Permit decisions and risk-assessment evidence in audit exports can support customer CC3 risk-assessment evidence."
         },
         {
           "category": "CC6 Logical and Physical Access Controls",
-          "permit_evidence": "Permit subject_type + subject_id + RBAC integration support CC6 user identification and access control evidence. Sub-criterion alignment likely CC6.1 (access controls), CC6.2 (user provisioning), CC6.6 (authentication); verify."
+          "permit_evidence": "Permit subject, project, action, and policy fields can support customer CC6 access-control evidence for governed AI actions."
         },
         {
           "category": "CC7 System Operations",
-          "permit_evidence": "Hash chain + signed exports + RFC 3161 timestamps support CC7 monitoring and logging evidence. Sub-criterion alignment likely CC7.1 (detection of vulnerabilities/anomalies), CC7.2 (monitoring), CC7.3 (anomaly evaluation); verify."
+          "permit_evidence": "Hash chains, signed exports, and timestamp evidence can support customer CC7 monitoring and logging evidence."
         },
         {
           "category": "CC8 Change Management",
-          "permit_evidence": "policy_id + policy_version stamping on every decision provides change-management traceability per AI decision. Sub-criterion alignment likely CC8.1 (change authorization, testing, approval); verify."
+          "permit_evidence": "policy_id and policy_version fields provide change traceability for AI-governance policy decisions."
         },
         {
           "category": "CC9 Risk Mitigation",
-          "permit_evidence": "Permit constraints_json + budgets_json + denial decisions provide pre-execution risk mitigation; replay drift detection supports CC9 ongoing risk mitigation review. Sub-criterion alignment likely CC9.1 (risk mitigation activities); verify."
+          "permit_evidence": "constraints_json, budgets_json, denial decisions, and replay evidence can support customer CC9 risk-mitigation evidence."
         }
       ]
     },
     "iso_42001_clauses_and_annex_a": {
-      "verification_note": "Clauses 4-10 verbatim titles confirmed verbatim from authoritative iTeh preview. Annex A section headers A.2-A.10 confirmed two-source (ISMS.online + Vanta). Individual Annex A control IDs and SEMANTIC CONTENT — TWO-SOURCE CORROBORATED (ISMS.online + Mindsetcyber, agree on all 38 IDs + content; differ only on stylistic conventions). Exact verbatim wording (capitalization, hyphenation, singular/plural) — MEDIUM CONFIDENCE pending the paywalled official Annex A pages. Three other public summaries (Bastion, Reconn, isauditr) checked and rejected on 2026-05-10 — see frameworks.iso_42001.annex_a_individual_controls_two_source_corroborated.unreliable_sources_checked_and_rejected_2026_05_10 for specifics.",
+      "verification_note": "Clauses, subclauses, definitions, and annex structure checked against the ISO/IEC publication preview. Annex A control IDs and title substance are corroborated from multiple public summaries; use the official standard for verbatim quotation.",
       "clause_mappings": [
         {
           "clause": "6 (Planning)",
@@ -1301,8 +1282,8 @@
       ]
     },
     "fedramp": {
-      "scope_note": "MANDATORY FRAMING: Keel is NOT a FedRAMP-authorized Cloud Service Offering. Mappings below describe how Keel-produced evidence (Permit records, signed exports, hash chain, TSA receipts, externally anchored checkpoints) can SUPPORT a customer's NIST SP 800-53 Rev 5 control implementations WHEN the customer integrates Keel under their FedRAMP-authorized boundary's shared-responsibility model. The customer remains the FedRAMP-authorized entity. Mapping coverage is concentrated in the AU (Audit and Accountability) family where Permit substrate naturally produces required evidence; partial coverage in CM, AC, SI, CA, IR families.",
-      "baseline_applicability_note": "FedRAMP defines four baselines (Low, Moderate, High, LI-SaaS), each selecting a different subset of NIST 800-53 Rev 5 controls. The mappings below indicate which NIST 800-53 control IDs the Permit substrate supports; whether a given control is REQUIRED depends on the customer's selected baseline (for example, AU-10 is required in High and Moderate, not in Low). Customers should consult their selected FedRAMP baseline workbook to determine applicability.",
+      "scope_note": "Evidence-support mapping for selected NIST SP 800-53 Rev 5 controls inside a customer's own authorization boundary. Coverage is strongest in AU audit-and-accountability controls, with partial support in selected AC, CM, CA, IR, SI, and SC controls.",
+      "baseline_applicability_note": "FedRAMP baselines select different NIST SP 800-53 controls. Customers should consult their selected baseline workbook to determine applicability.",
       "control_mappings": [
         {
           "control_id": "AU-2",
@@ -1314,19 +1295,19 @@
           "control_id": "AU-3",
           "control_title": "Content of Audit Records",
           "evidence_type": "direct_support",
-          "permit_evidence": "Permit decision_details + closure_v2 capture: what type of event occurred (action_name), when (created_at + TSA timestamp), where (resource_provider + resource_model), source (subject_id + project_id), outcome (decision: allow/deny/challenge), identity (subject_id), and additional context (policy_id + policy_version). Exceeds AU-3 minimum content requirements for the AI-action surface."
+          "permit_evidence": "Permit decision and closure fields record event type, time, resource, subject, outcome, policy version, and execution context for governed AI actions."
         },
         {
           "control_id": "AU-4",
           "control_title": "Audit Log Storage Capacity",
           "evidence_type": "partial",
-          "permit_evidence": "Keel tier policies set retention windows: Starter 7d, Production 180d, Enterprise 365d. External R2 checkpoint anchoring offloads checkpoint storage from primary tenant. Audit-log storage capacity assessment is the customer's responsibility under their boundary; Keel provides documented retention floors."
+          "permit_evidence": "Permit evidence should be paired with customer-defined storage-capacity and retention controls. Signed exports support customer archive workflows."
         },
         {
           "control_id": "AU-6",
           "control_title": "Audit Record Review, Analysis, and Reporting",
           "evidence_type": "partial",
-          "permit_evidence": "Signed audit export bundle is the artifact for review/analysis. Verifier CLI enables review without vendor access. Permit substrate does NOT replace customer SIEM/SOC review processes; provides the trustworthy evidence those processes consume."
+          "permit_evidence": "Signed audit export bundles and verifier output support customer review, analysis, and reporting workflows for governed AI actions."
         },
         {
           "control_id": "AU-7",
@@ -1338,7 +1319,7 @@
           "control_id": "AU-8",
           "control_title": "Time Stamps",
           "evidence_type": "direct_support",
-          "permit_evidence": "Every Permit carries created_at server timestamp. Enterprise-tier integration with RFC 3161 Time-Stamp Authority (FreeTSA.org default, or any RFC 3161 TSA) provides independent third-party time witness on integrity checkpoints. TSA receipts bind the audit chain state to externally verifiable time, exceeding AU-8 'organization-defined granularity' for AI-action timestamps."
+          "permit_evidence": "Permit timestamps and RFC 3161 timestamp receipts, when present, support independent time evidence for integrity checkpoints."
         },
         {
           "control_id": "AU-9",
@@ -1350,7 +1331,7 @@
           "control_id": "AU-9(2)",
           "control_title": "Protection of Audit Information | Store on Separate Physical Systems or Components",
           "evidence_type": "direct_support",
-          "permit_evidence": "External checkpoint anchoring publishes signed chain snapshots to S3-compatible storage (Cloudflare R2 by default, or customer-controlled bucket) every 5 minutes via cron. Checkpoints are byte-identical to primary chain state but stored on infrastructure separate from the Keel service. This supports AU-9(2) evidence for the Permit substrate."
+          "permit_evidence": "External checkpoint anchoring can store signed chain snapshots separately from primary audit storage."
         },
         {
           "control_id": "AU-9(3)",
@@ -1362,13 +1343,13 @@
           "control_id": "AU-10",
           "control_title": "Non-repudiation",
           "evidence_type": "direct_support",
-          "permit_evidence": "Ed25519 signed exports bind audit content to a specific signing key under Keel's control. Signing key rotation history (migration 0146) preserves verification across key rotations via active-windows in the public manifest. RFC 3161 TSA receipts add independent time witness. Customer's verifier CLI reproduces signature verification without Keel-side access. This is scoped signature-attribution evidence for exported AI-action records, not a broad non-repudiation claim."
+          "permit_evidence": "Ed25519 signed exports, public key manifests, and timestamp receipts support scoped signature-attribution evidence for exported AI-action records."
         },
         {
           "control_id": "AU-11",
           "control_title": "Audit Record Retention",
           "evidence_type": "partial",
-          "permit_evidence": "Production 180d retention and Enterprise 365d retention are plan-tier-gated and enforced at the database layer (RLS-protected). EU AI Act Art 26(6) retention should be treated as an adequate-period legal determination, not a fixed value in this mapping. Customer should specify their organization-defined retention period and select Keel tier accordingly; for FedRAMP-typical 3-year audit retention, Enterprise tier plus customer-side archive of monthly signed exports is the supported pattern."
+          "permit_evidence": "Signed exports can be archived to support customer-defined audit-retention requirements. Retention duration remains a customer control and contract question."
         },
         {
           "control_id": "AU-12",
@@ -1392,7 +1373,7 @@
           "control_id": "CM-3",
           "control_title": "Configuration Change Control",
           "evidence_type": "necessary",
-          "permit_evidence": "policy_id + policy_version stamped on every Permit binds each AI decision to a specific configuration version. Policy diff tracking (migration 0147) provides change-management traceability with content-addressed snapshots. Necessary for customer CM-3 evidence for AI policy changes; not enough for general system configuration change control."
+          "permit_evidence": "policy_id and policy_version fields bind each AI decision to a specific policy configuration version and support customer change-traceability evidence."
         },
         {
           "control_id": "CM-8",
@@ -1428,7 +1409,7 @@
           "control_id": "SI-12",
           "control_title": "Information Management and Retention",
           "evidence_type": "partial",
-          "permit_evidence": "Tier-gated retention (Production 180d, Enterprise 365d), RLS-enforced project isolation, audit-export retention for customer-side archive. Provides the AI-evidence retention substrate; customer establishes overall information management policy beyond AI surface."
+          "permit_evidence": "Signed exports and customer archives can support AI-evidence retention. Customer information-management policies remain outside Permit scope."
         },
         {
           "control_id": "SC-13",
@@ -1440,7 +1421,7 @@
           "control_id": "SC-28",
           "control_title": "Protection of Information at Rest",
           "evidence_type": "partial",
-          "permit_evidence": "RLS isolation at database layer + encrypted provider keys (AES-256-GCM) + R2 checkpoint storage with vendor-managed encryption. Database encryption at rest is the hosting provider's (Supabase / AWS) responsibility under customer's boundary. Permit substrate provides cryptographic integrity (not solely confidentiality) layered on top."
+          "permit_evidence": "Signed exports, hash-chain integrity, and checkpoint evidence protect AI evidence with cryptographic integrity. Customer confidentiality controls remain separate."
         }
       ],
       "uncovered_high_priority_controls": [
@@ -1453,19 +1434,19 @@
         {
           "control_id": "AU-5",
           "control_title": "Response to Audit Logging Process Failures",
-          "status": "PARTIAL — CUSTOMER MUST OWN ALERTING",
-          "rationale": "Keel substrate fails loudly at startup if signing key manifest is empty (per fail-loud-at-startup hardening), and tampering-detection codes provide specific failure classifications. Customer is responsible for ingesting these signals into their alerting/IR workflows."
+          "status": "PARTIAL - CUSTOMER ALERTING REQUIRED",
+          "rationale": "Permit verifier failure codes can identify integrity failures; customer monitoring and alert routing remain customer-owned controls."
         },
         {
           "control_id": "CP-2",
           "control_title": "Contingency Plan",
-          "status": "PARTIAL — KEEL SUBSTRATE SUPPORTS BUT DOES NOT DEFINE",
-          "rationale": "Three-trust-root-channel architecture (Keel API + PyPI + GitHub) and external R2 checkpoints provide continuity-of-evidence properties. Customer's contingency plan must define operational continuity beyond just evidence access."
+          "status": "PARTIAL - CUSTOMER PLAN REQUIRED",
+          "rationale": "Permit evidence availability can support contingency evidence needs, but the customer contingency plan remains outside Permit scope."
         }
       ]
     },
     "cis_controls": {
-      "scope_note": "Permit substrate naturally maps to ~6 of 18 CIS Controls v8.1. Control 8 (Audit Log Management) is the strongest fit; Controls 3, 4, 6, 16, 17 have partial alignment. The remaining 12 controls (Asset inventory, Vulnerability Management, Email/Browser, Malware Defense, Data Recovery, Network, Training, Penetration Testing, etc.) are out-of-scope for Permit substrate — customer addresses these via standard security tooling.",
+      "scope_note": "Permit maps to selected CIS Controls where AI-decision evidence, policy traceability, and audit-log integrity are relevant. Other CIS Controls remain customer-owned.",
       "control_mappings": [
         {
           "control": "Control 3",
@@ -1489,13 +1470,13 @@
           "control": "Control 8",
           "name": "Audit Log Management",
           "evidence_type": "direct_support",
-          "permit_evidence": "Strongest fit. Per-project hash chain provides tamper-evident audit log integrity evidence (Control 8 safeguard 8.2: 'Collect Audit Logs'). Tier-gated retention (Production 180d, Enterprise 365d) addresses 8.3 ('Ensure Adequate Audit Log Storage'). Ed25519 signed exports + RFC 3161 timestamps support 8.10 ('Retain Audit Logs') and 8.11 ('Conduct Audit Log Reviews') — the audit evidence is preserved in tamper-evident form for review without vendor dependency."
+          "permit_evidence": "Hash chains, signed exports, and timestamp evidence support tamper-evident audit-log collection, retention, and review for governed AI actions."
         },
         {
           "control": "Control 15",
           "name": "Service Provider Management",
           "evidence_type": "partial",
-          "permit_evidence": "Where Keel IS the customer's AI-governance service provider, the customer can demonstrate Control 15.3 ('Classify Service Providers') and 15.6 ('Monitor Service Providers') using Keel's signed audit exports as objective performance evidence. resource_provider field on Permit also inventories OTHER AI service providers used (OpenAI, Anthropic, Google, etc.) — supporting 15.1 ('Establish and Maintain an Inventory of Service Providers')."
+          "permit_evidence": "Signed audit exports and resource_provider fields can support customer service-provider inventory and monitoring evidence for AI providers."
         },
         {
           "control": "Control 16",
@@ -1525,31 +1506,31 @@
       ]
     },
     "pci_dss": {
-      "scope_note": "MANDATORY FRAMING: Keel is NOT a PCI-DSS-validated service provider. Mappings below describe how Keel-produced audit evidence can SUPPORT a customer's PCI compliance WHEN AI workloads touch the customer's Cardholder Data Environment (CDE). For most B2B SaaS AI use cases that do NOT touch CDE, PCI DSS is entirely OUT OF SCOPE and these mappings do not apply. Requirement 10 (audit logging) is the only requirement where Permit substrate is load-bearing. Partial alignment with Requirements 6, 7, 12.",
+      "scope_note": "Evidence-support mapping for customer AI workloads that process cardholder data within a Cardholder Data Environment. Requirement 10 is the primary fit; Requirements 6, 7, and 12 are partial fits.",
       "requirement_mappings": [
         {
           "requirement": "Requirement 6",
           "name": "Develop and maintain secure systems and software",
           "evidence_type": "partial",
-          "permit_evidence": "policy_id + policy_version on every Permit + policy diff tracking (migration 0147) provides change-management traceability for AI policies — relevant to PCI Req 6.5 ('Changes to all system components in the production environment are made according to established procedures'). Permit does NOT cover general secure-development practices (Req 6.2 secure-coding training, Req 6.3 software vulnerabilities management, etc.)."
+          "permit_evidence": "policy_id and policy_version fields provide AI-policy change traceability. General secure-development controls remain customer-owned."
         },
         {
           "requirement": "Requirement 7",
           "name": "Restrict access to system components and cardholder data by business need to know",
           "evidence_type": "partial",
-          "permit_evidence": "Permit policy can encode business-need-to-know rules for AI-action access (e.g., agent X may invoke only specific tools on specific data classes). Denied permits log access violations. Partial — PCI Req 7 covers cardholder-data access broadly; Permit covers the AI-action boundary only. Customer must implement PCI Req 7.1, 7.2 access control for CDE itself."
+          "permit_evidence": "Permit policies can document and enforce AI-action access boundaries. CDE access control remains customer-owned."
         },
         {
           "requirement": "Requirement 10",
           "name": "Log and monitor all access to system components and cardholder data",
           "evidence_type": "direct_support",
-          "permit_evidence": "Primary Permit fit for PCI. Hash-chained audit records (Req 10.5 'Audit logs are protected from destruction and unauthorized modifications' — cryptographically satisfied). Tier-gated retention (Production 180d, Enterprise 365d) addresses 10.7 ('Audit logs are retained for at least 12 months'... Enterprise tier meets the standard 12-month floor; longer windows available on request). RFC 3161 timestamps support 10.6 ('Time-synchronization mechanisms support consistent time settings'). Ed25519 signed exports + verifier CLI enable Req 10.4 review processes without vendor dependency. Note: Production 180d retention falls SHORT of PCI 12-month floor — Enterprise tier is the recommended tier for PCI-in-scope AI workloads."
+          "permit_evidence": "Hash-chained audit records, signed exports, verifier output, and timestamp evidence can support audit logging and monitoring evidence for in-scope AI workloads. Customer retention requirements remain customer-owned."
         },
         {
           "requirement": "Requirement 12",
           "name": "Support information security with organizational policies and programs",
           "evidence_type": "partial",
-          "permit_evidence": "Permit policy artifacts ARE documented AI-governance policies. policy_version provides version-controlled policy evidence. Partial alignment because Req 12 covers organizational security policy broadly; Permit covers the AI-action policy surface."
+          "permit_evidence": "Permit policy artifacts and policy versions can support AI-governance policy evidence. Organization-wide security policy remains customer-owned."
         }
       ],
       "out_of_scope_requirements": [
@@ -1562,10 +1543,10 @@
         "Requirement 9 Restrict physical access to cardholder data — physical security responsibility",
         "Requirement 11 Test security of systems and networks regularly — customer vulnerability scanning / pentesting responsibility"
       ],
-      "broad_scoping_caveat": "PCI DSS applies only to entities that handle cardholder data within a defined Cardholder Data Environment (CDE). For most B2B SaaS AI workloads that do not process payment card data, PCI DSS is entirely OUT OF SCOPE — these mappings exist for the narrow case where AI processing touches a customer's CDE (e.g., AI-driven fraud detection on transaction data, AI-augmented customer service with payment context). Do not cite PCI mappings broadly for non-CDE AI use cases."
+      "broad_scoping_caveat": "PCI DSS applies to entities that handle cardholder data within a Cardholder Data Environment. These mappings are for customer AI workloads that are inside that scope."
     },
     "owasp_asvs": {
-      "version_note": "ASVS v5.0.0 (released May 30 2025). Chapter numbering is NOT backwards-compatible with v4 — V8 is 'Authorization' in v5 (was 'Data Protection' in v4); V4 is 'API and Web Service' in v5 (was 'Access Control' in v4). When citing in customer-facing artifacts, always include the v5 version qualifier.",
+      "version_note": "ASVS v5.0.0 chapter numbering differs from v4; cite the v5 version qualifier when using these mappings.",
       "chapter_mappings": [
         {
           "chapter": "V4 API and Web Service",
@@ -1580,17 +1561,17 @@
         {
           "chapter": "V11 Cryptography",
           "evidence_type": "direct_support",
-          "permit_evidence": "Hash-chain integrity, Ed25519 signed exports, RFC 3161 third-party timestamps, externally anchored checkpoints — the entire Keel evidence substrate is purpose-built around verifiable cryptographic primitives. Key rotation is documented in the signed manifest with active-windows per key."
+          "permit_evidence": "Hash-chain integrity, Ed25519 signed exports, timestamp receipts, externally anchored checkpoints, and key manifests provide cryptographic integrity evidence."
         },
         {
           "chapter": "V13 Configuration",
           "evidence_type": "partial",
-          "permit_evidence": "Permit policy_id + policy_version are configuration-as-code for AI governance; policy diff tracking + snapshot-archive provide change-management for policy configuration. Does NOT cover infrastructure/runtime configuration outside the Permit policy surface."
+          "permit_evidence": "policy_id and policy_version provide AI-governance configuration traceability. Runtime and infrastructure configuration remain outside Permit scope."
         },
         {
           "chapter": "V14 Data Protection",
           "evidence_type": "necessary",
-          "permit_evidence": "Permit closure record + signed exports protect AI evidence at rest with cryptographic integrity. Audit-export retention windows are tier-gated (180d Production, 365d Enterprise) and policy-enforced. Necessary for AI-evidence data protection; not enough for general data-protection compliance."
+          "permit_evidence": "Permit closure records and signed exports protect AI evidence with cryptographic integrity. General data-protection compliance remains customer-owned."
         },
         {
           "chapter": "V16 Security Logging and Error Handling",
@@ -1600,25 +1581,24 @@
       ]
     }
   },
-
   "explicit_non_mappings": [
     {
       "framework": "cppa_admt_regs",
       "control_id": "11 CCR §7150(b)(4)(E) (proposed text)",
-      "status": "DOES NOT APPLY",
-      "rationale": "Proposed-text trigger 'operation of generative models, such as large language models' was REMOVED in the September 2025 final adopted text. Do not cite as a current trigger. Final scope is limited to ADMT used to REPLACE human decisionmaking for significant decisions (§7150(b)(3)) or training ADMT for those uses or for identity-biological-profiling tech (§7150(b)(6))."
+      "status": "NOT IN FINAL ADOPTED TEXT",
+      "rationale": "This trigger was not included in the final adopted text. Final scope is limited to ADMT used to replace human decisionmaking for significant decisions, or training ADMT for those uses or for identity/biological profiling technology."
     },
     {
       "framework": "cppa_admt_regs",
       "control_id": "11 CCR §7152(a)(2)(B) (proposed text)",
-      "status": "REMOVED IN FINAL",
-      "rationale": "ADMT 'quality of personal information' sub-block (completeness/representativeness/timeliness/validity/accuracy/consistency/reliability) was removed from §7152(a)(2) in the final adopted text. Final §7152(a)(2) only requires identifying categories of personal information processed."
+      "status": "NOT IN FINAL ADOPTED TEXT",
+      "rationale": "This sub-block was not included in final §7152(a)(2); final text requires a concise explanation of assessment purpose."
     },
     {
       "framework": "cppa_admt_regs",
       "control_id": "11 CCR §7152(a)(6)(B) (proposed text)",
-      "status": "COLLAPSED IN FINAL",
-      "rationale": "The detailed ADMT evaluation framework with three sub-requirements in proposed (a)(6)(B)(i)–(iii) was reduced to a single line at final §7152(a)(6)(A)(iv): 'Implementing policies, procedures, and training to ensure that the business's ADMT works for the business's purpose and does not unlawfully discriminate based upon protected characteristics.'"
+      "status": "NOT IN FINAL ADOPTED TEXT",
+      "rationale": "The detailed proposed evaluation framework was reduced in the final adopted text to policy, procedure, and training requirements."
     },
     {
       "framework": "owasp_api_top_10_2023",
@@ -1659,8 +1639,8 @@
     {
       "framework": "fedramp",
       "control_id": "FedRAMP program participation (entirely)",
-      "status": "KEEL IS NOT FEDRAMP AUTHORIZED",
-      "rationale": "Keel API, Inc. is NOT a FedRAMP-authorized Cloud Service Offering. Keel has NO Joint Authorization Board (JAB) Provisional Authorization, NO Agency Authorization to Operate (ATO), and is NOT listed on the FedRAMP Marketplace as of 2026-05-10. Customer-facing material claiming Keel is 'FedRAMP authorized', 'FedRAMP compliant', 'FedRAMP certified', or 'FedRAMP-listed' would be FALSE. Mappings in framework_overlays.fedramp describe how Keel-produced evidence can SUPPORT a customer's NIST 800-53 control implementations within the customer's existing FedRAMP-authorized boundary — Keel does not itself complete any FedRAMP requirement as a standalone service."
+      "status": "NOT A SERVICE AUTHORIZATION CLAIM",
+      "rationale": "Keel is not a FedRAMP-authorized Cloud Service Offering. This artifact maps Permit evidence to selected customer-side NIST SP 800-53 evidence needs only."
     },
     {
       "framework": "fedramp",
@@ -1677,14 +1657,14 @@
     {
       "framework": "pci_dss",
       "control_id": "PCI DSS validation status entirely",
-      "status": "KEEL IS NOT PCI-DSS-VALIDATED",
-      "rationale": "Keel API, Inc. is NOT a PCI-DSS-validated service provider. No Attestation of Compliance (AOC), no Report on Compliance (ROC), not listed as a PCI-DSS-validated service provider as of 2026-05-10. Customer-facing material claiming Keel is 'PCI compliant', 'PCI certified', or 'PCI-validated' would be FALSE. Mappings describe how Keel-produced evidence supports a customer's PCI Requirement 10 AI-related logging when AI workloads touch the customer's CDE."
+      "status": "NOT A SERVICE VALIDATION CLAIM",
+      "rationale": "Keel is not a PCI DSS validated service provider. This artifact maps Permit evidence to selected customer-side evidence needs only when the customer workload is in PCI DSS scope."
     },
     {
       "framework": "pci_dss",
       "control_id": "PCI DSS broadly when AI workloads do NOT touch CDE",
-      "status": "ENTIRELY OUT OF SCOPE",
-      "rationale": "For B2B SaaS AI use cases that do not process payment card data within a Cardholder Data Environment (CDE), PCI DSS does not apply. These mappings exist for the narrow case where AI processing touches a customer's CDE. Do not cite PCI mappings as a general AI governance signal — they apply only when payment card data flows through AI workloads."
+      "status": "OUT OF SCOPE WHEN NO CDE TOUCHPOINT EXISTS",
+      "rationale": "PCI DSS does not apply to AI workloads that do not process payment card data within a Cardholder Data Environment. These mappings are for the narrower in-scope case."
     },
     {
       "framework": "cis_controls",

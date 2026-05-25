@@ -82,15 +82,13 @@ Reference artifacts in [`examples/`](examples/) — schema-valid illustrative pe
 
 [`mappings/control-frameworks.schema-mapping.json`](mappings/control-frameworks.schema-mapping.json) — machine-readable mapping from Permit v1 wire-format fields and audit-export-bundle artifacts to specific control IDs across 14 frameworks (CCPA §1798.105, CPPA ADMT regulations, EU AI Act, GDPR, AICPA SOC 2, NIST AI RMF, ISO/IEC 42001:2023, OWASP LLM Top 10 2025, MITRE ATLAS, OWASP API Security Top 10 2023, OWASP ASVS v5.0.0, FedRAMP / NIST SP 800-53 Rev 5, CIS Controls v8.1, PCI DSS v4.0.1).
 
-See [`mappings/README.md`](mappings/README.md) for verification methodology, framing-discipline guardrails (especially for FedRAMP and PCI DSS where Keel is NOT authorized/validated as a service), and explicit non-mappings documenting controls Keel does NOT address.
+See [`mappings/README.md`](mappings/README.md) for status, scope, evidence-support disclaimers, schema shape, and explicit non-mappings documenting controls Keel does not address.
 
 ## Conformance test vectors
 
 [`test-vectors/`](test-vectors/) — a versioned conformance fixture set that any verifier (Keel's reference verifier or independent third-party implementations) can be tested against. Each fixture has an `expected.json` defining the required outcome; a verifier that disagrees on any fixture is non-conforming.
 
-Current conformance artifacts include the pinned-semantics golden corpus in [`test-vectors/verifier_claims/`](test-vectors/verifier_claims/), semantic-artifact conformance records in [`test-vectors/semantics/`](test-vectors/semantics/), and self-contained Permit Chain semantic vectors under [`test-vectors/vectors/cat-08-permit-chains/`](test-vectors/vectors/cat-08-permit-chains/).
-
-Planned expansion covers 8 categories (baseline, tamper-chain, tamper-signature, closure-binding, canonicalization, key-rotation, bundle-format, Permit Chains) with 36 fixtures total. The v0.1 MVP scope is 14 vectors; 22 are deferred. The fixture-generator tool and complete byte-level fixtures for the original cryptographic categories are follow-up work. See [`test-vectors/README.md`](test-vectors/README.md) and [`test-vectors/CONFORMANCE.md`](test-vectors/CONFORMANCE.md).
+Current conformance artifacts include the pinned-semantics golden corpus in [`test-vectors/verifier_claims/`](test-vectors/verifier_claims/), semantic-artifact conformance records in [`test-vectors/semantics/`](test-vectors/semantics/), and self-contained Permit Chain semantic vectors under [`test-vectors/vectors/cat-08-permit-chains/`](test-vectors/vectors/cat-08-permit-chains/). See [`test-vectors/README.md`](test-vectors/README.md) and [`test-vectors/CONFORMANCE.md`](test-vectors/CONFORMANCE.md).
 
 ## Versioning
 

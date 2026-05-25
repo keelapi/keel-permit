@@ -107,6 +107,6 @@ This release went through a pre-publish accuracy and safety audit. Findings fold
 ### Out of scope for v1.0.0
 
 - Per-chunk Merkle stream digests (reserved for a future format version).
-- Multi-witness anchoring (see Keel reference implementation roadmap; orthogonal to this spec).
+- Multi-witness anchoring (orthogonal to this spec).
 - TEE/HSM signing models (orthogonal to wire format).
 - Customer counter-signatures (a future spec revision may introduce dual-signer envelopes).
