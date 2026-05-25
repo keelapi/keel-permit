@@ -6,3 +6,8 @@ venv/
 .idea/
 .vscode/
 .claude/
+
+# Local-only research/workpapers. Do not publish.
+_internal-local/
+research-local/
+compliance-research-local/
