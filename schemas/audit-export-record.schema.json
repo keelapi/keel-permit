@@ -281,6 +281,12 @@
           "default": null,
           "title": "Constraints Json"
         },
+        "custom_metadata": {
+          "type": ["object", "null"],
+          "description": "Optional issuer-defined extension carrier. Reserved keys: shadow_override (introduced in v1.5.0 for audit annotation of shadow-overridden dispatches). Conforming validators MUST accept arbitrary additional keys here without rejection.",
+          "default": null,
+          "additionalProperties": true
+        },
         "created_at": {
           "format": "date-time",
           "title": "Created At",

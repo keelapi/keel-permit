@@ -4,6 +4,15 @@ All notable changes to this specification are documented here.
 
 The spec document follows [Semantic Versioning](https://semver.org/). Wire formats (Permit `v1`, `closure_v1`, `closure_v2`, chain entry `v1`) version independently and are not bumped by spec-document revisions.
 
+## [1.5.0] — 2026-06-02
+
+Added `custom_metadata` as designated extension carrier on `AuditExportPermitSource`.
+
+- Added `custom_metadata` as an optional property on `AuditExportPermitSource` in all three schemas (`permit-v1.schema.json`, `audit-export-bundle.schema.json`, `audit-export-record.schema.json`). The outer `AuditExportPermitSource` remains closed (`additionalProperties: false`); `custom_metadata` itself uses `additionalProperties: true` as the escape hatch for additive issuer extensions.
+- Reserved key: `shadow_override` under `custom_metadata`, introduced for audit annotation of shadow-overridden dispatches (carries `outcome`, `seam_id`, `rule_action`, `param_signature`, `shadow_decision`, `legacy_decision`, `shadow_reason_code`).
+- Updated §2.3 optional fields table and §12 (closed-semantics prose) in `spec/permit-v1.md` to document the closed-with-escape-valve pattern and the `shadow_override` reserved key.
+- Backward compatible: validators accepting v1.4.x records remain valid; `custom_metadata` is optional and absent from all existing permits.
+
 ## [1.4.1] — 2026-05-22
 
 Promotes the Step 4 verifier adjudication corpus into the canonical public
