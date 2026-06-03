@@ -1,5 +1,7 @@
 # Permit v1
 
+**Spec version: 1.5.0**
+
 A **Permit** is a pre-execution decision record. It attests that an action was evaluated against a policy and that a decision was reached. When an allowed action proceeds to provider or tool dispatch, the permit can also be bound to the final provider/tool request body before execution.
 
 A Permit is a self-describing JSON object. It can be persisted, transmitted, and exported in evidence bundles. A Permit JSON object alone is not self-authenticating; cryptographic verification requires the signed export artifacts, closure records where applicable, chain entries where applicable, and the issuer's public keys or key manifest.
@@ -78,6 +80,7 @@ For `decision == "deny"` and `decision == "challenge"`, `binding_request_hash` M
 | `workflow_declaration_id` | UUID | Stable identifier of the workflow declaration that governs this permit, when the permit is part of a declared workflow. |
 | `workflow_id` | string | Caller-facing workflow identifier associated with `workflow_declaration_id`. |
 | `workflow_state_json` | object | Decision-time workflow snapshot; see §5. |
+| `custom_metadata` | object | null | Issuer-defined extension carrier. Keys are issuer-namespaced. |
 
 Implementations MAY include additional descriptive fields (usage verification metadata, accounting disposition, condition evaluation, budget envelope summary). Such fields are documented in the JSON Schema in `schemas/permit-v1.schema.json` but are not part of the normative wire-format minimum.
 
@@ -194,7 +197,15 @@ The following field names are reserved for future versions and MUST NOT be repur
 
 ## 12. Extensions and future fields
 
-The wire format defined in `schemas/permit-v1.schema.json` is **closed**. Conforming validators MUST reject objects that contain fields not listed in the schema. Reserved field names in §11 are reserved for future versions and MUST NOT appear in current Permit v1 objects; the current schema rejects them with `additionalProperties: false`.
+The wire format defined in `schemas/permit-v1.schema.json` uses **closed semantics with an explicit extension carrier**. Conforming validators MUST reject objects that contain top-level fields not listed in the schema, EXCEPT for keys inside the `custom_metadata` object. The `custom_metadata` field is the designated issuer-defined extension carrier: validators MUST accept arbitrary keys inside `custom_metadata` without rejection, including keys not defined in this specification version.
+
+Reserved field names in §11 are reserved for future versions and MUST NOT appear in current Permit v1 objects; the current schema rejects them with `additionalProperties: false`.
+
+Reserved `custom_metadata` keys (managed by this specification, do not redefine):
+
+- `shadow_override` — present when the issuer's authorization layer overrode a downstream dispatch decision. Carries audit annotation including `outcome`, `seam_id`, `rule_action`, `param_signature`, `shadow_decision`, `legacy_decision`, `shadow_reason_code`. Introduced in v1.5.0.
+
+Future spec versions may reserve additional `custom_metadata` keys; consumers SHOULD ignore unknown keys gracefully.
 
 Two extension paths exist:
 

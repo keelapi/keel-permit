@@ -79,6 +79,19 @@ _MINIMUM_BY_FIELD = {
 }
 _WORKFLOW_ID_PATTERN = "^[A-Za-z0-9_-]{1,255}$"
 
+_PERMIT_EXTENSION_FIELDS = {
+    "custom_metadata": {
+        "type": ["object", "null"],
+        "description": (
+            "Optional issuer-defined extension carrier. Reserved keys: shadow_override "
+            "(introduced in v1.5.0 for audit annotation of shadow-overridden dispatches). "
+            "Conforming validators MUST accept arbitrary additional keys here without rejection."
+        ),
+        "default": None,
+        "additionalProperties": True,
+    },
+}
+
 _PERMIT_CHAIN_FIELDS = {
     "actor_ref": {
         "anyOf": [
@@ -321,7 +334,7 @@ def _tighten_bundle(schema: dict) -> dict:
 
 
 def _add_permit_chain_fields(schema: dict) -> dict:
-    """Allow optional Permit Chain v1 fields in closed Permit schemas."""
+    """Allow optional Permit Chain v1 fields and extension fields in closed Permit schemas."""
     schema = copy.deepcopy(schema)
 
     def is_permit_properties(props: dict) -> bool:
@@ -339,6 +352,8 @@ def _add_permit_chain_fields(schema: dict) -> dict:
             props = node.get("properties")
             if isinstance(props, dict) and is_permit_properties(props):
                 for field_name, field_schema in _PERMIT_CHAIN_FIELDS.items():
+                    props.setdefault(field_name, copy.deepcopy(field_schema))
+                for field_name, field_schema in _PERMIT_EXTENSION_FIELDS.items():
                     props.setdefault(field_name, copy.deepcopy(field_schema))
             for value in node.values():
                 visit(value)
