@@ -189,3 +189,45 @@ All signing AND verification paths route canonicalization through this function.
 Artifacts loaded from storage MUST use their stored `binding_version` when re-canonicalizing — for tamper-detection, audit-export replay, or any other post-issuance hashing operation. The `BINDING_VERSION` default applies ONLY to brand-new artifact issuance.
 
 This invariant is enforced in code via `_assign_permit_binding` (and equivalent paths) which only assigns a binding_version when the artifact has not been previously signed.
+
+## 12. Binding v6 resource attributes canonical hash
+
+Binding version v6 adds `resource_attributes_canonical_hash`, a scope-faithful commitment to the JSON object carried in `resource_attributes_json`.
+
+The hash is computed as:
+
+```python
+resource_attributes_canonical_hash = SHA-256(
+    rfc8785.dumps(resource_attributes_json)
+)
+```
+
+The empty resource-attributes form normalizes to `{}`. Therefore its canonical bytes are `b"{}"` and its hash is the constant:
+
+```text
+44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
+```
+
+### JSON admissibility
+
+`resource_attributes_json` MUST be JCS-serializable by `rfc8785.dumps`. Values that cannot be serialized under RFC 8785 / JCS are inadmissible and MUST NOT be signed as v6 resource attributes.
+
+### Dispatch
+
+`canonical_binding_bytes` dispatches by stored `binding_version` as follows:
+
+- `v1`-`v4`: legacy Keel canonical profile (see §1-§8).
+- `v5` and `v6`: RFC 8785 / JCS via `rfc8785.dumps` (see §9).
+
+The v6 resource-attributes recompute-entry gate is version-EXACT: recomputation of `resource_attributes_canonical_hash` MUST run only when the stored `binding_version == "v6"`. It MUST NOT run for `v5`, for later versions by range comparison, or for artifacts whose version is inferred from an issuer default.
+
+### Replay invariant
+
+A v6 replay verifier MUST establish all four of the following before accepting a stored binding:
+
+1. The stored `binding_version` is exactly `"v6"`.
+2. The binding payload contains `resource_attributes_canonical_hash`.
+3. The recomputed `SHA-256(rfc8785.dumps(resource_attributes_json))` matches the payload's `resource_attributes_canonical_hash`.
+4. The recomputed canonical binding bytes match the signed binding hash.
+
+The resource-attributes hash is scope-faithful: it covers exactly what is inside `resource_attributes_json`. It does not cover, imply, or attest to evidence stored elsewhere in the permit, closure, audit trail, provider trace, database row, or export bundle.
