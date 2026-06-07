@@ -117,3 +117,117 @@ Implementations SHOULD ship golden test vectors and exercise them in CI on every
 ## 8. Library version pinning
 
 Where a third-party canonicalization library is used, its major version MUST be pinned in the issuer's and verifier's dependency manifests. A library upgrade that changes byte output for any input is a breaking change requiring coordinated rollout across producer and consumer; in the worst case, it requires a `chain_format_version` bump.
+
+## 9. RFC 8785 (JCS) profile — `keel.canonical_json.payload.v2-rfc8785`
+
+**Status**: ACTIVE for all signed artifacts with `binding_version >= "v5"`. Shipped to production 2026-06-05.
+
+Starting with binding version v5, Keel adopts **RFC 8785 (JSON Canonicalization Scheme — JCS)** as the canonicalization profile for all newly-signed surfaces. This includes:
+
+- Permit binding payloads (`canonical_binding_payload_v5`)
+- PERMIT_V2 envelope signature slots (operator_approval, counter_signature, audit_attestation, provider_attestation)
+- Provider wire-body hashes (`binding_request_canonical_version=v5`)
+- Chain canonicalization (`closure_v3` chain format)
+
+The profile is named `keel.canonical_json.payload.v2-rfc8785` in the `canonicalization_profile` field. Verifiers select the canonical algorithm based on the artifact's `binding_version` (or equivalent version field on the specific surface).
+
+### Implementation
+
+Keel uses the `rfc8785` Python package (≥0.1.4, <1) on both the issuer side (keel-api) and the independent verifier side (keel-verifier 3.2.0+). Any third-party implementation in any language can verify v5+ signed artifacts using its language's RFC 8785 library — no Keel code is required.
+
+### Backward compatibility
+
+Binding versions v1-v4 continue to use the legacy Keel canonical profile defined in §1-§8 of this document. The legacy profile is preserved without modification; v1-v4 historical permits remain byte-stable and verifiable forever using `_legacy_canonical_json_v1_to_v4` (the renamed pre-v5 function in keel-api/`app/services/permit_binding.py`).
+
+### Profile selection invariant
+
+For any signed surface, the canonicalization profile is **determined by the artifact's stored version field**, NOT by the issuer's current default. This invariant prevents replay/re-emission paths from silently applying the v5 profile to artifacts originally signed under legacy canonical (see §11 below).
+
+## 10. Audit trail (RFC 8785 alignment audit, 2026-06-04)
+
+**Audit target**: keel-api `_canonical_json` (now renamed `_legacy_canonical_json_v1_to_v4`).
+**Oracle**: `rfc8785==0.1.4` (PyPI), reference RFC 8785 / JCS Python implementation.
+**Method**: cleanroom comparison harness, 77 test cases across 7 categories.
+
+### Findings (5 generator classes of divergence)
+
+Five categories where the pre-v5 Keel canonical differs from strict RFC 8785:
+
+1. **Integers outside ±(2^53 − 1)** — Keel emits as raw digits; JCS rejects. Mitigated: no Keel field reaches this range under the type system.
+2. **Floats with integer value (`1.0`, `0.0`, `100.0`)** — Keel emits trailing `.0`; JCS strips. The only surface where this could surface in pre-v5 was `canonical_provider_wire_body` for permits whose underlying provider request body included integer-valued floats (e.g., `temperature: 1.0`). Dormant in pre-v5; closed under v5.
+3. **Float exponent zero-pad (`1e-07` vs `1e-7`)** — same wire-body surface as (2).
+4. **Object key sort spanning UTF-16 surrogate gap** — Keel sorts by codepoint; JCS sorts by UTF-16 BE. All Keel field keys are ASCII; this never surfaces under any current schema.
+5. **Lone-surrogate string input** — both implementations reject; only the exception type differs.
+
+### Mitigation strategy
+
+All five divergence classes are documented intentional departures from JCS in the pre-v5 profile. They are mitigated by input-type discipline at the issuer Pydantic boundary (no floats in binding payloads, no oversized integers, no supplementary-plane unicode keys). For v5+, the divergences are eliminated by adopting `rfc8785.dumps` as the canonical serializer.
+
+### Reproducibility
+
+The audit harness is preserved at keel-api/`tests/test_jcs_drift_lock.py` (and equivalent in keel-verifier) and runs on every commit via CI to prevent silent regression of byte-equivalence on the realistic Keel payload set.
+
+## 11. Dispatch contract — `canonical_binding_bytes`
+
+Substrate-v5 introduces a single dispatch API in keel-api and keel-verifier:
+
+```python
+def canonical_binding_bytes(
+    binding_version: str, payload: Mapping[str, Any]
+) -> bytes:
+    """Substrate-wide canonical bytes dispatch.
+
+    v1-v4: legacy Keel canonical profile (see §1-§8 of this document).
+    v5:    RFC 8785 (JCS) profile (see §9 of this document).
+    """
+```
+
+All signing AND verification paths route canonicalization through this function. The version selection is determined by the `binding_version` tag on the signed artifact. Both keel-api (issuer) and keel-verifier (independent verifier) implement this function with byte-identical semantics; cross-repo byte-identity is enforced by golden-vector tests in both repos and verified at every release.
+
+### Replay invariant
+
+Artifacts loaded from storage MUST use their stored `binding_version` when re-canonicalizing — for tamper-detection, audit-export replay, or any other post-issuance hashing operation. The `BINDING_VERSION` default applies ONLY to brand-new artifact issuance.
+
+This invariant is enforced in code via `_assign_permit_binding` (and equivalent paths) which only assigns a binding_version when the artifact has not been previously signed.
+
+## 12. Binding v6 resource attributes canonical hash
+
+Binding version v6 adds `resource_attributes_canonical_hash`, a scope-faithful commitment to the JSON object carried in `resource_attributes_json`.
+
+The hash is computed as:
+
+```python
+resource_attributes_canonical_hash = SHA-256(
+    rfc8785.dumps(resource_attributes_json)
+)
+```
+
+The empty resource-attributes form normalizes to `{}`. Therefore its canonical bytes are `b"{}"` and its hash is the constant:
+
+```text
+44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
+```
+
+### JSON admissibility
+
+`resource_attributes_json` MUST be JCS-serializable by `rfc8785.dumps`. Values that cannot be serialized under RFC 8785 / JCS are inadmissible and MUST NOT be signed as v6 resource attributes.
+
+### Dispatch
+
+`canonical_binding_bytes` dispatches by stored `binding_version` as follows:
+
+- `v1`-`v4`: legacy Keel canonical profile (see §1-§8).
+- `v5` and `v6`: RFC 8785 / JCS via `rfc8785.dumps` (see §9).
+
+The v6 resource-attributes recompute-entry gate is version-EXACT: recomputation of `resource_attributes_canonical_hash` MUST run only when the stored `binding_version == "v6"`. It MUST NOT run for `v5`, for later versions by range comparison, or for artifacts whose version is inferred from an issuer default.
+
+### Replay invariant
+
+A v6 replay verifier MUST establish all four of the following before accepting a stored binding:
+
+1. The stored `binding_version` is exactly `"v6"`.
+2. The binding payload contains `resource_attributes_canonical_hash`.
+3. The recomputed `SHA-256(rfc8785.dumps(resource_attributes_json))` matches the payload's `resource_attributes_canonical_hash`.
+4. The recomputed canonical binding bytes match the signed binding hash.
+
+The resource-attributes hash is scope-faithful: it covers exactly what is inside `resource_attributes_json`. It does not cover, imply, or attest to evidence stored elsewhere in the permit, closure, audit trail, provider trace, database row, or export bundle.
