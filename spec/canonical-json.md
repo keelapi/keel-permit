@@ -231,3 +231,21 @@ A v6 replay verifier MUST establish all four of the following before accepting a
 4. The recomputed canonical binding bytes match the signed binding hash.
 
 The resource-attributes hash is scope-faithful: it covers exactly what is inside `resource_attributes_json`. It does not cover, imply, or attest to evidence stored elsewhere in the permit, closure, audit trail, provider trace, database row, or export bundle.
+
+### Current rail-evidence key set
+
+For permits issued under binding v6, the current set of agent-payment rail keys that may appear in `resource_attributes_json` is:
+
+| Key | Status |
+|---|---|
+| `paypal` | Bound |
+| `visa` | Bound |
+| `ap2` | Bound |
+| `mastercard` | Bound |
+| `x402` | Bound |
+| `openai_acp` | Bound |
+| `l402` | Bound |
+| `ucp` | Bound |
+| `amex_ace` | **Scaffold / vocabulary stake** — no public wire spec; NOT a live binding |
+
+This enumeration covers 8 live-binding rails plus 1 vocabulary stake. The scope-faithful guarantee (replay invariant, point 4) applies to whatever keys are present in a given permit's `resource_attributes_json`; a permit need not contain all keys, and this list is not a completeness claim over all possible future rail evidence.
