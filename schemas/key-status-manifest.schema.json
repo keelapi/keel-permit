@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keelapi/keel-permit/blob/main/schemas/key-status-manifest.schema.json",
+  "title": "Key Status Manifest v1",
+  "description": "Strict payload shape for a signed permit_v2.key_status_manifest.v1 manifest over account-scoped public keys and their key.status.v1 references.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "manifest_type": {
+      "type": "string",
+      "const": "permit_v2.key_status_manifest.v1",
+      "description": "Signed artifact type."
+    },
+    "canonicalization_profile": {
+      "type": "string",
+      "const": "keel.canonical_json.payload.v1",
+      "description": "Canonical JSON profile used for manifest_hash."
+    },
+    "computed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Issuer time at which the manifest was computed."
+    },
+    "account_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uuid"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Account scope covered by the manifest, or null for a multi-account issuer manifest."
+    },
+    "key_scopes": {
+      "const": [
+        "operator",
+        "buyer_principal",
+        "mcp_server",
+        "provider_principal"
+      ],
+      "description": "Exact key-scope set covered by the manifest."
+    },
+    "keys": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/key_entry"
+      },
+      "description": "Public account-scoped key records covered by this manifest."
+    },
+    "signer": {
+      "$ref": "#/$defs/signer"
+    },
+    "manifest_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hex hash of the canonical signed manifest fields, excluding manifest_hash and signature."
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9+/]{86}==$",
+      "description": "Base64 Ed25519 signature over manifest_hash using the signer key."
+    }
+  },
+  "required": [
+    "manifest_type",
+    "canonicalization_profile",
+    "computed_at",
+    "account_id",
+    "key_scopes",
+    "keys",
+    "signer",
+    "manifest_hash",
+    "signature"
+  ],
+  "$defs": {
+    "event_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "event_type": {
+          "type": "string",
+          "const": "key.status.v1"
+        },
+        "event_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "record_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "sequence_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "revoked",
+            "compromised"
+          ]
+        }
+      },
+      "required": [
+        "event_type",
+        "event_id",
+        "record_hash",
+        "sequence_number",
+        "status"
+      ]
+    },
+    "key_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "account_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "key_scope": {
+          "type": "string",
+          "enum": [
+            "operator",
+            "buyer_principal",
+            "mcp_server",
+            "provider_principal"
+          ]
+        },
+        "key_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "algorithm": {
+          "type": "string",
+          "const": "ed25519"
+        },
+        "public_key": {
+          "type": "string",
+          "pattern": "^ed25519:[A-Za-z0-9+/]{43}=$"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "revoked",
+            "compromised"
+          ]
+        },
+        "valid_from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "valid_until": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "revoked_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "compromised_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "metadata": {
+          "type": "object"
+        },
+        "event_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/event_ref"
+          }
+        },
+        "principal": {
+          "$ref": "#/$defs/principal"
+        }
+      },
+      "required": [
+        "account_id",
+        "key_scope",
+        "key_id",
+        "algorithm",
+        "public_key",
+        "status",
+        "valid_from",
+        "valid_until",
+        "revoked_at",
+        "compromised_at",
+        "metadata",
+        "event_refs",
+        "principal"
+      ]
+    },
+    "principal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "operator",
+            "buyer_principal",
+            "mcp_server",
+            "provider_principal"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rail_class": {
+          "type": "string",
+          "minLength": 1
+        },
+        "issuer_url": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "key_source": {
+          "type": "string",
+          "enum": [
+            "manual_registration",
+            "discovered_jwks",
+            "bundled_static"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "id"
+      ]
+    },
+    "signer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "purpose": {
+          "type": "string",
+          "const": "permit_binding_signing"
+        },
+        "key_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9._:-]+$"
+        },
+        "algorithm": {
+          "type": "string",
+          "const": "ed25519"
+        }
+      },
+      "required": [
+        "purpose",
+        "key_id",
+        "algorithm"
+      ]
+    }
+  }
+}

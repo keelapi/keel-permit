@@ -63,6 +63,7 @@ flowchart LR
 - [`spec/verifier-pack-pinning-v0.md`](spec/verifier-pack-pinning-v0.md) — Pinned semantics for evidence packs
 - [`spec/permit-revoked-event-v1.md`](spec/permit-revoked-event-v1.md) — Signed permit revocation event
 - [`spec/key-status-event-v1.md`](spec/key-status-event-v1.md) — Signed key status event
+- [`spec/key-status-manifest-v1.md`](spec/key-status-manifest-v1.md) — Signed account key-status manifest
 - [`spec/dispatch-absence-after-revocation-v1.md`](spec/dispatch-absence-after-revocation-v1.md) — Scope-faithful absence adjudication after revocation
 
 ## Schemas
