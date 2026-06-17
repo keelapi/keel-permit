@@ -178,7 +178,7 @@ def canonical_binding_bytes(
     """Substrate-wide canonical bytes dispatch.
 
     v1-v4: legacy Keel canonical profile (see §1-§8 of this document).
-    v5:    RFC 8785 (JCS) profile (see §9 of this document).
+    v5-v7: RFC 8785 (JCS) profile (see §9 of this document).
     """
 ```
 
@@ -217,9 +217,9 @@ The empty resource-attributes form normalizes to `{}`. Therefore its canonical b
 `canonical_binding_bytes` dispatches by stored `binding_version` as follows:
 
 - `v1`-`v4`: legacy Keel canonical profile (see §1-§8).
-- `v5` and `v6`: RFC 8785 / JCS via `rfc8785.dumps` (see §9).
+- `v5`, `v6`, and `v7`: RFC 8785 / JCS via `rfc8785.dumps` (see §9).
 
-The v6 resource-attributes recompute-entry gate is version-EXACT: recomputation of `resource_attributes_canonical_hash` MUST run only when the stored `binding_version == "v6"`. It MUST NOT run for `v5`, for later versions by range comparison, or for artifacts whose version is inferred from an issuer default.
+The v6 resource-attributes recompute-entry gate is version-EXACT: recomputation of `resource_attributes_canonical_hash` MUST run only when the stored `binding_version == "v6"`. It MUST NOT run for `v5`, for unsupported later versions by range comparison, or for artifacts whose version is inferred from an issuer default. Binding v7 adds its own exact recompute gate in §13.
 
 ### Replay invariant
 
@@ -231,6 +231,32 @@ A v6 replay verifier MUST establish all four of the following before accepting a
 4. The recomputed canonical binding bytes match the signed binding hash.
 
 The resource-attributes hash is scope-faithful: it covers exactly what is inside `resource_attributes_json`. It does not cover, imply, or attest to evidence stored elsewhere in the permit, closure, audit trail, provider trace, database row, or export bundle.
+
+## 13. Binding v7 additive authority, subject, and account binding
+
+Binding version v7 is additive over v6. The v6 canonical field set is frozen.
+Binding v7 signs exactly the v6 fields plus:
+
+| Field | Type | Description |
+|---|---|---|
+| `authority_chain_digest` | string or null | Digest of the resolved authority-chain evidence, or null when no chain is present. |
+| `quota_reservation_id` | string or null | Identifier of the quota reservation bound to the decision, or null. |
+| `subject_id` | string | Subject identifier bound into the signed decision. |
+| `subject_type` | string | Subject type bound into the signed decision. |
+| `account_id` | UUID string or null | Account selector bound into the signed decision for c7 slot key lookup. |
+| `org_id` | UUID string or null | Registry-partition selector bound into the signed decision for c7 slot key lookup. |
+
+Binding v7 uses the same RFC 8785 / JCS substrate as v5 and v6. It does not
+change legacy v1-v4 canonicalization and does not reinterpret historical v6
+artifacts.
+
+For `binding_version == "v7"`, verifiers MUST recompute and compare every signed
+sub-hash whose source material is present, including
+`resource_attributes_canonical_hash`, `spend_scope_hash`, and
+`delegation_policy_hash`. The v7 resource-attributes recompute-entry gate is
+version-EXACT: recomputation of `resource_attributes_canonical_hash` MUST run
+only when the stored `binding_version == "v7"` for v7 artifacts. It MUST NOT be
+entered by range comparison or by an issuer default inferred after signing.
 
 ### Current rail-evidence key set
 

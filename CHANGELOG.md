@@ -4,6 +4,16 @@ All notable changes to this specification are documented here.
 
 The spec document follows [Semantic Versioning](https://semver.org/). Wire formats (Permit `v1`, `closure_v1`, `closure_v2`, chain entry `v1`) version independently and are not bumped by spec-document revisions.
 
+## [1.6.0] — 2026-06-17
+
+Documents additive Permit binding v7/c7 support while keeping v6 frozen.
+
+- Add the public v7 canonicalization contract: v7 uses the RFC 8785 substrate and signs the frozen v6 field set plus `authority_chain_digest`, `quota_reservation_id`, `subject_id`, `subject_type`, `account_id`, and `org_id`.
+- Preserve v6 as byte-stable/frozen. v7 is additive; historical v6 artifacts continue to verify under the v6 rules.
+- Update the Permit v2 schema to admit the v7/c7 signed fields, including `binding_version`, `account_id`, `org_id`, authority-chain digest, quota reservation, and subject fields.
+- Clarify that for v7+ Permit v2 slot key lookup, account and registry-partition selection comes from signed permit bytes, never a caller manifest or other unsigned metadata.
+- Record v7/c7 support in the public capability inventory and test-vector manifest. These public artifacts ship with the verifier release train and remain gated on ratification before publication.
+
 ## [1.5.0] — 2026-06-02
 
 Added `custom_metadata` as designated extension carrier on `AuditExportPermitSource`.

@@ -9,6 +9,11 @@ completeness of key-status evidence; completeness is established by higher
 level verifier claims that pin the manifest and compose it with checkpoint
 scope-state evidence.
 
+For Permit binding v7 and later, this manifest does not choose the account or
+registry partition for Permit v2 slot key lookup. That selector comes from the
+signed permit bytes; unsigned manifest account metadata may corroborate the
+signed selector but MUST NOT override it.
+
 ---
 
 ## 1. Conformance Keywords

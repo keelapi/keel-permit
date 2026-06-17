@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/github/license/keelapi/keel-permit)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/keelapi/keel-permit?label=release)](https://github.com/keelapi/keel-permit/releases)
-![Spec version](https://img.shields.io/badge/spec-1.5.0-blue)
+![Spec version](https://img.shields.io/badge/spec-1.6.0-blue)
 
 A pre-execution decision record for AI agent systems. A Permit records that an action was evaluated and decided, and, for dispatched allow executions, can be bound to the final provider or tool request. A Permit JSON object alone is not self-authenticating; verification is performed from signed export artifacts and the relevant public keys or key manifest. Those artifacts are verifiable without contacting the issuer when the verifier has the signed export artifacts and relevant public keys/key manifest.
 
@@ -12,8 +12,9 @@ This repository contains the wire-format specification, JSON schemas, and verifi
 
 | | |
 |---|---|
-| Spec document version | 1.5.0 |
+| Spec document version | 1.6.0 |
 | Permit wire format | `v1` |
+| Permit binding versions | `v1`-`v7` (`v6` frozen; `v7` additive/c7) |
 | Closure record format | `closure_v1`, `closure_v2` |
 | Chain entry hash format | `v1` |
 | Reference implementation | [keel-api](https://github.com/keelapi/keel-api) |
@@ -53,6 +54,7 @@ flowchart LR
 ## Specifications
 
 - [`spec/permit-v1.md`](spec/permit-v1.md) — Permit object
+- [`spec/permit-v2.md`](spec/permit-v2.md) — Permit v2 multi-party signature slots
 - [`spec/closure-v2.md`](spec/closure-v2.md) — Execution closure record
 - [`spec/chain-entry.md`](spec/chain-entry.md) — Tamper-evident chain entry
 - [`spec/audit-export-bundle.md`](spec/audit-export-bundle.md) — Evidence bundle format
@@ -64,6 +66,7 @@ flowchart LR
 - [`spec/permit-revoked-event-v1.md`](spec/permit-revoked-event-v1.md) — Signed permit revocation event
 - [`spec/key-status-event-v1.md`](spec/key-status-event-v1.md) — Signed key status event
 - [`spec/key-status-manifest-v1.md`](spec/key-status-manifest-v1.md) — Signed account key-status manifest
+- [`spec/key-status-completeness-v1.md`](spec/key-status-completeness-v1.md) — Key-status completeness verifier claim
 - [`spec/dispatch-absence-after-revocation-v1.md`](spec/dispatch-absence-after-revocation-v1.md) — Scope-faithful absence adjudication after revocation
 
 ## Schemas
@@ -75,6 +78,16 @@ Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated f
 - [`claim_registry/`](claim_registry/) — stable verifier-claim registry artifacts.
 - [`comparator_registry/`](comparator_registry/) — authority-envelope comparator semantics for Permit Chains.
 - [`semantics/`](semantics/) — pinned semantic artifacts consumed by verifiers for export manifests, governance chains, closure records, checkpoints, workflows, and Permit binding.
+
+## Capability Inventory
+
+| Capability | Public contract |
+|---|---|
+| Permit binding canonicalization | `v1`-`v4` use the legacy Keel profile; `v5`-`v7` use RFC 8785 / JCS. |
+| Frozen v6 boundary | `v6` remains byte-stable and keeps its exact resource-attributes contract. |
+| Additive v7/c7 binding | `v7` signs the v6 field set plus `authority_chain_digest`, `quota_reservation_id`, `subject_id`, `subject_type`, `account_id`, and `org_id`. |
+| Permit v2 slot key lookup | For `v7` and later, account and registry-partition selection comes from signed permit bytes; unsigned manifest override is rejected. |
+| Reference verifier status | The reference verifier verifies `v7` permit decisions and rejects unsigned account-selector drift. |
 
 ## Examples
 

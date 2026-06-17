@@ -209,6 +209,15 @@ The v2-specific slots use account-scoped Ed25519 public keys. Verifiers MUST
 resolve keys by `(account_id, key_id)` as of the slot's `signed_at` timestamp,
 not by current key state.
 
+For Permit binding v7 and later, the account and registry-partition selector
+used for slot key lookup is signed permit data. Verifiers MUST derive the
+selector from the signed permit bytes (`account_id` and, when present, `org_id`)
+and MUST NOT let a caller manifest, URL, request envelope, or other unsigned
+metadata select or override it. If unsigned evidence supplies a different
+`account_id` or `org_id` from the signed permit bytes, verification MUST reject
+the slot. If a v7+ slot requires account-scoped key lookup and no signed
+`account_id` is available, the slot evidence is insufficient.
+
 Routine key rotation after signing remains valid. A revocation or compromise
 effective at or before `signed_at` invalidates the slot. A revocation or
 compromise effective after `signed_at` MUST NOT invalidate an otherwise valid

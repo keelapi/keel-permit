@@ -22,6 +22,12 @@ The verifier MUST require all of the following evidence:
 The subject `comparison_instant_source` MUST be `signed_bytes`. A caller-supplied
 time is not sufficient.
 
+For Permit binding v7 and later, a Permit v2 slot subject's `account_id` and
+registry-partition selector MUST come from the signed permit bytes. A caller
+manifest or other unsigned metadata is not sufficient to select the account for
+key-status completeness, and manifest drift from the signed permit selector
+prevents support.
+
 ## 2. Manifest Requirements
 
 The key-status manifest MUST pass the schema and signature rules in

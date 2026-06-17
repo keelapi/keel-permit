@@ -836,6 +836,20 @@
       "default": null,
       "title": "Actual Usage Json"
     },
+    "account_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Signed account selector for binding v7+ slot key lookup.",
+      "title": "Account Id"
+    },
     "authority_envelope": {
       "anyOf": [
         {
@@ -919,6 +933,20 @@
       "default": null,
       "title": "Authority Envelope Version"
     },
+    "authority_chain_digest": {
+      "anyOf": [
+        {
+          "pattern": "^(sha256:)?[a-f0-9]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Binding v7 authority-chain digest signed into the permit decision.",
+      "title": "Authority Chain Digest"
+    },
     "audit_attestation": {
       "$ref": "#/$defs/AuditAttestationSignature"
     },
@@ -934,6 +962,20 @@
       ],
       "default": null,
       "title": "Binding Request Hash"
+    },
+    "binding_version": {
+      "enum": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "v5",
+        "v6",
+        "v7"
+      ],
+      "description": "Permit binding canonicalization version. v7 is additive over frozen v6.",
+      "title": "Binding Version",
+      "type": "string"
     },
     "budget_envelope": {
       "anyOf": [
@@ -1074,6 +1116,20 @@
     "operator_approval": {
       "$ref": "#/$defs/OperatorApprovalSignature"
     },
+    "org_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Signed registry-partition selector for binding v7+ slot key lookup.",
+      "title": "Org Id"
+    },
     "parent_permit_id": {
       "anyOf": [
         {
@@ -1117,6 +1173,20 @@
       "format": "uuid",
       "title": "Project Id",
       "type": "string"
+    },
+    "quota_reservation_id": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Binding v7 quota reservation identifier signed into the permit decision.",
+      "title": "Quota Reservation Id"
     },
     "reason": {
       "title": "Reason",
@@ -1213,10 +1283,12 @@
       "title": "Status"
     },
     "subject_id": {
+      "description": "Subject identifier signed into the permit decision.",
       "title": "Subject Id",
       "type": "string"
     },
     "subject_type": {
+      "description": "Subject type signed into the permit decision.",
       "title": "Subject Type",
       "type": "string"
     },

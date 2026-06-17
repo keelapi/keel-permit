@@ -5,6 +5,37 @@
   "test_vectors_version": "0.1.0-draft",
   "permit_spec_version": "1.0.0",
   "generated_at": "2026-05-10",
+  "capabilities": {
+    "permit_binding_versions": {
+      "supported": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "v5",
+        "v6",
+        "v7"
+      ],
+      "frozen": [
+        "v6"
+      ],
+      "additive": [
+        "v7"
+      ]
+    },
+    "v7_c7": {
+      "status": "supported",
+      "canonical_additive_fields": [
+        "authority_chain_digest",
+        "quota_reservation_id",
+        "subject_id",
+        "subject_type",
+        "account_id",
+        "org_id"
+      ],
+      "slot_selector_rule": "For v7 and later, Permit v2 slot key lookup uses account_id/org_id from signed permit bytes; unsigned manifest override rejects."
+    }
+  },
   "categories": [
     {
       "id": "cat-01-baseline",
