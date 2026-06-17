@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keelapi/keel-permit/blob/main/schemas/key-status-event.schema.json",
+  "title": "Key Status Event v1",
+  "description": "Strict payload shape for a signed key.status.v1 event recording account-scoped key revocation or compromise.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "const": "key.status.v1",
+      "description": "Signed artifact type."
+    },
+    "account_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "UUID of the account that owns the key. Signed to prevent cross-account replay."
+    },
+    "key_scope": {
+      "type": "string",
+      "enum": [
+        "operator",
+        "buyer_principal",
+        "mcp_server",
+        "provider_principal"
+      ],
+      "description": "Account-scoped key table or role namespace for the status change."
+    },
+    "key_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hex key identifier of the account-scoped public key."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "revoked",
+        "compromised"
+      ],
+      "description": "Terminal key status recorded by this event."
+    },
+    "revoked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp at which the key was revoked. Required only when status is revoked."
+    },
+    "compromised_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp at which the key was marked compromised. Required only when status is compromised."
+    },
+    "signer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "purpose": {
+          "type": "string",
+          "const": "permit_binding_signing",
+          "description": "Signing-key purpose that produced the event signature."
+        },
+        "key_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "description": "Signing key identifier from the public key manifest."
+        },
+        "algorithm": {
+          "type": "string",
+          "const": "ed25519",
+          "description": "Signature algorithm."
+        }
+      },
+      "required": [
+        "purpose",
+        "key_id",
+        "algorithm"
+      ]
+    },
+    "event_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hex hash of the canonical signed fields, excluding event_hash and signature."
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9+/]{86}==$",
+      "description": "Base64 Ed25519 signature over event_hash using the signer key."
+    }
+  },
+  "required": [
+    "event_type",
+    "account_id",
+    "key_scope",
+    "key_id",
+    "status",
+    "signer",
+    "event_hash",
+    "signature"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "revoked"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "revoked_at"
+        ],
+        "not": {
+          "required": [
+            "compromised_at"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "compromised"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "compromised_at"
+        ],
+        "not": {
+          "required": [
+            "revoked_at"
+          ]
+        }
+      }
+    }
+  ]
+}
