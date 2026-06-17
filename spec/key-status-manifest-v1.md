@@ -78,6 +78,7 @@ untrusted caller manifest.
 
 ## 6. Claim Use
 
-This manifest is a foundational input for `key.status.completeness.v1` and
+This manifest is a foundational input for
+[`key.status.completeness.v1`](key-status-completeness-v1.md) and
 revocation-temporal composition. It is not sufficient by itself to prove that
 all relevant key-status events have been observed.
