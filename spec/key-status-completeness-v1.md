@@ -58,13 +58,22 @@ The commitment's `matching_count` MUST equal the number of distinct
 event sequence number MUST be in `[1, checkpoint_head]`. Duplicate event
 identities are rejected.
 
-## 4. Revoked-Key Sufficiency
+## 4. Key-Status Sufficiency
 
-For a revocation completeness subject, the manifest MUST contain a key entry
-whose signed `account_id`, `key_scope`, and `key_id` exactly match the subject.
-That entry MUST have `status: "revoked"`, `revoked_at` MUST be at or before the
-signed `comparison_instant`, and the entry MUST include at least one
-`key.status.v1` event reference with `status: "revoked"`.
+For a revocation completeness subject (`expected_status: "revoked"`), the
+manifest MUST contain a key entry whose signed `account_id`, `key_scope`, and
+`key_id` exactly match the subject. That entry MUST have `status: "revoked"`,
+`revoked_at` MUST be at or before the signed `comparison_instant`, and the entry
+MUST include at least one `key.status.v1` event reference with
+`status: "revoked"`.
+
+For a slot-liveness subject (`expected_status: "not_revoked"`), the manifest
+MUST contain a key entry whose signed `account_id`, `key_scope`, and `key_id`
+exactly match the subject. The claim is supported only when neither
+`revoked_at` nor `compromised_at` is at or before the signed
+`comparison_instant`. A bounded-zero event domain is sufficient only when the
+checkpoint scope-state commitment's `matching_count` is zero and the signed
+manifest also carries zero `key.status.v1` references.
 
 All requirements compose with logical AND. Missing or unsupported scope-state
 evidence prevents the completeness claim from being supported even when the

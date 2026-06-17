@@ -188,14 +188,17 @@ values are introduced.
 | `PERMIT_OPERATOR_APPROVAL_INVALID` | `disproved` | The `operator_approval` sub-object is malformed, its `signed_payload_hash` does not equal the canonical operator-approval payload hash, or its Ed25519 signature does not verify. |
 | `PERMIT_OPERATOR_APPROVAL_KEY_NOT_TRUSTED` | `insufficient_evidence` | The verifier cannot resolve an issuer-organization operator key for `(account_id, key_id)` that was active at `operator_approval.signed_at`. |
 | `PERMIT_OPERATOR_APPROVAL_SIGNER_MISMATCH` | `disproved` | `operator_approval.signer_id` differs from the `operator_id` in the signed operator-approval payload. |
+| `PERMIT_OPERATOR_APPROVAL_KEY_STATUS_COMPLETENESS_UNSUPPORTED` | `insufficient_evidence` | The v2 operator-approval claim cannot obtain supported `key.status.completeness.v1` for the exact operator key at `operator_approval.signed_at`. |
 | `PERMIT_COUNTER_SIGNATURE_INVALID` | `disproved` | The `counter_signature` sub-object is malformed, its `signed_payload_hash` does not equal the canonical counter-signature payload hash, or its Ed25519 signature does not verify. |
 | `PERMIT_COUNTER_SIGNATURE_KEY_NOT_TRUSTED` | `insufficient_evidence` | The verifier cannot resolve a buyer-principal key for `(account_id, key_id)` that was active at `counter_signature.signed_at`. |
 | `PERMIT_COUNTER_SIGNATURE_SIGNER_MISMATCH` | `disproved` | `counter_signature.signer_id` differs from the `buyer_principal_id` in the signed counter-signature payload. |
 | `PERMIT_COUNTER_SIGNATURE_INTENT_MISMATCH` | `disproved` | `counter_signature.execution_intent_hash` differs from the `execution_intent_hash` in the signed counter-signature payload. |
+| `PERMIT_COUNTER_SIGNATURE_KEY_STATUS_COMPLETENESS_UNSUPPORTED` | `insufficient_evidence` | The v2 counter-signature claim cannot obtain supported `key.status.completeness.v1` for the exact buyer-principal key at `counter_signature.signed_at`. |
 | `PERMIT_AUDIT_ATTESTATION_INVALID` | `disproved` | The `audit_attestation` sub-object is malformed, its `signed_payload_hash` does not equal the canonical audit-attestation payload hash, or its Ed25519 signature does not verify. |
 | `PERMIT_AUDIT_ATTESTATION_KEY_NOT_TRUSTED` | `insufficient_evidence` | The verifier cannot resolve a buyer-principal key for `(account_id, key_id)` that was active at `audit_attestation.signed_at`. |
 | `PERMIT_AUDIT_ATTESTATION_SIGNER_MISMATCH` | `disproved` | `audit_attestation.signer_id` differs from the `buyer_principal_id` in the signed audit-attestation payload. |
 | `PERMIT_AUDIT_ATTESTATION_BATCH_MISMATCH` | `disproved` | `audit_attestation.batch_id` differs from the `batch_id` in the signed audit-attestation payload. |
+| `PERMIT_AUDIT_ATTESTATION_KEY_STATUS_COMPLETENESS_UNSUPPORTED` | `insufficient_evidence` | The v2 audit-attestation claim cannot obtain supported `key.status.completeness.v1` for the exact buyer-principal key at `audit_attestation.signed_at`. |
 | `PAYLOAD_TYPE_MISMATCH` | `disproved` | The signature slot or signed payload carries a `payload_type` that does not exactly match the registered value for that slot: `permit.operator_approval.v1`, `permit.counter_signature.v1`, or `permit.audit_attestation.v1`. |
 
 ## 14. Scope-State and Scope-Faithfulness Codes

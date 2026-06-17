@@ -214,6 +214,23 @@ effective at or before `signed_at` invalidates the slot. A revocation or
 compromise effective after `signed_at` MUST NOT invalidate an otherwise valid
 historical signature.
 
+The v1 verifier claims (`permit.operator_approval.v1`,
+`permit.counter_signature.v1`, and `permit.audit_attestation.v1`) verify the
+slot signature, signed payload, key-window lookup, and slot-local timing rules.
+The v2 verifier claims (`permit.operator_approval.v2`,
+`permit.counter_signature.v2`, and `permit.audit_attestation.v2`) add a blocking
+AND dependency on `key.status.completeness.v1`. A v2 slot claim can be supported
+only when `key.status.completeness.v1` is supported for the exact `(account_id,
+key_scope, key_id)` signer tuple at the slot's signed `signed_at` timestamp with
+`comparison_instant_source: "signed_bytes"` and `expected_status:
+"not_revoked"`.
+
+For v2 slot claims, unsupported, missing, stale, or disproved key-status
+completeness evidence prevents slot support. The slot claim reports this as
+`insufficient_evidence`; revocation-temporal evidence does not make a slot claim
+emit `disproved` unless the slot signature, payload, key-window lookup, or
+slot-local timing rule itself fails.
+
 ## 11. Procurement and audit posture
 
 Existing audit standards verify controls, logs, and authorization processes,
