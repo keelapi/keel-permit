@@ -14,6 +14,10 @@
       "path": "test-vectors/semantics/checkpoint_tsa_imprint_v1.json"
     },
     {
+      "semantic_artifact_id": "keel.budget.partition_ledger.v1",
+      "path": "test-vectors/semantics/budget_partition_ledger_v1.json"
+    },
+    {
       "semantic_artifact_id": "keel.closure.digest_rules.v1",
       "path": "test-vectors/semantics/closure_digest_rules_v1.json"
     },
@@ -44,6 +48,10 @@
     {
       "semantic_artifact_id": "keel.permit_binding.canonical_request.v1",
       "path": "test-vectors/semantics/permit_binding_canonical_request_v1.json"
+    },
+    {
+      "semantic_artifact_id": "keel.quota.reservation_linkage.v1",
+      "path": "test-vectors/semantics/quota_reservation_linkage_v1.json"
     },
     {
       "semantic_artifact_id": "keel.workflow.canonicalization.v1",

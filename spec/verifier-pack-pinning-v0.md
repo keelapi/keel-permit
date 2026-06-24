@@ -41,7 +41,7 @@ Pinned packs carry both `claim_set` and `semantics_pins`.
     "version": "verifier-claims.v0",
     "registry": {
       "id": "keel.verifier_claim_registry.v0",
-      "hash": "sha256:d4ff07076f823d3f6a9bd7ce17f6096b035ca466b8ec71996d5417e4957ec7c8",
+      "hash": "sha256:4be808c13849d2737bd0f40da0f522d8a6c4b672c29e3ac2c0b43cdc8e6be5c7",
       "path": "claim_registry/v0.json"
     },
     "claims": [
@@ -60,7 +60,7 @@ Pinned packs carry both `claim_set` and `semantics_pins`.
     "mode": "pinned",
     "profile": {
       "id": "keel.pre_pinning_default.v0",
-      "hash": "sha256:8475b44ef4141b58687dd04ef3a59cc39619a7ab1083a629192b57ac5cf084fe",
+      "hash": "sha256:67a26994d6d73b460adc0aa05f823c42e512d952372e6eb9a73f560fbbec186c",
       "path": "semantics/profiles/pre_pinning_default_v0.json"
     },
     "artifacts": [
@@ -119,12 +119,12 @@ An evidence pack with no `claim_set` and no `semantics_pins` is evaluated under
 
 The profile artifact is
 `semantics/profiles/pre_pinning_default_v0.json` with hash
-`sha256:8475b44ef4141b58687dd04ef3a59cc39619a7ab1083a629192b57ac5cf084fe`.
+`sha256:67a26994d6d73b460adc0aa05f823c42e512d952372e6eb9a73f560fbbec186c`.
 It expands to these base components:
 
 | ID | Hash |
 | --- | --- |
-| `keel.verifier_claim_registry.v0` | `sha256:d4ff07076f823d3f6a9bd7ce17f6096b035ca466b8ec71996d5417e4957ec7c8` |
+| `keel.verifier_claim_registry.v0` | `sha256:4be808c13849d2737bd0f40da0f522d8a6c4b672c29e3ac2c0b43cdc8e6be5c7` |
 | `keel.export_manifest.integrity.v1` | `sha256:d1d67dca7eb9a662d26463c3dec841f47f8791df2fafb21e911dd26a83dabb76` |
 | `keel.governance_chain.record_hash.v1` | `sha256:a3213706c9e9531a74cd2355f2f05e537c7a70604cb869b7b76c65cba4a2b707` |
 | `keel.governance_event.integrity_digest.v1` | `sha256:7d3f447e215ca53dd5add04b4a62b4223d28ad22210b5a3df8fcbc85f5dbe440` |

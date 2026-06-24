@@ -159,3 +159,100 @@ Failure modes include `chain_events`, `chain_field:<field>`,
 `integrity_digest_count_mismatch`, `unsupported_authority_envelope_version`,
 `comparable_authority_envelopes`, `comparator_allows_child_authority`, and
 `failed_fields_mismatch`.
+
+## 8. R4 ledger attestation grades
+
+R4 budget-ledger claims MAY emit an `attestation_grade` in their structured
+epistemic state. The only valid grades, from weakest to strongest, are:
+
+1. `keel_self_signed_unanchored`
+2. `keel_attested_unsigned`
+3. `signed_identity`
+
+`signed_identity` means the supplied reservation-linkage identity tuple carries
+a verifier-supported detached signature and that signature verifies under the
+supplied key material.
+
+`keel_attested_unsigned` means unsigned Keel ledger rows were reconciled inside
+a verified self-attesting evidence bundle whose signed body contains an
+accepted `published_checkpoint` anchor. It is Keel-attested unsigned evidence,
+not independent third-party attestation.
+
+`keel_self_signed_unanchored` means unsigned Keel ledger rows were reconciled
+inside a verified self-attesting bundle without an accepted body anchor.
+Verifiers MUST NOT emit `keel_attested_unsigned` for unanchored unsigned rows.
+They MUST either emit `keel_self_signed_unanchored` or withhold the claim when
+the evidence does not satisfy the claim.
+
+Pinned claim requests MAY set `minimum_trust_grade`. If the emitted grade is
+lower than the requested minimum, a verifier MUST treat the requested claim as
+`insufficient_evidence`.
+
+## 9. `quota.reservation_linkage.v1`
+
+This claim adjudicates whether budget-reservation ledger evidence links a
+reservation to the permit or execution row that consumed it. The verifier MUST
+evaluate this claim with the pinned
+`keel.quota.reservation_linkage.v1` semantic artifact and the verified
+`evidence_bundle.self_attesting.v1` substrate.
+
+Required evidence inputs:
+
+- Either `signed_reservation_linkages[]` identity tuples with detached
+  signatures, or `budget_allocation_events[]` rows for the per-permit
+  reservation family.
+- For unsigned rows, the per-permit transition family is `reserve`,
+  `reserve_adjust`, `release`, and `commit`.
+- Unsigned rows MUST carry enough identity fields to group by `reservation_id`
+  and bind the group to one `project_id`, `envelope_id`, `allocation_id`, and
+  `permit_id` when those fields are present.
+- Commit evidence carries two separate amount metrics:
+  `reserved_released_usd_micros` and `spent_added_usd_micros`.
+  `spent_added_usd_micros` is the clamped positive spend delta.
+- For unsigned rows, bundle anchor state determines whether the supported grade
+  is `keel_attested_unsigned` or `keel_self_signed_unanchored`.
+
+Verdict schema:
+
+- `supported`: the signed tuple verifies, or unsigned rows replay without
+  contradiction, and any requested `minimum_trust_grade` is satisfied.
+- `disproved`: signed tuple verification fails, signed and unsigned linkage
+  evidence conflict, or ledger rows release more reservation than was reserved.
+- `insufficient_evidence`: required identity fields, amount metrics, semantic
+  pins, or requested minimum grade are missing or insufficient.
+- `unverifiable_scope`: the pinned semantic artifact is unknown to the
+  verifier's permanent allowlist.
+
+The semantic artifact for this claim is
+`semantics/quota/reservation_linkage_v1.json` with hash
+`sha256:42c505642283286bef5067d54b4b6e81e9d43bf31e4e7d5d5dedbfb8403a521c`.
+
+## 10. `budget.partition_ledger.v1`
+
+This claim adjudicates whether budget allocation cap-lifecycle rows are
+replayable as partition evidence for per-agent budget cap accounting. The
+verifier MUST evaluate this claim with the pinned
+`keel.budget.partition_ledger.v1` semantic artifact and the verified evidence
+substrate that carries the ledger rows.
+
+Required evidence inputs:
+
+- `budget_allocation_events[]` rows for the cap-lifecycle transition family:
+  `cap_allocate`, `cap_update`, and `cap_deactivate`.
+- Rows MUST carry `project_id`, `envelope_id`, `allocation_id`, `is_active`,
+  `transition`, `metric`, `amount`, and `seq` when those fields are applicable.
+- Cap lifecycle rows are replayed in `seq` order. Active rows contribute
+  `cap_usd_micros`; inactive rows contribute zero.
+
+Verdict schema:
+
+- `supported`: cap-lifecycle rows are present and replayable.
+- `disproved`: a cap-lifecycle row is malformed or carries an invalid cap
+  amount.
+- `insufficient_evidence`: required rows, fields, or semantic pins are missing.
+- `unverifiable_scope`: the pinned semantic artifact is unknown to the
+  verifier's permanent allowlist.
+
+The semantic artifact for this claim is
+`semantics/budget/partition_ledger_v1.json` with hash
+`sha256:ab76d2cbb6000283fbf91d6196a33ff60d74508cbea4aedbb0a6258c60aac0c8`.
