@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/github/license/keelapi/keel-permit)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/keelapi/keel-permit?label=release)](https://github.com/keelapi/keel-permit/releases)
-![Spec version](https://img.shields.io/badge/spec-1.6.0-blue)
+![Spec version](https://img.shields.io/badge/spec-1.7.0-blue)
 
 A pre-execution decision record for AI agent systems. A Permit records that an action was evaluated and decided, and, for dispatched allow executions, can be bound to the final provider or tool request. A Permit JSON object alone is not self-authenticating; verification is performed from signed export artifacts and the relevant public keys or key manifest. Those artifacts are verifiable without contacting the issuer when the verifier has the signed export artifacts and relevant public keys/key manifest.
 
@@ -12,7 +12,7 @@ This repository contains the wire-format specification, JSON schemas, and verifi
 
 | | |
 |---|---|
-| Spec document version | 1.6.0 |
+| Spec document version | 1.7.0 |
 | Permit wire format | `v1` |
 | Permit binding versions | `v1`-`v7` (`v6` frozen; `v7` additive/c7) |
 | Closure record format | `closure_v1`, `closure_v2` |
@@ -64,6 +64,8 @@ flowchart LR
 - [`spec/verifier-claims-v0.md`](spec/verifier-claims-v0.md) — Verifier claim model
 - [`spec/verifier-pack-pinning-v0.md`](spec/verifier-pack-pinning-v0.md) — Pinned semantics for evidence packs
 - [`spec/permit-revoked-event-v1.md`](spec/permit-revoked-event-v1.md) — Signed permit revocation event
+- [`spec/quota-reservation-linkage-v1.md`](spec/quota-reservation-linkage-v1.md) — Reservation ↔ permit linkage with anchor-contingent attestation grade
+- [`spec/budget-partition-ledger-v1.md`](spec/budget-partition-ledger-v1.md) — Active-cap partition ledger replayed from cap-lifecycle events
 - [`spec/key-status-event-v1.md`](spec/key-status-event-v1.md) — Signed key status event
 - [`spec/key-status-manifest-v1.md`](spec/key-status-manifest-v1.md) — Signed account key-status manifest
 - [`spec/key-status-completeness-v1.md`](spec/key-status-completeness-v1.md) — Key-status completeness verifier claim

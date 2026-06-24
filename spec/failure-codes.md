@@ -58,6 +58,10 @@ MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD NOT, RECOMMENDED, MAY
 | `PAYLOAD_TYPE_MISMATCH` | permit v2 signature | A v2 signature slot carries or signs a `payload_type` outside the slot's registered domain. |
 | `EXPORT_SCOPE_PREDICATE_OUT_OF_GRAMMAR` | export scope | A declared scope predicate uses an operator or range shape outside scope-predicate v1. |
 | `EXPORT_SCOPE_BRIDGE_RECORD_MATCHES_PREDICATE` | export scope | A bridge, proof, or continuity record satisfies the declared predicate. |
+| `RESERVATION_LINKAGE_CONFLICT` | reservation linkage | A signed-identity reservation tuple conflicts with the unsigned-row tuple, conservation fails, or a reservation links to more than one permit. |
+| `RESERVATION_LINKAGE_INSUFFICIENT` | reservation linkage | The reservation-linkage tuple cannot be determined, the carrying bundle cannot be validated, or a requested minimum trust grade is not met by the available evidence. |
+| `PARTITION_LEDGER_OVERCOMMIT` | partition ledger | The active-cap sum recomputed from cap-lifecycle events exceeds the budget envelope capacity. |
+| `PARTITION_LEDGER_INSUFFICIENT` | partition ledger | Cap-lifecycle events or the envelope capacity for an in-scope allocation are missing, or the carrying bundle cannot be validated. |
 
 A verifier MUST emit exactly one of these codes per detected violation. Implementations MAY emit multiple codes when a single artifact contains multiple independent violations.
 

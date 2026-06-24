@@ -4,6 +4,16 @@ All notable changes to this specification are documented here.
 
 The spec document follows [Semantic Versioning](https://semver.org/). Wire formats (Permit `v1`, `closure_v1`, `closure_v2`, chain entry `v1`) version independently and are not bumped by spec-document revisions.
 
+## [1.7.0] — 2026-06-23
+
+Adds the R4 LEDGER (prove half) public contract: two verifier claims over the append-only `budget_allocation_events` ledger, with an anchor-contingent attestation grade.
+
+- Add `quota.reservation_linkage.v1`: reservation ↔ permit/execution linkage reconciled over the per-permit event family (`reserve`, `reserve_adjust`, `release`, `commit`) grouped by `reservation_id`. The claim is **anchor-contingent** — the trust grade `keel_attested_unsigned` is emitted only when the verified bundle body carries an accepted anchor; over an unanchored bundle the claim is withheld or emitted as the strictly weaker `keel_self_signed_unanchored`, never `keel_attested_unsigned`.
+- Define the ordered attestation-grade enum `signed_identity` > `keel_attested_unsigned` > `keel_self_signed_unanchored` and the minimum-grade fail-closed rule.
+- Add `budget.partition_ledger.v1`: per-envelope active-cap sum ≤ envelope capacity, replayed from the cap-lifecycle event family (`cap_allocate`, `cap_update`, `cap_deactivate`) rather than the mutable cap.
+- Add pinned semantics `semantics/quota/reservation_linkage_v1.json` and `semantics/budget/partition_ledger_v1.json`, and the failure codes `RESERVATION_LINKAGE_CONFLICT`, `RESERVATION_LINKAGE_INSUFFICIENT`, `PARTITION_LEDGER_OVERCOMMIT`, `PARTITION_LEDGER_INSUFFICIENT`.
+- These public artifacts ship with the verifier release train and remain gated on ratification before publication. "Keel-attested," never "independent," until the external monotonic witness (S1).
+
 ## [1.6.0] — 2026-06-17
 
 Documents additive Permit binding v7/c7 support while keeping v6 frozen.
