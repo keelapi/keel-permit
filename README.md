@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/github/license/keelapi/keel-permit)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/keelapi/keel-permit?label=release)](https://github.com/keelapi/keel-permit/releases)
-![Spec version](https://img.shields.io/badge/spec-1.6.0-blue)
+![Spec version](https://img.shields.io/badge/spec-1.7.0-blue)
 
 A pre-execution decision record for AI agent systems. A Permit records that an action was evaluated and decided, and, for dispatched allow executions, can be bound to the final provider or tool request. A Permit JSON object alone is not self-authenticating; verification is performed from signed export artifacts and the relevant public keys or key manifest. Those artifacts are verifiable without contacting the issuer when the verifier has the signed export artifacts and relevant public keys/key manifest.
 
@@ -12,7 +12,7 @@ This repository contains the wire-format specification, JSON schemas, and verifi
 
 | | |
 |---|---|
-| Spec document version | 1.6.0 |
+| Spec document version | 1.7.0 |
 | Permit wire format | `v1` |
 | Permit binding versions | `v1`-`v7` (`v6` frozen; `v7` additive/c7) |
 | Closure record format | `closure_v1`, `closure_v2` |
@@ -77,7 +77,7 @@ Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated f
 
 - [`claim_registry/`](claim_registry/) — stable verifier-claim registry artifacts.
 - [`comparator_registry/`](comparator_registry/) — authority-envelope comparator semantics for Permit Chains.
-- [`semantics/`](semantics/) — pinned semantic artifacts consumed by verifiers for export manifests, governance chains, closure records, checkpoints, workflows, and Permit binding.
+- [`semantics/`](semantics/) — pinned semantic artifacts consumed by verifiers for export manifests, governance chains, closure records, checkpoints, workflows, Permit binding, and R4 budget-ledger claims.
 
 ## Capability Inventory
 
@@ -87,6 +87,7 @@ Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated f
 | Frozen v6 boundary | `v6` remains byte-stable and keeps its exact resource-attributes contract. |
 | Additive v7/c7 binding | `v7` signs the v6 field set plus `authority_chain_digest`, `quota_reservation_id`, `subject_id`, `subject_type`, `account_id`, and `org_id`. |
 | Permit v2 slot key lookup | For `v7` and later, account and registry-partition selection comes from signed permit bytes; unsigned manifest override is rejected. |
+| R4 ledger claims | `quota.reservation_linkage.v1` and `budget.partition_ledger.v1` define budget-allocation ledger evidence; unsigned quota linkage grades are anchor-contingent. |
 | Reference verifier status | The reference verifier verifies `v7` permit decisions and rejects unsigned account-selector drift. |
 
 ## Examples

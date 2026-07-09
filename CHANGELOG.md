@@ -4,6 +4,21 @@ All notable changes to this specification are documented here.
 
 The spec document follows [Semantic Versioning](https://semver.org/). Wire formats (Permit `v1`, `closure_v1`, `closure_v2`, chain entry `v1`) version independently and are not bumped by spec-document revisions.
 
+## [1.7.0] — 2026-06-24
+
+Adds the R4 budget-ledger verifier-claim contract. Permit wire format `v1`,
+Permit binding versions, closure formats, and chain entry `v1` are unchanged.
+
+- Add `quota.reservation_linkage.v1` and `budget.partition_ledger.v1` to
+  `claim_registry/v0.json`.
+- Add pinned semantic artifacts for quota reservation linkage and budget
+  partition ledger replay.
+- Define the attestation-grade enum and ordering:
+  `keel_self_signed_unanchored < keel_attested_unsigned < signed_identity`.
+- Clarify that `keel_attested_unsigned` is anchor-contingent; unanchored
+  self-attesting bundles must use `keel_self_signed_unanchored` or withhold the
+  quota linkage claim.
+
 ## [1.6.0] — 2026-06-17
 
 Documents additive Permit binding v7/c7 support while keeping v6 frozen.
