@@ -12,6 +12,17 @@
   ],
   "claims": [
     {
+      "name": "permit.co_signature.v1",
+      "assertion": "A registered human-passkey credential produced a valid WebAuthn assertion whose challenge binds to the independently verified Permit canonical hash and whose ceremony satisfies the configured RP ID, origin, user-presence, and user-verification rules.",
+      "required_evidence": "Signed-pack-integrity-protected permit.co_signature.v1 claim and assertion envelope; independently verified target-Permit identity, canonical hash, action, resource, and modality; trusted registered co-signer COSE key-status record; RP ID; allowed origins; and effective user-verification requirement.",
+      "verdict_enum": [
+        "supported",
+        "disproved",
+        "insufficient_evidence",
+        "unverifiable_scope"
+      ]
+    },
+    {
       "name": "export.integrity.v1",
       "assertion": "Export bytes match manifest `content_hash`; manifest signature is valid for the trusted export-signing key at signing time.",
       "required_evidence": "Export bytes, manifest, public key or key manifest/trust root, signature metadata.",

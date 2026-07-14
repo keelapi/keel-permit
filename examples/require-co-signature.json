@@ -1,0 +1,24 @@
+{
+  "type": "require_co_signature",
+  "role": "approver",
+  "signer_set": [
+    {
+      "user_id": "20000000-0000-4000-8000-000000000001"
+    },
+    {
+      "group": "finance-approvers"
+    }
+  ],
+  "min_approvals": {
+    "n": 2,
+    "of": 3
+  },
+  "separation_of_duties": true,
+  "timeout_seconds": 3600,
+  "phase": "pre_execution",
+  "min_assurance": "any",
+  "allowed_aaguids": [
+    "00000000-0000-4000-8000-000000000007"
+  ],
+  "require_user_verification": true
+}

@@ -9,6 +9,7 @@ Reference artifacts illustrating the wire formats specified in [`../spec/`](../s
 - [`closure-v2-closed.json`](closure-v2-closed.json) — `closure_v2` envelope with `closure_status: closed` and all three digest fields (`dispatch_request_digest_v1`, `provider_response_digest_v1`, `client_response_digest_v1`).
 - [`chain-entry.json`](chain-entry.json) — single chain entry illustrating the v1 record-hash structure.
 - [`audit-export-bundle-v2.json`](audit-export-bundle-v2.json) — illustrative `schema_version: 2` bundle with one record and three chain entries (permit evaluation, dispatch binding, closure). It is schema-valid but is not a full verifier-complete reference bundle.
+- [`require-co-signature.json`](require-co-signature.json) — `require_co_signature` approver requirement showing a mixed signer set, N-of-M quorum, separation of duties, and default-off assurance fields.
 
 ## Caveat
 

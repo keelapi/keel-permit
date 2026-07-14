@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keelapi/keel-permit/blob/main/schemas/permit-co-signature-v1.schema.json",
+  "title": "Permit Co-Signature Claim v1",
+  "description": "A permit.co_signature.v1 semantic record with its verifiable WebAuthn assertion material.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "payload_type": {
+      "const": "permit.co_signature.v1"
+    },
+    "permit_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "permit_canonical_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Lowercase hexadecimal SHA-256 digest of the canonical permit bytes."
+    },
+    "action": {
+      "type": "string",
+      "minLength": 1
+    },
+    "resource": {
+      "type": "string",
+      "minLength": 1
+    },
+    "modality": {
+      "type": "string",
+      "minLength": 1
+    },
+    "co_signer_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "role": {
+      "type": "string",
+      "enum": ["approver", "witness"]
+    },
+    "key_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "custody_tier": {
+      "const": "human_passkey"
+    },
+    "signed_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{6}Z$"
+    },
+    "assertion": {
+      "$ref": "webauthn-assertion-envelope-v1.schema.json"
+    }
+  },
+  "required": [
+    "payload_type",
+    "permit_id",
+    "permit_canonical_hash",
+    "action",
+    "resource",
+    "modality",
+    "co_signer_id",
+    "role",
+    "key_id",
+    "custody_tier",
+    "signed_at",
+    "assertion"
+  ]
+}
