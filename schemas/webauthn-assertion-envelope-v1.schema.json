@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keelapi/keel-permit/blob/main/schemas/webauthn-assertion-envelope-v1.schema.json",
+  "title": "WebAuthn Assertion Envelope v1",
+  "description": "The byte-preserving WebAuthn assertion material used by permit.co_signature.v1.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "credential_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_-]+$",
+      "description": "Base64url without padding of PublicKeyCredential.rawId."
+    },
+    "authenticator_data": {
+      "type": "string",
+      "minLength": 50,
+      "pattern": "^[A-Za-z0-9_-]+$",
+      "description": "Base64url without padding of AuthenticatorAssertionResponse.authenticatorData."
+    },
+    "client_data_json": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_-]+$",
+      "description": "Base64url without padding of the exact AuthenticatorAssertionResponse.clientDataJSON bytes."
+    },
+    "signature": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_-]+$",
+      "description": "Base64url without padding of AuthenticatorAssertionResponse.signature."
+    },
+    "cose_alg": {
+      "type": "integer",
+      "enum": [-7, -8],
+      "description": "COSE algorithm: -7 is ES256 and -8 is EdDSA."
+    }
+  },
+  "required": [
+    "credential_id",
+    "authenticator_data",
+    "client_data_json",
+    "signature",
+    "cose_alg"
+  ]
+}

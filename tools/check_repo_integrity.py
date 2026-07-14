@@ -23,6 +23,7 @@ EXAMPLE_SCHEMA_PAIRS = [
     ("examples/chain-entry.json", "schemas/chain-entry.schema.json"),
     ("examples/closure-v2-closed.json", "schemas/closure-v2.schema.json"),
     ("examples/audit-export-bundle-v2.json", "schemas/audit-export-bundle.schema.json"),
+    ("examples/require-co-signature.json", "schemas/require-co-signature-v1.schema.json"),
 ]
 
 
@@ -210,6 +211,120 @@ def check_json_schemas_self_validate(require_jsonschema: bool, errors: list[str]
             fail(errors, f"{schema_path.relative_to(ROOT)} is not a valid draft-2020-12 schema: {exc}")
 
 
+def check_permit_co_signature_vectors(require_jsonschema: bool, errors: list[str]) -> None:
+    try:
+        import jsonschema
+        from referencing import Registry, Resource
+    except ImportError:
+        if require_jsonschema:
+            fail(errors, "jsonschema and referencing are required but are not installed")
+        else:
+            print("jsonschema not installed; skipping permit co-signature vector validation.")
+        return
+
+    schema_documents = [
+        json.loads(path.read_text(encoding="utf-8"))
+        for path in sorted((ROOT / "schemas").glob("*.schema.json"))
+    ]
+    registry = Registry()
+    for schema in schema_documents:
+        schema_id = schema.get("$id")
+        if isinstance(schema_id, str):
+            registry = registry.with_resource(schema_id, Resource.from_contents(schema))
+
+    claim_schema = json.loads(
+        (ROOT / "schemas/permit-co-signature-v1.schema.json").read_text(encoding="utf-8")
+    )
+    key_schema = json.loads(
+        (ROOT / "schemas/permit-co-signer-key-v1.schema.json").read_text(encoding="utf-8")
+    )
+    claim_validator = jsonschema.Draft202012Validator(
+        claim_schema,
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+    key_validator = jsonschema.Draft202012Validator(
+        key_schema,
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+    corpus_path = ROOT / "test-vectors/permit_co_signature/v1/corpus.json"
+    corpus = json.loads(corpus_path.read_text(encoding="utf-8"))
+    vectors = corpus.get("vectors")
+    if not isinstance(vectors, list) or len(vectors) < 8:
+        fail(errors, "permit co-signature corpus must contain at least 8 vectors")
+        return
+
+    by_id = {
+        vector.get("id"): vector
+        for vector in vectors
+        if isinstance(vector, dict) and isinstance(vector.get("id"), str)
+    }
+    required_vector_ids = {
+        "positive-es256",
+        "positive-eddsa",
+        "negative-wrong-challenge",
+        "negative-wrong-origin",
+        "negative-wrong-rp-id-hash",
+        "negative-uv-zero",
+        "negative-tampered-authenticator-data",
+        "negative-tampered-signature",
+        "negative-replay-different-permit",
+    }
+    missing_vector_ids = sorted(required_vector_ids - set(by_id))
+    if missing_vector_ids:
+        fail(errors, f"permit co-signature corpus is missing required vectors: {missing_vector_ids}")
+
+    for vector_id, expected_alg in (("positive-es256", -7), ("positive-eddsa", -8)):
+        vector = by_id.get(vector_id, {})
+        assertion = vector.get("claim", {}).get("assertion", {})
+        expected = vector.get("expected", {})
+        if assertion.get("cose_alg") != expected_alg or expected.get("verdict") != "supported":
+            fail(errors, f"permit co-signature vector {vector_id} must support COSE alg {expected_alg}")
+
+    negative_vectors = [
+        vector for vector_id, vector in by_id.items() if vector_id.startswith("negative-")
+    ]
+    negative_reasons = [vector.get("expected", {}).get("reason") for vector in negative_vectors]
+    if any(vector.get("expected", {}).get("verdict") != "disproved" for vector in negative_vectors):
+        fail(errors, "all permit co-signature negative vectors must have verdict disproved")
+    if len(negative_reasons) != len(set(negative_reasons)):
+        fail(errors, "permit co-signature negative vectors must have distinct primary reasons")
+
+    required_key_fields = {
+        "aaguid",
+        "attestation_format",
+        "attestation_statement",
+        "backup_eligible",
+        "backup_state",
+        "sign_count",
+        "cose_alg",
+        "rp_id",
+        "credential_id",
+    }
+    if not required_key_fields.issubset(set(key_schema.get("required", []))):
+        missing = sorted(required_key_fields - set(key_schema.get("required", [])))
+        fail(errors, f"permit co-signer key schema is missing required recorded fields: {missing}")
+
+    for vector in vectors:
+        vector_id = vector.get("id", "<missing-id>") if isinstance(vector, dict) else "<invalid>"
+        if not isinstance(vector, dict):
+            fail(errors, f"permit co-signature vector {vector_id} is not an object")
+            continue
+        for label, validator, instance in (
+            ("claim", claim_validator, vector.get("claim")),
+            ("registered_cose_key", key_validator, vector.get("registered_cose_key")),
+        ):
+            failures = sorted(validator.iter_errors(instance), key=lambda err: list(err.path))
+            if failures:
+                first = failures[0]
+                location = ".".join(str(part) for part in first.path) or "<root>"
+                fail(
+                    errors,
+                    f"permit co-signature vector {vector_id} {label} fails schema at {location}: {first.message}",
+                )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--require-jsonschema", action="store_true")
@@ -224,6 +339,7 @@ def main() -> int:
     check_version_metadata(errors)
     check_json_schemas_self_validate(args.require_jsonschema, errors)
     check_examples_against_schemas(args.require_jsonschema, errors)
+    check_permit_co_signature_vectors(args.require_jsonschema, errors)
 
     if errors:
         print("Repository integrity check failed:")

@@ -36,6 +36,15 @@
       "slot_selector_rule": "For v7 and later, Permit v2 slot key lookup uses account_id/org_id from signed permit bytes; unsigned manifest override rejects."
     }
   },
+  "protocol_suites": {
+    "permit.co_signature.v1": {
+      "path": "permit_co_signature/v1/corpus.json",
+      "status": "golden",
+      "vector_count": 9,
+      "supported_cose_algorithms": [-7, -8],
+      "reference_verifier": "permit_co_signature/v1/reference_verify.mjs"
+    }
+  },
   "categories": [
     {
       "id": "cat-01-baseline",

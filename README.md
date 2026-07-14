@@ -55,6 +55,7 @@ flowchart LR
 
 - [`spec/permit-v1.md`](spec/permit-v1.md) — Permit object
 - [`spec/permit-v2.md`](spec/permit-v2.md) — Permit v2 multi-party signature slots
+- [`spec/permit-co-signature-v1.md`](spec/permit-co-signature-v1.md) — WebAuthn human co-signature claim and policy/key contracts
 - [`spec/closure-v2.md`](spec/closure-v2.md) — Execution closure record
 - [`spec/chain-entry.md`](spec/chain-entry.md) — Tamper-evident chain entry
 - [`spec/audit-export-bundle.md`](spec/audit-export-bundle.md) — Evidence bundle format
@@ -71,7 +72,7 @@ flowchart LR
 
 ## Schemas
 
-Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated from the reference implementation's Pydantic models and then post-processed with public wire-format constraints. Regenerate with [`tools/export_schemas.py`](tools/export_schemas.py). `schemas/closure-v2.schema.json` and `schemas/audit-export-manifest.schema.json` are hand-maintained because the reference implementation builds those envelopes dynamically rather than from Pydantic models.
+Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated from the reference implementation's Pydantic models and then post-processed with public wire-format constraints. Regenerate with [`tools/export_schemas.py`](tools/export_schemas.py). `schemas/closure-v2.schema.json`, `schemas/audit-export-manifest.schema.json`, and the four WebAuthn co-signature contract schemas are hand-maintained because they define repository-native protocol envelopes rather than generated reference-implementation models.
 
 ## Released artifacts
 
@@ -88,6 +89,7 @@ Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated f
 | Additive v7/c7 binding | `v7` signs the v6 field set plus `authority_chain_digest`, `quota_reservation_id`, `subject_id`, `subject_type`, `account_id`, and `org_id`. |
 | Permit v2 slot key lookup | For `v7` and later, account and registry-partition selection comes from signed permit bytes; unsigned manifest override is rejected. |
 | R4 ledger claims | `quota.reservation_linkage.v1` and `budget.partition_ledger.v1` define budget-allocation ledger evidence; unsigned quota linkage grades are anchor-contingent. |
+| Permit co-signature contract | `permit.co_signature.v1` verifies WebAuthn ES256 or EdDSA assertions bound by challenge to a Permit canonical hash; assurance and identity enforcement remain default-off. |
 | Reference verifier status | The reference verifier verifies `v7` permit decisions and rejects unsigned account-selector drift. |
 
 ## Examples
@@ -105,6 +107,8 @@ See [`mappings/README.md`](mappings/README.md) for status, scope, evidence-suppo
 [`test-vectors/`](test-vectors/) — a versioned conformance fixture set that any verifier (Keel's reference verifier or independent third-party implementations) can be tested against. Each fixture has an `expected.json` defining the required outcome; a verifier that disagrees on any fixture is non-conforming.
 
 Current conformance artifacts include the pinned-semantics golden corpus in [`test-vectors/verifier_claims/`](test-vectors/verifier_claims/), semantic-artifact conformance records in [`test-vectors/semantics/`](test-vectors/semantics/), and self-contained Permit Chain semantic vectors under [`test-vectors/vectors/cat-08-permit-chains/`](test-vectors/vectors/cat-08-permit-chains/). See [`test-vectors/README.md`](test-vectors/README.md) and [`test-vectors/CONFORMANCE.md`](test-vectors/CONFORMANCE.md).
+
+The WebAuthn co-signature protocol corpus and its dependency-free executable reference verifier are under [`test-vectors/permit_co_signature/v1/`](test-vectors/permit_co_signature/v1/).
 
 ## Versioning
 

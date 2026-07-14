@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keelapi/keel-permit/blob/main/schemas/permit-co-signer-key-v1.schema.json",
+  "title": "Permit Co-Signer Key Record v1",
+  "description": "Registered WebAuthn credential metadata required for current assertion verification and later assurance policy flips.",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "attestationStatement": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "inline"
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          },
+          "required": ["kind", "value"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "sha256"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": ["kind", "value"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "ref"
+            },
+            "value": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "required": ["kind", "value"]
+        }
+      ]
+    }
+  },
+  "properties": {
+    "record_type": {
+      "const": "permit.co_signer_key.v1"
+    },
+    "key_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "co_signer_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "custody_tier": {
+      "const": "human_passkey"
+    },
+    "credential_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "public_key_cose": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_-]+$",
+      "description": "Base64url without padding of the credentialPublicKey COSE_Key CBOR bytes."
+    },
+    "cose_alg": {
+      "type": "integer",
+      "enum": [-7, -8]
+    },
+    "rp_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 253
+    },
+    "aaguid": {
+      "type": ["string", "null"],
+      "format": "uuid",
+      "description": "Nullable in Phase 1, recorded for future AAGUID assurance policy."
+    },
+    "attestation_format": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "description": "WebAuthn attestation fmt. Phase 1 uses none and does not enforce assurance from it."
+    },
+    "attestation_statement": {
+      "$ref": "#/$defs/attestationStatement",
+      "description": "Inline statement, SHA-256 commitment, reference, or null. Recorded but not assurance-enforced in Phase 1."
+    },
+    "backup_eligible": {
+      "type": ["boolean", "null"],
+      "description": "Credential BE state, nullable and not assurance-enforced in Phase 1."
+    },
+    "backup_state": {
+      "type": ["boolean", "null"],
+      "description": "Credential BS state, nullable and not assurance-enforced in Phase 1."
+    },
+    "sign_count": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "maximum": 4294967295,
+      "description": "Most recently recorded authenticator signCount, nullable and not clone-enforced by this Phase 0 contract."
+    }
+  },
+  "required": [
+    "record_type",
+    "key_id",
+    "co_signer_id",
+    "custody_tier",
+    "credential_id",
+    "public_key_cose",
+    "cose_alg",
+    "rp_id",
+    "aaguid",
+    "attestation_format",
+    "attestation_statement",
+    "backup_eligible",
+    "backup_state",
+    "sign_count"
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keelapi/keel-permit/blob/main/schemas/require-co-signature-v1.schema.json",
+  "title": "require_co_signature Requirement v1",
+  "description": "Policy requirement for approver or witness WebAuthn co-signatures.",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "signerSelector": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "group": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "oneOf": [
+        {
+          "required": ["user_id"]
+        },
+        {
+          "required": ["email"]
+        },
+        {
+          "required": ["group"]
+        }
+      ]
+    },
+    "nOfM": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "n": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "of": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": ["n", "of"]
+    }
+  },
+  "properties": {
+    "type": {
+      "const": "require_co_signature"
+    },
+    "role": {
+      "type": "string",
+      "enum": ["approver", "witness"]
+    },
+    "signer_set": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/signerSelector"
+      }
+    },
+    "min_approvals": {
+      "oneOf": [
+        {
+          "const": 1
+        },
+        {
+          "$ref": "#/$defs/nOfM"
+        },
+        {
+          "const": "all"
+        }
+      ],
+      "default": 1
+    },
+    "separation_of_duties": {
+      "type": "boolean",
+      "default": false
+    },
+    "timeout_seconds": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["pre_execution", "post_execution"]
+    },
+    "min_assurance": {
+      "type": "string",
+      "enum": ["any", "device_bound", "hardware_attested"],
+      "default": "any",
+      "description": "Recorded for forward compatibility. Phase 1 treats omitted or any as no assurance enforcement."
+    },
+    "allowed_aaguids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "description": "Optional forward-compatible allowlist; recorded but not enforced in Phase 1."
+    },
+    "require_user_verification": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "type",
+    "role",
+    "signer_set",
+    "min_approvals",
+    "separation_of_duties",
+    "timeout_seconds",
+    "phase"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "role": {
+            "const": "approver"
+          }
+        },
+        "required": ["role"]
+      },
+      "then": {
+        "properties": {
+          "phase": {
+            "const": "pre_execution"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "role": {
+            "const": "witness"
+          }
+        },
+        "required": ["role"]
+      },
+      "then": {
+        "properties": {
+          "phase": {
+            "const": "post_execution"
+          }
+        }
+      }
+    }
+  ]
+}

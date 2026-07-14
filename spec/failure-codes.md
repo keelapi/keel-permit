@@ -56,6 +56,20 @@ MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD NOT, RECOMMENDED, MAY
 | `PERMIT_AUDIT_ATTESTATION_SIGNER_MISMATCH` | permit v2 signature | The `audit_attestation.signer_id` does not match the signed `buyer_principal_id`. |
 | `PERMIT_AUDIT_ATTESTATION_BATCH_MISMATCH` | permit v2 signature | The envelope `batch_id` does not match the signed audit-attestation payload. |
 | `PAYLOAD_TYPE_MISMATCH` | permit v2 signature | A v2 signature slot carries or signs a `payload_type` outside the slot's registered domain. |
+| `CO_SIGNATURE_PERMIT_BINDING_MISMATCH` | permit co-signature | The co-signature claim's Permit identity or operation fields do not match the independently verified target Permit. |
+| `CO_SIGNATURE_EVIDENCE_MISSING` | permit co-signature | Required claim, target-Permit, registered-key, or enclosing signed-pack evidence is absent. |
+| `CO_SIGNATURE_CREDENTIAL_MISMATCH` | permit co-signature | The assertion credential ID does not match the registered co-signer key record. |
+| `CO_SIGNATURE_ALGORITHM_MISMATCH` | permit co-signature | The assertion algorithm does not match the registered COSE key, key type, or curve. |
+| `CO_SIGNATURE_CLIENT_DATA_INVALID` | permit co-signature | `clientDataJSON` is not canonical base64url of parseable UTF-8 JSON. |
+| `CO_SIGNATURE_TYPE_INVALID` | permit co-signature | `clientDataJSON.type` is not `webauthn.get`. |
+| `CO_SIGNATURE_CHALLENGE_MISMATCH` | permit co-signature | The decoded WebAuthn challenge does not equal the target Permit canonical hash bytes. |
+| `CO_SIGNATURE_ORIGIN_NOT_ALLOWED` | permit co-signature | The serialized client-data origin is absent from the configured exact-match allowed-origin set. |
+| `CO_SIGNATURE_AUTHENTICATOR_DATA_INVALID` | permit co-signature | `authenticatorData` is malformed, too short, or has an invalid flag combination. |
+| `CO_SIGNATURE_RP_ID_HASH_MISMATCH` | permit co-signature | `authenticatorData.rpIdHash` does not equal `SHA-256(rp_id)`. |
+| `CO_SIGNATURE_USER_PRESENCE_REQUIRED` | permit co-signature | The authenticator UP flag is clear. |
+| `CO_SIGNATURE_USER_VERIFICATION_REQUIRED` | permit co-signature | UV is required by policy but the authenticator UV flag is clear. |
+| `CO_SIGNATURE_SIGNATURE_MALFORMED` | permit co-signature | The assertion signature does not have the encoding required by its COSE algorithm. |
+| `CO_SIGNATURE_INVALID_SIGNATURE` | permit co-signature | The well-formed assertion signature does not verify over `authenticatorData || SHA-256(clientDataJSON)`. |
 | `EXPORT_SCOPE_PREDICATE_OUT_OF_GRAMMAR` | export scope | A declared scope predicate uses an operator or range shape outside scope-predicate v1. |
 | `EXPORT_SCOPE_BRIDGE_RECORD_MATCHES_PREDICATE` | export scope | A bridge, proof, or continuity record satisfies the declared predicate. |
 
@@ -200,6 +214,30 @@ values are introduced.
 | `PERMIT_AUDIT_ATTESTATION_BATCH_MISMATCH` | `disproved` | `audit_attestation.batch_id` differs from the `batch_id` in the signed audit-attestation payload. |
 | `PERMIT_AUDIT_ATTESTATION_KEY_STATUS_COMPLETENESS_UNSUPPORTED` | `insufficient_evidence` | The v2 audit-attestation claim cannot obtain supported `key.status.completeness.v1` for the exact buyer-principal key at `audit_attestation.signed_at`. |
 | `PAYLOAD_TYPE_MISMATCH` | `disproved` | The signature slot or signed payload carries a `payload_type` that does not exactly match the registered value for that slot: `permit.operator_approval.v1`, `permit.counter_signature.v1`, or `permit.audit_attestation.v1`. |
+
+### 13.4 Permit Co-Signature Codes
+
+These codes apply to the WebAuthn verification procedure in
+[`permit-co-signature-v1.md`](permit-co-signature-v1.md). A verifier applies
+the normative check order in that specification when selecting a primary
+reason.
+
+| Code | Verdict | Trigger |
+|---|---|---|
+| `CO_SIGNATURE_PERMIT_BINDING_MISMATCH` | `disproved` | `permit_id`, `permit_canonical_hash`, `action`, `resource`, or `modality` in the claim differs from the independently verified target-Permit context. This is the cross-Permit replay reason. |
+| `CO_SIGNATURE_EVIDENCE_MISSING` | `insufficient_evidence` | The claim, independently verified target-Permit context, registered co-signer key, or signed pack material needed to trust them is absent. |
+| `CO_SIGNATURE_CREDENTIAL_MISMATCH` | `disproved` | The assertion `credential_id` differs from the registered key record's credential ID. |
+| `CO_SIGNATURE_ALGORITHM_MISMATCH` | `disproved` | The envelope `cose_alg` differs from the registered key's `cose_alg`, or the decoded COSE key type/curve does not match that algorithm. |
+| `CO_SIGNATURE_CLIENT_DATA_INVALID` | `disproved` | `client_data_json` is not strict unpadded base64url, does not decode to UTF-8, or does not parse as a JSON object with required string members. |
+| `CO_SIGNATURE_TYPE_INVALID` | `disproved` | Parsed `clientDataJSON.type` is not exactly `webauthn.get`. |
+| `CO_SIGNATURE_CHALLENGE_MISMATCH` | `disproved` | Base64url-decoded `clientDataJSON.challenge` does not equal the raw bytes represented by `permit_canonical_hash`. |
+| `CO_SIGNATURE_ORIGIN_NOT_ALLOWED` | `disproved` | Parsed `clientDataJSON.origin` is not an exact member of the verifier's allowed serialized-origin set. |
+| `CO_SIGNATURE_AUTHENTICATOR_DATA_INVALID` | `disproved` | `authenticator_data` is not strict unpadded base64url, is shorter than 37 bytes, or has BS set while BE is clear. |
+| `CO_SIGNATURE_RP_ID_HASH_MISMATCH` | `disproved` | The first 32 authenticator-data bytes do not equal `SHA-256(UTF-8(rp_id))`. |
+| `CO_SIGNATURE_USER_PRESENCE_REQUIRED` | `disproved` | The authenticator-data UP bit (`0x01`) is clear. UP is always required by this claim. |
+| `CO_SIGNATURE_USER_VERIFICATION_REQUIRED` | `disproved` | Effective `require_user_verification` is true and the authenticator-data UV bit (`0x04`) is clear. Omission of the requirement field means true. |
+| `CO_SIGNATURE_SIGNATURE_MALFORMED` | `disproved` | ES256 signature bytes are not strict ASN.1 DER ECDSA or EdDSA signature bytes are not the required 64-byte Ed25519 form. |
+| `CO_SIGNATURE_INVALID_SIGNATURE` | `disproved` | A well-formed signature fails verification against the registered COSE key over the WebAuthn signed bytes. A verifier cannot infer which signed input was altered solely from this cryptographic failure. |
 
 ## 14. Scope-State and Scope-Faithfulness Codes
 
