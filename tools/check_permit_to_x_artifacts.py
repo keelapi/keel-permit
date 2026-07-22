@@ -359,6 +359,41 @@ def validate_work_contract(registry: Registry) -> None:
     for index, event in enumerate(valid["value_events"]):
         validate_instance(event, "schemas/work-value-event-v1.schema.json", registry, f"value event {index}")
     validate_instance(pack, "schemas/work-chain-pack-v1.schema.json", registry, "work-chain pack")
+    replacement_request = copy.deepcopy(valid["work_request"])
+    replacement_request["existing_authority"] = {
+        "mode": "replace_existing",
+        "root_permit_id": "11111111-1111-4111-8111-111111111111",
+    }
+    validate_instance(
+        replacement_request,
+        "schemas/work-request-v1.schema.json",
+        registry,
+        "replacement work request",
+    )
+    additional_request = copy.deepcopy(valid["work_request"])
+    additional_request["existing_authority"] = {
+        "mode": "add_separate",
+        "root_permit_id": "11111111-1111-4111-8111-111111111111",
+        "combined_risk_acknowledged": True,
+    }
+    validate_instance(
+        additional_request,
+        "schemas/work-request-v1.schema.json",
+        registry,
+        "additional work request",
+    )
+    invalid_additional = copy.deepcopy(additional_request)
+    del invalid_additional["existing_authority"]["combined_risk_acknowledged"]
+    invalid_schema = load_json("schemas/work-request-v1.schema.json")
+    invalid_errors = list(
+        jsonschema.Draft202012Validator(
+            invalid_schema,
+            registry=registry,
+            format_checker=jsonschema.FormatChecker(),
+        ).iter_errors(invalid_additional)
+    )
+    if not invalid_errors:
+        raise ContractFailure("add_separate work request accepted without combined-risk acknowledgement")
     if work_failure_code(corpus) is not None:
         raise ContractFailure(f"valid Work corpus failed with {work_failure_code(corpus)}")
 

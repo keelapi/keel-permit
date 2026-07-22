@@ -28,6 +28,9 @@
       "minLength": 1,
       "maxLength": 200
     },
+    "existing_authority": {
+      "$ref": "#/$defs/existing_authority"
+    },
     "resource": {
       "$ref": "#/$defs/resource"
     },
@@ -38,6 +41,36 @@
       "items": {
         "$ref": "#/$defs/payment_authority_request"
       }
+    },
+    "existing_authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "root_permit_id"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["replace_existing", "add_separate"]
+        },
+        "root_permit_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "combined_risk_acknowledged": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"mode": {"const": "add_separate"}},
+            "required": ["mode"]
+          },
+          "then": {
+            "required": ["combined_risk_acknowledged"],
+            "properties": {"combined_risk_acknowledged": {"const": true}}
+          }
+        }
+      ]
     },
     "required_authority_ids": {
       "type": "array",
