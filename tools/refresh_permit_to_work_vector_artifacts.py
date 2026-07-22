@@ -167,6 +167,20 @@ def main() -> None:
         commitment["included_count"] = len(values)
         commitment["included_set_hash"] = digest(values)
 
+    signature = pack["scope_commitment_signature"]
+    signature_payload = {
+        "version": "keel.work_scope_commitment_signature_payload.v1",
+        "project_id": pack["project_id"],
+        "root_permit_id": pack["root_permit_id"],
+        "export_source": pack["export_source"],
+        "recorded_through": pack["declared_cutoff"]["recorded_through"],
+        "checkpoint_id": pack["declared_cutoff"]["checkpoint_id"],
+        "scope_commitment": pack["scope_commitment"],
+        "binding_key_id": signature["binding_key_id"],
+    }
+    signature["canonical_hash"] = digest(signature_payload)
+    pack["declared_cutoff"]["checkpoint_digest"] = signature["canonical_hash"]
+
     CORPUS.write_text(json.dumps(corpus, indent=2) + "\n", encoding="utf-8")
 
 

@@ -123,7 +123,7 @@
       "dispatch_boundary_evidence": {
         "artifact_id": "urn:x-keel:artifact:governance_event:88888888-8888-4888-8888-888888888882",
         "artifact_type": "governance_event",
-        "artifact_digest": "sha256:9b0472c20c0ff7ff71f9304b4543504bfafe129e07ea4cfc7ecb1cabfb69115c"
+        "artifact_digest": "sha256:44e02f03b1f4388edd201c1b7d78e37a037fbc7ac78c3a440b6775d97b2a3f66"
       }
     },
     "value_events": [
@@ -198,14 +198,14 @@
         "event_type": "work.issued",
         "permit_id": "22222222-2222-4222-8222-222222222222",
         "occurred_at": "2026-07-21T16:05:00Z",
-        "event_digest": "sha256:2c71686446aa12f7db723e77c056359a38bba155de065ac9b142a0285a822cbb"
+        "event_digest": "sha256:e78c0f0f41495c2244fc59804e0f3fc7e3e7271277f979a0dfddaa4ddf90652e"
       },
       {
         "event_id": "88888888-8888-4888-8888-888888888882",
         "event_type": "dispatch.egress_bound",
         "permit_id": "33333333-3333-4333-8333-333333333333",
         "occurred_at": "2026-07-21T16:07:00Z",
-        "event_digest": "sha256:9b0472c20c0ff7ff71f9304b4543504bfafe129e07ea4cfc7ecb1cabfb69115c"
+        "event_digest": "sha256:44e02f03b1f4388edd201c1b7d78e37a037fbc7ac78c3a440b6775d97b2a3f66"
       }
     ],
     "pack": {
@@ -220,7 +220,7 @@
       "declared_cutoff": {
         "recorded_through": "2026-07-21T16:10:00Z",
         "checkpoint_id": "66666666-6666-4666-8666-666666666666",
-        "checkpoint_digest": "sha256:9333333333333333333333333333333333333333333333333333333333333333"
+        "checkpoint_digest": "sha256:494d212c33cb8dfcbde5a8a9e49f2892044051311070f27c984e013342391d5e"
       },
       "scope_commitment": {
         "version": "keel.work_scope_commitment.v1",
@@ -237,7 +237,7 @@
             "population": "child_permits",
             "source_relation": "permits",
             "included_count": 1,
-            "included_set_hash": "sha256:e371abbfa39eb447e1546a9c0c937a46e5c9d6bf62f968a4fbb0e58c81129897"
+            "included_set_hash": "sha256:7d01d92ba9c40b338cf0eb766a1cd58c22863b8222ffb67fd0fec1c05cb550d2"
           },
           {
             "population": "work_value_events",
@@ -249,7 +249,7 @@
             "population": "lifecycle_events",
             "source_relation": "governance_events",
             "included_count": 2,
-            "included_set_hash": "sha256:641d0accff4fb8f6f154c39a91359b6ab914a7e1c2f76f97b48917122a096268"
+            "included_set_hash": "sha256:a7cdf6a5c51aa54ffd8a8e8d7ffbf7e0859f4628282c6f07b6dbdf8329ac9dd6"
           }
         ]
       },
@@ -257,7 +257,7 @@
         "version": "keel.work_scope_commitment_signature.v1",
         "signature_profile": "keel.canonical_json.payload.v1",
         "binding_key_id": "keel-test-signing-key-v1",
-        "canonical_hash": "sha256:9333333333333333333333333333333333333333333333333333333333333333",
+        "canonical_hash": "sha256:494d212c33cb8dfcbde5a8a9e49f2892044051311070f27c984e013342391d5e",
         "signature": "ed25519:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
         "signed_at": "2026-07-21T16:10:00Z"
       },
@@ -368,27 +368,27 @@
         {
           "artifact_id": "urn:x-keel:artifact:governance_event:88888888-8888-4888-8888-888888888881",
           "artifact_type": "governance_event",
-          "artifact_digest": "sha256:2c71686446aa12f7db723e77c056359a38bba155de065ac9b142a0285a822cbb",
+          "artifact_digest": "sha256:e78c0f0f41495c2244fc59804e0f3fc7e3e7271277f979a0dfddaa4ddf90652e",
           "payload": {
             "version": "keel.work_lifecycle_event.v1",
             "event_id": "88888888-8888-4888-8888-888888888881",
             "event_type": "work.issued",
             "permit_id": "22222222-2222-4222-8222-222222222222",
             "occurred_at": "2026-07-21T16:05:00Z",
-            "event_digest": "sha256:9111111111111111111111111111111111111111111111111111111111111111"
+            "event_digest": "sha256:2c71686446aa12f7db723e77c056359a38bba155de065ac9b142a0285a822cbb"
           }
         },
         {
           "artifact_id": "urn:x-keel:artifact:governance_event:88888888-8888-4888-8888-888888888882",
           "artifact_type": "governance_event",
-          "artifact_digest": "sha256:9b0472c20c0ff7ff71f9304b4543504bfafe129e07ea4cfc7ecb1cabfb69115c",
+          "artifact_digest": "sha256:44e02f03b1f4388edd201c1b7d78e37a037fbc7ac78c3a440b6775d97b2a3f66",
           "payload": {
             "version": "keel.work_dispatch_boundary.v1",
             "event_id": "88888888-8888-4888-8888-888888888882",
             "event_type": "dispatch.egress_bound",
             "permit_id": "33333333-3333-4333-8333-333333333333",
             "occurred_at": "2026-07-21T16:07:00Z",
-            "event_digest": "sha256:9222222222222222222222222222222222222222222222222222222222222222",
+            "event_digest": "sha256:9b0472c20c0ff7ff71f9304b4543504bfafe129e07ea4cfc7ecb1cabfb69115c",
             "root_permit_id": "22222222-2222-4222-8222-222222222222",
             "child_permit_id": "33333333-3333-4333-8333-333333333333",
             "liveness": {

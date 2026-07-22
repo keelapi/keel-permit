@@ -180,6 +180,26 @@ resolve exactly once in the top-level `artifacts` array. The referenced digest
 MUST equal the RFC 8785/JCS SHA-256 digest of the embedded artifact payload.
 An artifact identifier or digest is not a substitute for the artifact bytes.
 
+The scope-commitment signature signs the RFC 8785/JCS bytes of this exact
+object, with no other fields:
+
+```json
+{
+  "version": "keel.work_scope_commitment_signature_payload.v1",
+  "project_id": "<pack.project_id>",
+  "root_permit_id": "<pack.root_permit_id>",
+  "export_source": "<pack.export_source object>",
+  "recorded_through": "<pack.declared_cutoff.recorded_through>",
+  "checkpoint_id": "<pack.declared_cutoff.checkpoint_id>",
+  "scope_commitment": "<pack.scope_commitment object>",
+  "binding_key_id": "<pack.scope_commitment_signature.binding_key_id>"
+}
+```
+
+`canonical_hash` and `declared_cutoff.checkpoint_digest` MUST both equal the
+lowercase SHA-256 digest of those canonical bytes. The signature is Ed25519
+over the ASCII canonical-hash string under the named Permit-binding key.
+
 The profile registers four claims:
 
 - `permit.work_authority_manifest.v1`

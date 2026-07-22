@@ -384,6 +384,18 @@ def work_failure_code(corpus: dict[str, Any]) -> str | None:
         commitment = population_commitments[population]
         if commitment["included_count"] != len(values) or commitment["included_set_hash"] != digest(values):
             return "WORK_SCOPE_POPULATION_MISMATCH"
+    signature_payload = {
+        "version": "keel.work_scope_commitment_signature_payload.v1",
+        "project_id": pack["project_id"],
+        "root_permit_id": pack["root_permit_id"],
+        "export_source": pack["export_source"],
+        "recorded_through": pack["declared_cutoff"]["recorded_through"],
+        "checkpoint_id": pack["declared_cutoff"]["checkpoint_id"],
+        "scope_commitment": pack["scope_commitment"],
+        "binding_key_id": signature["binding_key_id"],
+    }
+    if signature.get("canonical_hash") != digest(signature_payload):
+        return "WORK_SCOPE_COMMITMENT_SIGNATURE_INVALID"
 
     if set(pack["requested_claims"]) != WORK_CLAIMS:
         return "WORK_VERSION_UNSUPPORTED"
