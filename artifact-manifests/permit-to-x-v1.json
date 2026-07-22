@@ -11,7 +11,7 @@
     {"id": "keel.work_package.v1.schema", "path": "schemas/work-package-v1.schema.json", "sha256": "4c15ca430d254ff994242655c2c272b71fe2ba8be38b3f3274ba48056a3b3c54"},
     {"id": "keel.work_authority.v1.schema", "path": "schemas/work-authority-v1.schema.json", "sha256": "33a47eb5c05be566116ff15287c4b32d38469e5d4f09afb71212a5aa9c90763f"},
     {"id": "keel.work_value_event.v1.schema", "path": "schemas/work-value-event-v1.schema.json", "sha256": "4ac66ae3c485d5d2c5d71cfc5e871821d84b6f167245abc18fe62112c705d046"},
-    {"id": "keel.work_chain_pack.v1.schema", "path": "schemas/work-chain-pack-v1.schema.json", "sha256": "81f3d4bd08c792a85943fe9b4ae6628f8b68e40217b0bccb4af0da53cf0a417a"},
+    {"id": "keel.work_chain_pack.v1.schema", "path": "schemas/work-chain-pack-v1.schema.json", "sha256": "a87c71994b86213a065a4c74c264b0b293e9d2b16a8935107f3d1aa716ab88e4"},
     {"id": "keel.work_payment_authority.v1", "path": "comparator_registry/work-payment-authority-v1.json", "sha256": "1c4dfb67f2277224a3cbdc88fba7280a91a9b405fcfeb99baa7888d93c5daf79"},
     {"id": "keel.permit.work_authority_manifest.v1", "path": "semantics/work/authority_manifest_v1.json", "sha256": "16e0f76ecef3021897aba7836fc9c336a528a0f6f2ed3902e5e8db503232f5cc"},
     {"id": "keel.permit.work_child_containment.v1", "path": "semantics/work/child_containment_v1.json", "sha256": "67a300d0968002c9fd9373b6742e8290601803cf8d2573c79b79ace296fc4576"},

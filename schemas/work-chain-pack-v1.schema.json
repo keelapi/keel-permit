@@ -20,6 +20,7 @@
     "lifecycle_events",
     "policy_snapshots",
     "evidence_artifacts",
+    "artifacts",
     "requested_claims"
   ],
   "properties": {
@@ -136,6 +137,11 @@
       "type": "array",
       "items": {"$ref": "#/$defs/artifact_reference"}
     },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/artifact"}
+    },
     "requested_claims": {
       "type": "array",
       "minItems": 4,
@@ -182,6 +188,17 @@
         "artifact_id": {"type": "string", "minLength": 1},
         "artifact_type": {"type": "string", "minLength": 1},
         "artifact_digest": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "artifact_type", "artifact_digest", "payload"],
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 1},
+        "artifact_type": {"type": "string", "minLength": 1},
+        "artifact_digest": {"$ref": "#/$defs/digest"},
+        "payload": {"type": "object"}
       }
     },
     "child_permit_evidence": {

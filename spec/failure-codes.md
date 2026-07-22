@@ -320,6 +320,7 @@ claim and do not change the v0 verdict enum.
 | `WORK_SCOPE_COMMITMENT_MISSING` | `insufficient_evidence` | The pack lacks the signed declared source/cutoff/checkpoint and recorded-population commitments required by `work-chain.v1`. |
 | `WORK_SCOPE_COMMITMENT_SIGNATURE_INVALID` | `disproved` | The Work scope-commitment signature is invalid or its canonical hash does not match the declared checkpoint digest. |
 | `WORK_SCOPE_POPULATION_MISMATCH` | `disproved` | A committed authority, child, value-event, or lifecycle-event population count or set hash differs from the supplied population. |
+| `WORK_ARTIFACT_INTEGRITY_INVALID` | `disproved` | A referenced Work artifact is absent, duplicated, type-mismatched, or its embedded payload does not match the declared digest. |
 | `WORK_VERSION_UNSUPPORTED` | `unverifiable_scope` | A WorkPackage, authority, child binding, value-event, comparator, scope commitment, or claim recipe version is not supported. |
 
 ## 16. Code stability

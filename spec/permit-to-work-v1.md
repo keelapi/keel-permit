@@ -174,6 +174,12 @@ authority/child/value/lifecycle populations. It claims only a scope-faithful
 slice of Keel-recorded evidence through that boundary. It does not assert
 comprehensive runtime instrumentation or exhaustive real-world activity.
 
+The pack is self-contained: every root Permit, child Permit, lifecycle event,
+provider receipt, or settlement reference used by a requested claim MUST
+resolve exactly once in the top-level `artifacts` array. The referenced digest
+MUST equal the RFC 8785/JCS SHA-256 digest of the embedded artifact payload.
+An artifact identifier or digest is not a substitute for the artifact bytes.
+
 The profile registers four claims:
 
 - `permit.work_authority_manifest.v1`

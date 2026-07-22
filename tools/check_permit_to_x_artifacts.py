@@ -260,6 +260,60 @@ def work_failure_code(corpus: dict[str, Any]) -> str | None:
     value_events = valid["value_events"]
     pack = assemble_pack(corpus)
 
+    artifacts = pack.get("artifacts")
+    if not isinstance(artifacts, list):
+        return "WORK_ARTIFACT_INTEGRITY_INVALID"
+    artifacts_by_id: dict[str, dict[str, Any]] = {}
+    for artifact in artifacts:
+        if not isinstance(artifact, dict):
+            return "WORK_ARTIFACT_INTEGRITY_INVALID"
+        artifact_id = artifact.get("artifact_id")
+        if not isinstance(artifact_id, str) or artifact_id in artifacts_by_id:
+            return "WORK_ARTIFACT_INTEGRITY_INVALID"
+        if artifact.get("artifact_digest") != digest(artifact.get("payload")):
+            return "WORK_ARTIFACT_INTEGRITY_INVALID"
+        artifacts_by_id[artifact_id] = artifact
+
+    def reference_resolves(reference: Any) -> bool:
+        if not isinstance(reference, dict):
+            return False
+        artifact = artifacts_by_id.get(reference.get("artifact_id"))
+        return bool(
+            artifact is not None
+            and artifact.get("artifact_type") == reference.get("artifact_type")
+            and artifact.get("artifact_digest") == reference.get("artifact_digest")
+        )
+
+    if not reference_resolves(pack["root"]["permit_artifact"]):
+        return "WORK_ARTIFACT_INTEGRITY_INVALID"
+    for child_evidence in pack["child_permits"]:
+        if not reference_resolves(child_evidence.get("permit_artifact")):
+            return "WORK_ARTIFACT_INTEGRITY_INVALID"
+        dispatch_reference = child_evidence.get("dispatch_boundary_evidence")
+        if dispatch_reference is not None and not reference_resolves(dispatch_reference):
+            return "WORK_ARTIFACT_INTEGRITY_INVALID"
+    for reference in pack["evidence_artifacts"]:
+        if not reference_resolves(reference):
+            return "WORK_ARTIFACT_INTEGRITY_INVALID"
+    for event in pack["value_events"]:
+        evidence = event.get("evidence_reference")
+        if evidence is None:
+            continue
+        artifact = artifacts_by_id.get(evidence.get("artifact_id"))
+        if artifact is None or artifact.get("artifact_digest") != evidence.get(
+            "artifact_digest"
+        ):
+            return "WORK_ARTIFACT_INTEGRITY_INVALID"
+    for event in pack["lifecycle_events"]:
+        matches = [
+            artifact
+            for artifact in artifacts
+            if artifact.get("artifact_type") == "governance_event"
+            and artifact.get("artifact_digest") == event.get("event_digest")
+        ]
+        if len(matches) != 1:
+            return "WORK_ARTIFACT_INTEGRITY_INVALID"
+
     issued_ids = {item["authority_id"] for item in package["issued_authorities"]}
     excluded_ids = {item["authority_id"] for item in package["excluded_authorities"]}
     if not set(package["required_authority_ids"]).issubset(issued_ids - excluded_ids):
