@@ -241,7 +241,7 @@
       "additionalProperties": false,
       "required": ["event_id", "event_type", "occurred_at", "event_digest"],
       "properties": {
-        "event_id": {"type": "string", "format": "uuid"},
+        "event_id": {"type": "string", "minLength": 1},
         "event_type": {
           "type": "string",
           "enum": ["work.issued", "work.closed", "permit.revoked", "dispatch.egress_bound"]
