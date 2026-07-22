@@ -180,8 +180,8 @@ resolve exactly once in the top-level `artifacts` array. The referenced digest
 MUST equal the RFC 8785/JCS SHA-256 digest of the embedded artifact payload.
 An artifact identifier or digest is not a substitute for the artifact bytes.
 
-The scope-commitment signature signs the RFC 8785/JCS bytes of this exact
-object, with no other fields:
+The scope-commitment signature signs this exact object under
+`keel.canonical_json.payload.v1`, with no other fields:
 
 ```json
 {
@@ -197,8 +197,9 @@ object, with no other fields:
 ```
 
 `canonical_hash` and `declared_cutoff.checkpoint_digest` MUST both equal the
-lowercase SHA-256 digest of those canonical bytes. The signature is Ed25519
-over the ASCII canonical-hash string under the named Permit-binding key.
+`sha256:`-prefixed lowercase digest of those canonical bytes. Consistent with
+the Permit-binding signature profile, the Ed25519 signature covers the ASCII
+64-hex digest suffix (without `sha256:`) under the named Permit-binding key.
 
 The profile registers four claims:
 
