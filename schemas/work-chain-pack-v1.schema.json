@@ -12,6 +12,7 @@
     "export_source",
     "declared_cutoff",
     "scope_commitment",
+    "scope_commitment_signature",
     "root",
     "authorities",
     "child_permits",
@@ -62,6 +63,35 @@
           "maxItems": 4,
           "items": {"$ref": "#/$defs/population_commitment"}
         }
+      }
+    },
+    "scope_commitment_signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "signature_profile",
+        "binding_key_id",
+        "canonical_hash",
+        "signature",
+        "signed_at"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "const": "keel.work_scope_commitment_signature.v1"
+        },
+        "signature_profile": {
+          "type": "string",
+          "const": "keel.canonical_json.payload.v1"
+        },
+        "binding_key_id": {"type": "string", "minLength": 1},
+        "canonical_hash": {"$ref": "#/$defs/digest"},
+        "signature": {
+          "type": "string",
+          "pattern": "^ed25519:[A-Za-z0-9+/]+={0,2}$"
+        },
+        "signed_at": {"type": "string", "format": "date-time"}
       }
     },
     "root": {

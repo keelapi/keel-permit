@@ -318,6 +318,7 @@ claim and do not change the v0 verdict enum.
 | `WORK_VALUE_CONSERVATION_MISMATCH` | `disproved` | Ordered events overdraw authorized value, make an outstanding reservation negative, mismatch currency, or otherwise fail the pinned conservation equation. |
 | `WORK_SETTLEMENT_EVIDENCE_MISSING` | `insufficient_evidence` | A `settled` event is supplied without a supported settlement artifact reference and evidence. |
 | `WORK_SCOPE_COMMITMENT_MISSING` | `insufficient_evidence` | The pack lacks the signed declared source/cutoff/checkpoint and recorded-population commitments required by `work-chain.v1`. |
+| `WORK_SCOPE_COMMITMENT_SIGNATURE_INVALID` | `disproved` | The Work scope-commitment signature is invalid or its canonical hash does not match the declared checkpoint digest. |
 | `WORK_SCOPE_POPULATION_MISMATCH` | `disproved` | A committed authority, child, value-event, or lifecycle-event population count or set hash differs from the supplied population. |
 | `WORK_VERSION_UNSUPPORTED` | `unverifiable_scope` | A WorkPackage, authority, child binding, value-event, comparator, scope commitment, or claim recipe version is not supported. |
 

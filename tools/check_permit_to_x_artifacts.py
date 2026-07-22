@@ -318,6 +318,11 @@ def work_failure_code(corpus: dict[str, Any]) -> str | None:
     population_commitments = {
         item["population"]: item for item in pack["scope_commitment"]["populations"]
     }
+    signature = pack.get("scope_commitment_signature")
+    if not isinstance(signature, dict):
+        return "WORK_SCOPE_COMMITMENT_MISSING"
+    if signature.get("canonical_hash") != pack["declared_cutoff"]["checkpoint_digest"]:
+        return "WORK_SCOPE_COMMITMENT_SIGNATURE_INVALID"
     if set(population_commitments) != set(POPULATION_PATHS):
         return "WORK_SCOPE_COMMITMENT_MISSING"
     for population, pack_path in POPULATION_PATHS.items():

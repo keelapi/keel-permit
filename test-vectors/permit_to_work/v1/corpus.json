@@ -249,6 +249,14 @@
           }
         ]
       },
+      "scope_commitment_signature": {
+        "version": "keel.work_scope_commitment_signature.v1",
+        "signature_profile": "keel.canonical_json.payload.v1",
+        "binding_key_id": "keel-test-signing-key-v1",
+        "canonical_hash": "sha256:9333333333333333333333333333333333333333333333333333333333333333",
+        "signature": "ed25519:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "signed_at": "2026-07-21T16:10:00Z"
+      },
       "root": {
         "permit_artifact": {
           "artifact_id": "urn:x-keel:artifact:permit:22222222-2222-4222-8222-222222222222",
@@ -350,6 +358,18 @@
       "target": "pack.scope_commitment.populations.1.included_count",
       "value": 2,
       "expected_failure_code": "WORK_SCOPE_POPULATION_MISMATCH"
+    },
+    {
+      "id": "scope-commitment-signature-missing",
+      "target": "pack.scope_commitment_signature",
+      "operation": "delete",
+      "expected_failure_code": "WORK_SCOPE_COMMITMENT_MISSING"
+    },
+    {
+      "id": "scope-commitment-signature-hash-mismatch",
+      "target": "pack.scope_commitment_signature.canonical_hash",
+      "value": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "expected_failure_code": "WORK_SCOPE_COMMITMENT_SIGNATURE_INVALID"
     }
   ]
 }

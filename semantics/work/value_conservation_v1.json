@@ -9,6 +9,7 @@
     "event_version": "keel.work_value_event.v1",
     "checks": [
       "events are strictly ordered by authority_sequence with no duplicate transition idempotency digest",
+      "the declared checkpoint digest matches a valid scope-commitment signature over the export source, cutoff, and exact population commitments",
       "every event uses the authority currency and a positive amount magnitude",
       "outstanding reservations never become negative",
       "reserved plus terminally consumed or outcome-unknown value never exceeds value_max_minor",
