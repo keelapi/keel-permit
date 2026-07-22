@@ -297,11 +297,35 @@ values are introduced.
 | `EXPORT_SCOPE_MEMBERSHIP_ROOT_MISMATCH` | `disproved` | Recomputed Merkle root differs from signed sidecar root. |
 | `EXPORT_SCOPE_RANGE_MISMATCH` | `disproved` | Disclosure min/max sequence differs from signed matching range. |
 
-## 15. Code stability
+## 15. Work-Permit Codes
+
+These codes apply only when a verifier is asked to adjudicate a
+`work-chain.v1` evidence pack. They do not turn a presentation title into a
+claim and do not change the v0 verdict enum.
+
+| Code | Verdict | Trigger |
+|---|---|---|
+| `WORK_AUTHORITY_MANIFEST_SCHEMA_INVALID` | `disproved` | A supplied WorkPackage v1 or work-authority v1 object claims the supported version but violates its strict schema. |
+| `WORK_AUTHORITY_SET_HASH_MISMATCH` | `disproved` | Recomputed authority canonical hashes or the ordered issued-authority-set hash differ from the signed WorkPackage. |
+| `WORK_REQUIRED_AUTHORITY_MISSING` | `disproved` | A required authority identifier is absent from the issued set or appears in the excluded set. |
+| `WORK_AUTHORITY_SCOPE_MISMATCH` | `disproved` | A supplied authority row disagrees with the signed root project, root Permit, semantic action, resource, time window, or canonical hash. |
+| `WORK_CHILD_BINDING_MISMATCH` | `disproved` | Signed and relational Work root, authority, child, or authority-hash values disagree. |
+| `WORK_CHILD_OUTSIDE_AUTHORITY` | `disproved` | An exact child request exceeds the named authority under `work-payment-authority.v1`. |
+| `WORK_DISPATCH_BOUNDARY_MISSING` | `insufficient_evidence` | A dispatch claim is requested but the exact `dispatch.egress_bound` boundary evidence or its transaction-bound liveness snapshot is absent. |
+| `WORK_ANCESTOR_NOT_LIVE_AT_DISPATCH` | `disproved` | Root, authority, child, identity/authority, approval, or reservation state was not live at the recorded dispatch boundary. |
+| `WORK_EXECUTION_POLICY_BLOCKED` | `disproved` | Current execution Policy or the non-bypassable safety floor blocked the action at the recorded boundary. |
+| `WORK_VALUE_EVENT_SEQUENCE_INVALID` | `disproved` | Authority sequences are duplicated, inverted, or contain an unexplained gap, or a deterministic transition identity is repeated. |
+| `WORK_VALUE_CONSERVATION_MISMATCH` | `disproved` | Ordered events overdraw authorized value, make an outstanding reservation negative, mismatch currency, or otherwise fail the pinned conservation equation. |
+| `WORK_SETTLEMENT_EVIDENCE_MISSING` | `insufficient_evidence` | A `settled` event is supplied without a supported settlement artifact reference and evidence. |
+| `WORK_SCOPE_COMMITMENT_MISSING` | `insufficient_evidence` | The pack lacks the signed declared source/cutoff/checkpoint and recorded-population commitments required by `work-chain.v1`. |
+| `WORK_SCOPE_POPULATION_MISMATCH` | `disproved` | A committed authority, child, value-event, or lifecycle-event population count or set hash differs from the supplied population. |
+| `WORK_VERSION_UNSUPPORTED` | `unverifiable_scope` | A WorkPackage, authority, child binding, value-event, comparator, scope commitment, or claim recipe version is not supported. |
+
+## 16. Code stability
 
 The codes in this document are **stable identifiers**. New codes MAY be added by future spec revisions; existing codes MUST NOT be renamed, repurposed, or removed. A code's literal string is part of the public contract for downstream tooling (alerting, dashboards, automated incident response).
 
-## 16. Verifier output format
+## 17. Verifier output format
 
 This spec does not constrain how a verifier surfaces failure codes — JSON, structured logs, exit codes, human-readable text are all permitted. The MUST is that the literal code strings appear unchanged.
 
