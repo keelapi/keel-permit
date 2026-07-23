@@ -282,7 +282,7 @@ The pinned semantic artifacts and exact-byte hashes are:
 - `semantics/work/execution_authorized_at_boundary_v1.json` —
   `sha256:c0c2f008fbe733f7c571fda909ba52ac818b2feebe3e2b3bc136773fad087f63`
 - `semantics/work/value_conservation_v1.json` —
-  `sha256:a6f7f5e65f0d5b1be9ac1cdb4a63727f86757ba4f17fde011abb5775588790cb`
+  `sha256:6ce4403efe186f78b78070d198b9080cac77eaee9f32922904b8b2b2377163aa`
 
 The pack's scope commitment is limited to a scope-faithful slice of
 Keel-recorded evidence through its declared cutoff and checkpoint. It does not

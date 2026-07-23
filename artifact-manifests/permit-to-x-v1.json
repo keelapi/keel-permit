@@ -2,20 +2,95 @@
   "version": "keel.permit_to_x_artifact_manifest.v1",
   "hash_algorithm": "sha256",
   "artifacts": [
-    {"id": "keel.permit.semantic_selector_registry", "path": "semantic_registry/v1.json", "sha256": "d7440aed255789fab9c7397bd5fcdb9ea3322d2590d509dc0e385287c0ef24b7"},
-    {"id": "keel.permit.semantic_selector_registry.schema", "path": "semantic_registry/v1.schema.json", "sha256": "8ccd1acb774fe1af6201f3f4e32c0c95c86dbf82fd10ae82b11b457264ae0cdf"},
-    {"id": "keel.permit.presentation_registry", "path": "presentation_registry/v1.json", "sha256": "aaa95ee506ddcb7144bc220e8cab199ad56202aab3b563c82322e41cada849cd"},
-    {"id": "keel.permit.presentation_registry.schema", "path": "presentation_registry/v1.schema.json", "sha256": "089ec3065078f581070af2363f017e0b526970c90ac53b8dcd62fa482463f2db"},
-    {"id": "keel.permit.semantic_binding.v1.schema", "path": "schemas/permit-semantic-binding-v1.schema.json", "sha256": "463d29dc01bfc29d54ad36892fb8a74a1f2a4f42f6fdcb370d927a5a51ddf4d4"},
-    {"id": "keel.work_request.v1.schema", "path": "schemas/work-request-v1.schema.json", "sha256": "797b89f06f423ddb1e1efefc5fa67dd61b5ac0582dff68e0becc3379bc2be76c"},
-    {"id": "keel.work_package.v1.schema", "path": "schemas/work-package-v1.schema.json", "sha256": "4c15ca430d254ff994242655c2c272b71fe2ba8be38b3f3274ba48056a3b3c54"},
-    {"id": "keel.work_authority.v1.schema", "path": "schemas/work-authority-v1.schema.json", "sha256": "33a47eb5c05be566116ff15287c4b32d38469e5d4f09afb71212a5aa9c90763f"},
-    {"id": "keel.work_value_event.v1.schema", "path": "schemas/work-value-event-v1.schema.json", "sha256": "4ac66ae3c485d5d2c5d71cfc5e871821d84b6f167245abc18fe62112c705d046"},
-    {"id": "keel.work_chain_pack.v1.schema", "path": "schemas/work-chain-pack-v1.schema.json", "sha256": "ce50ef82e6764be3bb8094c49dab13fe41f4eeaef80fdd7d47f1132d27eba715"},
-    {"id": "keel.work_payment_authority.v1", "path": "comparator_registry/work-payment-authority-v1.json", "sha256": "1c4dfb67f2277224a3cbdc88fba7280a91a9b405fcfeb99baa7888d93c5daf79"},
-    {"id": "keel.permit.work_authority_manifest.v1", "path": "semantics/work/authority_manifest_v1.json", "sha256": "16e0f76ecef3021897aba7836fc9c336a528a0f6f2ed3902e5e8db503232f5cc"},
-    {"id": "keel.permit.work_child_containment.v1", "path": "semantics/work/child_containment_v1.json", "sha256": "67a300d0968002c9fd9373b6742e8290601803cf8d2573c79b79ace296fc4576"},
-    {"id": "keel.permit_chain.execution_authorized_at_boundary.v1", "path": "semantics/work/execution_authorized_at_boundary_v1.json", "sha256": "c0c2f008fbe733f7c571fda909ba52ac818b2feebe3e2b3bc136773fad087f63"},
-    {"id": "keel.permit.work_value_conservation.v1", "path": "semantics/work/value_conservation_v1.json", "sha256": "6ce4403efe186f78b78070d198b9080cac77eaee9f32922904b8b2b2377163aa"}
+    {
+      "id": "keel.permit.semantic_selector_registry",
+      "path": "semantic_registry/v1.json",
+      "sha256": "d7440aed255789fab9c7397bd5fcdb9ea3322d2590d509dc0e385287c0ef24b7"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.schema",
+      "path": "semantic_registry/v1.schema.json",
+      "sha256": "8ccd1acb774fe1af6201f3f4e32c0c95c86dbf82fd10ae82b11b457264ae0cdf"
+    },
+    {
+      "id": "keel.permit.presentation_registry",
+      "path": "presentation_registry/v1.json",
+      "sha256": "aaa95ee506ddcb7144bc220e8cab199ad56202aab3b563c82322e41cada849cd"
+    },
+    {
+      "id": "keel.permit.presentation_registry.schema",
+      "path": "presentation_registry/v1.schema.json",
+      "sha256": "089ec3065078f581070af2363f017e0b526970c90ac53b8dcd62fa482463f2db"
+    },
+    {
+      "id": "keel.permit.semantic_binding.v1.schema",
+      "path": "schemas/permit-semantic-binding-v1.schema.json",
+      "sha256": "463d29dc01bfc29d54ad36892fb8a74a1f2a4f42f6fdcb370d927a5a51ddf4d4"
+    },
+    {
+      "id": "keel.work_request.v1.schema",
+      "path": "schemas/work-request-v1.schema.json",
+      "sha256": "797b89f06f423ddb1e1efefc5fa67dd61b5ac0582dff68e0becc3379bc2be76c"
+    },
+    {
+      "id": "keel.work_package.v1.schema",
+      "path": "schemas/work-package-v1.schema.json",
+      "sha256": "4c15ca430d254ff994242655c2c272b71fe2ba8be38b3f3274ba48056a3b3c54"
+    },
+    {
+      "id": "keel.work_authority.v1.schema",
+      "path": "schemas/work-authority-v1.schema.json",
+      "sha256": "33a47eb5c05be566116ff15287c4b32d38469e5d4f09afb71212a5aa9c90763f"
+    },
+    {
+      "id": "keel.work_value_event.v1.schema",
+      "path": "schemas/work-value-event-v1.schema.json",
+      "sha256": "4ac66ae3c485d5d2c5d71cfc5e871821d84b6f167245abc18fe62112c705d046"
+    },
+    {
+      "id": "keel.work_chain_pack.v1.schema",
+      "path": "schemas/work-chain-pack-v1.schema.json",
+      "sha256": "ce50ef82e6764be3bb8094c49dab13fe41f4eeaef80fdd7d47f1132d27eba715"
+    },
+    {
+      "id": "keel.work_payment_authority.v1",
+      "path": "comparator_registry/work-payment-authority-v1.json",
+      "sha256": "1c4dfb67f2277224a3cbdc88fba7280a91a9b405fcfeb99baa7888d93c5daf79"
+    },
+    {
+      "id": "keel.permit.work_authority_manifest.v1",
+      "path": "semantics/work/authority_manifest_v1.json",
+      "sha256": "16e0f76ecef3021897aba7836fc9c336a528a0f6f2ed3902e5e8db503232f5cc"
+    },
+    {
+      "id": "keel.permit.work_child_containment.v1",
+      "path": "semantics/work/child_containment_v1.json",
+      "sha256": "67a300d0968002c9fd9373b6742e8290601803cf8d2573c79b79ace296fc4576"
+    },
+    {
+      "id": "keel.permit_chain.execution_authorized_at_boundary.v1",
+      "path": "semantics/work/execution_authorized_at_boundary_v1.json",
+      "sha256": "c0c2f008fbe733f7c571fda909ba52ac818b2feebe3e2b3bc136773fad087f63"
+    },
+    {
+      "id": "keel.permit.work_value_conservation.v1",
+      "path": "semantics/work/value_conservation_v1.json",
+      "sha256": "6ce4403efe186f78b78070d198b9080cac77eaee9f32922904b8b2b2377163aa"
+    },
+    {
+      "id": "permit-to-x.test-vectors.permit-to-work.v1",
+      "path": "test-vectors/permit_to_work/v1/corpus.json",
+      "sha256": "15781c680dd05e230ad7cf98e6fa71c992b4894b552140a7a6a63ab6065e157e"
+    },
+    {
+      "id": "permit-to-x.test-vectors.semantic-registry.v1",
+      "path": "semantic_registry/test-vectors/v1.json",
+      "sha256": "c1e47d15fb5f149918bb0297f20967cf58809f0d0d01390b1388ad39610b5a94"
+    },
+    {
+      "id": "permit-to-x.test-vectors.presentation-registry.v1",
+      "path": "presentation_registry/test-vectors/v1.json",
+      "sha256": "6e0509270ee9212c7952ba47d4ef256f4c815684878f69feb825a3e636c4fbce"
+    }
   ]
 }

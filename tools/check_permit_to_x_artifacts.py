@@ -6,6 +6,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -525,6 +526,35 @@ def validate_artifact_manifest() -> None:
             raise ContractFailure(f"artifact manifest hash mismatch for {path}")
 
 
+def validate_spec_document_pins() -> None:
+    """Inline hash pins published in spec documents must match actual bytes.
+
+    Third-party verifier authors pin recipes from the published claims spec,
+    so a stale inline pin is a contract inconsistency even when the artifact
+    manifest is correct.
+    """
+    spec_path = ROOT / "spec" / "verifier-claims-v0.md"
+    text = spec_path.read_text(encoding="utf-8")
+    pins = re.findall(
+        r"`(semantics/work/[a-z0-9_]+\.json)`[^`]*`sha256:([0-9a-f]{64})`",
+        text,
+    )
+    if not pins:
+        raise ContractFailure(
+            "spec/verifier-claims-v0.md contains no work semantic hash pins"
+        )
+    for path, pinned in pins:
+        resolved = (ROOT / path).resolve()
+        if not resolved.is_file():
+            raise ContractFailure(f"spec pin references missing file: {path}")
+        actual = hashlib.sha256(resolved.read_bytes()).hexdigest()
+        if actual != pinned:
+            raise ContractFailure(
+                f"spec/verifier-claims-v0.md pin for {path} is stale: "
+                f"pinned sha256:{pinned}, actual sha256:{actual}"
+            )
+
+
 def main() -> int:
     try:
         registry = schema_registry()
@@ -532,6 +562,7 @@ def main() -> int:
         validate_work_contract(registry)
         validate_claim_contracts()
         validate_artifact_manifest()
+        validate_spec_document_pins()
     except (ContractFailure, jsonschema.SchemaError) as exc:
         print(f"Permit-to-X contract check failed: {exc}")
         return 1
