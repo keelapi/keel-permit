@@ -23,5 +23,7 @@ jobs:
         run: python tools/check_public_hygiene.py
       - name: Check repository integrity
         run: python tools/check_repo_integrity.py --require-jsonschema
+      - name: Check Permit-to-X contract artifacts
+        run: python tools/check_permit_to_x_artifacts.py
       - name: Verify permit co-signature golden vectors
         run: node test-vectors/permit_co_signature/v1/reference_verify.mjs

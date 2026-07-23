@@ -256,3 +256,35 @@ Verdict schema:
 The semantic artifact for this claim is
 `semantics/budget/partition_ledger_v1.json` with hash
 `sha256:ab76d2cbb6000283fbf91d6196a33ff60d74508cbea4aedbb0a6258c60aac0c8`.
+
+## 11. Bounded Work claims
+
+`work-chain.v1` registers four narrower claims:
+
+1. `permit.work_authority_manifest.v1` checks the signed WorkPackage authority
+   manifest against the supplied relational authority population. It does not
+   independently replay Policy correctness.
+2. `permit.work_child_containment.v1` checks one exact child against its named
+   root and authority under `work-payment-authority.v1`.
+3. `permit_chain.execution_authorized_at_boundary.v1` checks recorded
+   root/authority/child/approval/Policy/safety liveness at the exact
+   dispatch-egress boundary.
+4. `permit.work_value_conservation.v1` replays ordered payment-value events
+   inside the pack's declared scope-faithful recorded population. Settlement
+   remains separate and requires supported settlement evidence.
+
+The pinned semantic artifacts and exact-byte hashes are:
+
+- `semantics/work/authority_manifest_v1.json` —
+  `sha256:16e0f76ecef3021897aba7836fc9c336a528a0f6f2ed3902e5e8db503232f5cc`
+- `semantics/work/child_containment_v1.json` —
+  `sha256:67a300d0968002c9fd9373b6742e8290601803cf8d2573c79b79ace296fc4576`
+- `semantics/work/execution_authorized_at_boundary_v1.json` —
+  `sha256:c0c2f008fbe733f7c571fda909ba52ac818b2feebe3e2b3bc136773fad087f63`
+- `semantics/work/value_conservation_v1.json` —
+  `sha256:6ce4403efe186f78b78070d198b9080cac77eaee9f32922904b8b2b2377163aa`
+
+The pack's scope commitment is limited to a scope-faithful slice of
+Keel-recorded evidence through its declared cutoff and checkpoint. It does not
+assert comprehensive runtime instrumentation, exhaustive real-world activity,
+business-job completion, provider success, or settlement.

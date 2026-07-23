@@ -1,0 +1,123 @@
+{
+  "version": "keel.semantic_selector_vectors.v1",
+  "registry": "../v1.json",
+  "vectors": [
+    {
+      "id": "positive-work-root",
+      "candidate": {
+        "trusted_source_kind": "work_request_server_reconciled",
+        "action_name": "work.authorize",
+        "operation": "work.authorize",
+        "chain_role": "work_root",
+        "governed_surface": "permit_decision",
+        "evidence_capabilities": ["authorization", "payment_value_events", "scope_faithful_work_chain"],
+        "permit_product": "permit"
+      },
+      "expected": {"semantic_id": "keel.context.work.v1", "fallback": null}
+    },
+    {
+      "id": "positive-linked-payment",
+      "candidate": {
+        "trusted_source_kind": "action_verb_execute",
+        "action_name": "payment.execute",
+        "operation": "payment.execute",
+        "chain_role": "action_child",
+        "governed_surface": "payment_rail",
+        "evidence_capabilities": ["authorization", "dispatch", "provider_outcome", "settlement_optional"],
+        "permit_product": "permit"
+      },
+      "expected": {"semantic_id": "keel.action.payment_execute.v1", "fallback": null}
+    },
+    {
+      "id": "positive-standalone-payment",
+      "candidate": {
+        "trusted_source_kind": "action_verb_execute",
+        "action_name": "payment.execute",
+        "operation": "payment.execute",
+        "chain_role": "session_root",
+        "governed_surface": "payment_rail",
+        "evidence_capabilities": ["authorization", "dispatch", "provider_outcome", "settlement_optional"],
+        "permit_product": "permit"
+      },
+      "expected": {"semantic_id": "keel.action.payment_execute.v1", "fallback": null}
+    },
+    {
+      "id": "negative-caller-spoofs-payment",
+      "candidate": {
+        "trusted_source_kind": "caller_declared",
+        "action_name": "payment.execute",
+        "operation": "payment.execute",
+        "chain_role": "session_root",
+        "governed_surface": "payment_rail",
+        "evidence_capabilities": ["authorization", "dispatch", "provider_outcome", "settlement_optional"],
+        "permit_product": "permit"
+      },
+      "expected": {"semantic_id": null, "fallback": "unclassified_action_request"}
+    },
+    {
+      "id": "positive-generate-text",
+      "candidate": {
+        "trusted_source_kind": "action_verb_execute",
+        "action_name": "ai.generate",
+        "operation": "generate.text",
+        "chain_role": "session_root",
+        "governed_surface": "model_provider",
+        "evidence_capabilities": ["authorization", "dispatch", "provider_outcome"],
+        "permit_product": "permit"
+      },
+      "expected": {"semantic_id": "keel.action.generate_text.v1", "fallback": null}
+    },
+    {
+      "id": "negative-generic-path-spoofs-generate-text",
+      "candidate": {
+        "trusted_source_kind": "caller_declared",
+        "action_name": "ai.generate",
+        "operation": "generate.text",
+        "chain_role": "session_root",
+        "governed_surface": "model_provider",
+        "evidence_capabilities": ["authorization", "dispatch", "provider_outcome"],
+        "permit_product": "permit"
+      },
+      "expected": {"semantic_id": null, "fallback": "unclassified_action_request"}
+    },
+    {
+      "id": "positive-realtime-generic-qualified",
+      "candidate": {
+        "trusted_source_kind": "realtime_session_service",
+        "action_name": "ai.generate",
+        "operation": "realtime.session",
+        "chain_role": "session_root",
+        "governed_surface": "realtime_session",
+        "evidence_capabilities": ["authorization"],
+        "permit_product": "permit"
+      },
+      "expected": {"semantic_id": "keel.context.realtime_session.v1", "fallback": null}
+    },
+    {
+      "id": "negative-cost-permit-carve-out",
+      "candidate": {
+        "trusted_source_kind": "action_verb_execute",
+        "action_name": "payment.execute",
+        "operation": "payment.execute",
+        "chain_role": "session_root",
+        "governed_surface": "payment_rail",
+        "evidence_capabilities": ["authorization", "dispatch", "provider_outcome", "settlement_optional"],
+        "permit_product": "cost_permit"
+      },
+      "expected": {"semantic_id": null, "fallback": "cost_permit_unchanged"}
+    },
+    {
+      "id": "generic-trusted-unknown-action",
+      "candidate": {
+        "trusted_source_kind": "action_verb_execute",
+        "action_name": "agent.unknown",
+        "operation": "unknown.execute",
+        "chain_role": "session_root",
+        "governed_surface": "permit_decision",
+        "evidence_capabilities": ["authorization"],
+        "permit_product": "permit"
+      },
+      "expected": {"semantic_id": null, "fallback": "generic_ai_permit"}
+    }
+  ]
+}

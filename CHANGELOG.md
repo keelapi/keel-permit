@@ -4,6 +4,29 @@ All notable changes to this specification are documented here.
 
 The spec document follows [Semantic Versioning](https://semver.org/). Wire formats (Permit `v1`, `closure_v1`, `closure_v2`, chain entry `v1`) version independently and are not bumped by spec-document revisions.
 
+## [1.8.0] — 2026-07-21
+
+Adds the contract-first foundation for bounded Work authority and honest
+Permit-to-X presentation. Permit wire format `v1`, existing binding versions,
+closure formats, default evidence bundles, and cost-permit vocabulary are
+unchanged.
+
+- Add strict payment-only Work request, WorkPackage, Work authority,
+  payment-value event, semantic-binding, and `work-chain.v1` schemas.
+- Add four contract-only Work claim definitions and pinned semantic recipes:
+  authority-manifest integrity, exact child containment, execution-boundary
+  authorization, and payment-value conservation.
+- Add a fail-closed semantic selector registry based on server-owned
+  provenance and a separate non-authorizing presentation registry.
+- Add admitted Work, Pay, and Generate Text presentations; keep realtime
+  generic-qualified as `AI Permit — Realtime session`.
+- Preserve generic, unclassified, historical-title-unavailable, and
+  cost-permit fallbacks.
+- Add positive, spoofing, carve-out, historical-rendering, non-interference,
+  schema, population-commitment, and negative Work contract vectors.
+- Do not claim runtime producer or public-verifier support from this contract
+  alone; those ship in coordinated downstream releases.
+
 ## [1.7.0] — 2026-06-24
 
 Adds the R4 budget-ledger verifier-claim contract. Permit wire format `v1`,

@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/github/license/keelapi/keel-permit)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/keelapi/keel-permit?label=release)](https://github.com/keelapi/keel-permit/releases)
-![Spec version](https://img.shields.io/badge/spec-1.7.0-blue)
+![Spec version](https://img.shields.io/badge/spec-1.8.0-blue)
 
 A pre-execution decision record for AI agent systems. A Permit records that an action was evaluated and decided, and, for dispatched allow executions, can be bound to the final provider or tool request. A Permit JSON object alone is not self-authenticating; verification is performed from signed export artifacts and the relevant public keys or key manifest. Those artifacts are verifiable without contacting the issuer when the verifier has the signed export artifacts and relevant public keys/key manifest.
 
@@ -12,7 +12,7 @@ This repository contains the wire-format specification, JSON schemas, and verifi
 
 | | |
 |---|---|
-| Spec document version | 1.7.0 |
+| Spec document version | 1.8.0 |
 | Permit wire format | `v1` |
 | Permit binding versions | `v1`-`v7` (`v6` frozen; `v7` additive/c7) |
 | Closure record format | `closure_v1`, `closure_v2` |
@@ -69,6 +69,9 @@ flowchart LR
 - [`spec/key-status-manifest-v1.md`](spec/key-status-manifest-v1.md) — Signed account key-status manifest
 - [`spec/key-status-completeness-v1.md`](spec/key-status-completeness-v1.md) — Key-status completeness verifier claim
 - [`spec/dispatch-absence-after-revocation-v1.md`](spec/dispatch-absence-after-revocation-v1.md) — Scope-faithful absence adjudication after revocation
+- [`spec/permit-to-work-v1.md`](spec/permit-to-work-v1.md) — Bounded Work authority, linked exact actions, payment-value events, and `work-chain.v1`
+- [`spec/permit-semantic-presentation-v1.md`](spec/permit-semantic-presentation-v1.md) — Trusted semantic selection and non-authorizing presentation
+- [`spec/permit-to-x-admission-v1.md`](spec/permit-to-x-admission-v1.md) — Twelve-gate admission test for specific Permit titles
 
 ## Schemas
 
@@ -79,6 +82,9 @@ Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated f
 - [`claim_registry/`](claim_registry/) — stable verifier-claim registry artifacts.
 - [`comparator_registry/`](comparator_registry/) — authority-envelope comparator semantics for Permit Chains.
 - [`semantics/`](semantics/) — pinned semantic artifacts consumed by verifiers for export manifests, governance chains, closure records, checkpoints, workflows, Permit binding, and R4 budget-ledger claims.
+- [`semantic_registry/`](semantic_registry/) — server-provenance selector contract for stable Permit semantics.
+- [`presentation_registry/`](presentation_registry/) — non-authorizing titles, definitions, controlled leading fields, evidence emphasis, and fallbacks.
+- [`artifact-manifests/permit-to-x-v1.json`](artifact-manifests/permit-to-x-v1.json) — exact-byte hashes for generated downstream consumers.
 
 ## Capability Inventory
 
@@ -91,6 +97,8 @@ Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated f
 | R4 ledger claims | `quota.reservation_linkage.v1` and `budget.partition_ledger.v1` define budget-allocation ledger evidence; unsigned quota linkage grades are anchor-contingent. |
 | Permit co-signature contract | `permit.co_signature.v1` verifies WebAuthn ES256 or EdDSA assertions bound by challenge to a Permit canonical hash; assurance and identity enforcement remain default-off. |
 | Reference verifier status | The reference verifier verifies `v7` permit decisions and rejects unsigned account-selector drift. |
+| Bounded Work contract | Strict payment-only Work schemas and four claim contracts are published contract-first; coordinated API producer and public-verifier support are separate release gates. |
+| Permit-to-X presentation | Specific titles require a trusted semantic selector result; presentation artifacts cannot change authorization or verifier verdicts. |
 
 ## Examples
 

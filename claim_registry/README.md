@@ -12,6 +12,11 @@ Standing rule:
 
 > No emitted evidence field, artifact, event payload, or manifest claim ships as externally product-real unless it maps to a stable named verifier claim in claim_registry/ and public keel-verifier independently adjudicates that claim.
 
+The four `permit.work_*` / `permit_chain.execution_authorized_at_boundary.v1`
+entries are contract-first definitions. Their presence in the registry does not
+declare producer or verifier implementation support; a coordinated released
+public verifier remains mandatory before external support claims.
+
 ## Versions
 
 | File | Claim registry version | Status |

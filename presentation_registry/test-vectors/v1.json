@@ -1,0 +1,30 @@
+{
+  "version": "keel.presentation_vectors.v1",
+  "registry": "../v1.json",
+  "vectors": [
+    {"id": "work", "semantic_id": "keel.context.work.v1", "expected_title": "AI Permit-to-Work"},
+    {"id": "pay", "semantic_id": "keel.action.payment_execute.v1", "expected_title": "AI Permit-to-Pay"},
+    {"id": "generate-text", "semantic_id": "keel.action.generate_text.v1", "expected_title": "AI Permit-to-Generate Text"},
+    {"id": "realtime", "semantic_id": "keel.context.realtime_session.v1", "expected_title": "AI Permit — Realtime session"},
+    {"id": "legacy", "semantic_id": null, "fallback": "generic_ai_permit", "expected_title": "AI Permit"},
+    {"id": "unclassified", "semantic_id": null, "fallback": "unclassified_action_request", "expected_title": "Unclassified action request"},
+    {
+      "id": "missing-historical-profile",
+      "semantic_id": "keel.action.generate_text.v1",
+      "pinned_profile": "permit_to_generate_text.r0-missing",
+      "fallback": "historical_specific_title_unavailable",
+      "expected_title": "AI Permit — specific title unavailable for this record"
+    }
+  ],
+  "non_interference": {
+    "semantic_id": "keel.action.generate_text.v1",
+    "replacement_customer_title": "Authorized text-generation record",
+    "must_not_change": [
+      "semantic_selector_result",
+      "signed_semantic_binding",
+      "requested_verifier_claims",
+      "json_verdict",
+      "process_exit_status"
+    ]
+  }
+}

@@ -10,6 +10,14 @@ Each registry version is a JSON artifact declaring, for every field in an `autho
 |---|---|---|
 | [`v0.json`](v0.json) | `authority-envelope.v0` | Current |
 
+## Work comparator
+
+[`work-payment-authority-v1.json`](work-payment-authority-v1.json) is a
+separate, narrow comparator for exact payment children linked to a bounded
+Work authority. It does not extend or replace `authority-envelope.v0`, and it
+is not a Policy evaluator. Unknown fields fail closed as
+`unverifiable_scope` until a new comparator version is published.
+
 ## Hash-addressing
 
 A signed evidence pack containing a permit chain MUST either inline the registry artifact OR hash-address it in the bundle manifest. A verifier walking permit-chain claims that cannot resolve the registry from the pack MUST return `insufficient_evidence` and emit `WALK_PERMIT_CHAIN_MISSING_COMPARATOR`. See `spec/permit-chain-v1.md` §4.2.
