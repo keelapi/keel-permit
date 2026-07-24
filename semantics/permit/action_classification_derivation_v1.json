@@ -1,35 +1,121 @@
 {
   "id": "keel.permit.action_classification_derivation.v1",
   "version": "v1",
-  "kind": "action_classification_derivation_rule",
+  "kind": "action_classification_derivation_ruleset",
   "status": "released",
   "body": {
-    "claim": "Derives an authorized_action from a signed tool classification fact, so a semantic identity minted from a classified tool call is re-derivable offline from signed facts plus this versioned rule alone.",
-    "applies_when": {
-      "invocation.operation": "call.tools",
-      "invocation.transport": "mcp",
-      "classification.class": "value_movement",
-      "classification.kind": "registered_tool"
+    "claim": "Derives an authorized_action from a signed tool classification fact, so a semantic identity minted from a classified tool call is re-derivable offline from signed facts plus this versioned ruleset and its pinned dependency artifacts alone. Shaped as a ruleset, not a single rule, so a later Permit-to-X (e.g. a deploy classification) is a new rule entry, not a schema change.",
+
+    "digest_convention": "All digests are lowercase sha256 hex with the 'sha256:' prefix, matching every other permit-to-x artifact. base64 is used only for Ed25519 keys/signatures elsewhere, never for artifact or input digests.",
+
+    "canonicalization_profile": "keel.canonical_json.payload.v1",
+
+    "classification_subject_variants": {
+      "registered_tool": {
+        "discriminator": "classification.subject.kind == \"registered_tool\"",
+        "required_fields": [
+          "classification.subject.connector_identity",
+          "classification.subject.canonical_tool_name"
+        ],
+        "forbidden_fields": "fields belonging to other (future) subject variants MUST be absent",
+        "identifier_profile": "keel.registered_tool_identifiers.v1",
+        "unknown_kind_outcome": "unsupported_derivation_subject (no_derivation, not invalid): a verifier that does not recognise the kind yields no title, it does not reject the permit."
+      }
     },
-    "derives": {
-      "authorized_action": "payment.execute",
-      "operation": "payment.execute"
+
+    "classification_input_canonicalization": {
+      "profile": "keel.registered_tool_classification_input.v1",
+      "logical_object": {
+        "profile": "keel.registered_tool_classification_input.v1",
+        "connector_identity": "<classification.subject.connector_identity>",
+        "canonical_tool_name": "<classification.subject.canonical_tool_name>"
+      },
+      "bytes": "serialize the logical_object with keel.canonical_json.payload.v1; input_digest = sha256: over those bytes. The profile string is part of the object so two different logical structures cannot canonicalize to the same bytes.",
+      "purpose": "Two independent verifiers computing input_digest for the same call MUST agree byte-for-byte."
     },
-    "requires_signed_classification_provenance": [
-      "classification.class",
-      "classification.classification_artifact_version",
-      "classification.classification_artifact_digest",
-      "classification.connector_identity",
-      "classification.canonical_tool_name",
-      "classification.input_digest"
+
+    "identifier_grammar": {
+      "profile": "keel.registered_tool_identifiers.v1",
+      "type": "string",
+      "encoding": "utf-8",
+      "grammar": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$",
+      "equality": "validate against the grammar, then compare byte-for-byte. No case folding, Unicode normalization, whitespace trimming, alias resolution, or version stripping at verification time. connector_identity is the operator-registered identity produced by the issuer's normalize_known_mcp_connector_identity; canonical_tool_name is the Keel-resolved name produced by normalize_mcp_tool_name; both are already normalized at issuance and frozen into the signed record.",
+      "malformed": "an identifier that fails the grammar makes the binding invalid, not merely unmatched."
+    },
+
+    "rules": [
+      {
+        "rule_id": "registered-value-movement-is-payment-execute",
+        "applies_when": {
+          "all": [
+            {"fact": "invocation.operation", "op": "equals", "value": "call.tools"},
+            {"fact": "invocation.transport", "op": "equals", "value": "mcp"},
+            {"fact": "classification.subject.kind", "op": "equals", "value": "registered_tool"},
+            {"fact": "classification.class", "op": "equals", "value": "value_movement"}
+          ]
+        },
+        "requires": [
+          {"predicate": "classification_registry_membership"},
+          {"predicate": "classification_registry_digest_match"},
+          {"predicate": "classification_input_digest_match"},
+          {"fact": "control.mode", "op": "equals", "value": "enforced_in_path"}
+        ],
+        "derives": {"authorized_action": "payment.execute", "operation": "payment.execute"}
+      }
     ],
-    "verifier_obligations": [
-      "The (connector_identity, canonical_tool_name) in the classification fact MUST appear in keel.permit.value_movement_classification at the referenced classification_artifact_version, and that artifact's digest MUST equal classification_artifact_digest. Re-derivation is thus fully offline and does not trust the issuer's classification result.",
-      "control.mode MUST be enforced_in_path. An observed (not in-path) call never derives a payment authorized_action; enforcement qualifies issuance, it does not define the action.",
-      "The derived authorized_action feeds the existing semantic selector as action_name/operation = payment.execute. The permit's own invocation.operation stays call.tools; the two are distinct signed facts, not competing descriptions of one field.",
-      "transport_surface and target_surface are recorded separately. target_surface = payment_rail describes the action's resource class; it is NOT a claim that the wire was a native payment-rail integration.",
-      "No provider outcome, settlement, or completion is implied. payment.execute is authority to attempt; observed_evidence carries what actually happened."
+
+    "resolution": {
+      "match_policy": "exactly_one",
+      "zero_matches": "no_derivation",
+      "multiple_matches": "invalid",
+      "note": "exactly_one, never first-match. A future rule that also matched would surface as invalid rather than silently pick one."
+    },
+
+    "predicate_vocabulary": {
+      "classification_registry_membership": "(classification.subject.connector_identity, classification.subject.canonical_tool_name) MUST be an entry in the classification_registry dependency resolved below. Absent entry with an otherwise-valid record: no_derivation.",
+      "classification_registry_digest_match": "classification.provenance.registry.artifact_digest MUST equal the resolved classification_registry artifact digest. Mismatch: invalid.",
+      "classification_input_digest_match": "classification.provenance.input.digest MUST equal the digest recomputed per classification_input_canonicalization. Mismatch: invalid.",
+      "closed_set": "This is the entire predicate vocabulary for v1. There is no general expression language. A permit referencing an unknown predicate is unverifiable, not silently passed."
+    },
+
+    "dependencies": [
+      {
+        "role": "classification_registry",
+        "artifact_id": "keel.permit.value_movement_classification.v1",
+        "version_policy": "exact",
+        "digest_source": "signed_permit",
+        "permit_path": "classification.provenance.registry.artifact_digest"
+      },
+      {
+        "role": "presentation_registry",
+        "artifact_id": "keel.permit.presentation_registry",
+        "note": "payment.execute -> Permit-to-Pay is unchanged from the existing presentation path."
+      }
     ],
-    "non_authorizing": "This rule governs presentation identity only. It never affects policy evaluation, dispatch, executable authority, or verdicts. A wrong derivation degrades a title; it cannot escalate authorization."
+
+    "historical_resolution": {
+      "model": "keel-verifier version-aware resolution (keel-verifier v3.7.0): resolve each dependency by the version+digest the permit embeds, NOT by whatever is current. Never substitute a newer artifact for an older permit.",
+      "unavailable": "If the exact artifact bytes for the embedded digest cannot be found, the outcome is unverifiable / artifact_unavailable, never a fallback to a newer version.",
+      "resolve_by": "algorithm + digest is identity; artifact_id + version are metadata and type checks."
+    },
+
+    "outcome_taxonomy": {
+      "valid": "all applies_when + requires satisfied; authorized_action derived; feeds the existing semantic selector as action_name/operation = payment.execute.",
+      "no_derivation": "rule not applicable, subject kind unrecognised, or registry entry absent -> generic title, permit otherwise unaffected.",
+      "invalid": "digest mismatch, malformed identifier, or multiple rules match -> the semantic binding is invalid.",
+      "unverifiable": "a required dependency artifact is unavailable, or an unknown predicate is referenced -> cannot decide; do not treat as valid or as generic."
+    },
+
+    "invariants": [
+      "invocation.operation stays call.tools; authorized_action is payment.execute; these are distinct signed facts, never two values of one field.",
+      "transport_surface and target_surface are recorded separately. target_surface = payment_rail is the action's resource class, not a claim the wire was a native payment-rail integration.",
+      "control.mode == enforced_in_path is REQUIRED. Enforcement qualifies issuance; it does not define the action. An observed call never derives a payment authorized_action.",
+      "No provider outcome, settlement, or completion is implied. payment.execute is authority to attempt; observed_evidence carries what happened.",
+      "The classification decision bound here MUST be the same one used to enforce, bound by input_digest + registry digest, not a re-lookup that could diverge under normalization."
+    ],
+
+    "non_authorizing": "This ruleset governs presentation identity only. It never affects policy evaluation, dispatch, executable authority, or verdicts. A wrong derivation degrades a title; it cannot escalate authorization.",
+
+    "normative_surface": "The test-vector corpus keel.permit.action_classification_derivation.test_vectors.v1 is the machine-checkable contract. Two independent verifiers that agree on the corpus conform; this document explains the corpus, it does not replace it."
   }
 }

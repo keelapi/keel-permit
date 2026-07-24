@@ -105,12 +105,17 @@
     {
       "id": "keel.permit.value_movement_classification.v1",
       "path": "semantics/permit/value_movement_classification_v1.json",
-      "sha256": "5370f48f11a11bd78b7fcb28077652a865c1cb7e01d704d6aebae7be107153c5"
+      "sha256": "c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
     },
     {
       "id": "keel.permit.action_classification_derivation.v1",
       "path": "semantics/permit/action_classification_derivation_v1.json",
-      "sha256": "5554bc725014f819f2c50ab94cacd67b01442975b91d51a978715edd29f51271"
+      "sha256": "034f8196b7366acc957d27506f9ef952b9d83b89a7436f5ccc297f1a3e701fbd"
+    },
+    {
+      "id": "permit-to-x.test-vectors.action-classification-derivation.v1",
+      "path": "test-vectors/action_classification_derivation/v1/corpus.json",
+      "sha256": "c2a000d46b05a6770faf18d708cbf7799e0372b5fc9f5905631b1030877c6e67"
     }
   ]
 }
