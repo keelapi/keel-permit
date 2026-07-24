@@ -91,6 +91,16 @@
       "id": "permit-to-x.test-vectors.presentation-registry.v1",
       "path": "presentation_registry/test-vectors/v1.json",
       "sha256": "6e0509270ee9212c7952ba47d4ef256f4c815684878f69feb825a3e636c4fbce"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v2",
+      "path": "semantic_registry/v2.json",
+      "sha256": "d07c57a2260166ce9e91fd730a17eb2d7a5389bf261c894ff63a1805149cc6ac"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v2.schema",
+      "path": "semantic_registry/v2.schema.json",
+      "sha256": "f9cc64a0cbc1d2bc2f5f39b18c93502ec0c04980e6b0a203569418b1e4d529af"
     }
   ]
 }
