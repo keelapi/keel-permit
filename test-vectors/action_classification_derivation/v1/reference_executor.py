@@ -7,10 +7,12 @@ identical outcomes without an undocumented choice. Every place this script had t
 decide something the spec did not state is a spec gap.
 
 The verifier's environment is an explicit per-vector input `given`:
-  trusted_registry_digests: [digest, ...]   -- the immutable trust set
-  store_corrupt_digests:     [digest, ...]   -- trusted digests whose bytes do NOT hash to them
-  store_malformed_digests:   [digest, ...]   -- trusted, hash-ok, but not a valid registry artifact
-The pinned canonical registry digest resolves to the real, valid registry.
+  trusted_registry_digests: [digest, ...]      -- the immutable trust set
+  store: [{digest, content_utf8}, ...]          -- byte-concrete extra store entries
+The pinned canonical registry digest always resolves to the real registry bytes.
+A store entry whose content_utf8 does not hash to its digest triggers step-3
+dependency_integrity; hash-correct content that is not a valid registry triggers
+step-4 dependency_artifact_invalid.
 """
 import hashlib
 import json
@@ -66,16 +68,32 @@ def execute(facts, given):
     else:
         return "no_derivation", t + [f"2:unknown subject kind {kind!r} (common envelope already validated)"]
 
-    # Step 3 DEPENDENCY RESOLUTION (hash-verifying)
+    # Step 3 DEPENDENCY RESOLUTION (hash-verifying, byte-concrete)
     trusted = set(given.get("trusted_registry_digests", []))
     if reg_digest not in trusted:
         return "unverifiable", t + [f"3:registry {reg_digest[:14]}.. not trusted -> artifact_unavailable"]
-    if reg_digest in set(given.get("store_corrupt_digests", [])):
+    # Resolve bytes: the pinned registry for its own digest, else the store.
+    store = {e["digest"]: e["content_utf8"].encode() for e in given.get("store", [])}
+    if reg_digest == PINNED:
+        reg_bytes = REG_PATH.read_bytes()
+    elif reg_digest in store:
+        reg_bytes = store[reg_digest]
+    else:
+        return "unverifiable", t + ["3:trusted digest but no bytes in store -> artifact_unavailable"]
+    if "sha256:" + hashlib.sha256(reg_bytes).hexdigest() != reg_digest:
         return "invalid", t + ["3:store bytes do not hash to trusted digest -> dependency_integrity"]
     t.append("3:resolved by exact digest, hash-verified")
 
     # Step 4 DEPENDENCY VALIDATION
-    if reg_digest in set(given.get("store_malformed_digests", [])):
+    try:
+        rb = json.loads(reg_bytes.decode())
+        body = rb.get("body", {})
+        valid = (rb.get("kind") == "value_movement_tool_classification"
+                 and body.get("classification") == "value_movement"
+                 and isinstance(body.get("entries"), list))
+    except Exception:
+        valid = False
+    if not valid:
         return "invalid", t + ["4:resolved registry fails schema/version -> dependency_artifact_invalid"]
     t.append("4:dependency registry valid")
 

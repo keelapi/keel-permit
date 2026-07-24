@@ -4,16 +4,16 @@
   "classification_registry": "../../semantics/permit/value_movement_classification_v1.json",
   "classification_registry_digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
   "canonicalization_profile": "keel.canonical_json.payload.v1",
-  "given_model": "Each vector's `given` is the verifier's explicit immutable environment: trusted_registry_digests (the trust set; step 3 resolves only a digest in it), and optional store_corrupt_digests / store_malformed_digests to model a trusted digest whose bytes fail hash-verification (step 3) or registry validation (step 4). The canonical pinned registry digest resolves to the real valid registry.",
+  "given_model": "Each vector's `given` is the verifier's explicit immutable environment. trusted_registry_digests is the trust set (step 3 resolves only a digest in it). The verifier always has the pinned canonical registry's real bytes available for its own digest. `store` optionally supplies byte-concrete (digest, content_utf8) pairs so integrity vectors are realizable: content that does not hash to its claimed digest triggers step-3 dependency_integrity; hash-correct content that is not a valid registry triggers step-4 dependency_artifact_invalid.",
   "conformance": "Passing every vector is NECESSARY, NOT SUFFICIENT. The ruleset decision_algorithm, profile/grammar definitions, and verification_inputs are the complete contract; this corpus is mandatory minimum evidence. reference_executor.py runs the algorithm against every vector from the spec.",
-  "step9_conflict_designed_out": "Round-3's step-9 counterexample (membership-absent + digest-false + observed yielding different outcomes) is not constructible in v1: integrity/digest checks are GLOBAL algorithm steps (3/4/6) before rule matching, and the rule's only per-rule predicates are membership and enforcement, both -> no_derivation. There is no valid/invalid precedence conflict inside step 8 by construction.",
+  "step9_conflict_designed_out": "Round-3's step-9 counterexample is not constructible in v1: integrity/digest checks are global steps 3/4/6 before rule matching; the rule's only per-rule predicates (membership, enforcement) are both -> no_derivation.",
   "outcomes": [
     "valid",
     "no_derivation",
     "invalid",
     "unverifiable"
   ],
-  "deferred_coverage": "multiple-applicable-rules and rule-order-permutation need a synthetic 2-rule fixture (lands with the second Permit-to-X rule). Full canonicalization/Unicode/JSON-boundary suites and resolver-multiplicity are broader-assurance property tests, co-designed with the reference verifier. Named so their absence is explicit.",
+  "deferred_coverage": "multiple-applicable-rules / rule-order-permutation need a synthetic 2-rule fixture (with the second Permit-to-X rule). Full canonicalization/Unicode/JSON-boundary suites and resolver-multiplicity are property tests co-designed with the reference verifier.",
   "vectors": [
     {
       "id": "positive-payments-value-movement",
@@ -107,7 +107,7 @@
     },
     {
       "id": "positive-surfaces-are-orthogonal",
-      "title": "Unusual target_surface still derives payment.execute; surfaces are orthogonal",
+      "title": "Unusual target_surface still derives payment.execute; surfaces orthogonal",
       "given": {
         "trusted_registry_digests": [
           "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
@@ -149,7 +149,7 @@
         "outcome": "valid",
         "authorized_action": "payment.execute"
       },
-      "note": "Proves transport_surface/target_surface are orthogonal signed facts (2b decoupling), not identity inputs."
+      "note": "transport_surface/target_surface are orthogonal signed facts (2b), not identity inputs."
     },
     {
       "id": "negative-observed-not-enforced",
@@ -197,7 +197,7 @@
     },
     {
       "id": "negative-tool-not-in-registry",
-      "title": "Tool absent from the classification registry derives nothing",
+      "title": "Tool absent from the registry derives nothing",
       "given": {
         "trusted_registry_digests": [
           "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
@@ -241,7 +241,7 @@
     },
     {
       "id": "negative-unknown-subject-kind",
-      "title": "Unrecognised subject kind (common envelope valid) -> no_derivation, not rejection",
+      "title": "Unrecognised subject kind (common envelope valid) -> no_derivation",
       "given": {
         "trusted_registry_digests": [
           "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
@@ -329,7 +329,7 @@
     },
     {
       "id": "invalid-malformed-registry-digest",
-      "title": "Registry digest not a well-formed sha256: -> invalid (common-envelope, step 1)",
+      "title": "Registry digest not a well-formed sha256: -> invalid (common envelope, step 1)",
       "given": {
         "trusted_registry_digests": [
           "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
@@ -462,7 +462,7 @@
     },
     {
       "id": "unverifiable-registry-digest-untrusted",
-      "title": "Well-formed registry digest not in the trusted set -> unverifiable, never substitution",
+      "title": "Well-formed registry digest not in the trusted set -> unverifiable",
       "given": {
         "trusted_registry_digests": [
           "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
@@ -504,11 +504,11 @@
         "outcome": "unverifiable",
         "reason": "artifact_unavailable"
       },
-      "note": "Environmental; resolves once the exact-digest artifact is trusted+supplied. Forged bytes hashing to it do not help: the digest is not trusted."
+      "note": "Environmental; resolves once the exact-digest artifact is trusted+supplied."
     },
     {
       "id": "invalid-unknown-kind-plus-malformed-common-digest",
-      "title": "Unknown subject kind AND a malformed common registry digest -> invalid, NOT no_derivation: the common envelope (step 1) is validated before subject dispatch (step 2), so an unknown kind cannot launder a malformed common binding",
+      "title": "Unknown kind AND malformed common registry digest -> invalid: common envelope (step 1) validated before subject dispatch (step 2)",
       "given": {
         "trusted_registry_digests": [
           "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
@@ -549,17 +549,20 @@
       "expected": {
         "outcome": "invalid"
       },
-      "note": "Locks step-1-before-step-2 precedence (ChatGPT round-3 counterexample)."
+      "note": "Locks step-1-before-step-2 (round-3)."
     },
     {
       "id": "invalid-trusted-digest-corrupt-bytes",
-      "title": "Trusted registry digest whose store bytes do NOT hash to it -> invalid (dependency_integrity), never 'resolved by construction'",
+      "title": "Trusted registry digest whose store bytes do NOT hash to it -> invalid (dependency_integrity)",
       "given": {
         "trusted_registry_digests": [
-          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
+          "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
         ],
-        "store_corrupt_digests": [
-          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
+        "store": [
+          {
+            "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "content_utf8": "these bytes do not hash to the claimed digest"
+          }
         ]
       },
       "facts": {
@@ -580,7 +583,7 @@
             "registry": {
               "artifact_id": "keel.permit.value_movement_classification.v1",
               "artifact_version": "v1",
-              "artifact_digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
+              "artifact_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
             },
             "input": {
               "profile": "keel.registered_tool_classification_input.v1",
@@ -597,17 +600,20 @@
       "expected": {
         "outcome": "invalid"
       },
-      "note": "Locks step 3 hash-verification: trusting a digest is not trusting arbitrary bytes offered under it."
+      "note": "Locks step 3 hash-verification with byte-concrete store: trusting a digest is not trusting arbitrary bytes offered under it."
     },
     {
       "id": "invalid-trusted-digest-malformed-registry",
-      "title": "Trusted, hash-correct registry that is not a valid registry artifact -> invalid (dependency_artifact_invalid)",
+      "title": "Trusted, hash-correct bytes that are not a valid registry -> invalid (dependency_artifact_invalid)",
       "given": {
         "trusted_registry_digests": [
-          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
+          "sha256:8a0c5414cae73bc0c0dfae2a1655ed1028bbe4661de842ef590087394869c333"
         ],
-        "store_malformed_digests": [
-          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
+        "store": [
+          {
+            "digest": "sha256:8a0c5414cae73bc0c0dfae2a1655ed1028bbe4661de842ef590087394869c333",
+            "content_utf8": "{\"kind\":\"not-a-registry\",\"version\":\"v1\"}"
+          }
         ]
       },
       "facts": {
@@ -628,7 +634,7 @@
             "registry": {
               "artifact_id": "keel.permit.value_movement_classification.v1",
               "artifact_version": "v1",
-              "artifact_digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
+              "artifact_digest": "sha256:8a0c5414cae73bc0c0dfae2a1655ed1028bbe4661de842ef590087394869c333"
             },
             "input": {
               "profile": "keel.registered_tool_classification_input.v1",
@@ -645,7 +651,7 @@
       "expected": {
         "outcome": "invalid"
       },
-      "note": "Locks step 4 dependency validation: pinning bytes is not validating them as a registry."
+      "note": "Locks step 4: pinning bytes is not validating them as a registry. Digest is the real hash of the malformed content, so step 3 passes and step 4 fails."
     }
   ]
 }

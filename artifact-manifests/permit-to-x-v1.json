@@ -115,7 +115,7 @@
     {
       "id": "permit-to-x.test-vectors.action-classification-derivation.v1",
       "path": "test-vectors/action_classification_derivation/v1/corpus.json",
-      "sha256": "03aedd3e7916efea71106435e575410e5516d5996061bae34ee9cb5fce7df0e8"
+      "sha256": "4747d329231f4a520c3c5bbd962568f77f08e72713191d125bfc03cc7686e4d2"
     }
   ]
 }
