@@ -4,17 +4,29 @@
   "classification_registry": "../../semantics/permit/value_movement_classification_v1.json",
   "classification_registry_digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
   "canonicalization_profile": "keel.canonical_json.payload.v1",
-  "contract": "This corpus is the normative, machine-checkable contract for offline re-derivation of a payment identity from a classified tool call. A verifier conforms iff it produces the expected outcome for every vector. The sibling recipe document explains it; this corpus decides it.",
+  "conformance": "Passing every vector is NECESSARY, NOT SUFFICIENT for conformance. The ruleset's decision_algorithm plus the profile/grammar definitions are the complete contract; this corpus is mandatory minimum evidence. Each vector's `given.available_artifacts` fixes the verifier's dependency-resolution state so resolution outcomes are deterministic and not environment-dependent.",
+  "digest_consistency": "Every vector whose facts carry a registry artifact_digest equal to this header classification_registry_digest MUST also, when resolved against a store containing the pinned registry, agree with it. A vector that references a different digest MUST supply the matching `given` store or expect unverifiable. Header and vector digests disagreeing without an explicit store override invalidates this corpus artifact; it never silently changes a vector's expected outcome.",
   "outcomes": [
     "valid",
     "no_derivation",
     "invalid",
     "unverifiable"
   ],
+  "deferred_coverage": "multiple-applicable-rules (needs a synthetic 2-rule fixture; lands with the second Permit-to-X rule), artifact-bytes-hash-mismatch corruption case, and property/generated tests are broader-assurance, co-designed with the reference verifier. Enumerated here so their absence is explicit, not silent.",
   "vectors": [
     {
       "id": "positive-payments-value-movement",
       "title": "Enforced payments value-movement tool derives payment.execute",
+      "given": {
+        "available_artifacts": [
+          {
+            "artifact_id": "keel.permit.value_movement_classification.v1",
+            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
+            "resolves": true,
+            "bytes_hash_ok": true
+          }
+        ]
+      },
       "facts": {
         "invocation": {
           "operation": "call.tools",
@@ -43,7 +55,9 @@
         },
         "control": {
           "mode": "enforced_in_path"
-        }
+        },
+        "transport_surface": "mcp_tool_call",
+        "target_surface": "payment_rail"
       },
       "expected": {
         "outcome": "valid",
@@ -53,6 +67,16 @@
     {
       "id": "positive-stripe-value-movement",
       "title": "Enforced stripe value-movement tool derives payment.execute",
+      "given": {
+        "available_artifacts": [
+          {
+            "artifact_id": "keel.permit.value_movement_classification.v1",
+            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
+            "resolves": true,
+            "bytes_hash_ok": true
+          }
+        ]
+      },
       "facts": {
         "invocation": {
           "operation": "call.tools",
@@ -81,7 +105,9 @@
         },
         "control": {
           "mode": "enforced_in_path"
-        }
+        },
+        "transport_surface": "mcp_tool_call",
+        "target_surface": "payment_rail"
       },
       "expected": {
         "outcome": "valid",
@@ -89,8 +115,69 @@
       }
     },
     {
+      "id": "positive-surfaces-are-orthogonal",
+      "title": "Surfaces are recorded but do not affect the outcome: an unusual target_surface still derives payment.execute",
+      "given": {
+        "available_artifacts": [
+          {
+            "artifact_id": "keel.permit.value_movement_classification.v1",
+            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
+            "resolves": true,
+            "bytes_hash_ok": true
+          }
+        ]
+      },
+      "facts": {
+        "invocation": {
+          "operation": "call.tools",
+          "transport": "mcp",
+          "connector_identity": "payments",
+          "canonical_tool_name": "authorize_payment"
+        },
+        "classification": {
+          "class": "value_movement",
+          "subject": {
+            "kind": "registered_tool",
+            "connector_identity": "payments",
+            "canonical_tool_name": "authorize_payment"
+          },
+          "provenance": {
+            "registry": {
+              "artifact_id": "keel.permit.value_movement_classification.v1",
+              "artifact_version": "v1",
+              "artifact_digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
+            },
+            "input": {
+              "profile": "keel.registered_tool_classification_input.v1",
+              "digest": "sha256:f0ba6cc4dd39652b29a20e5a157f75dde7928034eae0828b914e5140914900ae"
+            }
+          }
+        },
+        "control": {
+          "mode": "enforced_in_path"
+        },
+        "transport_surface": "mcp_tool_call",
+        "target_surface": "some_other_resource_class"
+      },
+      "expected": {
+        "outcome": "valid",
+        "authorized_action": "payment.execute"
+      },
+      "note": "Proves transport_surface/target_surface are orthogonal signed facts, not identity inputs (2b: surface is not part of authority identity)."
+    },
+    {
       "id": "negative-observed-not-enforced",
       "title": "control.mode != enforced_in_path yields generic title",
+      "given": {
+        "available_artifacts": [
+          {
+            "artifact_id": "keel.permit.value_movement_classification.v1",
+            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
+            "resolves": true,
+            "bytes_hash_ok": true
+          }
+        ]
+      },
       "facts": {
         "invocation": {
           "operation": "call.tools",
@@ -119,7 +206,9 @@
         },
         "control": {
           "mode": "observed"
-        }
+        },
+        "transport_surface": "mcp_tool_call",
+        "target_surface": "payment_rail"
       },
       "expected": {
         "outcome": "no_derivation"
@@ -128,6 +217,16 @@
     {
       "id": "negative-tool-not-in-registry",
       "title": "A tool absent from the classification registry derives nothing",
+      "given": {
+        "available_artifacts": [
+          {
+            "artifact_id": "keel.permit.value_movement_classification.v1",
+            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
+            "resolves": true,
+            "bytes_hash_ok": true
+          }
+        ]
+      },
       "facts": {
         "invocation": {
           "operation": "call.tools",
@@ -156,7 +255,9 @@
         },
         "control": {
           "mode": "enforced_in_path"
-        }
+        },
+        "transport_surface": "mcp_tool_call",
+        "target_surface": "payment_rail"
       },
       "expected": {
         "outcome": "no_derivation"
@@ -165,6 +266,16 @@
     {
       "id": "negative-unknown-subject-kind",
       "title": "Unrecognised subject kind yields no title, not rejection",
+      "given": {
+        "available_artifacts": [
+          {
+            "artifact_id": "keel.permit.value_movement_classification.v1",
+            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
+            "resolves": true,
+            "bytes_hash_ok": true
+          }
+        ]
+      },
       "facts": {
         "invocation": {
           "operation": "call.tools",
@@ -193,7 +304,9 @@
         },
         "control": {
           "mode": "enforced_in_path"
-        }
+        },
+        "transport_surface": "mcp_tool_call",
+        "target_surface": "payment_rail"
       },
       "expected": {
         "outcome": "no_derivation"
@@ -202,6 +315,16 @@
     {
       "id": "invalid-wrong-input-digest",
       "title": "input_digest not matching the canonicalized inputs is invalid",
+      "given": {
+        "available_artifacts": [
+          {
+            "artifact_id": "keel.permit.value_movement_classification.v1",
+            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
+            "resolves": true,
+            "bytes_hash_ok": true
+          }
+        ]
+      },
       "facts": {
         "invocation": {
           "operation": "call.tools",
@@ -230,15 +353,27 @@
         },
         "control": {
           "mode": "enforced_in_path"
-        }
+        },
+        "transport_surface": "mcp_tool_call",
+        "target_surface": "payment_rail"
       },
       "expected": {
         "outcome": "invalid"
       }
     },
     {
-      "id": "invalid-wrong-registry-digest",
-      "title": "registry artifact_digest not matching the resolved artifact is invalid",
+      "id": "invalid-registry-digest-disagrees-signed-vs-membership",
+      "title": "provenance registry digest points at an artifact that resolves but is not the pinned classification registry -> membership cannot be established under it -> invalid",
+      "given": {
+        "available_artifacts": [
+          {
+            "artifact_id": "keel.permit.value_movement_classification.v1",
+            "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "resolves": true,
+            "bytes_hash_ok": true
+          }
+        ]
+      },
       "facts": {
         "invocation": {
           "operation": "call.tools",
@@ -257,7 +392,7 @@
             "registry": {
               "artifact_id": "keel.permit.value_movement_classification.v1",
               "artifact_version": "v1",
-              "artifact_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+              "artifact_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
             },
             "input": {
               "profile": "keel.registered_tool_classification_input.v1",
@@ -267,15 +402,28 @@
         },
         "control": {
           "mode": "enforced_in_path"
-        }
+        },
+        "transport_surface": "mcp_tool_call",
+        "target_surface": "payment_rail"
       },
       "expected": {
         "outcome": "invalid"
-      }
+      },
+      "note": "The referenced digest resolves (present in store) but to bytes that are not the canonical registry, so digest_match fails against the pinned artifact. Distinct from unavailable."
     },
     {
       "id": "invalid-malformed-identifier",
       "title": "Identifier failing the grammar (uppercase) is invalid, not merely unmatched",
+      "given": {
+        "available_artifacts": [
+          {
+            "artifact_id": "keel.permit.value_movement_classification.v1",
+            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
+            "resolves": true,
+            "bytes_hash_ok": true
+          }
+        ]
+      },
       "facts": {
         "invocation": {
           "operation": "call.tools",
@@ -304,7 +452,9 @@
         },
         "control": {
           "mode": "enforced_in_path"
-        }
+        },
+        "transport_surface": "mcp_tool_call",
+        "target_surface": "payment_rail"
       },
       "expected": {
         "outcome": "invalid"
@@ -313,6 +463,16 @@
     {
       "id": "invalid-whitespace-identifier",
       "title": "Trailing whitespace fails the grammar -> invalid",
+      "given": {
+        "available_artifacts": [
+          {
+            "artifact_id": "keel.permit.value_movement_classification.v1",
+            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
+            "resolves": true,
+            "bytes_hash_ok": true
+          }
+        ]
+      },
       "facts": {
         "invocation": {
           "operation": "call.tools",
@@ -341,7 +501,9 @@
         },
         "control": {
           "mode": "enforced_in_path"
-        }
+        },
+        "transport_surface": "mcp_tool_call",
+        "target_surface": "payment_rail"
       },
       "expected": {
         "outcome": "invalid"
@@ -349,7 +511,10 @@
     },
     {
       "id": "unverifiable-registry-artifact-unavailable",
-      "title": "A registry digest the verifier cannot resolve is unverifiable, never a newer-version fallback",
+      "title": "The referenced registry digest is absent from the verifier's store -> unverifiable, never a newer-version fallback",
+      "given": {
+        "available_artifacts": []
+      },
       "facts": {
         "invocation": {
           "operation": "call.tools",
@@ -378,13 +543,15 @@
         },
         "control": {
           "mode": "enforced_in_path"
-        }
+        },
+        "transport_surface": "mcp_tool_call",
+        "target_surface": "payment_rail"
       },
       "expected": {
         "outcome": "unverifiable",
         "reason": "artifact_unavailable"
       },
-      "note": "Distinct from invalid-wrong-registry-digest: there the artifact resolves and mismatches; here no artifact with this digest exists in the verifier's store."
+      "note": "Environmental, not semantic: resolves deterministically once the exact-digest artifact is supplied. Local possession of a DIFFERENT registry must not change this to invalid."
     }
   ]
 }
