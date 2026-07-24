@@ -110,7 +110,7 @@
     {
       "id": "keel.permit.action_classification_derivation.v1",
       "path": "semantics/permit/action_classification_derivation_v1.json",
-      "sha256": "c28bf2ca73f79a3f0fc1472b5124e36283107fa604f5f2d629ce329ad3cdc53c"
+      "sha256": "466bbdfd460bf58626647ee5163b2b7a6ba04baf7f08c5a143309ab0d3f5f1e9"
     },
     {
       "id": "permit-to-x.test-vectors.action-classification-derivation.v1",

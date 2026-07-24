@@ -154,6 +154,14 @@
       "The classification decision bound here MUST be the same one used to enforce, bound by input_digest + registry digest, not a re-lookup that could diverge under normalization."
     ],
 
+    "verifier_build_obligations": {
+      "note": "Four-round contract review converged: no determinism hole, the Step-8 conflict is designed out, shape is build-ready. These items are deferrable to the verifier-implementation phase but MUST be finalized as part of completing that verifier (not postponed past its ship), because they govern digest/signature validity:",
+      "canonicalization_boundaries": "the serialization profile keel.canonical_json.payload.v1 must pin: duplicate-object-name handling (reject), exact code-unit/byte identifier comparison (already fixed by the ASCII grammar), absent-vs-null, and number representation. RFC 8785 governs most; the verifier must not let its host parser define these by accident.",
+      "closed_v1_profile": "exactly one digest algorithm (sha256) and one canonicalization version; an unknown/unsupported canonicalization or algorithm identifier -> a specified terminal outcome (unverifiable for unsupported_version, invalid for malformed), never silent acceptance.",
+      "deferred_to_second_rule": "rule-set cardinality semantics (mutual exclusivity / priority / convergence / reject-multiple) become required only when a second rule is added; unrepresentable in single-rule v1.",
+      "deferred_to_pluggable_resolvers": "resolver-multiplicity policy ('accept any candidate whose bytes hash to D; fail only when none do') is required only if multiple resolver backends are exposed; a single reference verifier imposes one deterministic policy."
+    },
+
     "non_authorizing": "This ruleset governs presentation identity only. It never affects policy evaluation, dispatch, executable authority, or verdicts. A wrong derivation degrades a title; it cannot escalate authorization.",
 
     "verification_inputs": {
