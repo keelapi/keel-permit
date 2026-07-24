@@ -1,0 +1,35 @@
+{
+  "id": "keel.permit.action_classification_derivation.v1",
+  "version": "v1",
+  "kind": "action_classification_derivation_rule",
+  "status": "released",
+  "body": {
+    "claim": "Derives an authorized_action from a signed tool classification fact, so a semantic identity minted from a classified tool call is re-derivable offline from signed facts plus this versioned rule alone.",
+    "applies_when": {
+      "invocation.operation": "call.tools",
+      "invocation.transport": "mcp",
+      "classification.class": "value_movement",
+      "classification.kind": "registered_tool"
+    },
+    "derives": {
+      "authorized_action": "payment.execute",
+      "operation": "payment.execute"
+    },
+    "requires_signed_classification_provenance": [
+      "classification.class",
+      "classification.classification_artifact_version",
+      "classification.classification_artifact_digest",
+      "classification.connector_identity",
+      "classification.canonical_tool_name",
+      "classification.input_digest"
+    ],
+    "verifier_obligations": [
+      "The (connector_identity, canonical_tool_name) in the classification fact MUST appear in keel.permit.value_movement_classification at the referenced classification_artifact_version, and that artifact's digest MUST equal classification_artifact_digest. Re-derivation is thus fully offline and does not trust the issuer's classification result.",
+      "control.mode MUST be enforced_in_path. An observed (not in-path) call never derives a payment authorized_action; enforcement qualifies issuance, it does not define the action.",
+      "The derived authorized_action feeds the existing semantic selector as action_name/operation = payment.execute. The permit's own invocation.operation stays call.tools; the two are distinct signed facts, not competing descriptions of one field.",
+      "transport_surface and target_surface are recorded separately. target_surface = payment_rail describes the action's resource class; it is NOT a claim that the wire was a native payment-rail integration.",
+      "No provider outcome, settlement, or completion is implied. payment.execute is authority to attempt; observed_evidence carries what actually happened."
+    ],
+    "non_authorizing": "This rule governs presentation identity only. It never affects policy evaluation, dispatch, executable authority, or verdicts. A wrong derivation degrades a title; it cannot escalate authorization."
+  }
+}

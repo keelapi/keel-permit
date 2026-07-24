@@ -101,6 +101,16 @@
       "id": "keel.permit.semantic_selector_registry.v2.schema",
       "path": "semantic_registry/v2.schema.json",
       "sha256": "f9cc64a0cbc1d2bc2f5f39b18c93502ec0c04980e6b0a203569418b1e4d529af"
+    },
+    {
+      "id": "keel.permit.value_movement_classification.v1",
+      "path": "semantics/permit/value_movement_classification_v1.json",
+      "sha256": "5370f48f11a11bd78b7fcb28077652a865c1cb7e01d704d6aebae7be107153c5"
+    },
+    {
+      "id": "keel.permit.action_classification_derivation.v1",
+      "path": "semantics/permit/action_classification_derivation_v1.json",
+      "sha256": "5554bc725014f819f2c50ab94cacd67b01442975b91d51a978715edd29f51271"
     }
   ]
 }
