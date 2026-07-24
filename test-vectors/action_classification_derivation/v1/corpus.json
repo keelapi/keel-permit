@@ -4,27 +4,22 @@
   "classification_registry": "../../semantics/permit/value_movement_classification_v1.json",
   "classification_registry_digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
   "canonicalization_profile": "keel.canonical_json.payload.v1",
-  "conformance": "Passing every vector is NECESSARY, NOT SUFFICIENT for conformance. The ruleset's decision_algorithm plus the profile/grammar definitions are the complete contract; this corpus is mandatory minimum evidence. Each vector's `given.available_artifacts` fixes the verifier's dependency-resolution state so resolution outcomes are deterministic and not environment-dependent.",
-  "digest_consistency": "Every vector whose facts carry a registry artifact_digest equal to this header classification_registry_digest MUST also, when resolved against a store containing the pinned registry, agree with it. A vector that references a different digest MUST supply the matching `given` store or expect unverifiable. Header and vector digests disagreeing without an explicit store override invalidates this corpus artifact; it never silently changes a vector's expected outcome.",
+  "given_model": "Each vector's `given.trusted_registry_digests` is the set of classification_registry digests the verifier pins (has, and accepts as authentic). Dependency resolution (algorithm step 4) resolves ONLY a digest in this set; a digest outside it is unverifiable, regardless of whether some party can supply bytes hashing to it. This makes every resolution outcome a function of (signed record, trusted set), never of incidental local inventory.",
+  "conformance": "Passing every vector is NECESSARY, NOT SUFFICIENT. The ruleset decision_algorithm plus profile/grammar definitions are the complete contract; this corpus is mandatory minimum evidence. reference_executor.py in this directory runs the algorithm against every vector purely from the spec.",
   "outcomes": [
     "valid",
     "no_derivation",
     "invalid",
     "unverifiable"
   ],
-  "deferred_coverage": "multiple-applicable-rules (needs a synthetic 2-rule fixture; lands with the second Permit-to-X rule), artifact-bytes-hash-mismatch corruption case, and property/generated tests are broader-assurance, co-designed with the reference verifier. Enumerated here so their absence is explicit, not silent.",
+  "deferred_coverage": "multiple-applicable-rules (synthetic 2-rule fixture; lands with the second Permit-to-X rule) and property/generated tests are broader-assurance, co-designed with the reference verifier. Named so their absence is explicit.",
   "vectors": [
     {
       "id": "positive-payments-value-movement",
       "title": "Enforced payments value-movement tool derives payment.execute",
       "given": {
-        "available_artifacts": [
-          {
-            "artifact_id": "keel.permit.value_movement_classification.v1",
-            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
-            "resolves": true,
-            "bytes_hash_ok": true
-          }
+        "trusted_registry_digests": [
+          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
         ]
       },
       "facts": {
@@ -68,13 +63,8 @@
       "id": "positive-stripe-value-movement",
       "title": "Enforced stripe value-movement tool derives payment.execute",
       "given": {
-        "available_artifacts": [
-          {
-            "artifact_id": "keel.permit.value_movement_classification.v1",
-            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
-            "resolves": true,
-            "bytes_hash_ok": true
-          }
+        "trusted_registry_digests": [
+          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
         ]
       },
       "facts": {
@@ -116,15 +106,10 @@
     },
     {
       "id": "positive-surfaces-are-orthogonal",
-      "title": "Surfaces are recorded but do not affect the outcome: an unusual target_surface still derives payment.execute",
+      "title": "An unusual target_surface still derives payment.execute; surfaces do not affect identity",
       "given": {
-        "available_artifacts": [
-          {
-            "artifact_id": "keel.permit.value_movement_classification.v1",
-            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
-            "resolves": true,
-            "bytes_hash_ok": true
-          }
+        "trusted_registry_digests": [
+          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
         ]
       },
       "facts": {
@@ -163,19 +148,14 @@
         "outcome": "valid",
         "authorized_action": "payment.execute"
       },
-      "note": "Proves transport_surface/target_surface are orthogonal signed facts, not identity inputs (2b: surface is not part of authority identity)."
+      "note": "Proves transport_surface/target_surface are orthogonal signed facts (2b decoupling), not identity inputs."
     },
     {
       "id": "negative-observed-not-enforced",
       "title": "control.mode != enforced_in_path yields generic title",
       "given": {
-        "available_artifacts": [
-          {
-            "artifact_id": "keel.permit.value_movement_classification.v1",
-            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
-            "resolves": true,
-            "bytes_hash_ok": true
-          }
+        "trusted_registry_digests": [
+          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
         ]
       },
       "facts": {
@@ -218,13 +198,8 @@
       "id": "negative-tool-not-in-registry",
       "title": "A tool absent from the classification registry derives nothing",
       "given": {
-        "available_artifacts": [
-          {
-            "artifact_id": "keel.permit.value_movement_classification.v1",
-            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
-            "resolves": true,
-            "bytes_hash_ok": true
-          }
+        "trusted_registry_digests": [
+          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
         ]
       },
       "facts": {
@@ -267,13 +242,8 @@
       "id": "negative-unknown-subject-kind",
       "title": "Unrecognised subject kind yields no title, not rejection",
       "given": {
-        "available_artifacts": [
-          {
-            "artifact_id": "keel.permit.value_movement_classification.v1",
-            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
-            "resolves": true,
-            "bytes_hash_ok": true
-          }
+        "trusted_registry_digests": [
+          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
         ]
       },
       "facts": {
@@ -316,13 +286,8 @@
       "id": "invalid-wrong-input-digest",
       "title": "input_digest not matching the canonicalized inputs is invalid",
       "given": {
-        "available_artifacts": [
-          {
-            "artifact_id": "keel.permit.value_movement_classification.v1",
-            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
-            "resolves": true,
-            "bytes_hash_ok": true
-          }
+        "trusted_registry_digests": [
+          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
         ]
       },
       "facts": {
@@ -362,16 +327,11 @@
       }
     },
     {
-      "id": "invalid-registry-digest-disagrees-signed-vs-membership",
-      "title": "provenance registry digest points at an artifact that resolves but is not the pinned classification registry -> membership cannot be established under it -> invalid",
+      "id": "invalid-malformed-registry-digest",
+      "title": "A registry digest that is not a well-formed sha256: value is invalid (structural)",
       "given": {
-        "available_artifacts": [
-          {
-            "artifact_id": "keel.permit.value_movement_classification.v1",
-            "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-            "resolves": true,
-            "bytes_hash_ok": true
-          }
+        "trusted_registry_digests": [
+          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
         ]
       },
       "facts": {
@@ -392,7 +352,7 @@
             "registry": {
               "artifact_id": "keel.permit.value_movement_classification.v1",
               "artifact_version": "v1",
-              "artifact_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+              "artifact_digest": "not-a-digest"
             },
             "input": {
               "profile": "keel.registered_tool_classification_input.v1",
@@ -409,19 +369,14 @@
       "expected": {
         "outcome": "invalid"
       },
-      "note": "The referenced digest resolves (present in store) but to bytes that are not the canonical registry, so digest_match fails against the pinned artifact. Distinct from unavailable."
+      "note": "Record-determined invalid, independent of the verifier's store: the signed digest is syntactically malformed."
     },
     {
       "id": "invalid-malformed-identifier",
       "title": "Identifier failing the grammar (uppercase) is invalid, not merely unmatched",
       "given": {
-        "available_artifacts": [
-          {
-            "artifact_id": "keel.permit.value_movement_classification.v1",
-            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
-            "resolves": true,
-            "bytes_hash_ok": true
-          }
+        "trusted_registry_digests": [
+          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
         ]
       },
       "facts": {
@@ -464,13 +419,8 @@
       "id": "invalid-whitespace-identifier",
       "title": "Trailing whitespace fails the grammar -> invalid",
       "given": {
-        "available_artifacts": [
-          {
-            "artifact_id": "keel.permit.value_movement_classification.v1",
-            "digest": "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0",
-            "resolves": true,
-            "bytes_hash_ok": true
-          }
+        "trusted_registry_digests": [
+          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
         ]
       },
       "facts": {
@@ -510,10 +460,12 @@
       }
     },
     {
-      "id": "unverifiable-registry-artifact-unavailable",
-      "title": "The referenced registry digest is absent from the verifier's store -> unverifiable, never a newer-version fallback",
+      "id": "unverifiable-registry-digest-untrusted",
+      "title": "A well-formed registry digest the verifier does not pin -> unverifiable, never a substitution or a forged-bytes acceptance",
       "given": {
-        "available_artifacts": []
+        "trusted_registry_digests": [
+          "sha256:c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
+        ]
       },
       "facts": {
         "invocation": {
@@ -551,7 +503,7 @@
         "outcome": "unverifiable",
         "reason": "artifact_unavailable"
       },
-      "note": "Environmental, not semantic: resolves deterministically once the exact-digest artifact is supplied. Local possession of a DIFFERENT registry must not change this to invalid."
+      "note": "Environmental, resolves once the exact-digest artifact is trusted+supplied. An attacker supplying bytes that hash to this digest does not help: the digest is not in the verifier's trusted set. A DIFFERENT trusted registry must not flip this to valid/invalid."
     }
   ]
 }
