@@ -110,12 +110,12 @@
     {
       "id": "keel.permit.action_classification_derivation.v1",
       "path": "semantics/permit/action_classification_derivation_v1.json",
-      "sha256": "ec547067cd06460e9a795111d5974ca510875b888216188108dfcc918acb06f1"
+      "sha256": "25901a483f30c1b7d36d672796f03aff1cf2cf48018252e213c281b169215c0b"
     },
     {
       "id": "permit-to-x.test-vectors.action-classification-derivation.v1",
       "path": "test-vectors/action_classification_derivation/v1/corpus.json",
-      "sha256": "03a73ac1af3b028a523d0dbf9589ec776227b1c2962a5d1b74c8435f6515cdd0"
+      "sha256": "03aedd3e7916efea71106435e575410e5516d5996061bae34ee9cb5fce7df0e8"
     }
   ]
 }

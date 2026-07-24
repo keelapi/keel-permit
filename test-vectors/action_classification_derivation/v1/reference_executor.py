@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 """Reference executor for keel.permit.action_classification_derivation.v1.
 
-Not the product verifier. This executes the ruleset's normative decision_algorithm
-by hand against the corpus, purely from the spec, to answer one question: can two
-implementers run this algorithm and get identical outcomes for every vector without
-making an undocumented choice? Every place this script had to decide something the
-spec did not state is a spec gap and is flagged.
+Not the product verifier. Executes the ruleset's normative decision_algorithm by
+hand against the corpus, purely from the spec, to test that two implementers get
+identical outcomes without an undocumented choice. Every place this script had to
+decide something the spec did not state is a spec gap.
+
+The verifier's environment is an explicit per-vector input `given`:
+  trusted_registry_digests: [digest, ...]   -- the immutable trust set
+  store_corrupt_digests:     [digest, ...]   -- trusted digests whose bytes do NOT hash to them
+  store_malformed_digests:   [digest, ...]   -- trusted, hash-ok, but not a valid registry artifact
+The pinned canonical registry digest resolves to the real, valid registry.
 """
 import hashlib
 import json
@@ -16,18 +21,17 @@ from pathlib import Path
 import rfc8785
 
 HERE = Path(__file__).resolve().parent
-CORPUS = json.loads((HERE / "corpus.json").read_text())
-RULESET = json.loads((HERE / ".." / ".." / ".." / "semantics" / "permit" / "action_classification_derivation_v1.json").read_text())["body"]
-REGISTRY = json.loads((HERE / ".." / ".." / ".." / "semantics" / "permit" / "value_movement_classification_v1.json").read_text())
+S = lambda *p: HERE.joinpath(*p)
+CORPUS = json.loads(S("corpus.json").read_text())
+RULESET = json.loads(S("..", "..", "..", "semantics", "permit", "action_classification_derivation_v1.json").read_text())["body"]
+REG_PATH = S("..", "..", "..", "semantics", "permit", "value_movement_classification_v1.json")
+REGISTRY = json.loads(REG_PATH.read_text())
 
 GRAMMAR = re.compile(RULESET["identifier_grammar"]["grammar"])
 DIGEST_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
-KNOWN_SUBJECT_KINDS = set(RULESET["classification_subject_variants"].keys())
-REGISTRY_MEMBERS = {(e["connector_identity"], e["canonical_tool_name"])
-                    for e in REGISTRY["body"]["entries"]}
-PINNED_REGISTRY_DIGEST = "sha256:" + hashlib.sha256(
-    (HERE / ".." / ".." / ".." / "semantics" / "permit" / "value_movement_classification_v1.json").read_bytes()
-).hexdigest()
+KNOWN_KINDS = set(RULESET["classification_subject_variants"].keys())
+MEMBERS = {(e["connector_identity"], e["canonical_tool_name"]) for e in REGISTRY["body"]["entries"]}
+PINNED = "sha256:" + hashlib.sha256(REG_PATH.read_bytes()).hexdigest()
 
 
 def _input_digest(ci, tn):
@@ -37,109 +41,97 @@ def _input_digest(ci, tn):
 
 
 def execute(facts, given):
-    """Run decision_algorithm steps in order; first terminal step wins."""
-    trace = []
+    t = []
     cls = facts.get("classification", {})
     subject = cls.get("subject", {})
     prov = cls.get("provenance", {})
-
-    # Step 1 STRUCTURAL
-    kind = subject.get("kind")
-    if kind == "registered_tool":
-        if not subject.get("connector_identity") or not subject.get("canonical_tool_name"):
-            return "invalid", trace + ["1:structural: registered_tool missing required fields"]
-    trace.append("1:structural ok")
-
-    # Step 2 SUBJECT KIND
-    if kind not in KNOWN_SUBJECT_KINDS:
-        return "no_derivation", trace + [f"2:unknown subject kind {kind!r}"]
-    trace.append("2:subject-kind known")
-
-    # Step 3 IDENTIFIER GRAMMAR (validate the signed values directly)
-    for label in ("connector_identity", "canonical_tool_name"):
-        val = subject.get(label, "")
-        if not GRAMMAR.match(val):
-            return "invalid", trace + [f"3:grammar fail {label}={val!r}"]
-    trace.append("3:grammar ok")
-
-    # digest well-formedness is part of structural validity of a digest field
     reg_digest = prov.get("registry", {}).get("artifact_digest", "")
-    if not DIGEST_RE.match(reg_digest):
-        return "invalid", trace + [f"3b:malformed registry digest {reg_digest!r}"]
+    in_digest = prov.get("input", {}).get("digest", "")
 
-    # Step 4 DEPENDENCY RESOLUTION (resolve ONLY by embedded digest, from the
-    # verifier's trusted set; unknown digest -> unverifiable, never substitute)
+    # Step 1 COMMON ENVELOPE — common signed-field syntax BEFORE variant dispatch.
+    if not DIGEST_RE.match(reg_digest):
+        return "invalid", t + [f"1:malformed common registry digest {reg_digest!r}"]
+    if not DIGEST_RE.match(in_digest):
+        return "invalid", t + [f"1:malformed common input digest {in_digest!r}"]
+    t.append("1:common envelope ok")
+
+    # Step 2 SUBJECT DISPATCH
+    kind = subject.get("kind")
+    if kind in KNOWN_KINDS:
+        for label in ("connector_identity", "canonical_tool_name"):
+            v = subject.get(label, "")
+            if not subject.get(label) or not GRAMMAR.match(v):
+                return "invalid", t + [f"2:variant field/grammar fail {label}={v!r}"]
+        t.append("2:known variant, fields+grammar ok")
+    else:
+        return "no_derivation", t + [f"2:unknown subject kind {kind!r} (common envelope already validated)"]
+
+    # Step 3 DEPENDENCY RESOLUTION (hash-verifying)
     trusted = set(given.get("trusted_registry_digests", []))
     if reg_digest not in trusted:
-        return "unverifiable", trace + [f"4:registry digest {reg_digest[:14]}.. not in trusted set -> artifact_unavailable"]
-    trace.append("4:dependency resolved by exact digest")
+        return "unverifiable", t + [f"3:registry {reg_digest[:14]}.. not trusted -> artifact_unavailable"]
+    if reg_digest in set(given.get("store_corrupt_digests", [])):
+        return "invalid", t + ["3:store bytes do not hash to trusted digest -> dependency_integrity"]
+    t.append("3:resolved by exact digest, hash-verified")
 
-    # Step 5 ARTIFACT INTEGRITY: trusted set is integrity-verified by construction.
-    # Step 6 INTERNAL DIGEST AGREEMENT: single registry digest field here; nothing to disagree.
-    # (A future second signed digest field would be compared here.)
+    # Step 4 DEPENDENCY VALIDATION
+    if reg_digest in set(given.get("store_malformed_digests", [])):
+        return "invalid", t + ["4:resolved registry fails schema/version -> dependency_artifact_invalid"]
+    t.append("4:dependency registry valid")
 
-    # Step 7 INPUT DIGEST
-    recomputed = _input_digest(subject["connector_identity"], subject["canonical_tool_name"])
-    if prov.get("input", {}).get("digest") != recomputed:
-        return "invalid", trace + ["7:input_digest mismatch"]
-    trace.append("7:input_digest ok")
+    # Step 5 INTERNAL DIGEST AGREEMENT — v1: exactly one authoritative ref, no-op.
 
-    # Step 8 RULE MATCH SET (evaluate ALL rules against the same facts)
+    # Step 6 INPUT DIGEST (self-contained)
+    if in_digest != _input_digest(subject["connector_identity"], subject["canonical_tool_name"]):
+        return "invalid", t + ["6:input_digest mismatch"]
+    t.append("6:input_digest ok")
+
+    # Step 7 RULE MATCH SET
     def fact_at(path):
         node = facts
         for part in path.split("."):
-            node = node.get(part, {}) if isinstance(node, dict) else {}
-        return node if not isinstance(node, dict) or node else (node if node != {} else None)
-
-    matched = []
-    for rule in RULESET["rules"]:
-        if all(fact_at(c["fact"]) == c["value"]
-               for c in rule["applies_when"]["all"] if c["op"] == "equals"):
-            matched.append(rule)
+            if not isinstance(node, dict):
+                return None
+            node = node.get(part)
+        return node
+    matched = [r for r in RULESET["rules"]
+               if all(fact_at(c["fact"]) == c["value"] for c in r["applies_when"]["all"])]
     if len(matched) == 0:
-        return "no_derivation", trace + ["8:zero rules match"]
+        return "no_derivation", t + ["7:zero rules match"]
     if len(matched) > 1:
-        return "invalid", trace + [f"8:{len(matched)} rules match -> invalid"]
+        return "invalid", t + [f"7:{len(matched)} rules match -> invalid"]
     rule = matched[0]
-    trace.append(f"8:exactly one rule matched ({rule['rule_id']})")
+    t.append(f"7:exactly one rule ({rule['rule_id']})")
 
-    # Step 9 REQUIRES
+    # Step 8 REQUIRES (ordered substeps)
+    known_predicates = {"classification_registry_membership"}
     for req in rule["requires"]:
-        if "predicate" in req:
-            p = req["predicate"]
-            if p == "classification_registry_membership":
-                key = (subject["connector_identity"], subject["canonical_tool_name"])
-                if key not in REGISTRY_MEMBERS:
-                    return "no_derivation", trace + [f"9:{p} absent -> no_derivation"]
-            elif p == "classification_registry_digest_match":
-                if reg_digest != PINNED_REGISTRY_DIGEST:
-                    return "invalid", trace + [f"9:{p} mismatch -> invalid"]
-            elif p == "classification_input_digest_match":
-                pass  # already checked at step 7
-            else:
-                return "unverifiable", trace + [f"9:unknown predicate {p}"]
-        else:  # fact predicate
-            if fact_at(req["fact"]) != req["value"]:
-                # control.mode != enforced_in_path is a no_derivation per spec
-                return "no_derivation", trace + [f"9:required fact {req['fact']} != {req['value']}"]
-    trace.append("9:requires ok")
+        if "predicate" in req and req["predicate"] not in known_predicates:
+            return "invalid", t + [f"8a:unevaluable predicate {req['predicate']}"]  # 8a
+    for req in rule["requires"]:  # 8b membership (only per-rule predicate)
+        if req.get("predicate") == "classification_registry_membership":
+            if (subject["connector_identity"], subject["canonical_tool_name"]) not in MEMBERS:
+                return "no_derivation", t + ["8b:membership absent -> no_derivation"]
+    for req in rule["requires"]:  # 8c enforcement
+        if "fact" in req and fact_at(req["fact"]) != req["value"]:
+            return "no_derivation", t + [f"8c:{req['fact']} != {req['value']} -> no_derivation"]
+    t.append("8:requires ok")
 
-    # Step 10 DERIVE
-    return "valid", trace + [f"10:derive {rule['derives']['authorized_action']}"]
+    # Step 9 DERIVE
+    return "valid", t + [f"9:derive {rule['derives']['authorized_action']}"]
 
 
 def main():
     fails = 0
     for v in CORPUS["vectors"]:
-        outcome, trace = execute(v["facts"], v.get("given", {}))
-        expected = v["expected"]["outcome"]
-        ok = outcome == expected
+        got, tr = execute(v["facts"], v.get("given", {}))
+        want = v["expected"]["outcome"]
+        ok = got == want
         fails += not ok
-        mark = "OK " if ok else "XX "
-        print(f"{mark}{v['id']:<52} got={outcome:<13} want={expected}")
+        print(f"{'OK ' if ok else 'XX '}{v['id']:<50} got={got:<13} want={want}")
         if not ok:
-            for t in trace:
-                print(f"      {t}")
+            for line in tr:
+                print(f"      {line}")
     print(f"\n{len(CORPUS['vectors'])} vectors, {fails} mismatch")
     return 1 if fails else 0
 
