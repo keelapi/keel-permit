@@ -101,6 +101,21 @@
       "id": "keel.permit.semantic_selector_registry.v2.schema",
       "path": "semantic_registry/v2.schema.json",
       "sha256": "f9cc64a0cbc1d2bc2f5f39b18c93502ec0c04980e6b0a203569418b1e4d529af"
+    },
+    {
+      "id": "keel.permit.value_movement_classification.v1",
+      "path": "semantics/permit/value_movement_classification_v1.json",
+      "sha256": "c46b8bd165ef16c284621e5349b22e5621fe66c4a25a3c8b18c8d88e20de76d0"
+    },
+    {
+      "id": "keel.permit.action_classification_derivation.v1",
+      "path": "semantics/permit/action_classification_derivation_v1.json",
+      "sha256": "466bbdfd460bf58626647ee5163b2b7a6ba04baf7f08c5a143309ab0d3f5f1e9"
+    },
+    {
+      "id": "permit-to-x.test-vectors.action-classification-derivation.v1",
+      "path": "test-vectors/action_classification_derivation/v1/corpus.json",
+      "sha256": "4747d329231f4a520c3c5bbd962568f77f08e72713191d125bfc03cc7686e4d2"
     }
   ]
 }
