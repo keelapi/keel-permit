@@ -17,6 +17,9 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
   request digest.
 - Extend the semantic-binding schema additively so a signed Permit can pin the
   fact registry, profile, schema, canonicalization rule, and exact fact digest.
+- Define `permit.review_transition.v1` and its signed transition semantics so a
+  verifier can link an issuance-time challenge to a later approved or denied
+  review outcome without re-issuing the original Permit.
 
 ## [1.8.0] — 2026-07-21
 
