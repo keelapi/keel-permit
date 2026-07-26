@@ -71,6 +71,7 @@ flowchart LR
 - [`spec/dispatch-absence-after-revocation-v1.md`](spec/dispatch-absence-after-revocation-v1.md) — Scope-faithful absence adjudication after revocation
 - [`spec/permit-to-work-v1.md`](spec/permit-to-work-v1.md) — Bounded Work authority, linked exact actions, payment-value events, and `work-chain.v1`
 - [`spec/permit-semantic-presentation-v1.md`](spec/permit-semantic-presentation-v1.md) — Trusted semantic selection and non-authorizing presentation
+- [`spec/permit-fact-profiles-v1.md`](spec/permit-fact-profiles-v1.md) — Typed, privacy-aware authorization facts for Permit-to-X
 - [`spec/permit-to-x-admission-v1.md`](spec/permit-to-x-admission-v1.md) — Twelve-gate admission test for specific Permit titles
 
 ## Schemas
@@ -83,6 +84,7 @@ Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated f
 - [`comparator_registry/`](comparator_registry/) — authority-envelope comparator semantics for Permit Chains.
 - [`semantics/`](semantics/) — pinned semantic artifacts consumed by verifiers for export manifests, governance chains, closure records, checkpoints, workflows, Permit binding, and R4 budget-ledger claims.
 - [`semantic_registry/`](semantic_registry/) — server-provenance selector contract for stable Permit semantics.
+- [`fact_profiles/`](fact_profiles/) — typed authorization-fact schemas and disclosure rules for specific Permit semantics.
 - [`presentation_registry/`](presentation_registry/) — non-authorizing titles, definitions, controlled leading fields, evidence emphasis, and fallbacks.
 - [`artifact-manifests/permit-to-x-v1.json`](artifact-manifests/permit-to-x-v1.json) — exact-byte hashes for generated downstream consumers.
 
@@ -99,6 +101,7 @@ Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated f
 | Reference verifier status | The reference verifier verifies `v7` permit decisions and rejects unsigned account-selector drift. |
 | Bounded Work contract | Strict payment-only Work schemas and four claim contracts are published contract-first; coordinated API producer and public-verifier support are separate release gates. |
 | Permit-to-X presentation | Specific titles require a trusted semantic selector result; presentation artifacts cannot change authorization or verifier verdicts. |
+| Permit-to-X fact profiles | Semantic registry v3 can bind an eligible semantic to a typed fact profile; exact payment facts use integer minor units, currency, recipient commitments, payment rail, and exact request digest. |
 
 ## Examples
 

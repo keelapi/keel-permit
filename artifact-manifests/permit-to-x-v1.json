@@ -25,7 +25,27 @@
     {
       "id": "keel.permit.semantic_binding.v1.schema",
       "path": "schemas/permit-semantic-binding-v1.schema.json",
-      "sha256": "463d29dc01bfc29d54ad36892fb8a74a1f2a4f42f6fdcb370d927a5a51ddf4d4"
+      "sha256": "fa428ed077be1e390147c496ff277510eeb24b999573a5baef0bd77941c90fd6"
+    },
+    {
+      "id": "keel.permit.payment_exact_facts.v1.schema",
+      "path": "schemas/payment-exact-facts-v1.schema.json",
+      "sha256": "b12f4bdca4fd759ea624d73f5d1cf65f4f103a2d55218a8be28b156aba871cf2"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v1",
+      "path": "fact_profiles/v1.json",
+      "sha256": "3ca05ab61d31c7dfc0cfe6a1c33eebf015e74a3d239ff6909d86c65c548c19ef"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v1.schema",
+      "path": "fact_profiles/v1.schema.json",
+      "sha256": "a237d12902702095c01038a16c70d2a835b35e07329c8f7e2002b09d6fe4fd89"
+    },
+    {
+      "id": "permit-to-x.test-vectors.fact-profiles.v1",
+      "path": "fact_profiles/test-vectors/v1.json",
+      "sha256": "13c5066628d77bdb6f56337471aca5e03e956af04b6da151256685772ab56823"
     },
     {
       "id": "keel.work_request.v1.schema",
@@ -101,6 +121,16 @@
       "id": "keel.permit.semantic_selector_registry.v2.schema",
       "path": "semantic_registry/v2.schema.json",
       "sha256": "f9cc64a0cbc1d2bc2f5f39b18c93502ec0c04980e6b0a203569418b1e4d529af"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v3",
+      "path": "semantic_registry/v3.json",
+      "sha256": "7ea4e6ab2dde98454cd2254b72bf2499e79b8bead396be9b35d2a6a729480ed4"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v3.schema",
+      "path": "semantic_registry/v3.schema.json",
+      "sha256": "aee19c7f95363e60954cf46a59d16a3961246d16841db5b336aba36609b2fb55"
     },
     {
       "id": "keel.permit.value_movement_classification.v1",
