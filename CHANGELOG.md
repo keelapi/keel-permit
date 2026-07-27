@@ -4,6 +4,23 @@ All notable changes to this specification are documented here.
 
 The spec document follows [Semantic Versioning](https://semver.org/). Wire formats (Permit `v1`, `closure_v1`, `closure_v2`, chain entry `v1`) version independently and are not bumped by spec-document revisions.
 
+## Unreleased
+
+- Add semantic selector registry v3 with an optional, trusted
+  `fact_profile_id` association.
+- Add `keel.fact_profile_registry.v1` and the first eligible profile,
+  `keel.facts.payment_exact.v1`.
+- Define privacy-aware per-field disclosure, retention, commitment, and erasure
+  posture for bulk exports and exact-permit evidence packs.
+- Add the exact payment fact schema and conformance vectors for integer amount
+  in minor units, currency, recipient commitments, payment rail, and exact
+  request digest.
+- Extend the semantic-binding schema additively so a signed Permit can pin the
+  fact registry, profile, schema, canonicalization rule, and exact fact digest.
+- Define `permit.review_transition.v1` and its signed transition semantics so a
+  verifier can link an issuance-time challenge to a later approved or denied
+  review outcome without re-issuing the original Permit.
+
 ## [1.8.0] — 2026-07-21
 
 Adds the contract-first foundation for bounded Work authority and honest

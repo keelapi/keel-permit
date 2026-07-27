@@ -70,7 +70,10 @@ def schema_registry() -> Registry:
     schema_paths.extend(
         [
             ROOT / "semantic_registry/v1.schema.json",
+            ROOT / "semantic_registry/v2.schema.json",
+            ROOT / "semantic_registry/v3.schema.json",
             ROOT / "presentation_registry/v1.schema.json",
+            ROOT / "fact_profiles/v1.schema.json",
         ]
     )
     for path in sorted(schema_paths):
@@ -115,7 +118,10 @@ def entry_matches(entry: dict[str, Any], candidate: dict[str, Any]) -> bool:
         return False
     if candidate.get("chain_role") not in match["allowed_chain_roles"]:
         return False
-    if candidate.get("governed_surface") not in match["required_surfaces"]:
+    if (
+        "required_surfaces" in match
+        and candidate.get("governed_surface") not in match["required_surfaces"]
+    ):
         return False
     required_evidence = set(match.get("required_evidence_capabilities", []))
     return required_evidence.issubset(set(candidate.get("evidence_capabilities", [])))
@@ -143,12 +149,26 @@ def select_semantic(
 
 def validate_semantics_and_presentation(registry: Registry) -> None:
     semantics = load_json("semantic_registry/v1.json")
+    semantics_v2 = load_json("semantic_registry/v2.json")
+    semantics_v3 = load_json("semantic_registry/v3.json")
     presentations = load_json("presentation_registry/v1.json")
     validate_instance(
         semantics,
         "semantic_registry/v1.schema.json",
         registry,
         "semantic registry",
+    )
+    validate_instance(
+        semantics_v2,
+        "semantic_registry/v2.schema.json",
+        registry,
+        "semantic registry v2",
+    )
+    validate_instance(
+        semantics_v3,
+        "semantic_registry/v3.schema.json",
+        registry,
+        "semantic registry v3",
     )
     validate_instance(
         presentations,
@@ -239,6 +259,135 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
     after = select_semantic(semantics, candidate)
     if before != after or digest(semantics) != digest(copy.deepcopy(semantics)):
         raise ContractFailure("presentation-only change interfered with semantic selection")
+
+
+def validate_fact_profiles(registry: Registry) -> None:
+    fact_registry = load_json("fact_profiles/v1.json")
+    semantics = load_json("semantic_registry/v3.json")
+    validate_instance(
+        fact_registry,
+        "fact_profiles/v1.schema.json",
+        registry,
+        "fact profile registry",
+    )
+
+    profiles = fact_registry["profiles"]
+    by_profile_id = {profile["fact_profile_id"]: profile for profile in profiles}
+    if len(by_profile_id) != len(profiles):
+        raise ContractFailure("fact profile registry contains duplicate ids")
+
+    semantic_ids = {entry["semantic_id"] for entry in semantics["entries"]}
+    for profile in profiles:
+        schema_path = profile["facts_schema"]
+        schema_file = ROOT / schema_path
+        if not schema_file.is_file():
+            raise ContractFailure(
+                f"{profile['fact_profile_id']} references missing schema {schema_path}"
+            )
+        actual_schema_digest = _sha256_file(schema_file)
+        if profile["facts_schema_digest"] != actual_schema_digest:
+            raise ContractFailure(
+                f"{profile['fact_profile_id']} facts schema digest is stale"
+            )
+        unknown_semantics = sorted(set(profile["semantic_ids"]) - semantic_ids)
+        if unknown_semantics:
+            raise ContractFailure(
+                f"{profile['fact_profile_id']} references unknown semantics: "
+                f"{unknown_semantics}"
+            )
+        paths = [field["path"] for field in profile["fields"]]
+        if len(paths) != len(set(paths)):
+            raise ContractFailure(
+                f"{profile['fact_profile_id']} contains duplicate field paths"
+            )
+        for field in profile["fields"]:
+            if field["classification"] in {"personal_data", "free_text", "secret"}:
+                if field["bulk_export_disclosure"] != "omit":
+                    raise ContractFailure(
+                        f"{profile['fact_profile_id']} exposes sensitive field "
+                        f"{field['path']} in bulk exports"
+                    )
+            if field["classification"] in {"personal_data", "free_text"} and (
+                field["commitment_method"] == "none"
+            ):
+                raise ContractFailure(
+                    f"{profile['fact_profile_id']} leaves sensitive field "
+                    f"{field['path']} uncommitted"
+                )
+
+    bound_profile_ids: set[str] = set()
+    for entry in semantics["entries"]:
+        profile_id = entry.get("fact_profile_id")
+        if profile_id is None:
+            continue
+        profile = by_profile_id.get(profile_id)
+        if profile is None:
+            raise ContractFailure(
+                f"{entry['semantic_id']} references unknown fact profile {profile_id}"
+            )
+        if entry["semantic_id"] not in profile["semantic_ids"]:
+            raise ContractFailure(
+                f"{entry['semantic_id']} is absent from {profile_id}.semantic_ids"
+            )
+        bound_profile_ids.add(profile_id)
+    if bound_profile_ids != set(by_profile_id):
+        raise ContractFailure("every eligible fact profile must be bound by a semantic")
+    payment_entry = next(
+        entry
+        for entry in semantics["entries"]
+        if entry["semantic_id"] == "keel.action.payment_execute.v1"
+    )
+    if payment_entry.get("fact_profile_id") != "keel.facts.payment_exact.v1":
+        raise ContractFailure("payment.execute is not bound to exact payment facts")
+
+    vectors = load_json("fact_profiles/test-vectors/v1.json")
+    profile = by_profile_id.get(vectors.get("profile_id"))
+    if profile is None:
+        raise ContractFailure("fact-profile vectors reference an unknown profile")
+    facts_schema = load_json(profile["facts_schema"])
+    validator = jsonschema.Draft202012Validator(
+        facts_schema,
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+    for vector in vectors["vectors"]:
+        actual_valid = not list(validator.iter_errors(vector["facts"]))
+        if actual_valid != vector["expected_valid"]:
+            raise ContractFailure(
+                f"fact vector {vector['id']} validity was {actual_valid}, "
+                f"expected {vector['expected_valid']}"
+            )
+        binding = vector.get("semantic_binding")
+        if binding is None:
+            continue
+        validate_instance(
+            binding,
+            "schemas/permit-semantic-binding-v1.schema.json",
+            registry,
+            f"fact vector {vector['id']} semantic binding",
+        )
+        if not actual_valid:
+            raise ContractFailure(
+                f"fact vector {vector['id']} binds a schema-invalid fact object"
+            )
+        if binding["authorization_facts_digest"] != digest(vector["facts"]):
+            raise ContractFailure(
+                f"fact vector {vector['id']} does not bind its canonical facts"
+            )
+        if binding["fact_profile_registry_digest"] != _sha256_file(
+            ROOT / "fact_profiles/v1.json"
+        ):
+            raise ContractFailure(
+                f"fact vector {vector['id']} has a stale fact registry digest"
+            )
+        if binding["fact_profile_entry_digest"] != digest(profile):
+            raise ContractFailure(
+                f"fact vector {vector['id']} has a stale fact profile digest"
+            )
+
+
+def _sha256_file(path: Path) -> str:
+    return "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def assemble_pack(corpus: dict[str, Any]) -> dict[str, Any]:
@@ -559,6 +708,7 @@ def main() -> int:
     try:
         registry = schema_registry()
         validate_semantics_and_presentation(registry)
+        validate_fact_profiles(registry)
         validate_work_contract(registry)
         validate_claim_contracts()
         validate_artifact_manifest()
