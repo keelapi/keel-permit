@@ -232,34 +232,14 @@ def check_permit_co_signature_vectors(require_jsonschema: bool, errors: list[str
         if isinstance(schema_id, str):
             registry = registry.with_resource(schema_id, Resource.from_contents(schema))
 
-    claim_schema = json.loads(
-        (ROOT / "schemas/permit-co-signature-v1.schema.json").read_text(encoding="utf-8")
-    )
     key_schema = json.loads(
         (ROOT / "schemas/permit-co-signer-key-v1.schema.json").read_text(encoding="utf-8")
-    )
-    claim_validator = jsonschema.Draft202012Validator(
-        claim_schema,
-        registry=registry,
-        format_checker=jsonschema.FormatChecker(),
     )
     key_validator = jsonschema.Draft202012Validator(
         key_schema,
         registry=registry,
         format_checker=jsonschema.FormatChecker(),
     )
-    corpus_path = ROOT / "test-vectors/permit_co_signature/v1/corpus.json"
-    corpus = json.loads(corpus_path.read_text(encoding="utf-8"))
-    vectors = corpus.get("vectors")
-    if not isinstance(vectors, list) or len(vectors) < 8:
-        fail(errors, "permit co-signature corpus must contain at least 8 vectors")
-        return
-
-    by_id = {
-        vector.get("id"): vector
-        for vector in vectors
-        if isinstance(vector, dict) and isinstance(vector.get("id"), str)
-    }
     required_vector_ids = {
         "positive-es256",
         "positive-eddsa",
@@ -271,25 +251,6 @@ def check_permit_co_signature_vectors(require_jsonschema: bool, errors: list[str
         "negative-tampered-signature",
         "negative-replay-different-permit",
     }
-    missing_vector_ids = sorted(required_vector_ids - set(by_id))
-    if missing_vector_ids:
-        fail(errors, f"permit co-signature corpus is missing required vectors: {missing_vector_ids}")
-
-    for vector_id, expected_alg in (("positive-es256", -7), ("positive-eddsa", -8)):
-        vector = by_id.get(vector_id, {})
-        assertion = vector.get("claim", {}).get("assertion", {})
-        expected = vector.get("expected", {})
-        if assertion.get("cose_alg") != expected_alg or expected.get("verdict") != "supported":
-            fail(errors, f"permit co-signature vector {vector_id} must support COSE alg {expected_alg}")
-
-    negative_vectors = [
-        vector for vector_id, vector in by_id.items() if vector_id.startswith("negative-")
-    ]
-    negative_reasons = [vector.get("expected", {}).get("reason") for vector in negative_vectors]
-    if any(vector.get("expected", {}).get("verdict") != "disproved" for vector in negative_vectors):
-        fail(errors, "all permit co-signature negative vectors must have verdict disproved")
-    if len(negative_reasons) != len(set(negative_reasons)):
-        fail(errors, "permit co-signature negative vectors must have distinct primary reasons")
 
     required_key_fields = {
         "aaguid",
@@ -306,23 +267,114 @@ def check_permit_co_signature_vectors(require_jsonschema: bool, errors: list[str
         missing = sorted(required_key_fields - set(key_schema.get("required", [])))
         fail(errors, f"permit co-signer key schema is missing required recorded fields: {missing}")
 
-    for vector in vectors:
-        vector_id = vector.get("id", "<missing-id>") if isinstance(vector, dict) else "<invalid>"
-        if not isinstance(vector, dict):
-            fail(errors, f"permit co-signature vector {vector_id} is not an object")
+    for version in ("v1", "v2"):
+        claim_schema = json.loads(
+            (ROOT / f"schemas/permit-co-signature-{version}.schema.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        claim_validator = jsonschema.Draft202012Validator(
+            claim_schema,
+            registry=registry,
+            format_checker=jsonschema.FormatChecker(),
+        )
+        corpus_path = ROOT / f"test-vectors/permit_co_signature/{version}/corpus.json"
+        corpus = json.loads(corpus_path.read_text(encoding="utf-8"))
+        vectors = corpus.get("vectors")
+        if not isinstance(vectors, list) or len(vectors) < 8:
+            fail(errors, f"permit co-signature {version} corpus must contain at least 8 vectors")
             continue
-        for label, validator, instance in (
-            ("claim", claim_validator, vector.get("claim")),
-            ("registered_cose_key", key_validator, vector.get("registered_cose_key")),
-        ):
-            failures = sorted(validator.iter_errors(instance), key=lambda err: list(err.path))
-            if failures:
-                first = failures[0]
-                location = ".".join(str(part) for part in first.path) or "<root>"
+
+        by_id = {
+            vector.get("id"): vector
+            for vector in vectors
+            if isinstance(vector, dict) and isinstance(vector.get("id"), str)
+        }
+        missing_vector_ids = sorted(required_vector_ids - set(by_id))
+        if missing_vector_ids:
+            fail(
+                errors,
+                f"permit co-signature {version} corpus is missing required vectors: "
+                f"{missing_vector_ids}",
+            )
+
+        for vector_id, expected_alg in (("positive-es256", -7), ("positive-eddsa", -8)):
+            vector = by_id.get(vector_id, {})
+            assertion = vector.get("claim", {}).get("assertion", {})
+            expected = vector.get("expected", {})
+            if (
+                assertion.get("cose_alg") != expected_alg
+                or expected.get("verdict") != "supported"
+            ):
                 fail(
                     errors,
-                    f"permit co-signature vector {vector_id} {label} fails schema at {location}: {first.message}",
+                    f"permit co-signature {version} vector {vector_id} "
+                    f"must support COSE alg {expected_alg}",
                 )
+
+        negative_vectors = [
+            vector
+            for vector_id, vector in by_id.items()
+            if vector_id.startswith("negative-")
+        ]
+        negative_reasons = [
+            vector.get("expected", {}).get("reason") for vector in negative_vectors
+        ]
+        if any(
+            vector.get("expected", {}).get("verdict") != "disproved"
+            for vector in negative_vectors
+        ):
+            fail(
+                errors,
+                f"all permit co-signature {version} negative vectors must be disproved",
+            )
+        if len(negative_reasons) != len(set(negative_reasons)):
+            fail(
+                errors,
+                f"permit co-signature {version} negative vectors must have distinct "
+                "primary reasons",
+            )
+
+        for vector in vectors:
+            vector_id = (
+                vector.get("id", "<missing-id>")
+                if isinstance(vector, dict)
+                else "<invalid>"
+            )
+            if not isinstance(vector, dict):
+                fail(
+                    errors,
+                    f"permit co-signature {version} vector {vector_id} is not an object",
+                )
+                continue
+            for label, validator, instance in (
+                ("claim", claim_validator, vector.get("claim")),
+                ("registered_cose_key", key_validator, vector.get("registered_cose_key")),
+            ):
+                failures = sorted(
+                    validator.iter_errors(instance), key=lambda err: list(err.path)
+                )
+                if failures:
+                    first = failures[0]
+                    location = ".".join(str(part) for part in first.path) or "<root>"
+                    fail(
+                        errors,
+                        f"permit co-signature {version} vector {vector_id} {label} "
+                        f"fails schema at {location}: {first.message}",
+                    )
+
+            if version == "v2":
+                decision = vector.get("verification_context", {}).get("permit_decision")
+                if (
+                    not isinstance(decision, dict)
+                    or decision.get("claim_name") != "permit.decision.v1"
+                    or decision.get("verdict") != "supported"
+                ):
+                    fail(
+                        errors,
+                        f"permit co-signature v2 vector {vector_id} lacks a separately "
+                        "supported Permit decision context",
+                    )
 
 
 def main() -> int:

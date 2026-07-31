@@ -27,3 +27,5 @@ jobs:
         run: python tools/check_permit_to_x_artifacts.py
       - name: Verify permit co-signature golden vectors
         run: node test-vectors/permit_co_signature/v1/reference_verify.mjs
+      - name: Verify target-bound permit co-signature golden vectors
+        run: node test-vectors/permit_co_signature/v2/reference_verify.mjs

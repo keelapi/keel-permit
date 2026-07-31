@@ -57,6 +57,7 @@ MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD NOT, RECOMMENDED, MAY
 | `PERMIT_AUDIT_ATTESTATION_BATCH_MISMATCH` | permit v2 signature | The envelope `batch_id` does not match the signed audit-attestation payload. |
 | `PAYLOAD_TYPE_MISMATCH` | permit v2 signature | A v2 signature slot carries or signs a `payload_type` outside the slot's registered domain. |
 | `CO_SIGNATURE_PERMIT_BINDING_MISMATCH` | permit co-signature | The co-signature claim's Permit identity or operation fields do not match the independently verified target Permit. |
+| `CO_SIGNATURE_TARGET_DECISION_UNSUPPORTED` | permit co-signature | A v2 co-signature lacks a separately supported signed Permit-decision claim for its target. |
 | `CO_SIGNATURE_EVIDENCE_MISSING` | permit co-signature | Required claim, target-Permit, registered-key, or enclosing signed-pack evidence is absent. |
 | `CO_SIGNATURE_CREDENTIAL_MISMATCH` | permit co-signature | The assertion credential ID does not match the registered co-signer key record. |
 | `CO_SIGNATURE_ALGORITHM_MISMATCH` | permit co-signature | The assertion algorithm does not match the registered COSE key, key type, or curve. |
@@ -225,6 +226,7 @@ reason.
 | Code | Verdict | Trigger |
 |---|---|---|
 | `CO_SIGNATURE_PERMIT_BINDING_MISMATCH` | `disproved` | `permit_id`, `permit_canonical_hash`, `action`, `resource`, or `modality` in the claim differs from the independently verified target-Permit context. This is the cross-Permit replay reason. |
+| `CO_SIGNATURE_TARGET_DECISION_UNSUPPORTED` | `insufficient_evidence` | A v2 claim's target `permit.decision.v1` evidence is missing or does not have a `supported` verdict. |
 | `CO_SIGNATURE_EVIDENCE_MISSING` | `insufficient_evidence` | The claim, independently verified target-Permit context, registered co-signer key, or signed pack material needed to trust them is absent. |
 | `CO_SIGNATURE_CREDENTIAL_MISMATCH` | `disproved` | The assertion `credential_id` differs from the registered key record's credential ID. |
 | `CO_SIGNATURE_ALGORITHM_MISMATCH` | `disproved` | The envelope `cose_alg` differs from the registered key's `cose_alg`, or the decoded COSE key type/curve does not match that algorithm. |
