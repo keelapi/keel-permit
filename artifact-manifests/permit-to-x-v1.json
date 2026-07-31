@@ -146,6 +146,41 @@
       "id": "permit-to-x.test-vectors.action-classification-derivation.v1",
       "path": "test-vectors/action_classification_derivation/v1/corpus.json",
       "sha256": "4747d329231f4a520c3c5bbd962568f77f08e72713191d125bfc03cc7686e4d2"
+    },
+    {
+      "id": "keel.verifier_claim_registry.v1",
+      "path": "claim_registry/v1.json",
+      "sha256": "53a79b26487030b10b6a74532b57a9a90da0aa15ce23f2215e9aa8dc9d8c51df"
+    },
+    {
+      "id": "keel.permit.co_signature.v2.schema",
+      "path": "schemas/permit-co-signature-v2.schema.json",
+      "sha256": "bbd2fe0a44a279536a867ffbefcf0977205b1543bacc5257b521043eb3a98798"
+    },
+    {
+      "id": "keel.permit.co_signature.quorum.v1.schema",
+      "path": "schemas/permit-co-signature-quorum-v1.schema.json",
+      "sha256": "f886faa80a0dfc9a0a5d6a24142a6933e27096232c258ff907640d2081b8cddd"
+    },
+    {
+      "id": "permit-to-x.test-vectors.permit-co-signature.v2",
+      "path": "test-vectors/permit_co_signature/v2/corpus.json",
+      "sha256": "85acd8a95a52232ff25de5d6a4f738cdab13ba88f5ce276098ed6790b358193a"
+    },
+    {
+      "id": "keel.permit.co_signature.v2",
+      "path": "semantics/permit/co_signature_v2.json",
+      "sha256": "8ea4807e1b4d4afc41e8bdd132015557e2f16ff33c1ca0d76268ad773c00550a"
+    },
+    {
+      "id": "keel.permit.co_signature.quorum.v1",
+      "path": "semantics/permit/co_signature_quorum_v1.json",
+      "sha256": "2fa6355456889aeab2feb4c1d80a73e2555a9cb0d6d3f06c2bf8d7ace15986aa"
+    },
+    {
+      "id": "keel.permit.exact_action.v1",
+      "path": "semantics/permit/exact_action_v1.json",
+      "sha256": "4c4afcb48f29b77144eedaae4a63f9187303d35a7f7aa5def02d4bbf26fac174"
     }
   ]
 }

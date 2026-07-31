@@ -46,6 +46,17 @@
         -8
       ],
       "reference_verifier": "permit_co_signature/v1/reference_verify.mjs"
+    },
+    "permit.co_signature.v2": {
+      "path": "permit_co_signature/v2/corpus.json",
+      "status": "golden",
+      "vector_count": 9,
+      "supported_cose_algorithms": [
+        -7,
+        -8
+      ],
+      "reference_verifier": "permit_co_signature/v2/reference_verify.mjs",
+      "target_source": "separately_supported_permit.decision.v1"
     }
   },
   "categories": [

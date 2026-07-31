@@ -4,6 +4,19 @@
 operation using a registered WebAuthn credential. It is an additive verifier
 claim contract. It does not add a field to Permit v1 or Permit v2.
 
+> **Published target-binding limitation.** The v1 ceremony proves possession
+> of the registered credential and binds the assertion challenge to the
+> `permit_canonical_hash` supplied to that ceremony. It does not define a
+> self-contained, signed source from which an offline verifier can derive the
+> target Permit. A v1 verifier MUST NOT elevate an unsigned export-record
+> projection of Permit identity, action, resource, modality, or canonical hash
+> into independently verified target context. When no separately verified
+> target context is available, v1 can establish ceremony, registered-key, and
+> enclosing-pack integrity only; target binding is
+> `insufficient_evidence`. New producers MUST use
+> [`permit.co_signature.v2`](permit-co-signature-v2.md), which binds directly
+> to a separately verified signed Permit-decision canonical hash.
+
 The assertion is a WebAuthn assertion. It is **not** a signature over raw
 canonical Permit bytes and it is **not** necessarily Ed25519. A conforming
 verifier verifies the authenticator-signed byte sequence and supports the COSE
@@ -105,9 +118,11 @@ distinguishes replay of an otherwise valid assertion onto a different Permit
 from a malformed challenge produced for the correct Permit.
 
 The claim proves that the registered credential signed the challenge under the
-verified WebAuthn ceremony constraints. It does not by itself prove a
-hardware-bound credential, an independently rooted identity, notarization, or
-third-party independence.
+verified WebAuthn ceremony constraints. Target binding is supported only when
+the target context was independently verified outside this claim; an unsigned
+Permit projection inside the same pack is not sufficient. The claim does not
+by itself prove a hardware-bound credential, an independently rooted identity,
+notarization, witnessing, or third-party independence.
 
 ## 6. Offline pack binding
 
@@ -129,42 +144,46 @@ challenge hash would be circular.
 The Phase 0 reference verifier is intentionally a protocol-unit harness. Its
 vector inputs treat the target-Permit context and registered COSE key record as
 already trusted so it can prove the WebAuthn reconstruction and binding rules
-without implementing an evidence-pack verifier.
+without implementing an evidence-pack verifier. This harness assumption MUST
+NOT be copied into an offline evidence-pack verifier.
 
 ## 7. Normative verification
 
-A verifier receives the claim, the target-Permit context, the registered
+A verifier receives the claim, an independently verified target-Permit
+context, the registered
 co-signer key record, the expected RP ID, an allowed-origin set, and the
 effective `require_user_verification` value. It MUST apply these checks in
 order:
 
 1. Validate the closed claim and envelope shapes.
-2. Compare the claim's Permit binding fields (`permit_id`,
+2. Require evidence that the target-Permit context was independently verified.
+   A target copied from an unsigned export record does not satisfy this step.
+3. Compare the claim's Permit binding fields (`permit_id`,
    `permit_canonical_hash`, `action`, `resource`, and `modality`) with the
    independently verified target-Permit context.
-3. Resolve `key_id`; require `credential_id` and `cose_alg` to equal the
+4. Resolve `key_id`; require `credential_id` and `cose_alg` to equal the
    registered key record.
-4. Base64url-decode the exact `client_data_json` bytes and parse them as UTF-8
+5. Base64url-decode the exact `client_data_json` bytes and parse them as UTF-8
    JSON without changing the bytes.
-5. Require `clientDataJSON.type == "webauthn.get"`.
-6. Require the challenge equality from section 4.
-7. Require `clientDataJSON.origin` to equal one member of the configured
+6. Require `clientDataJSON.type == "webauthn.get"`.
+7. Require the challenge equality from section 4.
+8. Require `clientDataJSON.origin` to equal one member of the configured
    allowed-origin set. Origins are serialized origins and are compared exactly;
    prefix, suffix, path, and wildcard matching are forbidden.
-8. Decode `authenticator_data`; require at least 37 bytes. Require bytes
+9. Decode `authenticator_data`; require at least 37 bytes. Require bytes
    `0..31` (`rpIdHash`) to equal `SHA-256(UTF-8(rp_id))`.
-9. Parse the flags byte at index 32. Require UP (`0x01`) to be set. Require UV
+10. Parse the flags byte at index 32. Require UP (`0x01`) to be set. Require UV
    (`0x04`) when `require_user_verification` is true; omission of that policy
    field means true.
-10. Require the registered COSE key's `alg`, key type, and curve to match the
+11. Require the registered COSE key's `alg`, key type, and curve to match the
     declared `cose_alg` profile in section 2.
-11. Construct the signed bytes without canonicalization or reserialization:
+12. Construct the signed bytes without canonicalization or reserialization:
 
     ```text
     decoded_authenticator_data || SHA-256(decoded_client_data_json)
     ```
 
-12. Verify the decoded assertion signature over those bytes against the
+13. Verify the decoded assertion signature over those bytes against the
     registered COSE public key.
 
 BE (`0x08`), BS (`0x10`), and the big-endian `signCount` at bytes `33..36` MAY

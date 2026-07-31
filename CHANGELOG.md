@@ -6,6 +6,14 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
+- Publish the `permit.co_signature.v1` offline target-source limitation and add
+  target-bound `permit.co_signature.v2` plus
+  `permit.co_signature.quorum.v1`.
+- Add `verifier-claims.v1` without reinterpreting frozen v0 evidence packs.
+- Define `permit.exact_action.v1` so exact semantic and fact evidence must be
+  covered by a separately supported signed Permit decision.
+- Add executable v2 WebAuthn vectors, including a valid-assertion false-target
+  case, and fail-loud CI validation.
 - Add semantic selector registry v3 with an optional, trusted
   `fact_profile_id` association.
 - Add `keel.fact_profile_registry.v1` and the first eligible profile,
