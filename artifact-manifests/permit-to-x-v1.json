@@ -150,7 +150,7 @@
     {
       "id": "keel.verifier_claim_registry.v1",
       "path": "claim_registry/v1.json",
-      "sha256": "53a79b26487030b10b6a74532b57a9a90da0aa15ce23f2215e9aa8dc9d8c51df"
+      "sha256": "ff3fee0993fefb4456e97380f44e23ccf43fc175c8f12c78645cb6b39b2250b2"
     },
     {
       "id": "keel.permit.co_signature.v2.schema",
@@ -181,6 +181,31 @@
       "id": "keel.permit.exact_action.v1",
       "path": "semantics/permit/exact_action_v1.json",
       "sha256": "4c4afcb48f29b77144eedaae4a63f9187303d35a7f7aa5def02d4bbf26fac174"
+    },
+    {
+      "id": "keel.authority.edge_revocation.v1",
+      "path": "semantics/permit/authority_edge_revocation_v1.json",
+      "sha256": "226c7261d98458aa40a14b89b9386ab310774afbcb6486cd3332253db670c289"
+    },
+    {
+      "id": "keel.authority.root_status_temporal.v1",
+      "path": "semantics/permit/authority_root_status_temporal_v1.json",
+      "sha256": "212f5d14d8604518c88de8bec32f7ccf6f8b130d7f1d6ebf762deb830984a3c0"
+    },
+    {
+      "id": "keel.authority.root_status_temporal.v2",
+      "path": "semantics/permit/authority_root_status_temporal_v2.json",
+      "sha256": "b3910d837d2ac5e11bb931657afaec7b37fc84e0b427a77cee8f403ea8c8b0bd"
+    },
+    {
+      "id": "keel.checkpoint.tsa_chain.v1",
+      "path": "semantics/checkpoint/tsa_chain_v1.json",
+      "sha256": "f89f756fbb7f27f14267d2279075875d2bf094b57f5002d0c058c1229b64c2e1"
+    },
+    {
+      "id": "keel.rail.settlement_reconciled.v1",
+      "path": "semantics/rail/settlement_reconciled_v1.json",
+      "sha256": "0cbbd2760072cf267e9decc1b884c2c089a37ccbedf8e0d981d18d510c12d42c"
     }
   ]
 }

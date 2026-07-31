@@ -93,5 +93,22 @@ signature. Missing signed requirement coverage, trusted group expansion,
 target decision, or enough signatures is `insufficient_evidence`.
 Unsupported requirement or identity semantics are `unverifiable_scope`.
 
+The interoperable signed-resource-attribute carrier for step 3 is
+`permit_co_signature_requirement_v1`:
+
+```json
+{
+  "permit_co_signature_requirement_v1": {
+    "requirement": { "...": "the exact require_co_signature object" },
+    "requirement_canonicalization": "rfc8785",
+    "requirement_digest": "sha256:<lowercase-hex>"
+  }
+}
+```
+
+The whole carrier MUST be inside the exact `resource_attributes_json` whose
+canonical hash is covered by the separately supported Permit decision.
+An unsigned export-only copy does not satisfy this requirement.
+
 Approver quorum is pre-execution and may gate executability. Witness quorum is
 post-execution and never grants or changes authority.
