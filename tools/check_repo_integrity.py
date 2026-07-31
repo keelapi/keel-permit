@@ -215,6 +215,13 @@ def check_version_metadata(errors: list[str]) -> None:
         fail(errors, "test-vectors/MANIFEST.json permit_spec_version is missing")
     elif not SEMVER_RE.fullmatch(permit_spec_version):
         fail(errors, f"test-vectors/MANIFEST.json permit_spec_version is not semver-like: {permit_spec_version!r}")
+    elif status_match and permit_spec_version != status_match.group(1):
+        fail(
+            errors,
+            "test-vectors/MANIFEST.json permit_spec_version "
+            f"{permit_spec_version} does not match README spec version "
+            f"{status_match.group(1)}",
+        )
 
 
 def check_examples_against_schemas(require_jsonschema: bool, errors: list[str]) -> None:

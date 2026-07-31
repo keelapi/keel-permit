@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import base64
 import copy
 import hashlib
 import json
@@ -27,6 +28,22 @@ WORK_CLAIMS = {
     "permit.work_child_containment.v1",
     "permit_chain.execution_authorized_at_boundary.v1",
     "permit.work_value_conservation.v1",
+}
+UNIVERSAL_CLAIMS = {
+    "permit.type.v1",
+    "permit.exact_target.v1",
+    "permit.material_request.v1",
+    "permit.valid_at_dispatch.v1",
+    "permit.revocation_at_dispatch.v1",
+    "permit.enforced_at_certified_boundary.v1",
+    "permit.bounded_use.v1",
+    "permit.single_use.v1",
+    "permit.replay_prevented.v1",
+    "permit.idempotency_bound.v1",
+    "provider.receipt_state.v1",
+    "provider.rejected.v1",
+    "provider.accepted.v1",
+    "provider.completed.v1",
 }
 TRUSTED_SOURCE_KINDS = {
     "work_request_server_reconciled",
@@ -64,6 +81,22 @@ def digest(value: Any) -> str:
     return "sha256:" + hashlib.sha256(canonical_bytes(value)).hexdigest()
 
 
+def one_entry(
+    values: list[dict[str, Any]],
+    *,
+    key: str,
+    expected: str,
+) -> dict[str, Any]:
+    matches = [
+        value
+        for value in values
+        if isinstance(value, dict) and value.get(key) == expected
+    ]
+    if len(matches) != 1:
+        raise ContractFailure(f"expected exactly one {key}={expected}")
+    return matches[0]
+
+
 def schema_registry() -> Registry:
     registry = Registry()
     schema_paths = list((ROOT / "schemas").glob("*.schema.json"))
@@ -74,6 +107,7 @@ def schema_registry() -> Registry:
             ROOT / "semantic_registry/v3.schema.json",
             ROOT / "presentation_registry/v1.schema.json",
             ROOT / "fact_profiles/v1.schema.json",
+            ROOT / "fact_profiles/v2.schema.json",
         ]
     )
     for path in sorted(schema_paths):
@@ -648,6 +682,385 @@ def validate_claim_contracts() -> None:
             raise ContractFailure(f"{path} does not bind claim {claim_name}")
 
 
+def validate_universal_verification_contract(registry: Registry) -> None:
+    """Validate the composable S1 contract and its cross-repository corpus."""
+
+    claims_v1_path = ROOT / "claim_registry/v1.json"
+    claims_v1 = load_json("claim_registry/v1.json")
+    claims_v2 = load_json("claim_registry/v2.json")
+    extension = claims_v2.get("extends")
+    if not isinstance(extension, dict):
+        raise ContractFailure("claim_registry/v2.json must pin a base registry")
+    if extension.get("artifact_id") != "keel.verifier_claim_registry.v1":
+        raise ContractFailure("claim_registry/v2.json extends the wrong artifact")
+    if extension.get("version") != claims_v1.get("version"):
+        raise ContractFailure("claim_registry/v2.json extends the wrong base version")
+    if extension.get("sha256") != _sha256_file(claims_v1_path).removeprefix(
+        "sha256:"
+    ):
+        raise ContractFailure("claim_registry/v2.json has a stale base digest")
+
+    base_claims = claims_v1.get("claims")
+    added_claims = claims_v2.get("claims")
+    if not isinstance(base_claims, list) or not isinstance(added_claims, list):
+        raise ContractFailure("claim registries must contain claim arrays")
+    base_names = [
+        claim.get("name") for claim in base_claims if isinstance(claim, dict)
+    ]
+    added_names = [
+        claim.get("name") for claim in added_claims if isinstance(claim, dict)
+    ]
+    if len(base_names) != len(set(base_names)):
+        raise ContractFailure("claim_registry/v1.json contains duplicate claims")
+    if len(added_names) != len(set(added_names)):
+        raise ContractFailure("claim_registry/v2.json contains duplicate additions")
+    overlap = sorted(set(base_names).intersection(added_names))
+    if overlap:
+        raise ContractFailure(
+            f"claim_registry/v2.json redefines base claims: {overlap}"
+        )
+    if set(added_names) != UNIVERSAL_CLAIMS:
+        missing = sorted(UNIVERSAL_CLAIMS - set(added_names))
+        extra = sorted(set(added_names) - UNIVERSAL_CLAIMS)
+        raise ContractFailure(
+            f"claim_registry/v2.json universal claim mismatch; "
+            f"missing={missing}, extra={extra}"
+        )
+    if set(claims_v2.get("verdict_enum", [])) != VERDICTS:
+        raise ContractFailure("claim_registry/v2.json changed the stable verdict enum")
+    for claim in added_claims:
+        if set(claim.get("verdict_enum", [])) != VERDICTS:
+            raise ContractFailure(
+                f"{claim.get('name')} changed the stable verdict enum"
+            )
+        if not claim.get("does_not_establish"):
+            raise ContractFailure(
+                f"{claim.get('name')} lacks claim-level does_not_establish"
+            )
+
+    fact_registry = load_json("fact_profiles/v2.json")
+    validate_instance(
+        fact_registry,
+        "fact_profiles/v2.schema.json",
+        registry,
+        "fact profile registry v2",
+    )
+    semantic_ids = {
+        entry["semantic_id"]
+        for entry in load_json("semantic_registry/v3.json")["entries"]
+    }
+    safe_low_entropy_methods = {
+        "keel.salted_sha256_jcs.v1",
+        "keel.randomized_sha256_jcs.v1",
+        "keel.hmac_sha256_jcs.v1",
+        "keel.opaque_reference.v1",
+    }
+    sensitive_classes = {
+        "personal_data",
+        "sensitive_data",
+        "secret",
+        "free_text",
+    }
+    for profile in fact_registry["profiles"]:
+        if profile["facts_schema_digest"] != _sha256_file(
+            ROOT / profile["facts_schema"]
+        ):
+            raise ContractFailure(
+                f"{profile['fact_profile_id']} v2 facts schema digest is stale"
+            )
+        unknown_semantics = sorted(set(profile["semantic_ids"]) - semantic_ids)
+        if unknown_semantics:
+            raise ContractFailure(
+                f"{profile['fact_profile_id']} v2 references unknown semantics: "
+                f"{unknown_semantics}"
+            )
+        fields = {field["path"]: field for field in profile["fields"]}
+        if len(fields) != len(profile["fields"]):
+            raise ContractFailure(
+                f"{profile['fact_profile_id']} v2 has duplicate field paths"
+            )
+        referenced_paths = set(profile["target_fact_paths"]).union(
+            profile["material_request_fact_paths"]
+        )
+        missing_paths = sorted(referenced_paths - set(fields))
+        if missing_paths:
+            raise ContractFailure(
+                f"{profile['fact_profile_id']} v2 references unknown paths: "
+                f"{missing_paths}"
+            )
+        for path in referenced_paths:
+            if not fields[path]["required_for_authorization"]:
+                raise ContractFailure(
+                    f"{profile['fact_profile_id']} v2 exact path {path} is optional"
+                )
+        for field in fields.values():
+            if (
+                field["classification"] in sensitive_classes
+                and field["low_entropy_possible"]
+                and field["commitment_method"] not in safe_low_entropy_methods
+            ):
+                raise ContractFailure(
+                    f"{profile['fact_profile_id']} v2 field {field['path']} "
+                    "uses an unsafe low-entropy representation"
+                )
+            if (
+                field["retention"]["erasable"]
+                and field["retention"]["erasure_action"] == "retain_signed_value"
+            ):
+                raise ContractFailure(
+                    f"{profile['fact_profile_id']} v2 field {field['path']} "
+                    "marks retained signed bytes erasable"
+                )
+
+    semantics = load_json("semantics/permit/universal_verification_v1.json")
+    body = semantics.get("body")
+    if not isinstance(body, dict):
+        raise ContractFailure("universal verification semantics body is missing")
+    claim_order = body.get("claim_order")
+    if not isinstance(claim_order, list):
+        raise ContractFailure("universal verification claim_order is missing")
+    if len(claim_order) != len(set(claim_order)):
+        raise ContractFailure("universal verification claim_order has duplicates")
+    if set(claim_order) != UNIVERSAL_CLAIMS.union({"permit.decision.v1"}):
+        raise ContractFailure(
+            "universal verification claim_order does not cover the contract"
+        )
+
+    corpus = load_json("test-vectors/universal_verification/v1/corpus.json")
+    if set(corpus.get("required_claims", [])) != UNIVERSAL_CLAIMS:
+        raise ContractFailure("universal vector corpus has stale required claims")
+    for contract_path in corpus.get("contracts", {}).values():
+        resolved = (
+            ROOT
+            / "test-vectors/universal_verification/v1"
+            / contract_path
+        ).resolve()
+        if not resolved.is_file():
+            raise ContractFailure(
+                f"universal vector corpus references missing contract {contract_path}"
+            )
+
+    schema_instances = corpus.get("schema_instances")
+    if not isinstance(schema_instances, dict):
+        raise ContractFailure("universal vector corpus lacks schema instances")
+    instance_schemas = {
+        "semantic_binding": "schemas/permit-semantic-binding-v2.schema.json",
+        "adapter_certification": "schemas/adapter-certification-v1.schema.json",
+        "deployment_assurance": "schemas/deployment-assurance-v1.schema.json",
+        "runtime_enforcement_proof": "schemas/runtime-enforcement-proof-v1.schema.json",
+        "bounded_use": "schemas/permit-bounded-use-v1.schema.json",
+        "selective_disclosure": "schemas/permit-selective-disclosure-v1.schema.json",
+        "provider_receipt": "schemas/provider-receipt-v1.schema.json",
+    }
+    for instance_name, schema_path in instance_schemas.items():
+        validate_instance(
+            schema_instances.get(instance_name),
+            schema_path,
+            registry,
+            f"universal schema instance {instance_name}",
+        )
+
+    selector_registry = load_json("semantic_registry/v3.json")
+    selector_entry = one_entry(
+        selector_registry["entries"],
+        key="semantic_id",
+        expected="keel.action.payment_execute.v1",
+    )
+    fact_profile = one_entry(
+        fact_registry["profiles"],
+        key="fact_profile_id",
+        expected="keel.facts.payment_exact.v1",
+    )
+    payment_facts = load_json("fact_profiles/test-vectors/v1.json")["vectors"][0][
+        "facts"
+    ]
+    universal_semantics = load_json(
+        "semantics/permit/universal_verification_v1.json"
+    )
+
+    def artifact_pin(
+        *,
+        artifact_id: str,
+        version: str,
+        path: str,
+    ) -> dict[str, Any]:
+        content = (ROOT / path).read_bytes()
+        return {
+            "artifact_id": artifact_id,
+            "version": version,
+            "sha256": "sha256:" + hashlib.sha256(content).hexdigest(),
+            "media_type": "application/json",
+            "content_base64": base64.b64encode(content).decode("ascii"),
+        }
+
+    exact_pack = {
+        "profile": "keel.permit_exact/v2",
+        "profile_version": 2,
+        "generated_at": "2026-07-30T12:30:00Z",
+        "permit_id": "permit_test",
+        "project_id": "project_test",
+        "declared_claims": ["permit.type.v1"],
+        "semantic_binding": schema_instances["semantic_binding"],
+        "authorization_facts": payment_facts,
+        "contract_pins": {
+            "claim_registry": artifact_pin(
+                artifact_id="keel.verifier_claim_registry.v2",
+                version=claims_v2["version"],
+                path="claim_registry/v2.json",
+            ),
+            "semantic_selector_registry": artifact_pin(
+                artifact_id="keel.permit.semantic_selector_registry.v3",
+                version=selector_registry["version"],
+                path="semantic_registry/v3.json",
+            ),
+            "semantic_selector_entry_digest": digest(selector_entry),
+            "fact_profile_registry": artifact_pin(
+                artifact_id="keel.permit.fact_profile_registry.v2",
+                version=fact_registry["version"],
+                path="fact_profiles/v2.json",
+            ),
+            "fact_profile_entry_digest": digest(fact_profile),
+            "authorization_facts_schema": artifact_pin(
+                artifact_id="keel.permit.payment_exact_facts.v1.schema",
+                version="keel.payment_exact_facts.v1",
+                path="schemas/payment-exact-facts-v1.schema.json",
+            ),
+            "universal_semantics": artifact_pin(
+                artifact_id="keel.permit.universal_verification.v1",
+                version=universal_semantics["version"],
+                path="semantics/permit/universal_verification_v1.json",
+            ),
+        },
+        "permit_decision": {"claim_name": "permit.decision.v1"},
+        "permit_receipt": {"action": {"resource_attributes_json": {}}},
+        "decision_state": {"decision": "allow", "status": "active"},
+        "review_transition": {"status": "not_present"},
+        "enforcement_evidence": None,
+        "bounded_use_transitions": [],
+        "provider_receipts": [],
+        "selective_disclosures": [],
+        "scope_evidence": [],
+        "does_not_establish": [
+            "dispatch",
+            "provider acceptance",
+            "external real-world outcome",
+        ],
+    }
+    validate_instance(
+        exact_pack,
+        "schemas/permit-exact-pack-v2.schema.json",
+        registry,
+        "universal exact pack",
+    )
+    for pin_name, pin in exact_pack["contract_pins"].items():
+        if not isinstance(pin, dict) or "content_base64" not in pin:
+            continue
+        content = base64.b64decode(pin["content_base64"], validate=True)
+        actual = "sha256:" + hashlib.sha256(content).hexdigest()
+        if actual != pin["sha256"]:
+            raise ContractFailure(
+                f"universal exact pack pin {pin_name} has a stale digest"
+            )
+        parsed = json.loads(content)
+        if not isinstance(parsed, dict):
+            raise ContractFailure(
+                f"universal exact pack pin {pin_name} is not a JSON object"
+            )
+
+    invalid_instances = []
+    missing_anti_bypass = copy.deepcopy(schema_instances["adapter_certification"])
+    missing_anti_bypass.pop("anti_bypass_requirements")
+    invalid_instances.append(
+        (
+            missing_anti_bypass,
+            instance_schemas["adapter_certification"],
+            "adapter certification missing anti-bypass requirements",
+        )
+    )
+    missing_pre_effect = copy.deepcopy(schema_instances["runtime_enforcement_proof"])
+    missing_pre_effect.pop("pre_effect")
+    invalid_instances.append(
+        (
+            missing_pre_effect,
+            instance_schemas["runtime_enforcement_proof"],
+            "runtime proof missing pre-effect marker",
+        )
+    )
+    invalid_first_transition = copy.deepcopy(schema_instances["bounded_use"])
+    invalid_first_transition["previous_transition_digest"] = (
+        "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    )
+    invalid_instances.append(
+        (
+            invalid_first_transition,
+            instance_schemas["bounded_use"],
+            "first bounded-use transition has a predecessor",
+        )
+    )
+    transport_acceptance = copy.deepcopy(schema_instances["provider_receipt"])
+    transport_acceptance["source_class"] = "keel_transport_observation"
+    invalid_instances.append(
+        (
+            transport_acceptance,
+            instance_schemas["provider_receipt"],
+            "transport observation claims acceptance",
+        )
+    )
+    for instance, schema_path, label in invalid_instances:
+        schema = load_json(schema_path)
+        validator = jsonschema.Draft202012Validator(
+            schema,
+            registry=registry,
+            format_checker=jsonschema.FormatChecker(),
+        )
+        if not list(validator.iter_errors(instance)):
+            raise ContractFailure(f"universal negative schema vector passed: {label}")
+
+    vectors = corpus.get("vectors")
+    if not isinstance(vectors, list) or len(vectors) < 20:
+        raise ContractFailure(
+            "universal vector corpus must contain at least 20 behavioral vectors"
+        )
+    vector_ids = [
+        vector.get("id") for vector in vectors if isinstance(vector, dict)
+    ]
+    if len(vector_ids) != len(set(vector_ids)):
+        raise ContractFailure("universal vector corpus contains duplicate ids")
+    covered_claims = {
+        vector.get("claim") for vector in vectors if isinstance(vector, dict)
+    }
+    required_vector_claims = {
+        "permit.type.v1",
+        "permit.exact_target.v1",
+        "permit.material_request.v1",
+        "permit.valid_at_dispatch.v1",
+        "permit.revocation_at_dispatch.v1",
+        "permit.enforced_at_certified_boundary.v1",
+        "permit.bounded_use.v1",
+        "permit.single_use.v1",
+        "permit.replay_prevented.v1",
+        "permit.idempotency_bound.v1",
+        "provider.rejected.v1",
+        "provider.accepted.v1",
+        "provider.completed.v1",
+    }
+    missing_vector_claims = sorted(required_vector_claims - covered_claims)
+    if missing_vector_claims:
+        raise ContractFailure(
+            f"universal vector corpus misses claims: {missing_vector_claims}"
+        )
+    for vector in vectors:
+        expected = vector.get("expected")
+        if not isinstance(expected, dict) or expected.get("verdict") not in VERDICTS:
+            raise ContractFailure(
+                f"universal vector {vector.get('id')} lacks a stable verdict"
+            )
+        if not isinstance(expected.get("reason"), str):
+            raise ContractFailure(
+                f"universal vector {vector.get('id')} lacks a reason code"
+            )
+
+
 def validate_artifact_manifest() -> None:
     manifest = load_json("artifact-manifests/permit-to-x-v1.json")
     if manifest.get("version") != "keel.permit_to_x_artifact_manifest.v1":
@@ -711,6 +1124,7 @@ def main() -> int:
         validate_fact_profiles(registry)
         validate_work_contract(registry)
         validate_claim_contracts()
+        validate_universal_verification_contract(registry)
         validate_artifact_manifest()
         validate_spec_document_pins()
     except (ContractFailure, jsonschema.SchemaError) as exc:
