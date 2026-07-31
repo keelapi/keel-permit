@@ -6,6 +6,28 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
+## [1.10.0] — 2026-07-30
+
+- Add `verifier-claims.v2` as a composable, digest-pinned extension of the
+  immutable v1 registry.
+- Define structured claims for specific Permit type, exact target, material
+  request, execution-time validity, revocation, certified enforcement,
+  bounded/single use, replay, idempotency, and provider receipt states.
+- Add consequence-neutral semantic binding v2 and strict
+  `keel.permit_exact/v2` evidence-pack body with exact embedded contract bytes.
+- Add fact-profile registry v2 with operative disclosure audiences, retention,
+  erasure behavior, and low-entropy privacy safeguards.
+- Add signed adapter-certification, deployment-assurance, runtime-enforcement,
+  and bounded-use schemas with digest binding, expiry, and revocation.
+- Separate provider rejection, acceptance, completion, and external-outcome
+  ceilings through a reusable provider-receipt state machine.
+- Add the minimum cross-repository behavioral corpus and fail-loud integrity
+  checks for every new contract surface.
+- Preserve all version-pinned v0/v1 claim, fact-profile, semantic, and evidence
+  behavior without silent reinterpretation.
+
+## [1.9.1] — 2026-07-30
+
 - Carry every verifier claim and pinned semantic recipe already implemented by
   keel-verifier into `verifier-claims.v1`, closing release-source parity for
   TSA-chain, temporal authority, edge-revocation, and settlement adjudication.
@@ -31,6 +53,12 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 - Define `permit.review_transition.v1` and its signed transition semantics so a
   verifier can link an issuance-time challenge to a later approved or denied
   review outcome without re-issuing the original Permit.
+
+## [1.9.0] — 2026-07-30
+
+- Publish the initial corrected co-signature and exact-action contract set.
+- Superseded before downstream consumption by v1.9.1 because the v1 claim
+  registry did not yet preserve the full released verifier-claim superset.
 
 ## [1.8.0] — 2026-07-21
 

@@ -3,8 +3,8 @@
   "$id": "https://github.com/keelapi/keel-permit/blob/main/test-vectors/MANIFEST.json",
   "title": "Permit Spec — Test Vector Manifest",
   "test_vectors_version": "0.1.0-draft",
-  "permit_spec_version": "1.0.0",
-  "generated_at": "2026-05-10",
+  "permit_spec_version": "1.10.0",
+  "generated_at": "2026-07-30",
   "capabilities": {
     "permit_binding_versions": {
       "supported": [
@@ -57,6 +57,14 @@
       ],
       "reference_verifier": "permit_co_signature/v2/reference_verify.mjs",
       "target_source": "separately_supported_permit.decision.v1"
+    },
+    "permit.universal_verification.v1": {
+      "path": "universal_verification/v1/corpus.json",
+      "status": "contract",
+      "vector_count": 20,
+      "claim_registry": "verifier-claims.v2",
+      "fact_profile_registry": "keel.fact_profile_registry.v2",
+      "note": "Normalized cross-repository behavior is necessary but not sufficient; verifier releases also run raw-pack cryptographic and historical corpora."
     }
   },
   "categories": [

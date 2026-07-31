@@ -325,11 +325,43 @@ claim and do not change the v0 verdict enum.
 | `WORK_ARTIFACT_INTEGRITY_INVALID` | `disproved` | A referenced Work artifact is absent, duplicated, type-mismatched, or its embedded payload does not match the declared digest. |
 | `WORK_VERSION_UNSUPPORTED` | `unverifiable_scope` | A WorkPackage, authority, child binding, value-event, comparator, scope commitment, or claim recipe version is not supported. |
 
-## 16. Code stability
+## 16. Universal Permit Verification Codes
+
+These codes apply to `keel.permit.universal_verification.v1` and the
+`verifier-claims.v2` additions.
+
+| Code | Verdict | Trigger |
+|---|---|---|
+| `UNIVERSAL_REGISTRY_UNRESOLVED` | `unverifiable_scope` | A declared claim, fact-profile, schema, semantic, or base-registry artifact cannot be resolved by exact identity, version, and digest. |
+| `UNIVERSAL_REGISTRY_DIGEST_MISMATCH` | `disproved` | A present pinned contract artifact does not match its declared digest. |
+| `UNIVERSAL_DUPLICATE_CLAIM` | `disproved` | A composable claim-registry chain defines the same claim name more than once. |
+| `PERMIT_TYPE_UNRESOLVED` | `insufficient_evidence` | The supported signed decision does not resolve to exactly one admitted semantic and required fact profile. |
+| `PERMIT_EXACT_TARGET_MISMATCH` | `disproved` | A required target fact is absent, schema-invalid, unbound, or differs from the signed decision evidence. |
+| `PERMIT_MATERIAL_REQUEST_MISMATCH` | `disproved` | A material request fact or exact request digest differs from dispatch evidence. |
+| `PERMIT_NOT_YET_VALID_AT_DISPATCH` | `disproved` | The trusted dispatch instant precedes Permit issuance. |
+| `PERMIT_EXPIRED_AT_DISPATCH` | `disproved` | The trusted dispatch instant is equal to or later than the signed expiry boundary. |
+| `PERMIT_REVOKED_AT_DISPATCH` | `disproved` | An effective Permit revocation precedes or equals the trusted dispatch instant in the supported declared scope. |
+| `CERTIFICATION_EVIDENCE_MISSING` | `insufficient_evidence` | Adapter certification, deployment assurance, runtime enforcement proof, trust-key evidence, or a required revocation population is absent. |
+| `CERTIFICATION_BINDING_MISMATCH` | `disproved` | Certification, assurance, or runtime proof IDs/digests, project, semantic, surface, adapter, deployment, Permit, dispatch, or exact request identity disagree. |
+| `CERTIFICATION_NOT_ACTIVE_AT_DISPATCH` | `disproved` | Adapter certification or deployment assurance was not yet active, expired, or was effectively revoked at dispatch. |
+| `RUNTIME_ENFORCEMENT_PROOF_INVALID` | `disproved` | The runtime proof signature, canonical hash, pre-effect marker, or gate-result binding is invalid. |
+| `BOUNDED_USE_TRANSITION_INVALID` | `disproved` | A bounded-use transition has invalid arithmetic, sequence, predecessor digest, identity, signature, or canonical hash. |
+| `BOUNDED_USE_LIMIT_EXCEEDED` | `disproved` | `consumed_after` exceeds the signed maximum-use limit. |
+| `SINGLE_USE_POPULATION_MISMATCH` | `disproved` | A single-use claim has a maximum other than one or a supported scope-faithful population with other than exactly one transition. |
+| `PERMIT_REPLAY_DETECTED` | `disproved` | A second accepted dispatch for the same Permit and exact request identity exists in the supported declared scope. |
+| `PERMIT_IDEMPOTENCY_BINDING_MISMATCH` | `disproved` | The committed idempotency identity maps to inconsistent Permit, request, dispatch, or transition identities. |
+| `PROVIDER_RECEIPT_SCHEMA_INVALID` | `disproved` | A supplied provider receipt claims v1 but violates the strict schema. |
+| `PROVIDER_RECEIPT_CHAIN_INVALID` | `disproved` | Receipt sequence, predecessor digest, transition, or identity continuity is invalid. |
+| `PROVIDER_RECEIPT_SOURCE_CEILING` | `disproved` | A source class claims a state it cannot establish, including Keel transport observation claiming acceptance or completion. |
+| `PROVIDER_STATE_EVIDENCE_MISSING` | `insufficient_evidence` | A declared rejection, acceptance, or completion claim lacks authoritative source-specific evidence. |
+| `DISCLOSURE_LOW_ENTROPY_PLAIN_HASH_FORBIDDEN` | `disproved` | A low-entropy personal, sensitive, secret, or free-text fact uses an unsalted plain hash or another non-approved representation. |
+| `DISCLOSURE_OPENING_UNAUTHORIZED` | `disproved` | A cleartext opening lacks an allowed audience, an audit reason, or a matching signed commitment. |
+
+## 17. Code stability
 
 The codes in this document are **stable identifiers**. New codes MAY be added by future spec revisions; existing codes MUST NOT be renamed, repurposed, or removed. A code's literal string is part of the public contract for downstream tooling (alerting, dashboards, automated incident response).
 
-## 17. Verifier output format
+## 18. Verifier output format
 
 This spec does not constrain how a verifier surfaces failure codes — JSON, structured logs, exit codes, human-readable text are all permitted. The MUST is that the literal code strings appear unchanged.
 
