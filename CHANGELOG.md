@@ -6,6 +6,9 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
+- Carry every verifier claim and pinned semantic recipe already implemented by
+  keel-verifier into `verifier-claims.v1`, closing release-source parity for
+  TSA-chain, temporal authority, edge-revocation, and settlement adjudication.
 - Publish the `permit.co_signature.v1` offline target-source limitation and add
   target-bound `permit.co_signature.v2` plus
   `permit.co_signature.quorum.v1`.

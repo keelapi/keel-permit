@@ -75,9 +75,64 @@
           "settlement",
           "external real-world outcome"
         ],
-        "verdict_enum": [
-          "supported",
-          "disproved",
+      "verdict_enum": [
+        "supported",
+        "disproved",
+        "insufficient_evidence",
+        "unverifiable_scope"
+      ]
+    },
+    {
+      "name": "checkpoint.tsa_chain.v1",
+      "assertion": "Checkpoint TSA receipt chain, timestamping purpose, and release-pinned revocation snapshot validate at the RFC 3161 genTime.",
+      "required_evidence": "Checkpoint JSON, TSA receipt(s), release-pinned tsa_trust_bundle_v1 roots/intermediates/CRLs, and OpenSSL 3 TSA chain validation output.",
+      "verdict_enum": [
+        "supported",
+        "disproved",
+        "insufficient_evidence",
+        "unverifiable_scope"
+      ]
+    },
+    {
+      "name": "authority.root_status_temporal.v1",
+      "assertion": "The authority-chain root was not suspended at the relevant dispatch or verification resolution time, as proven from signed root.status.v1 governance-chain evidence for the root principal.",
+      "required_evidence": "Authority chain root principal, signed root.status.v1 governance events for the same project and root principal, permit-binding trust root, resolution_time, and pinned authority root-status temporal semantics.",
+      "verdict_enum": [
+        "supported",
+        "disproved",
+        "insufficient_evidence",
+        "unverifiable_scope"
+      ]
+    },
+    {
+      "name": "authority.root_status_temporal.v2",
+      "assertion": "The authority-chain root was not suspended or terminally disabled at the relevant dispatch or verification resolution time, as proven from signed root.status.v1 pre-disable evidence and signed root.status.v2 disable evidence for the root principal.",
+      "required_evidence": "Authority chain root principal, signed root.status.v1 governance events for restorable pre-disable statuses, signed root.status.v2 events in root_status_v2_events for terminal disable, permit-binding trust root, resolution_time, and pinned authority root-status temporal v2 semantics.",
+      "verdict_enum": [
+        "supported",
+        "disproved",
+        "insufficient_evidence",
+        "unverifiable_scope"
+      ]
+    },
+    {
+      "name": "authority.edge_revocation.v1",
+      "assertion": "An authority edge in the permit authority chain was not revoked at the relevant dispatch or verification resolution time, as proven from signed key.status.v1 governance-chain evidence (key_scope=authority_edge) for the edge digest.",
+      "required_evidence": "Authority chain edges, signed key.status.v1 events (key_scope=authority_edge, status=revoked) for the same project and edge digests, permit-binding trust root, resolution_time, and pinned authority edge-revocation temporal semantics.",
+      "verdict_enum": [
+        "supported",
+        "disproved",
+        "insufficient_evidence",
+        "unverifiable_scope"
+      ]
+    },
+    {
+      "name": "rail.settlement_reconciled.v1",
+      "assertion": "A rail spend's settled amount reconciles within the permit's spend authority against an attested settlement record bound into the Keel receipt for the bound settlement reference (transaction id + network), where the settlement record is sourced from a non-Keel authority (the x402 facilitator's attested settlement for source_class=facilitator_attested, or an on-chain transaction receipt for source_class=chain_read).",
+      "required_evidence": "Permit spend authority (amount_max); the bound settlement reference (transaction, network); the settlement record {success, transaction, network, amount, payer} with its source_class; the reconciliation digest binding the settlement into the execution-record hash; and pinned rail settlement-reconciliation semantics.",
+      "verdict_enum": [
+        "supported",
+        "disproved",
         "insufficient_evidence",
         "unverifiable_scope"
       ]

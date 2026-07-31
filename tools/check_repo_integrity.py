@@ -104,6 +104,51 @@ def check_failure_codes(files: list[Path], errors: list[str]) -> None:
         fail(errors, f"failure code {code} is used in JSON fixtures but not defined in spec/failure-codes.md")
 
 
+def check_claim_registry_v1_superset(errors: list[str]) -> None:
+    """Prevent a successor registry from silently dropping released claims."""
+
+    registries: dict[str, dict[str, Any]] = {}
+    for version in ("v0", "v1"):
+        path = ROOT / "claim_registry" / f"{version}.json"
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except Exception as exc:  # noqa: BLE001 - report parser detail.
+            fail(errors, f"{path.relative_to(ROOT)} could not be loaded: {exc}")
+            return
+        if not isinstance(payload, dict):
+            fail(errors, f"{path.relative_to(ROOT)} must be a JSON object")
+            return
+        registries[version] = payload
+
+    names: dict[str, list[str]] = {}
+    for version, payload in registries.items():
+        raw_claims = payload.get("claims")
+        if not isinstance(raw_claims, list):
+            fail(errors, f"claim_registry/{version}.json claims must be an array")
+            return
+        names[version] = [
+            str(claim.get("name"))
+            for claim in raw_claims
+            if isinstance(claim, dict) and isinstance(claim.get("name"), str)
+        ]
+        duplicates = sorted(
+            name for name in set(names[version]) if names[version].count(name) > 1
+        )
+        if duplicates:
+            fail(
+                errors,
+                f"claim_registry/{version}.json has duplicate claims: {duplicates}",
+            )
+
+    missing = sorted(set(names["v0"]) - set(names["v1"]))
+    if missing:
+        fail(
+            errors,
+            "claim_registry/v1.json must preserve every v0 claim name; "
+            f"missing={missing}",
+        )
+
+
 def check_manifest_summary(errors: list[str]) -> None:
     manifest = json.loads((ROOT / "test-vectors/MANIFEST.json").read_text(encoding="utf-8"))
     categories = manifest["categories"]
@@ -387,6 +432,7 @@ def main() -> int:
     check_json_parse(files, errors)
     check_markdown_links(files, errors)
     check_failure_codes(files, errors)
+    check_claim_registry_v1_superset(errors)
     check_manifest_summary(errors)
     check_version_metadata(errors)
     check_json_schemas_self_validate(args.require_jsonschema, errors)
