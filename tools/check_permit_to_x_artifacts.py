@@ -953,17 +953,16 @@ def validate_universal_verification_contract(registry: Registry) -> None:
                 "permit.type.v1",
                 "permit.exact_target.v1",
                 "permit.material_request.v1",
-                "permit.bounded_use.v1",
-                "permit.single_use.v1",
-                "permit.idempotency_bound.v1",
             )
             if any(verdicts.get(claim) == "disproved" for claim in required):
                 actual = ("disproved", "REFUND_ORIGINAL_PAYMENT_BINDING_MISMATCH")
             elif not all(verdicts.get(claim) == "supported" for claim in required):
                 actual = (
                     "insufficient_evidence",
-                    "REFUND_DISPATCH_BINDING_UNPROVEN",
+                    "REFUND_AUTHORIZATION_BINDING_UNPROVEN",
                 )
+            elif not vector.get("facts_match_signed_limits"):
+                actual = ("disproved", "REFUND_SIGNED_LIMITS_MISMATCH")
             else:
                 actual = ("supported", "REFUND_ORIGINAL_PAYMENT_BOUND")
         else:

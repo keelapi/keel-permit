@@ -42,11 +42,9 @@
       "universal_verdicts": {
         "permit.type.v1": "supported",
         "permit.exact_target.v1": "supported",
-        "permit.material_request.v1": "supported",
-        "permit.bounded_use.v1": "supported",
-        "permit.single_use.v1": "supported",
-        "permit.idempotency_bound.v1": "supported"
+        "permit.material_request.v1": "supported"
       },
+      "facts_match_signed_limits": true,
       "expected": {
         "claim": "permit.refund_original_payment_bound.v1",
         "verdict": "supported",
@@ -54,21 +52,19 @@
       }
     },
     {
-      "id": "refund-use-evidence-missing",
+      "id": "refund-signed-limits-mismatch",
       "semantic_id": "keel.action.payment_refund.v1",
       "fact_profile_id": "keel.facts.refund_exact.v1",
       "universal_verdicts": {
         "permit.type.v1": "supported",
         "permit.exact_target.v1": "supported",
-        "permit.material_request.v1": "supported",
-        "permit.bounded_use.v1": "insufficient_evidence",
-        "permit.single_use.v1": "insufficient_evidence",
-        "permit.idempotency_bound.v1": "insufficient_evidence"
+        "permit.material_request.v1": "supported"
       },
+      "facts_match_signed_limits": false,
       "expected": {
         "claim": "permit.refund_original_payment_bound.v1",
-        "verdict": "insufficient_evidence",
-        "reason": "REFUND_DISPATCH_BINDING_UNPROVEN"
+        "verdict": "disproved",
+        "reason": "REFUND_SIGNED_LIMITS_MISMATCH"
       }
     }
   ]

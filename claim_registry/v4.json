@@ -35,10 +35,12 @@
     },
     {
       "name": "permit.refund_original_payment_bound.v1",
-      "assertion": "The signed AI Permit-to-Refund binds one original-payment commitment, payer commitment, maximum amount, currency, rail, reason commitment, exact request, idempotency identity, expiry, and one-use limit, with a valid bounded-use transition when dispatch evidence is supplied.",
-      "required_evidence": "Supported permit.decision.v1, permit.type.v1, permit.exact_target.v1, permit.material_request.v1, permit.idempotency_bound.v1, permit.bounded_use.v1, and permit.single_use.v1 for keel.action.payment_refund.v1; exact Refund facts; maximum_uses=1 in the signed Permit; and matching exact-request and idempotency identities.",
+      "assertion": "The signed AI Permit-to-Refund binds one original-payment commitment, payer commitment, maximum amount, currency, rail, reason commitment, exact request, idempotency identity, expiry, and one-use limit.",
+      "required_evidence": "Supported permit.decision.v1, permit.type.v1, permit.exact_target.v1, and permit.material_request.v1 for keel.action.payment_refund.v1; schema-valid exact Refund facts; maximum_uses=1 in both the signed facts and signed Permit constraints; and matching signed expiry. Dispatch, bounded use, replay, idempotency-at-dispatch, and provider outcome remain separate claims.",
       "does_not_establish": [
         "independent existence or ownership of the original payment behind the commitment",
+        "dispatch or consumption of the authorized use",
+        "provider-side idempotency",
         "processor acceptance",
         "funds returned or settlement",
         "external real-world outcome"

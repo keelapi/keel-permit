@@ -345,17 +345,17 @@
     {
       "id": "keel.verifier_claim_registry.v4",
       "path": "claim_registry/v4.json",
-      "sha256": "d76217af1e32cf22a593ff0ce0cc97efb6bb72d747daf6b055e4808b34a54039"
+      "sha256": "64b6f11c5cbf1168cff77d1b708018a5a069da00effee81eb27f78c731e63936"
     },
     {
       "id": "keel.permit.universal_verification.v3",
       "path": "semantics/permit/universal_verification_v3.json",
-      "sha256": "0120c0f4c309821e96838c2a2001bc79efdd691c34f29eb33d84b7d7eb2a6eb1"
+      "sha256": "c43a7cac09e217f78f203de7c082f06f2e2282e586d4025b6a84bbc1ce651e9c"
     },
     {
       "id": "permit-to-x.test-vectors.consequence-claims.v1",
       "path": "test-vectors/consequence_claims/v1/corpus.json",
-      "sha256": "3c2189b6bc16d34a774687464d3e2564c38441b011be2a0afca233b6b3526743"
+      "sha256": "64a4c592a035c5dfa67798842f9184094b4b3067d94a2f8c50a134b019f47f17"
     }
   ]
 }
