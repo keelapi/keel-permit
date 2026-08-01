@@ -809,6 +809,104 @@ def validate_universal_verification_contract(registry: Registry) -> None:
                 f"{claim.get('name')} lacks claim-level does_not_establish"
             )
 
+    claims_v3 = load_json("claim_registry/v3.json")
+    extension_v3 = claims_v3.get("extends")
+    if not isinstance(extension_v3, dict):
+        raise ContractFailure("claim_registry/v3.json must pin v2")
+    if extension_v3.get("artifact_id") != "keel.verifier_claim_registry.v2":
+        raise ContractFailure("claim_registry/v3.json extends the wrong artifact")
+    if extension_v3.get("version") != claims_v2.get("version"):
+        raise ContractFailure("claim_registry/v3.json extends the wrong version")
+    if extension_v3.get("sha256") != _sha256_file(
+        ROOT / "claim_registry/v2.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("claim_registry/v3.json has a stale base digest")
+    v3_claims = claims_v3.get("claims")
+    if not isinstance(v3_claims, list) or [
+        claim.get("name") for claim in v3_claims if isinstance(claim, dict)
+    ] != ["permit.delegate_child_linkage.v1"]:
+        raise ContractFailure(
+            "claim_registry/v3.json must add only Delegate child linkage"
+        )
+    for claim in v3_claims:
+        if set(claim.get("verdict_enum", [])) != VERDICTS:
+            raise ContractFailure("Delegate child-linkage changed the verdict enum")
+        if not claim.get("does_not_establish"):
+            raise ContractFailure("Delegate child-linkage lacks an evidence ceiling")
+
+    universal_v2 = load_json("semantics/permit/universal_verification_v2.json")
+    universal_v2_extension = universal_v2.get("extends")
+    if not isinstance(universal_v2_extension, dict):
+        raise ContractFailure("universal verification v2 must pin v1")
+    if universal_v2_extension.get("artifact_id") != (
+        "keel.permit.universal_verification.v1"
+    ):
+        raise ContractFailure("universal verification v2 extends the wrong artifact")
+    if universal_v2_extension.get("sha256") != _sha256_file(
+        ROOT / "semantics/permit/universal_verification_v1.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("universal verification v2 has a stale base digest")
+    conditional = universal_v2.get("body", {}).get("conditional_claims", {})
+    if conditional.get("keel.action.agent_delegate.v1") != [
+        "permit.delegate_child_linkage.v1"
+    ]:
+        raise ContractFailure(
+            "universal verification v2 does not bind Delegate child linkage"
+        )
+
+    linkage_vectors = load_json(
+        "test-vectors/delegate_child_linkage/v1/corpus.json"
+    )
+    linkage_schema = load_json("schemas/delegate-child-linkage-v1.schema.json")
+    linkage_validator = jsonschema.Draft202012Validator(
+        linkage_schema,
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+    for vector in linkage_vectors.get("vectors", []):
+        evidence = copy.deepcopy(linkage_vectors["base_evidence"])
+        mutation = vector.get("mutation")
+        if isinstance(mutation, dict):
+            current: Any = evidence
+            parts = str(mutation["path"]).removeprefix("/").split("/")
+            for part in parts[:-1]:
+                current = current[part]
+            current[parts[-1]] = mutation.get("value")
+        errors = list(linkage_validator.iter_errors(evidence))
+        if errors:
+            raise ContractFailure(
+                f"Delegate linkage vector {vector.get('id')} is schema-invalid: "
+                f"{errors[0].message}"
+            )
+        intended = evidence["intended_child_reference_commitment"]
+        created = evidence["created_child_reference_commitment"]
+        granted = evidence["authority_grant"][
+            "delegate_child_reference_commitment"
+        ]
+        acting = evidence["acting_child"]
+        if created != intended:
+            actual = ("disproved", "DELEGATE_CREATED_CHILD_MISMATCH")
+        elif granted != intended:
+            actual = ("disproved", "DELEGATE_GRANT_CHILD_MISMATCH")
+        elif acting is None:
+            actual = (
+                "insufficient_evidence",
+                "DELEGATE_ACTING_CHILD_EVIDENCE_MISSING",
+            )
+        elif acting["child_reference_commitment"] != intended:
+            actual = ("disproved", "DELEGATE_ACTING_CHILD_MISMATCH")
+        else:
+            actual = ("supported", "DELEGATE_CHILD_LINKAGE_VERIFIED")
+        expected = (
+            vector.get("expected_verdict"),
+            vector.get("expected_reason"),
+        )
+        if actual != expected:
+            raise ContractFailure(
+                f"Delegate linkage vector {vector.get('id')} got {actual}, "
+                f"expected {expected}"
+            )
+
     fact_registry = load_json("fact_profiles/v2.json")
     validate_instance(
         fact_registry,
@@ -1167,6 +1265,10 @@ def validate_artifact_manifest() -> None:
         "schemas/generate-text-exact-facts-v1.schema.json",
         "schemas/refund-exact-facts-v1.schema.json",
         "schemas/delegate-exact-facts-v1.schema.json",
+        "schemas/delegate-child-linkage-v1.schema.json",
+        "claim_registry/v3.json",
+        "semantics/permit/universal_verification_v2.json",
+        "test-vectors/delegate_child_linkage/v1/corpus.json",
     }
     missing_latest = sorted(required_latest_paths - paths)
     if missing_latest:

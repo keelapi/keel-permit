@@ -321,6 +321,26 @@
       "id": "keel.permit.delegate_exact_facts.v1.schema",
       "path": "schemas/delegate-exact-facts-v1.schema.json",
       "sha256": "700d23028b0a177fcf7916b25f80fcd16bd793e60b436d4eed5e45e42063a369"
+    },
+    {
+      "id": "keel.permit.delegate_child_linkage.v1.schema",
+      "path": "schemas/delegate-child-linkage-v1.schema.json",
+      "sha256": "cc9b6299951bd2f3e2485b69e9f8716284cc86c6a711e9e6305feb177b61590c"
+    },
+    {
+      "id": "keel.verifier_claim_registry.v3",
+      "path": "claim_registry/v3.json",
+      "sha256": "56d41c9245df3ddef6033be9ef192cfdda01cdaa380c38ea427321f8139ea922"
+    },
+    {
+      "id": "keel.permit.universal_verification.v2",
+      "path": "semantics/permit/universal_verification_v2.json",
+      "sha256": "4fb3ee63ec2c9c0c64716234e05ed7379de07a65b89fcbbe4aa20b39216d9fdd"
+    },
+    {
+      "id": "permit-to-x.test-vectors.delegate-child-linkage.v1",
+      "path": "test-vectors/delegate_child_linkage/v1/corpus.json",
+      "sha256": "26947322512a12573033cd80b9fd35110c1ecb3fd1cdc9da2d7f0a494224d86f"
     }
   ]
 }
