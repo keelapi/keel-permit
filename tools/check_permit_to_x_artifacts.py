@@ -49,6 +49,7 @@ TRUSTED_SOURCE_KINDS = {
     "work_request_server_reconciled",
     "action_verb_execute",
     "realtime_session_service",
+    "agent_delegation_service",
 }
 POPULATION_PATHS = {
     "work_authorities": "authorities",
@@ -105,9 +106,12 @@ def schema_registry() -> Registry:
             ROOT / "semantic_registry/v1.schema.json",
             ROOT / "semantic_registry/v2.schema.json",
             ROOT / "semantic_registry/v3.schema.json",
+            ROOT / "semantic_registry/v4.schema.json",
             ROOT / "presentation_registry/v1.schema.json",
+            ROOT / "presentation_registry/v2.schema.json",
             ROOT / "fact_profiles/v1.schema.json",
             ROOT / "fact_profiles/v2.schema.json",
+            ROOT / "fact_profiles/v3.schema.json",
         ]
     )
     for path in sorted(schema_paths):
@@ -1117,6 +1121,53 @@ def validate_spec_document_pins() -> None:
             )
 
 
+def validate_short_term_exact_profiles(registry: Registry) -> None:
+    semantics = load_json("semantic_registry/v4.json")
+    facts = load_json("fact_profiles/v3.json")
+    presentation = load_json("presentation_registry/v2.json")
+    validate_instance(
+        semantics,
+        "semantic_registry/v4.schema.json",
+        registry,
+        "semantic registry v4",
+    )
+    validate_instance(
+        facts,
+        "fact_profiles/v3.schema.json",
+        registry,
+        "fact profile registry v3",
+    )
+    validate_instance(
+        presentation,
+        "presentation_registry/v2.schema.json",
+        registry,
+        "presentation registry v2",
+    )
+    semantic_by_id = {entry["semantic_id"]: entry for entry in semantics["entries"]}
+    profile_by_id = {
+        profile["fact_profile_id"]: profile for profile in facts["profiles"]
+    }
+    presented = {profile["semantic_id"] for profile in presentation["profiles"]}
+    if presented != set(semantic_by_id):
+        raise ContractFailure("presentation v2 must cover every v4 semantic exactly")
+    expected = {
+        "keel.action.generate_text.v1": "keel.facts.generate_text_exact.v1",
+        "keel.action.payment_refund.v1": "keel.facts.refund_exact.v1",
+        "keel.action.agent_delegate.v1": "keel.facts.delegate_exact.v1",
+    }
+    for semantic_id, profile_id in expected.items():
+        entry = semantic_by_id.get(semantic_id)
+        profile = profile_by_id.get(profile_id)
+        if entry is None or entry.get("fact_profile_id") != profile_id:
+            raise ContractFailure(f"{semantic_id} is not bound to {profile_id}")
+        if profile is None or semantic_id not in profile.get("semantic_ids", []):
+            raise ContractFailure(f"{profile_id} does not admit {semantic_id}")
+        schema_path = str(profile["facts_schema"])
+        actual = "sha256:" + hashlib.sha256((ROOT / schema_path).read_bytes()).hexdigest()
+        if profile.get("facts_schema_digest") != actual:
+            raise ContractFailure(f"{profile_id} facts schema digest is stale")
+
+
 def main() -> int:
     try:
         registry = schema_registry()
@@ -1125,6 +1176,7 @@ def main() -> int:
         validate_work_contract(registry)
         validate_claim_contracts()
         validate_universal_verification_contract(registry)
+        validate_short_term_exact_profiles(registry)
         validate_artifact_manifest()
         validate_spec_document_pins()
     except (ContractFailure, jsonschema.SchemaError) as exc:
