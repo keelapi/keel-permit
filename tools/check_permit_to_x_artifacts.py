@@ -45,6 +45,10 @@ UNIVERSAL_CLAIMS = {
     "provider.accepted.v1",
     "provider.completed.v1",
 }
+CONSEQUENCE_EXACT_CLAIMS = {
+    "permit.generate_text_exact_request.v1",
+    "permit.refund_original_payment_bound.v1",
+}
 TRUSTED_SOURCE_KINDS = {
     "work_request_server_reconciled",
     "action_verb_execute",
@@ -834,6 +838,38 @@ def validate_universal_verification_contract(registry: Registry) -> None:
         if not claim.get("does_not_establish"):
             raise ContractFailure("Delegate child-linkage lacks an evidence ceiling")
 
+    claims_v4 = load_json("claim_registry/v4.json")
+    extension_v4 = claims_v4.get("extends")
+    if not isinstance(extension_v4, dict):
+        raise ContractFailure("claim_registry/v4.json must pin v3")
+    if extension_v4.get("artifact_id") != "keel.verifier_claim_registry.v3":
+        raise ContractFailure("claim_registry/v4.json extends the wrong artifact")
+    if extension_v4.get("version") != claims_v3.get("version"):
+        raise ContractFailure("claim_registry/v4.json extends the wrong version")
+    if extension_v4.get("sha256") != _sha256_file(
+        ROOT / "claim_registry/v3.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("claim_registry/v4.json has a stale base digest")
+    v4_claims = claims_v4.get("claims")
+    if not isinstance(v4_claims, list):
+        raise ContractFailure("claim_registry/v4.json must add consequence claims")
+    v4_names = {
+        claim.get("name") for claim in v4_claims if isinstance(claim, dict)
+    }
+    if v4_names != CONSEQUENCE_EXACT_CLAIMS:
+        raise ContractFailure(
+            "claim_registry/v4.json must add only Generate Text and Refund claims"
+        )
+    for claim in v4_claims:
+        if set(claim.get("verdict_enum", [])) != VERDICTS:
+            raise ContractFailure(
+                f"{claim.get('name')} changed the stable verdict enum"
+            )
+        if not claim.get("does_not_establish"):
+            raise ContractFailure(
+                f"{claim.get('name')} lacks a claim-level evidence ceiling"
+            )
+
     universal_v2 = load_json("semantics/permit/universal_verification_v2.json")
     universal_v2_extension = universal_v2.get("extends")
     if not isinstance(universal_v2_extension, dict):
@@ -853,6 +889,92 @@ def validate_universal_verification_contract(registry: Registry) -> None:
         raise ContractFailure(
             "universal verification v2 does not bind Delegate child linkage"
         )
+
+    universal_v3 = load_json("semantics/permit/universal_verification_v3.json")
+    universal_v3_extension = universal_v3.get("extends")
+    if not isinstance(universal_v3_extension, dict):
+        raise ContractFailure("universal verification v3 must pin v2")
+    if universal_v3_extension.get("artifact_id") != (
+        "keel.permit.universal_verification.v2"
+    ):
+        raise ContractFailure("universal verification v3 extends the wrong artifact")
+    if universal_v3_extension.get("sha256") != _sha256_file(
+        ROOT / "semantics/permit/universal_verification_v2.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("universal verification v3 has a stale base digest")
+    conditional_v3 = universal_v3.get("body", {}).get("conditional_claims", {})
+    expected_conditional_v3 = {
+        "keel.action.generate_text.v1": [
+            "permit.generate_text_exact_request.v1"
+        ],
+        "keel.action.payment_refund.v1": [
+            "permit.refund_original_payment_bound.v1"
+        ],
+        "keel.action.agent_delegate.v1": [
+            "permit.delegate_child_linkage.v1"
+        ],
+    }
+    if conditional_v3 != expected_conditional_v3:
+        raise ContractFailure(
+            "universal verification v3 consequence-claim mapping is incomplete"
+        )
+
+    consequence_vectors = load_json(
+        "test-vectors/consequence_claims/v1/corpus.json"
+    )
+    for vector in consequence_vectors.get("vectors", []):
+        semantic_id = vector.get("semantic_id")
+        verdicts = vector.get("universal_verdicts")
+        expected = vector.get("expected")
+        if not isinstance(verdicts, dict) or not isinstance(expected, dict):
+            raise ContractFailure(
+                f"consequence vector {vector.get('id')} is malformed"
+            )
+        if semantic_id == "keel.action.generate_text.v1":
+            required = (
+                "permit.type.v1",
+                "permit.exact_target.v1",
+                "permit.material_request.v1",
+                "permit.enforced_at_certified_boundary.v1",
+            )
+            if any(verdicts.get(claim) == "disproved" for claim in required):
+                actual = ("disproved", "GENERATE_TEXT_EXACT_REQUEST_MISMATCH")
+            elif not all(verdicts.get(claim) == "supported" for claim in required):
+                actual = (
+                    "insufficient_evidence",
+                    "GENERATE_TEXT_CERTIFIED_BOUNDARY_UNPROVEN",
+                )
+            elif not vector.get("facts_match_certification"):
+                actual = ("disproved", "GENERATE_TEXT_ADAPTER_BINDING_MISMATCH")
+            else:
+                actual = ("supported", "GENERATE_TEXT_EXACT_REQUEST_VERIFIED")
+        elif semantic_id == "keel.action.payment_refund.v1":
+            required = (
+                "permit.type.v1",
+                "permit.exact_target.v1",
+                "permit.material_request.v1",
+                "permit.bounded_use.v1",
+                "permit.single_use.v1",
+                "permit.idempotency_bound.v1",
+            )
+            if any(verdicts.get(claim) == "disproved" for claim in required):
+                actual = ("disproved", "REFUND_ORIGINAL_PAYMENT_BINDING_MISMATCH")
+            elif not all(verdicts.get(claim) == "supported" for claim in required):
+                actual = (
+                    "insufficient_evidence",
+                    "REFUND_DISPATCH_BINDING_UNPROVEN",
+                )
+            else:
+                actual = ("supported", "REFUND_ORIGINAL_PAYMENT_BOUND")
+        else:
+            raise ContractFailure(
+                f"consequence vector {vector.get('id')} has an unknown semantic"
+            )
+        if actual != (expected.get("verdict"), expected.get("reason")):
+            raise ContractFailure(
+                f"consequence vector {vector.get('id')} got {actual}, expected "
+                f"{(expected.get('verdict'), expected.get('reason'))}"
+            )
 
     linkage_vectors = load_json(
         "test-vectors/delegate_child_linkage/v1/corpus.json"
@@ -1269,6 +1391,9 @@ def validate_artifact_manifest() -> None:
         "claim_registry/v3.json",
         "semantics/permit/universal_verification_v2.json",
         "test-vectors/delegate_child_linkage/v1/corpus.json",
+        "claim_registry/v4.json",
+        "semantics/permit/universal_verification_v3.json",
+        "test-vectors/consequence_claims/v1/corpus.json",
     }
     missing_latest = sorted(required_latest_paths - paths)
     if missing_latest:
