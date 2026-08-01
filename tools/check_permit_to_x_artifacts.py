@@ -45,10 +45,15 @@ UNIVERSAL_CLAIMS = {
     "provider.accepted.v1",
     "provider.completed.v1",
 }
+CONSEQUENCE_EXACT_CLAIMS = {
+    "permit.generate_text_exact_request.v1",
+    "permit.refund_original_payment_bound.v1",
+}
 TRUSTED_SOURCE_KINDS = {
     "work_request_server_reconciled",
     "action_verb_execute",
     "realtime_session_service",
+    "agent_delegation_service",
 }
 POPULATION_PATHS = {
     "work_authorities": "authorities",
@@ -105,9 +110,12 @@ def schema_registry() -> Registry:
             ROOT / "semantic_registry/v1.schema.json",
             ROOT / "semantic_registry/v2.schema.json",
             ROOT / "semantic_registry/v3.schema.json",
+            ROOT / "semantic_registry/v4.schema.json",
             ROOT / "presentation_registry/v1.schema.json",
+            ROOT / "presentation_registry/v2.schema.json",
             ROOT / "fact_profiles/v1.schema.json",
             ROOT / "fact_profiles/v2.schema.json",
+            ROOT / "fact_profiles/v3.schema.json",
         ]
     )
     for path in sorted(schema_paths):
@@ -185,7 +193,9 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
     semantics = load_json("semantic_registry/v1.json")
     semantics_v2 = load_json("semantic_registry/v2.json")
     semantics_v3 = load_json("semantic_registry/v3.json")
+    semantics_v4 = load_json("semantic_registry/v4.json")
     presentations = load_json("presentation_registry/v1.json")
+    presentations_v2 = load_json("presentation_registry/v2.json")
     validate_instance(
         semantics,
         "semantic_registry/v1.schema.json",
@@ -205,11 +215,39 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
         "semantic registry v3",
     )
     validate_instance(
+        semantics_v4,
+        "semantic_registry/v4.schema.json",
+        registry,
+        "semantic registry v4",
+    )
+    validate_instance(
         presentations,
         "presentation_registry/v1.schema.json",
         registry,
         "presentation registry",
     )
+    validate_instance(
+        presentations_v2,
+        "presentation_registry/v2.schema.json",
+        registry,
+        "presentation registry v2",
+    )
+
+    latest_semantic_ids = [entry["semantic_id"] for entry in semantics_v4["entries"]]
+    latest_profile_ids = [
+        profile["presentation_profile_id"]
+        for profile in presentations_v2["profiles"]
+    ]
+    if len(latest_semantic_ids) != len(set(latest_semantic_ids)):
+        raise ContractFailure("semantic registry v4 contains duplicate semantic ids")
+    if len(latest_profile_ids) != len(set(latest_profile_ids)):
+        raise ContractFailure("presentation registry v2 contains duplicate profile ids")
+    if {profile["semantic_id"] for profile in presentations_v2["profiles"]} != set(
+        latest_semantic_ids
+    ):
+        raise ContractFailure(
+            "presentation registry v2 must cover semantic registry v4 exactly"
+        )
 
     semantic_ids = [entry["semantic_id"] for entry in semantics["entries"]]
     if len(semantic_ids) != len(set(semantic_ids)):
@@ -373,6 +411,43 @@ def validate_fact_profiles(registry: Registry) -> None:
     )
     if payment_entry.get("fact_profile_id") != "keel.facts.payment_exact.v1":
         raise ContractFailure("payment.execute is not bound to exact payment facts")
+
+    latest_fact_registry = load_json("fact_profiles/v3.json")
+    latest_semantics = load_json("semantic_registry/v4.json")
+    validate_instance(
+        latest_fact_registry,
+        "fact_profiles/v3.schema.json",
+        registry,
+        "fact profile registry v3",
+    )
+    latest_semantic_ids = {
+        entry["semantic_id"] for entry in latest_semantics["entries"]
+    }
+    latest_profile_ids: set[str] = set()
+    for profile in latest_fact_registry["profiles"]:
+        profile_id = profile["fact_profile_id"]
+        if profile_id in latest_profile_ids:
+            raise ContractFailure("fact profile registry v3 contains duplicate ids")
+        latest_profile_ids.add(profile_id)
+        schema_path = profile["facts_schema"]
+        if profile["facts_schema_digest"] != _sha256_file(ROOT / schema_path):
+            raise ContractFailure(f"{profile_id} v3 facts schema digest is stale")
+        unknown_semantics = sorted(
+            set(profile["semantic_ids"]) - latest_semantic_ids
+        )
+        if unknown_semantics:
+            raise ContractFailure(
+                f"{profile_id} v3 references unknown semantics: {unknown_semantics}"
+            )
+    bound_latest_profiles = {
+        entry["fact_profile_id"]
+        for entry in latest_semantics["entries"]
+        if entry.get("fact_profile_id") is not None
+    }
+    if bound_latest_profiles != latest_profile_ids:
+        raise ContractFailure(
+            "semantic registry v4 and fact profile registry v3 must bind exactly"
+        )
 
     vectors = load_json("fact_profiles/test-vectors/v1.json")
     profile = by_profile_id.get(vectors.get("profile_id"))
@@ -738,6 +813,221 @@ def validate_universal_verification_contract(registry: Registry) -> None:
                 f"{claim.get('name')} lacks claim-level does_not_establish"
             )
 
+    claims_v3 = load_json("claim_registry/v3.json")
+    extension_v3 = claims_v3.get("extends")
+    if not isinstance(extension_v3, dict):
+        raise ContractFailure("claim_registry/v3.json must pin v2")
+    if extension_v3.get("artifact_id") != "keel.verifier_claim_registry.v2":
+        raise ContractFailure("claim_registry/v3.json extends the wrong artifact")
+    if extension_v3.get("version") != claims_v2.get("version"):
+        raise ContractFailure("claim_registry/v3.json extends the wrong version")
+    if extension_v3.get("sha256") != _sha256_file(
+        ROOT / "claim_registry/v2.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("claim_registry/v3.json has a stale base digest")
+    v3_claims = claims_v3.get("claims")
+    if not isinstance(v3_claims, list) or [
+        claim.get("name") for claim in v3_claims if isinstance(claim, dict)
+    ] != ["permit.delegate_child_linkage.v1"]:
+        raise ContractFailure(
+            "claim_registry/v3.json must add only Delegate child linkage"
+        )
+    for claim in v3_claims:
+        if set(claim.get("verdict_enum", [])) != VERDICTS:
+            raise ContractFailure("Delegate child-linkage changed the verdict enum")
+        if not claim.get("does_not_establish"):
+            raise ContractFailure("Delegate child-linkage lacks an evidence ceiling")
+
+    claims_v4 = load_json("claim_registry/v4.json")
+    extension_v4 = claims_v4.get("extends")
+    if not isinstance(extension_v4, dict):
+        raise ContractFailure("claim_registry/v4.json must pin v3")
+    if extension_v4.get("artifact_id") != "keel.verifier_claim_registry.v3":
+        raise ContractFailure("claim_registry/v4.json extends the wrong artifact")
+    if extension_v4.get("version") != claims_v3.get("version"):
+        raise ContractFailure("claim_registry/v4.json extends the wrong version")
+    if extension_v4.get("sha256") != _sha256_file(
+        ROOT / "claim_registry/v3.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("claim_registry/v4.json has a stale base digest")
+    v4_claims = claims_v4.get("claims")
+    if not isinstance(v4_claims, list):
+        raise ContractFailure("claim_registry/v4.json must add consequence claims")
+    v4_names = {
+        claim.get("name") for claim in v4_claims if isinstance(claim, dict)
+    }
+    if v4_names != CONSEQUENCE_EXACT_CLAIMS:
+        raise ContractFailure(
+            "claim_registry/v4.json must add only Generate Text and Refund claims"
+        )
+    for claim in v4_claims:
+        if set(claim.get("verdict_enum", [])) != VERDICTS:
+            raise ContractFailure(
+                f"{claim.get('name')} changed the stable verdict enum"
+            )
+        if not claim.get("does_not_establish"):
+            raise ContractFailure(
+                f"{claim.get('name')} lacks a claim-level evidence ceiling"
+            )
+
+    universal_v2 = load_json("semantics/permit/universal_verification_v2.json")
+    universal_v2_extension = universal_v2.get("extends")
+    if not isinstance(universal_v2_extension, dict):
+        raise ContractFailure("universal verification v2 must pin v1")
+    if universal_v2_extension.get("artifact_id") != (
+        "keel.permit.universal_verification.v1"
+    ):
+        raise ContractFailure("universal verification v2 extends the wrong artifact")
+    if universal_v2_extension.get("sha256") != _sha256_file(
+        ROOT / "semantics/permit/universal_verification_v1.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("universal verification v2 has a stale base digest")
+    conditional = universal_v2.get("body", {}).get("conditional_claims", {})
+    if conditional.get("keel.action.agent_delegate.v1") != [
+        "permit.delegate_child_linkage.v1"
+    ]:
+        raise ContractFailure(
+            "universal verification v2 does not bind Delegate child linkage"
+        )
+
+    universal_v3 = load_json("semantics/permit/universal_verification_v3.json")
+    universal_v3_extension = universal_v3.get("extends")
+    if not isinstance(universal_v3_extension, dict):
+        raise ContractFailure("universal verification v3 must pin v2")
+    if universal_v3_extension.get("artifact_id") != (
+        "keel.permit.universal_verification.v2"
+    ):
+        raise ContractFailure("universal verification v3 extends the wrong artifact")
+    if universal_v3_extension.get("sha256") != _sha256_file(
+        ROOT / "semantics/permit/universal_verification_v2.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("universal verification v3 has a stale base digest")
+    conditional_v3 = universal_v3.get("body", {}).get("conditional_claims", {})
+    expected_conditional_v3 = {
+        "keel.action.generate_text.v1": [
+            "permit.generate_text_exact_request.v1"
+        ],
+        "keel.action.payment_refund.v1": [
+            "permit.refund_original_payment_bound.v1"
+        ],
+        "keel.action.agent_delegate.v1": [
+            "permit.delegate_child_linkage.v1"
+        ],
+    }
+    if conditional_v3 != expected_conditional_v3:
+        raise ContractFailure(
+            "universal verification v3 consequence-claim mapping is incomplete"
+        )
+
+    consequence_vectors = load_json(
+        "test-vectors/consequence_claims/v1/corpus.json"
+    )
+    for vector in consequence_vectors.get("vectors", []):
+        semantic_id = vector.get("semantic_id")
+        verdicts = vector.get("universal_verdicts")
+        expected = vector.get("expected")
+        if not isinstance(verdicts, dict) or not isinstance(expected, dict):
+            raise ContractFailure(
+                f"consequence vector {vector.get('id')} is malformed"
+            )
+        if semantic_id == "keel.action.generate_text.v1":
+            required = (
+                "permit.type.v1",
+                "permit.exact_target.v1",
+                "permit.material_request.v1",
+                "permit.enforced_at_certified_boundary.v1",
+            )
+            if any(verdicts.get(claim) == "disproved" for claim in required):
+                actual = ("disproved", "GENERATE_TEXT_EXACT_REQUEST_MISMATCH")
+            elif not all(verdicts.get(claim) == "supported" for claim in required):
+                actual = (
+                    "insufficient_evidence",
+                    "GENERATE_TEXT_CERTIFIED_BOUNDARY_UNPROVEN",
+                )
+            elif not vector.get("facts_match_certification"):
+                actual = ("disproved", "GENERATE_TEXT_ADAPTER_BINDING_MISMATCH")
+            else:
+                actual = ("supported", "GENERATE_TEXT_EXACT_REQUEST_VERIFIED")
+        elif semantic_id == "keel.action.payment_refund.v1":
+            required = (
+                "permit.type.v1",
+                "permit.exact_target.v1",
+                "permit.material_request.v1",
+            )
+            if any(verdicts.get(claim) == "disproved" for claim in required):
+                actual = ("disproved", "REFUND_ORIGINAL_PAYMENT_BINDING_MISMATCH")
+            elif not all(verdicts.get(claim) == "supported" for claim in required):
+                actual = (
+                    "insufficient_evidence",
+                    "REFUND_AUTHORIZATION_BINDING_UNPROVEN",
+                )
+            elif not vector.get("facts_match_signed_limits"):
+                actual = ("disproved", "REFUND_SIGNED_LIMITS_MISMATCH")
+            else:
+                actual = ("supported", "REFUND_ORIGINAL_PAYMENT_BOUND")
+        else:
+            raise ContractFailure(
+                f"consequence vector {vector.get('id')} has an unknown semantic"
+            )
+        if actual != (expected.get("verdict"), expected.get("reason")):
+            raise ContractFailure(
+                f"consequence vector {vector.get('id')} got {actual}, expected "
+                f"{(expected.get('verdict'), expected.get('reason'))}"
+            )
+
+    linkage_vectors = load_json(
+        "test-vectors/delegate_child_linkage/v1/corpus.json"
+    )
+    linkage_schema = load_json("schemas/delegate-child-linkage-v1.schema.json")
+    linkage_validator = jsonschema.Draft202012Validator(
+        linkage_schema,
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+    for vector in linkage_vectors.get("vectors", []):
+        evidence = copy.deepcopy(linkage_vectors["base_evidence"])
+        mutation = vector.get("mutation")
+        if isinstance(mutation, dict):
+            current: Any = evidence
+            parts = str(mutation["path"]).removeprefix("/").split("/")
+            for part in parts[:-1]:
+                current = current[part]
+            current[parts[-1]] = mutation.get("value")
+        errors = list(linkage_validator.iter_errors(evidence))
+        if errors:
+            raise ContractFailure(
+                f"Delegate linkage vector {vector.get('id')} is schema-invalid: "
+                f"{errors[0].message}"
+            )
+        intended = evidence["intended_child_reference_commitment"]
+        created = evidence["created_child_reference_commitment"]
+        granted = evidence["authority_grant"][
+            "delegate_child_reference_commitment"
+        ]
+        acting = evidence["acting_child"]
+        if created != intended:
+            actual = ("disproved", "DELEGATE_CREATED_CHILD_MISMATCH")
+        elif granted != intended:
+            actual = ("disproved", "DELEGATE_GRANT_CHILD_MISMATCH")
+        elif acting is None:
+            actual = (
+                "insufficient_evidence",
+                "DELEGATE_ACTING_CHILD_EVIDENCE_MISSING",
+            )
+        elif acting["child_reference_commitment"] != intended:
+            actual = ("disproved", "DELEGATE_ACTING_CHILD_MISMATCH")
+        else:
+            actual = ("supported", "DELEGATE_CHILD_LINKAGE_VERIFIED")
+        expected = (
+            vector.get("expected_verdict"),
+            vector.get("expected_reason"),
+        )
+        if actual != expected:
+            raise ContractFailure(
+                f"Delegate linkage vector {vector.get('id')} got {actual}, "
+                f"expected {expected}"
+            )
+
     fact_registry = load_json("fact_profiles/v2.json")
     validate_instance(
         fact_registry,
@@ -1086,6 +1376,30 @@ def validate_artifact_manifest() -> None:
         actual = hashlib.sha256(resolved.read_bytes()).hexdigest()
         if actual != artifact.get("sha256"):
             raise ContractFailure(f"artifact manifest hash mismatch for {path}")
+    required_latest_paths = {
+        "semantic_registry/v4.json",
+        "semantic_registry/v4.schema.json",
+        "presentation_registry/v2.json",
+        "presentation_registry/v2.schema.json",
+        "fact_profiles/v3.json",
+        "fact_profiles/v3.schema.json",
+        "schemas/generate-text-exact-facts-v1.schema.json",
+        "schemas/refund-exact-facts-v1.schema.json",
+        "schemas/delegate-exact-facts-v1.schema.json",
+        "schemas/delegate-child-linkage-v1.schema.json",
+        "claim_registry/v3.json",
+        "semantics/permit/universal_verification_v2.json",
+        "test-vectors/delegate_child_linkage/v1/corpus.json",
+        "claim_registry/v4.json",
+        "semantics/permit/universal_verification_v3.json",
+        "test-vectors/consequence_claims/v1/corpus.json",
+    }
+    missing_latest = sorted(required_latest_paths - paths)
+    if missing_latest:
+        raise ContractFailure(
+            "Permit-to-X artifact manifest omits latest exact-action artifacts: "
+            f"{missing_latest}"
+        )
 
 
 def validate_spec_document_pins() -> None:
@@ -1117,6 +1431,53 @@ def validate_spec_document_pins() -> None:
             )
 
 
+def validate_short_term_exact_profiles(registry: Registry) -> None:
+    semantics = load_json("semantic_registry/v4.json")
+    facts = load_json("fact_profiles/v3.json")
+    presentation = load_json("presentation_registry/v2.json")
+    validate_instance(
+        semantics,
+        "semantic_registry/v4.schema.json",
+        registry,
+        "semantic registry v4",
+    )
+    validate_instance(
+        facts,
+        "fact_profiles/v3.schema.json",
+        registry,
+        "fact profile registry v3",
+    )
+    validate_instance(
+        presentation,
+        "presentation_registry/v2.schema.json",
+        registry,
+        "presentation registry v2",
+    )
+    semantic_by_id = {entry["semantic_id"]: entry for entry in semantics["entries"]}
+    profile_by_id = {
+        profile["fact_profile_id"]: profile for profile in facts["profiles"]
+    }
+    presented = {profile["semantic_id"] for profile in presentation["profiles"]}
+    if presented != set(semantic_by_id):
+        raise ContractFailure("presentation v2 must cover every v4 semantic exactly")
+    expected = {
+        "keel.action.generate_text.v1": "keel.facts.generate_text_exact.v1",
+        "keel.action.payment_refund.v1": "keel.facts.refund_exact.v1",
+        "keel.action.agent_delegate.v1": "keel.facts.delegate_exact.v1",
+    }
+    for semantic_id, profile_id in expected.items():
+        entry = semantic_by_id.get(semantic_id)
+        profile = profile_by_id.get(profile_id)
+        if entry is None or entry.get("fact_profile_id") != profile_id:
+            raise ContractFailure(f"{semantic_id} is not bound to {profile_id}")
+        if profile is None or semantic_id not in profile.get("semantic_ids", []):
+            raise ContractFailure(f"{profile_id} does not admit {semantic_id}")
+        schema_path = str(profile["facts_schema"])
+        actual = "sha256:" + hashlib.sha256((ROOT / schema_path).read_bytes()).hexdigest()
+        if profile.get("facts_schema_digest") != actual:
+            raise ContractFailure(f"{profile_id} facts schema digest is stale")
+
+
 def main() -> int:
     try:
         registry = schema_registry()
@@ -1125,6 +1486,7 @@ def main() -> int:
         validate_work_contract(registry)
         validate_claim_contracts()
         validate_universal_verification_contract(registry)
+        validate_short_term_exact_profiles(registry)
         validate_artifact_manifest()
         validate_spec_document_pins()
     except (ContractFailure, jsonschema.SchemaError) as exc:
