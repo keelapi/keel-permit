@@ -300,7 +300,7 @@
     {
       "id": "keel.permit.fact_profile_registry.v3",
       "path": "fact_profiles/v3.json",
-      "sha256": "f8c1c0f58decab5f7a1bf5b486a683c3a26c07f6fa3ce0f858856e00e91b2deb"
+      "sha256": "c3c5e460c06fecddd33dd8f5179094a6cdf499b431a9ecfd3341cdb39c6ebbb4"
     },
     {
       "id": "keel.permit.fact_profile_registry.v3.schema",
