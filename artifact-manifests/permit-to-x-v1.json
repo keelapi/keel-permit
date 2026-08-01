@@ -276,6 +276,51 @@
       "id": "permit-to-x.test-vectors.universal-verification.v1",
       "path": "test-vectors/universal_verification/v1/corpus.json",
       "sha256": "95b83d59a4c9c8adc48fa88309ebbb8aa34cfcd028d4d957782e5566f21a7c30"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v4",
+      "path": "semantic_registry/v4.json",
+      "sha256": "29dcee32ff774378a2e0ae065fe2e65f5f0bd8602df1246a02d56177199c1d20"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v4.schema",
+      "path": "semantic_registry/v4.schema.json",
+      "sha256": "9d13ff866546fca4246c609f70195c43c6eb3213dce2540422f85a562f7dac09"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v2",
+      "path": "presentation_registry/v2.json",
+      "sha256": "a65ccd592408c686bb05af7018e2229c3aa9c52180306e1b17dfa9ae0bae2123"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v2.schema",
+      "path": "presentation_registry/v2.schema.json",
+      "sha256": "5d10c5f4706923453bb40cfb28e85e49e2337078c91bf9fbd3c72ee546e10170"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v3",
+      "path": "fact_profiles/v3.json",
+      "sha256": "f8c1c0f58decab5f7a1bf5b486a683c3a26c07f6fa3ce0f858856e00e91b2deb"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v3.schema",
+      "path": "fact_profiles/v3.schema.json",
+      "sha256": "a04b9e764a43f996bb8aaf31b6a4b82788565eab5837d33cf591256720287b90"
+    },
+    {
+      "id": "keel.permit.generate_text_exact_facts.v1.schema",
+      "path": "schemas/generate-text-exact-facts-v1.schema.json",
+      "sha256": "59159251543c4c69b03c4da7779c5ff9d58d7f5fc7e4bed2033e3e7e56f02f6a"
+    },
+    {
+      "id": "keel.permit.refund_exact_facts.v1.schema",
+      "path": "schemas/refund-exact-facts-v1.schema.json",
+      "sha256": "aa225ed99e1bb122d737ec4c0d601436a9f44cadb16f127b1559db2b8de089d5"
+    },
+    {
+      "id": "keel.permit.delegate_exact_facts.v1.schema",
+      "path": "schemas/delegate-exact-facts-v1.schema.json",
+      "sha256": "700d23028b0a177fcf7916b25f80fcd16bd793e60b436d4eed5e45e42063a369"
     }
   ]
 }

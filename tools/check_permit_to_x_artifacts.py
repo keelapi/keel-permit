@@ -189,7 +189,9 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
     semantics = load_json("semantic_registry/v1.json")
     semantics_v2 = load_json("semantic_registry/v2.json")
     semantics_v3 = load_json("semantic_registry/v3.json")
+    semantics_v4 = load_json("semantic_registry/v4.json")
     presentations = load_json("presentation_registry/v1.json")
+    presentations_v2 = load_json("presentation_registry/v2.json")
     validate_instance(
         semantics,
         "semantic_registry/v1.schema.json",
@@ -209,11 +211,39 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
         "semantic registry v3",
     )
     validate_instance(
+        semantics_v4,
+        "semantic_registry/v4.schema.json",
+        registry,
+        "semantic registry v4",
+    )
+    validate_instance(
         presentations,
         "presentation_registry/v1.schema.json",
         registry,
         "presentation registry",
     )
+    validate_instance(
+        presentations_v2,
+        "presentation_registry/v2.schema.json",
+        registry,
+        "presentation registry v2",
+    )
+
+    latest_semantic_ids = [entry["semantic_id"] for entry in semantics_v4["entries"]]
+    latest_profile_ids = [
+        profile["presentation_profile_id"]
+        for profile in presentations_v2["profiles"]
+    ]
+    if len(latest_semantic_ids) != len(set(latest_semantic_ids)):
+        raise ContractFailure("semantic registry v4 contains duplicate semantic ids")
+    if len(latest_profile_ids) != len(set(latest_profile_ids)):
+        raise ContractFailure("presentation registry v2 contains duplicate profile ids")
+    if {profile["semantic_id"] for profile in presentations_v2["profiles"]} != set(
+        latest_semantic_ids
+    ):
+        raise ContractFailure(
+            "presentation registry v2 must cover semantic registry v4 exactly"
+        )
 
     semantic_ids = [entry["semantic_id"] for entry in semantics["entries"]]
     if len(semantic_ids) != len(set(semantic_ids)):
@@ -377,6 +407,43 @@ def validate_fact_profiles(registry: Registry) -> None:
     )
     if payment_entry.get("fact_profile_id") != "keel.facts.payment_exact.v1":
         raise ContractFailure("payment.execute is not bound to exact payment facts")
+
+    latest_fact_registry = load_json("fact_profiles/v3.json")
+    latest_semantics = load_json("semantic_registry/v4.json")
+    validate_instance(
+        latest_fact_registry,
+        "fact_profiles/v3.schema.json",
+        registry,
+        "fact profile registry v3",
+    )
+    latest_semantic_ids = {
+        entry["semantic_id"] for entry in latest_semantics["entries"]
+    }
+    latest_profile_ids: set[str] = set()
+    for profile in latest_fact_registry["profiles"]:
+        profile_id = profile["fact_profile_id"]
+        if profile_id in latest_profile_ids:
+            raise ContractFailure("fact profile registry v3 contains duplicate ids")
+        latest_profile_ids.add(profile_id)
+        schema_path = profile["facts_schema"]
+        if profile["facts_schema_digest"] != _sha256_file(ROOT / schema_path):
+            raise ContractFailure(f"{profile_id} v3 facts schema digest is stale")
+        unknown_semantics = sorted(
+            set(profile["semantic_ids"]) - latest_semantic_ids
+        )
+        if unknown_semantics:
+            raise ContractFailure(
+                f"{profile_id} v3 references unknown semantics: {unknown_semantics}"
+            )
+    bound_latest_profiles = {
+        entry["fact_profile_id"]
+        for entry in latest_semantics["entries"]
+        if entry.get("fact_profile_id") is not None
+    }
+    if bound_latest_profiles != latest_profile_ids:
+        raise ContractFailure(
+            "semantic registry v4 and fact profile registry v3 must bind exactly"
+        )
 
     vectors = load_json("fact_profiles/test-vectors/v1.json")
     profile = by_profile_id.get(vectors.get("profile_id"))
@@ -1090,6 +1157,23 @@ def validate_artifact_manifest() -> None:
         actual = hashlib.sha256(resolved.read_bytes()).hexdigest()
         if actual != artifact.get("sha256"):
             raise ContractFailure(f"artifact manifest hash mismatch for {path}")
+    required_latest_paths = {
+        "semantic_registry/v4.json",
+        "semantic_registry/v4.schema.json",
+        "presentation_registry/v2.json",
+        "presentation_registry/v2.schema.json",
+        "fact_profiles/v3.json",
+        "fact_profiles/v3.schema.json",
+        "schemas/generate-text-exact-facts-v1.schema.json",
+        "schemas/refund-exact-facts-v1.schema.json",
+        "schemas/delegate-exact-facts-v1.schema.json",
+    }
+    missing_latest = sorted(required_latest_paths - paths)
+    if missing_latest:
+        raise ContractFailure(
+            "Permit-to-X artifact manifest omits latest exact-action artifacts: "
+            f"{missing_latest}"
+        )
 
 
 def validate_spec_document_pins() -> None:
