@@ -54,7 +54,7 @@
       "trusted_source_kinds": ["realtime_session_service"],
       "match": {"operations": ["realtime.session"], "allowed_chain_roles": ["session_root"], "required_evidence_capabilities": ["authorization"]},
       "excluded_permit_products": ["cost_permit"],
-      "release_state": "generic_qualified"
+      "release_state": "eligible"
     }
   ]
 }
