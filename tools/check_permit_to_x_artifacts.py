@@ -49,6 +49,10 @@ CONSEQUENCE_EXACT_CLAIMS = {
     "permit.generate_text_exact_request.v1",
     "permit.refund_original_payment_bound.v1",
 }
+ENFORCEMENT_REGIME_CLAIMS = {
+    "permit.enforcement_regime_at_issuance.v1",
+    "permit.enforcement_regime_at_dispatch.v1",
+}
 TRUSTED_SOURCE_KINDS = {
     "work_request_server_reconciled",
     "action_verb_execute",
@@ -870,6 +874,46 @@ def validate_universal_verification_contract(registry: Registry) -> dict[str, An
                 f"{claim.get('name')} lacks a claim-level evidence ceiling"
             )
 
+    claims_v5 = load_json("claim_registry/v5.json")
+    extension_v5 = claims_v5.get("extends")
+    if not isinstance(extension_v5, dict):
+        raise ContractFailure("claim_registry/v5.json must pin v4")
+    if extension_v5.get("artifact_id") != "keel.verifier_claim_registry.v4":
+        raise ContractFailure("claim_registry/v5.json extends the wrong artifact")
+    if extension_v5.get("version") != claims_v4.get("version"):
+        raise ContractFailure("claim_registry/v5.json extends the wrong version")
+    if extension_v5.get("sha256") != _sha256_file(
+        ROOT / "claim_registry/v4.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("claim_registry/v5.json has a stale base digest")
+    v5_claims = claims_v5.get("claims")
+    if not isinstance(v5_claims, list):
+        raise ContractFailure("claim_registry/v5.json must add enforcement claims")
+    v5_names = {
+        claim.get("name") for claim in v5_claims if isinstance(claim, dict)
+    }
+    if v5_names != ENFORCEMENT_REGIME_CLAIMS:
+        raise ContractFailure(
+            "claim_registry/v5.json must add only Work enforcement-regime claims"
+        )
+    inherited_names = set(base_names).union(added_names).union(
+        claim.get("name") for claim in v3_claims if isinstance(claim, dict)
+    ).union(v4_names)
+    overlap_v5 = sorted(v5_names.intersection(inherited_names))
+    if overlap_v5:
+        raise ContractFailure(
+            f"claim_registry/v5.json redefines inherited claims: {overlap_v5}"
+        )
+    for claim in v5_claims:
+        if set(claim.get("verdict_enum", [])) != VERDICTS:
+            raise ContractFailure(
+                f"{claim.get('name')} changed the stable verdict enum"
+            )
+        if not claim.get("does_not_establish"):
+            raise ContractFailure(
+                f"{claim.get('name')} lacks a claim-level evidence ceiling"
+            )
+
     universal_v2 = load_json("semantics/permit/universal_verification_v2.json")
     universal_v2_extension = universal_v2.get("extends")
     if not isinstance(universal_v2_extension, dict):
@@ -918,6 +962,35 @@ def validate_universal_verification_contract(registry: Registry) -> dict[str, An
         raise ContractFailure(
             "universal verification v3 consequence-claim mapping is incomplete"
         )
+
+    universal_v4 = load_json("semantics/permit/universal_verification_v4.json")
+    universal_v4_extension = universal_v4.get("extends")
+    if not isinstance(universal_v4_extension, dict):
+        raise ContractFailure("universal verification v4 must pin v3")
+    if universal_v4_extension.get("artifact_id") != (
+        "keel.permit.universal_verification.v3"
+    ):
+        raise ContractFailure("universal verification v4 extends the wrong artifact")
+    if universal_v4_extension.get("sha256") != _sha256_file(
+        ROOT / "semantics/permit/universal_verification_v3.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("universal verification v4 has a stale base digest")
+    if universal_v4.get("body", {}).get("claim_registry_version") != (
+        "verifier-claims.v5"
+    ):
+        raise ContractFailure("universal verification v4 pins the wrong claim registry")
+    work_claims = universal_v4.get("body", {}).get(
+        "conditional_evidence_claims", {}
+    ).get("program:work")
+    if work_claims != {
+        "issuance": ["permit.enforcement_regime_at_issuance.v1"],
+        "dispatch": ["permit.enforcement_regime_at_dispatch.v1"],
+    }:
+        raise ContractFailure(
+            "universal verification v4 Work enforcement claims are incomplete"
+        )
+
+    validate_enforcement_claim_vectors()
 
     consequence_vectors = load_json(
         "test-vectors/consequence_claims/v1/corpus.json"
@@ -1394,6 +1467,9 @@ def validate_artifact_manifest() -> None:
         "claim_registry/v4.json",
         "semantics/permit/universal_verification_v3.json",
         "test-vectors/consequence_claims/v1/corpus.json",
+        "claim_registry/v5.json",
+        "semantics/permit/universal_verification_v4.json",
+        "test-vectors/enforcement_claims/v1/corpus.json",
     }
     missing_latest = sorted(required_latest_paths - paths)
     if missing_latest:
@@ -1401,6 +1477,79 @@ def validate_artifact_manifest() -> None:
             "Permit-to-X artifact manifest omits latest exact-action artifacts: "
             f"{missing_latest}"
         )
+
+
+def validate_enforcement_claim_vectors() -> None:
+    corpus = load_json("test-vectors/enforcement_claims/v1/corpus.json")
+    if set(corpus.get("claims", [])) != ENFORCEMENT_REGIME_CLAIMS:
+        raise ContractFailure("enforcement-claim corpus has stale claim coverage")
+    seen: set[str] = set()
+    covered_claims: set[str] = set()
+    for vector in corpus.get("vectors", []):
+        vector_id = vector.get("id")
+        if not isinstance(vector_id, str) or vector_id in seen:
+            raise ContractFailure("enforcement-claim vectors have duplicate or missing ids")
+        seen.add(vector_id)
+        expected = vector.get("expected")
+        if not isinstance(expected, dict):
+            raise ContractFailure(f"enforcement vector {vector_id} lacks an expectation")
+        claim = vector.get("claim")
+        if vector.get("surface_key") != "program:work":
+            if claim is not None or expected != {"claim_required": False}:
+                raise ContractFailure(
+                    f"enforcement vector {vector_id} applied Work claims to another surface"
+                )
+            continue
+        if claim not in ENFORCEMENT_REGIME_CLAIMS:
+            raise ContractFailure(f"enforcement vector {vector_id} has an unknown claim")
+        covered_claims.add(claim)
+        if claim == "permit.enforcement_regime_at_issuance.v1":
+            if not vector.get("state_present"):
+                actual = (
+                    "insufficient_evidence",
+                    "ENFORCEMENT_REGIME_AT_ISSUANCE_NOT_RECORDED",
+                )
+            elif not vector.get("signed_binding_supported") or not vector.get(
+                "identity_matches"
+            ):
+                actual = (
+                    "disproved",
+                    "ENFORCEMENT_ISSUANCE_BINDING_MISMATCH",
+                )
+            elif not vector.get("state_schema_valid"):
+                actual = ("disproved", "ENFORCEMENT_ISSUANCE_STATE_INVALID")
+            else:
+                actual = (
+                    "supported",
+                    "ENFORCEMENT_REGIME_AT_ISSUANCE_VERIFIED",
+                )
+        else:
+            proof_version = vector.get("runtime_proof_version")
+            if proof_version in {None, "keel.runtime_enforcement_proof.v1"}:
+                actual = (
+                    "insufficient_evidence",
+                    "ENFORCEMENT_REGIME_AT_DISPATCH_NOT_RECORDED",
+                )
+            elif proof_version != "keel.runtime_enforcement_proof.v2":
+                actual = ("unverifiable_scope", "ENFORCEMENT_PROOF_VERSION_UNSUPPORTED")
+            elif not vector.get("runtime_proof_signature_valid") or not vector.get(
+                "runtime_proof_schema_valid"
+            ):
+                actual = ("disproved", "ENFORCEMENT_DISPATCH_PROOF_INVALID")
+            elif not vector.get("identity_matches"):
+                actual = ("disproved", "ENFORCEMENT_DISPATCH_IDENTITY_MISMATCH")
+            else:
+                actual = (
+                    "supported",
+                    "ENFORCEMENT_REGIME_AT_DISPATCH_VERIFIED",
+                )
+        expected_pair = (expected.get("verdict"), expected.get("reason"))
+        if actual != expected_pair:
+            raise ContractFailure(
+                f"enforcement vector {vector_id} got {actual}, expected {expected_pair}"
+            )
+    if covered_claims != ENFORCEMENT_REGIME_CLAIMS:
+        raise ContractFailure("enforcement-claim corpus misses a claim")
 
 
 def validate_spec_document_pins() -> None:
