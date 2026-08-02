@@ -376,6 +376,21 @@
       "id": "keel.permit.exact_pack.v3.schema",
       "path": "schemas/permit-exact-pack-v3.schema.json",
       "sha256": "a76ac1981de156113e9ac9fc3b567f63af877a220436b5299660a3804cab469a"
+    },
+    {
+      "id": "keel.verifier_claim_registry.v5",
+      "path": "claim_registry/v5.json",
+      "sha256": "14b028e81b610c905ab923ce449c480352d56922e211023a6075e46592ce93d0"
+    },
+    {
+      "id": "keel.permit.universal_verification.v4",
+      "path": "semantics/permit/universal_verification_v4.json",
+      "sha256": "f52bd1add7a275ef467e3193d8854056ac9a186f89db6deedcc8f6d2cd397520"
+    },
+    {
+      "id": "permit-to-x.test-vectors.enforcement-claims.v1",
+      "path": "test-vectors/enforcement_claims/v1/corpus.json",
+      "sha256": "4b9c380c9f1bb93b07bf21a9b4d9f9f5021309437c685379dff51287d7c94119"
     }
   ]
 }
