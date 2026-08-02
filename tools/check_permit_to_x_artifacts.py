@@ -757,7 +757,7 @@ def validate_claim_contracts() -> None:
             raise ContractFailure(f"{path} does not bind claim {claim_name}")
 
 
-def validate_universal_verification_contract(registry: Registry) -> None:
+def validate_universal_verification_contract(registry: Registry) -> dict[str, Any]:
     """Validate the composable S1 contract and its cross-repository corpus."""
 
     claims_v1_path = ROOT / "claim_registry/v1.json"
@@ -1350,6 +1350,7 @@ def validate_universal_verification_contract(registry: Registry) -> None:
                 f"universal vector {vector.get('id')} lacks a reason code"
             )
 
+    return exact_pack
 
 def validate_artifact_manifest() -> None:
     manifest = load_json("artifact-manifests/permit-to-x-v1.json")
@@ -1478,6 +1479,219 @@ def validate_short_term_exact_profiles(registry: Registry) -> None:
             raise ContractFailure(f"{profile_id} facts schema digest is stale")
 
 
+def validate_enforcement_state_vectors() -> None:
+    """Execute every enforcement-state golden vector.
+
+    Registering the corpus by hash proves only that the bytes did not drift. It
+    does not prove the documents still verify, so this executes each expected
+    verdict on every run. An empty or unreadable corpus is a failure, never a
+    silent pass.
+    """
+
+    corpus_path = ROOT / "test-vectors" / "enforcement_state" / "v1" / "corpus.json"
+    if not corpus_path.is_file():
+        raise ContractFailure(f"missing enforcement-state corpus: {corpus_path}")
+    corpus = json.loads(corpus_path.read_text(encoding="utf-8"))
+    vectors = corpus.get("vectors") or []
+    if not vectors:
+        raise ContractFailure("enforcement-state corpus declares no vectors")
+
+    schemas: dict[str, Any] = {}
+    for name in (
+        "permit-enforcement-state-v1",
+        "runtime-enforcement-proof-v1",
+        "runtime-enforcement-proof-v2",
+    ):
+        schema_path = ROOT / "schemas" / f"{name}.schema.json"
+        if not schema_path.is_file():
+            raise ContractFailure(f"missing enforcement schema: {schema_path}")
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        jsonschema.Draft202012Validator.check_schema(schema)
+        schemas[name] = schema
+
+    seen_ids: set[str] = set()
+    for vector in vectors:
+        vector_id = str(vector.get("id") or "")
+        if not vector_id or vector_id in seen_ids:
+            raise ContractFailure(f"enforcement-state vector id missing or duplicated: {vector_id!r}")
+        seen_ids.add(vector_id)
+        schema_name = str(vector.get("schema") or "")
+        if schema_name not in schemas:
+            raise ContractFailure(f"{vector_id}: unknown schema {schema_name!r}")
+        expected = str(vector.get("expected") or "")
+        if expected not in {"valid", "invalid"}:
+            raise ContractFailure(f"{vector_id}: expected must be valid or invalid")
+        validator = jsonschema.Draft202012Validator(
+            schemas[schema_name],
+            format_checker=jsonschema.FormatChecker(),
+        )
+        is_valid = validator.is_valid(vector.get("document"))
+        if is_valid != (expected == "valid"):
+            raise ContractFailure(
+                f"{vector_id}: expected {expected}, schema said "
+                f"{'valid' if is_valid else 'invalid'}"
+            )
+
+    positives = sum(1 for v in vectors if v.get("expected") == "valid")
+    if positives == 0 or positives == len(vectors):
+        raise ContractFailure(
+            "enforcement-state corpus must carry both positive and negative vectors"
+        )
+
+
+def _enforcement_proof_fixture(version: str) -> dict[str, Any]:
+    """Minimal runtime enforcement proof for pack compatibility checks."""
+
+    digest = "sha256:" + "0" * 64
+    proof: dict[str, Any] = {
+        "version": f"keel.runtime_enforcement_proof.{version}",
+        "proof_id": "b7a1c0de-0000-4000-8000-0000000000aa",
+        "permit_id": "0acadb95-eced-4a3a-84ee-6fe408216871",
+        "project_id": "40a5edbc-8869-4579-80a3-26c739de30d0",
+        "dispatch_id": "d1a5pa7c-0000-4000-8000-0000000000aa",
+        "semantic_id": "keel.context.work.v1",
+        "exact_request_digest": digest,
+        "adapter_certification_id": "keel.adapter.work.v1",
+        "adapter_certification_digest": digest,
+        "deployment_assurance_id": "keel.deployment.work.v1",
+        "deployment_assurance_digest": digest,
+        "gate_id": "work.final_dispatch",
+        "gate_revision": "1",
+        "gate_result": "allow",
+        "pre_effect": True,
+        "evaluated_at": "2026-08-02T07:05:00Z",
+        "signature_profile": "keel.ed25519.sha256_rfc8785.v1",
+        "issuer_key_id": "keel-export-2026",
+        "canonical_hash": digest,
+        "signature": "ed25519:AAAA",
+    }
+    if version == "v2":
+        proof.update(
+            {
+                "effective_mode": "enforce",
+                "global_ceiling": "enforce",
+                "project_rung": "enforce",
+                "mapping_version": "keel.enforcement_rung_mapping.v1",
+                "enforcement_surface_key": "program:work",
+                "dispatch_attempted": True,
+                "upstream_called": True,
+            }
+        )
+    return proof
+
+
+def validate_pack_v3_compatibility(
+    registry: Registry, exact_pack: dict[str, Any]
+) -> None:
+    """Prove the pack v3 contract itself, not only its component schemas.
+
+    Pack v3 exists so one pack may carry either the historical v1 runtime proof
+    or the v2 proof that records the enforcement regime. Cases run against the
+    same real pack the universal contract check builds, so this cannot drift
+    from the shipped pack shape, and through the shared registry so every
+    external reference resolves.
+    """
+
+    schema_path = ROOT / "schemas" / "permit-exact-pack-v3.schema.json"
+    if not schema_path.is_file():
+        raise ContractFailure(f"missing pack schema: {schema_path}")
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    validator = jsonschema.Draft202012Validator(
+        schema,
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+
+    base = copy.deepcopy(exact_pack)
+    base["profile"] = "keel.permit_exact/v3"
+    base["profile_version"] = 3
+    # The shipped fixture carries enforcement_evidence: null, so synthesize the
+    # block under test and attach it to the otherwise real pack. Only the
+    # enforcement branch is synthetic; every other field stays as shipped.
+    digest = "sha256:" + "0" * 64
+    signed = {
+        "signature_profile": "keel.ed25519.sha256_rfc8785.v1",
+        "issuer_key_id": "keel-export-2026",
+        "canonical_hash": digest,
+        "signature": "ed25519:AAAA",
+    }
+    base["enforcement_evidence"] = {
+        "adapter_certification": {
+            "version": "keel.adapter_certification.v1",
+            "certification_id": "keel.adapter.work.v1",
+            "adapter_id": "managed.work.dispatch",
+            "adapter_version": "v1",
+            "semantic_ids": ["keel.context.work.v1"],
+            "governed_surfaces": ["work"],
+            "conformance_vector_set_digest": digest,
+            "negative_test_results_digest": digest,
+            "anti_bypass_requirements": ["pre_effect_gate"],
+            "issued_at": "2026-07-01T00:00:00Z",
+            "expires_at": "2027-07-01T00:00:00Z",
+            "revoked_at": None,
+            "revocation_event_digest": None,
+            **signed,
+        },
+        "deployment_assurance": {
+            "version": "keel.deployment_assurance.v1",
+            "assurance_id": "keel.deployment.work.v1",
+            "project_id": "40a5edbc-8869-4579-80a3-26c739de30d0",
+            "deployment_id": "keel-api",
+            "deployment_revision": "f" * 40,
+            "adapter_certification_id": "keel.adapter.work.v1",
+            "adapter_certification_digest": digest,
+            "adapter_id": "managed.work.dispatch",
+            "adapter_version": "v1",
+            "governed_surface": "work",
+            "semantic_ids": ["keel.context.work.v1"],
+            "anti_bypass_evidence_digest": digest,
+            "verified_at": "2026-08-01T00:00:00Z",
+            "expires_at": "2027-08-01T00:00:00Z",
+            "revoked_at": None,
+            "revocation_event_digest": None,
+            **signed,
+        },
+        "runtime_enforcement_proof": _enforcement_proof_fixture("v1"),
+    }
+
+    with_v1 = copy.deepcopy(base)
+    with_v1["enforcement_evidence"]["runtime_enforcement_proof"] = (
+        _enforcement_proof_fixture("v1")
+    )
+    with_v2 = copy.deepcopy(base)
+    with_v2["enforcement_evidence"]["runtime_enforcement_proof"] = (
+        _enforcement_proof_fixture("v2")
+    )
+
+    stale_identity = copy.deepcopy(with_v2)
+    stale_identity["profile"] = "keel.permit_exact/v2"
+    stale_identity["profile_version"] = 2
+
+    mixed = copy.deepcopy(with_v2)
+    mixed["enforcement_evidence"]["runtime_enforcement_proof"]["version"] = (
+        "keel.runtime_enforcement_proof.v1"
+    )
+
+    malformed = copy.deepcopy(with_v2)
+    malformed["enforcement_evidence"]["runtime_enforcement_proof"].pop("effective_mode")
+
+    cases: list[tuple[str, dict[str, Any], bool]] = [
+        ("pack v3 carrying runtime proof v1", with_v1, True),
+        ("pack v3 carrying runtime proof v2", with_v2, True),
+        ("pack v3 claiming the v2 profile identity", stale_identity, False),
+        ("pack v3 carrying a mixed v1/v2 proof", mixed, False),
+        ("pack v3 carrying a malformed v2 proof", malformed, False),
+    ]
+
+    for label, document, expected_valid in cases:
+        is_valid = validator.is_valid(document)
+        if is_valid != expected_valid:
+            raise ContractFailure(
+                f"{label}: expected {'valid' if expected_valid else 'invalid'}, "
+                f"schema said {'valid' if is_valid else 'invalid'}"
+            )
+
+
 def main() -> int:
     try:
         registry = schema_registry()
@@ -1485,10 +1699,12 @@ def main() -> int:
         validate_fact_profiles(registry)
         validate_work_contract(registry)
         validate_claim_contracts()
-        validate_universal_verification_contract(registry)
+        exact_pack = validate_universal_verification_contract(registry)
         validate_short_term_exact_profiles(registry)
         validate_artifact_manifest()
         validate_spec_document_pins()
+        validate_enforcement_state_vectors()
+        validate_pack_v3_compatibility(registry, exact_pack)
     except (ContractFailure, jsonschema.SchemaError) as exc:
         print(f"Permit-to-X contract check failed: {exc}")
         return 1

@@ -356,6 +356,26 @@
       "id": "permit-to-x.test-vectors.consequence-claims.v1",
       "path": "test-vectors/consequence_claims/v1/corpus.json",
       "sha256": "64a4c592a035c5dfa67798842f9184094b4b3067d94a2f8c50a134b019f47f17"
+    },
+    {
+      "id": "keel.permit.enforcement_state.v1.schema",
+      "path": "schemas/permit-enforcement-state-v1.schema.json",
+      "sha256": "033c0ff34a703716fadef2dc9e8c6d73fe33feb07253b282a881370c9d8a4ff7"
+    },
+    {
+      "id": "keel.permit.enforcement_state_vectors.v1",
+      "path": "test-vectors/enforcement_state/v1/corpus.json",
+      "sha256": "bb0d0f473901159c5da2ca55a86e00fc2f795bb76ab979d9898d12281aac502a"
+    },
+    {
+      "id": "keel.runtime_enforcement_proof.v2.schema",
+      "path": "schemas/runtime-enforcement-proof-v2.schema.json",
+      "sha256": "52851a0823e54404e7f6fcce42e67ced4878266d87f3a245026e5802bb21007d"
+    },
+    {
+      "id": "keel.permit.exact_pack.v3.schema",
+      "path": "schemas/permit-exact-pack-v3.schema.json",
+      "sha256": "a76ac1981de156113e9ac9fc3b567f63af877a220436b5299660a3804cab469a"
     }
   ]
 }
