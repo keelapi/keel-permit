@@ -1,0 +1,18 @@
+{
+  "version": "keel.presentation_vectors.v2",
+  "registry": "../v3.json",
+  "title_vectors": [
+    {"id": "refund-permit", "artifact_kind": "permit", "semantic_id": "keel.action.payment_refund.v1", "expected_title": "AI Permit-to-Refund-Payment"},
+    {"id": "payment-permit", "artifact_kind": "permit", "semantic_id": "keel.action.payment_execute.v1", "expected_title": "AI Permit-to-Pay"},
+    {"id": "denial-is-not-a-permit", "artifact_kind": "denial", "semantic_id": "keel.action.payment_refund.v1", "expected_title": "AI Action Denied"},
+    {"id": "review-is-not-a-permit", "artifact_kind": "review", "semantic_id": "keel.action.payment_refund.v1", "expected_title": "AI Action Awaiting Approval"},
+    {"id": "legacy-permit", "artifact_kind": "permit", "semantic_id": null, "fallback": "generic_ai_permit", "expected_title": "AI Permit"}
+  ],
+  "summary_contract": {
+    "expected_position": "end",
+    "expected_derivation": "verifier_from_verified_fields",
+    "expected_template": "semantics/permit/human_summary_v1.json",
+    "required_inputs": ["artifact_kind", "agent", "action", "target", "issued_at", "expires_at", "dispatch_state", "provider_state", "provider_object_id", "integrity_verdict", "trust_mode"],
+    "forbidden_inputs": ["caller_supplied_title", "caller_supplied_summary", "model_inference_as_fact"]
+  }
+}

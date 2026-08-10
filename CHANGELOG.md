@@ -6,6 +6,14 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
+- Define the human-first AI Permit-to-X artifact and `.keelpermit` package
+  inventory without creating a new authorization lifecycle or trust root.
+- Require verifier-derived titles, lifecycle fields, evidence boundaries, and
+  an end-positioned plain-language summary from verified structured fields.
+- Keep denial and pending-review records distinct from issued Permits and keep
+  raw canonical bytes, hex, Base64, signatures, and digests in an advanced
+  representation layer.
+
 ## [1.10.0] — 2026-07-30
 
 - Add `verifier-claims.v2` as a composable, digest-pinned extension of the
