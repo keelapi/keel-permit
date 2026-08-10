@@ -6,6 +6,18 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
+- Add five provider-exact Transactional CX consequences: Stripe payment
+  refund, account credit, period-end cancellation scheduling, pending
+  cancellation withdrawal, and HubSpot support-case resolution.
+- Publish additive consequence registry v3, semantic registry v8, fact-profile
+  registry v6, and presentation registry v7 while preserving every earlier
+  registry entry byte-for-value.
+- Bind provider environment and API version, short-lived authenticated
+  preflight state, exact mutation arguments, and one-use idempotency into each
+  CX action's signed authorization facts.
+- Distinguish withdrawing a pending cancellation from falsely claiming to
+  reinstate an already canceled subscription, and require provider-declared
+  `ticketState=CLOSED` metadata rather than trusting a ticket-stage label.
 - Add three exact Payment & Ledger consequences: paying one provider-verified
   open invoice, posting one version-checked double-entry ledger record, and
   recording one matched payment reconciliation.
