@@ -781,6 +781,61 @@
       "id": "keel.permit.coding_workspace_exact_action_contract.v1.spec",
       "path": "spec/coding-workspace-exact-action-contract-v1.md",
       "sha256": "647357cb17b055546b9234eca7e0f1a0cb100540d6a3ae6c1c4d60f72aeebb44"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v7",
+      "path": "consequence_registry/v7.json",
+      "sha256": "6c2b1721d66e7bbc451f0434ffe40f33db84f0a877ca87b271ecdf174a24c940"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v7.schema",
+      "path": "consequence_registry/v7.schema.json",
+      "sha256": "679190e99c9cf00f172cc28d605286a7ccb2afc9e7c890bbb80dd87304f42039"
+    },
+    {
+      "id": "keel.permit.collections_exact_facts.v1.schema",
+      "path": "schemas/collections-exact-facts-v1.schema.json",
+      "sha256": "8bf3717b214e4723b70f3499bd7261589eeff14e095bf0a4f5dd6579fe3bb19d"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v10",
+      "path": "fact_profiles/v10.json",
+      "sha256": "533443997464308cece23869e5c7b8cb915f5f61620de5e6a38a3db8d20fda61"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v10.schema",
+      "path": "fact_profiles/v10.schema.json",
+      "sha256": "b684e6f692c2b93f3f6aa558b899d91ee9095bb6a114002e7f8978c8df572885"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v12",
+      "path": "semantic_registry/v12.json",
+      "sha256": "fe3a49f9f55ca8a0e8e062616d089944f31c5fc1cff635af774143d75c46f21b"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v12.schema",
+      "path": "semantic_registry/v12.schema.json",
+      "sha256": "304e6d3b12a6837f113a7e7777f2768ca5ce66a61e7bd177ec453ea895de170c"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v11",
+      "path": "presentation_registry/v11.json",
+      "sha256": "6eb8e24ec0e0f0cab4187ec9d6db41e2f0bda380148459e86fbaa8f0cedd4807"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v11.schema",
+      "path": "presentation_registry/v11.schema.json",
+      "sha256": "e05c19cb7a29bc23f0b32c9ef2021918a1b827e9ac889b9bc846a93014608e61"
+    },
+    {
+      "id": "permit-to-x.test-vectors.consequence-registry.v8",
+      "path": "consequence_registry/test-vectors/v8.json",
+      "sha256": "892abe3c487af0c17fa757cf50dd75948cfce3aba316ed6301c69ce73daac53c"
+    },
+    {
+      "id": "keel.permit.collections_exact_action_contract.v1.spec",
+      "path": "spec/collections-exact-action-contract-v1.md",
+      "sha256": "07f86765492caf6961c916b8864eeebc9b0c282e60b3e0920a656207207b6c8e"
     }
   ]
 }
