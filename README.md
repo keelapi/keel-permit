@@ -89,6 +89,7 @@ Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated f
 - [`semantic_registry/`](semantic_registry/) — server-provenance selector contract for stable Permit semantics.
 - [`fact_profiles/`](fact_profiles/) — typed authorization-fact schemas and disclosure rules for specific Permit semantics.
 - [`presentation_registry/`](presentation_registry/) — non-authorizing titles, definitions, controlled leading fields, evidence emphasis, and fallbacks.
+- [`consequence_registry/`](consequence_registry/) — exact consequential tool mappings that generate additive semantic and presentation registry releases.
 - [`artifact-manifests/permit-to-x-v1.json`](artifact-manifests/permit-to-x-v1.json) — exact-byte hashes for generated downstream consumers.
 
 ## Capability Inventory
@@ -107,6 +108,7 @@ Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated f
 | Reference verifier status | The reference verifier verifies `v7` permit decisions and rejects unsigned account-selector drift. |
 | Bounded Work contract | Strict payment-only Work schemas and four claim contracts are published contract-first; coordinated API producer and public-verifier support are separate release gates. |
 | Permit-to-X presentation | Specific titles require a trusted semantic selector result; presentation artifacts cannot change authorization or verifier verdicts. |
+| Consequence registry | Exact certified tool names can add consequence-specific selectors and human titles without rewriting historical registries; caller labels and titles are never selector inputs. |
 | Permit-to-X fact profiles | Semantic registry v3 can bind an eligible semantic to a typed fact profile; exact payment facts use integer minor units, currency, recipient commitments, payment rail, and exact request digest. |
 
 ## Examples
