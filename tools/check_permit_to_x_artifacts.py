@@ -119,19 +119,23 @@ def schema_registry() -> Registry:
             ROOT / "semantic_registry/v5.schema.json",
             ROOT / "semantic_registry/v6.schema.json",
             ROOT / "semantic_registry/v7.schema.json",
+            ROOT / "semantic_registry/v8.schema.json",
             ROOT / "presentation_registry/v1.schema.json",
             ROOT / "presentation_registry/v2.schema.json",
             ROOT / "presentation_registry/v3.schema.json",
             ROOT / "presentation_registry/v4.schema.json",
             ROOT / "presentation_registry/v5.schema.json",
             ROOT / "presentation_registry/v6.schema.json",
+            ROOT / "presentation_registry/v7.schema.json",
             ROOT / "consequence_registry/v1.schema.json",
             ROOT / "consequence_registry/v2.schema.json",
+            ROOT / "consequence_registry/v3.schema.json",
             ROOT / "fact_profiles/v1.schema.json",
             ROOT / "fact_profiles/v2.schema.json",
             ROOT / "fact_profiles/v3.schema.json",
             ROOT / "fact_profiles/v4.schema.json",
             ROOT / "fact_profiles/v5.schema.json",
+            ROOT / "fact_profiles/v6.schema.json",
         ]
     )
     for path in sorted(schema_paths):
@@ -712,6 +716,239 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
                 raise ContractFailure(
                     f"{consequence_type} accepted adversarial {field} mutation"
                 )
+
+
+def validate_transactional_cx_contract(registry: Registry) -> None:
+    consequence_v2 = load_json("consequence_registry/v2.json")
+    consequence_v3 = load_json("consequence_registry/v3.json")
+    validate_instance(
+        consequence_v3,
+        "consequence_registry/v3.schema.json",
+        registry,
+        "consequence registry v3",
+    )
+    prior_consequences = consequence_v2["consequences"]
+    consequences = consequence_v3["consequences"]
+    if consequences[: len(prior_consequences)] != prior_consequences:
+        raise ContractFailure(
+            "consequence registry v3 must preserve every v2 entry byte-for-value"
+        )
+
+    facts_v5 = load_json("fact_profiles/v5.json")
+    facts_v6 = load_json("fact_profiles/v6.json")
+    semantics_v7 = load_json("semantic_registry/v7.json")
+    semantics_v8 = load_json("semantic_registry/v8.json")
+    presentations_v6 = load_json("presentation_registry/v6.json")
+    presentations_v7 = load_json("presentation_registry/v7.json")
+    vectors_v4 = load_json("consequence_registry/test-vectors/v4.json")
+
+    validate_instance(
+        facts_v6,
+        "fact_profiles/v6.schema.json",
+        registry,
+        "fact profile registry v6",
+    )
+    validate_instance(
+        semantics_v8,
+        "semantic_registry/v8.schema.json",
+        registry,
+        "semantic registry v8",
+    )
+    validate_instance(
+        presentations_v7,
+        "presentation_registry/v7.schema.json",
+        registry,
+        "presentation registry v7",
+    )
+    if facts_v6["profiles"][: len(facts_v5["profiles"])] != facts_v5["profiles"]:
+        raise ContractFailure("fact profile registry v6 is not an additive v5 extension")
+    if semantics_v8["entries"][: len(semantics_v7["entries"])] != semantics_v7[
+        "entries"
+    ]:
+        raise ContractFailure("semantic registry v8 is not an additive v7 extension")
+    if presentations_v7["profiles"][: len(presentations_v6["profiles"])] != (
+        presentations_v6["profiles"]
+    ):
+        raise ContractFailure("presentation registry v7 is not an additive v6 extension")
+
+    consequence_types = [item["consequence_type"] for item in consequences]
+    semantic_ids = [item["semantic_id"] for item in consequences]
+    tool_names = [tool for item in consequences for tool in item["tool_names"]]
+    if len(consequence_types) != len(set(consequence_types)):
+        raise ContractFailure("consequence registry v3 contains duplicate types")
+    if len(semantic_ids) != len(set(semantic_ids)):
+        raise ContractFailure("consequence registry v3 contains duplicate semantics")
+    if len(tool_names) != len(set(tool_names)):
+        raise ContractFailure("consequence registry v3 contains overlapping tools")
+
+    vectors_by_id = {vector["id"]: vector for vector in vectors_v4["vectors"]}
+    if set(vectors_by_id) != set(consequence_types):
+        raise ContractFailure(
+            "v4 exact consequence vectors must cover consequence registry v3"
+        )
+    profiles_by_id = {
+        profile["fact_profile_id"]: profile for profile in facts_v6["profiles"]
+    }
+    semantics_by_id = {
+        entry["semantic_id"]: entry for entry in semantics_v8["entries"]
+    }
+    presentations_by_id = {
+        profile["semantic_id"]: profile
+        for profile in presentations_v7["profiles"]
+    }
+    if len(profiles_by_id) != len(facts_v6["profiles"]):
+        raise ContractFailure("fact profile registry v6 contains duplicate ids")
+    if len(semantics_by_id) != len(semantics_v8["entries"]):
+        raise ContractFailure("semantic registry v8 contains duplicate ids")
+    if len(presentations_by_id) != len(presentations_v7["profiles"]):
+        raise ContractFailure("presentation registry v7 contains duplicate semantics")
+
+    schema_path = "schemas/transactional-cx-exact-facts-v1.schema.json"
+    schema = load_json(schema_path)
+    validator = jsonschema.Draft202012Validator(
+        schema,
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+    previous_count = len(prior_consequences)
+    cx_consequences = consequences[previous_count:]
+    expected_titles = {
+        "payment.refund": "AI Permit-to-Refund-Payment",
+        "customer.credit.issue": "AI Permit-to-Issue-Account-Credit",
+        "subscription.cancellation.schedule": (
+            "AI Permit-to-Schedule-Subscription-Cancellation"
+        ),
+        "subscription.cancellation.withdraw": (
+            "AI Permit-to-Withdraw-Subscription-Cancellation"
+        ),
+        "support.case.resolve": "AI Permit-to-Resolve-Support-Case",
+    }
+    for consequence in cx_consequences:
+        consequence_type = consequence["consequence_type"]
+        vector = vectors_by_id[consequence_type]
+        semantic_id = consequence["semantic_id"]
+        profile_id = vector["expected_fact_profile_id"]
+        entry = semantics_by_id.get(semantic_id)
+        profile = profiles_by_id.get(profile_id)
+        presentation = presentations_by_id.get(semantic_id)
+        if entry is None or entry.get("fact_profile_id") != profile_id:
+            raise ContractFailure(f"{consequence_type} lacks its exact semantic binding")
+        if profile is None or profile.get("facts_schema") != schema_path:
+            raise ContractFailure(f"{consequence_type} lacks its CX fact profile")
+        if semantic_id not in profile.get("semantic_ids", []):
+            raise ContractFailure(f"{consequence_type} fact profile semantic drifted")
+        action = consequence["tool_names"][0]
+        if presentation is None or presentation.get("customer_title") != expected_titles[
+            action
+        ]:
+            raise ContractFailure(f"{consequence_type} lacks its exact human title")
+        if presentation.get("does_not_establish") != consequence.get(
+            "does_not_establish"
+        ):
+            raise ContractFailure(f"{consequence_type} presentation limits drifted")
+        if "gateway_preflight_hmac" not in consequence.get(
+            "trusted_fact_requirements", []
+        ):
+            raise ContractFailure(f"{consequence_type} omits authenticated preflight")
+        if select_semantic(semantics_v8, vector["candidate"]) != (semantic_id, None):
+            raise ContractFailure(
+                f"{consequence_type} is not selected exactly once in semantic v8"
+            )
+
+        facts = vector["valid_authorization_facts"]
+        errors = list(validator.iter_errors(facts))
+        if errors:
+            raise ContractFailure(
+                f"{consequence_type} exact facts are invalid: {errors[0].message}"
+            )
+        if facts.get("fact_profile_id") != profile_id or facts.get("action") != action:
+            raise ContractFailure(f"{consequence_type} vector identity drifted")
+        if profile.get("facts_schema_digest") != _sha256_file(ROOT / schema_path):
+            raise ContractFailure(f"{consequence_type} facts schema digest is stale")
+
+        if action == "payment.refund":
+            if facts["amount_minor"] > facts["refundable_amount_minor_before"]:
+                raise ContractFailure("refund vector exceeds provider-observed remainder")
+            if facts["refund_application_fee"] or facts["reverse_transfer"]:
+                raise ContractFailure("refund vector expands into unmodeled Connect effects")
+        elif action == "customer.credit.issue":
+            if facts["provider_amount_minor"] != -facts["amount_minor"]:
+                raise ContractFailure("account-credit sign invariant is not exact")
+            expected = facts["customer_balance_before_minor"] - facts["amount_minor"]
+            if facts["expected_customer_balance_after_minor"] != expected:
+                raise ContractFailure("account-credit expected balance is inconsistent")
+        elif action == "subscription.cancellation.schedule":
+            if facts["cancel_at_period_end_before"] is not False or facts[
+                "cancel_at_period_end_requested"
+            ] is not True:
+                raise ContractFailure("cancellation schedule transition is not false-to-true")
+        elif action == "subscription.cancellation.withdraw":
+            if facts["cancel_at_period_end_before"] is not True or facts[
+                "cancel_at_period_end_requested"
+            ] is not False:
+                raise ContractFailure("cancellation withdrawal is not true-to-false")
+            if facts["canceled_at_before"] is not None or facts["ended_at_before"] is not None:
+                raise ContractFailure("withdrawal vector describes an ended subscription")
+        elif action == "support.case.resolve":
+            if facts["current_stage_state"] != "OPEN" or facts[
+                "requested_stage_state"
+            ] != "CLOSED":
+                raise ContractFailure("support resolution is not OPEN-to-CLOSED")
+
+        adversarial = copy.deepcopy(facts)
+        adversarial["fact_profile_id"] = next(
+            item["fact_profile_id"]
+            for item in facts_v6["profiles"]
+            if item["fact_profile_id"] != profile_id
+            and item["facts_schema"] == schema_path
+        )
+        if validator.is_valid(adversarial):
+            raise ContractFailure(f"{consequence_type} accepts another CX fact profile")
+
+        common_mutations = [
+            ("preflight_expires_at", "not-a-time"),
+            ("preflight_snapshot_digest", "sha256:short"),
+            (
+                "connector_identity",
+                "hubspot" if facts["connector_identity"] == "stripe" else "stripe",
+            ),
+        ]
+        action_mutations = {
+            "payment.refund": [("amount_minor", 0), ("reverse_transfer", True)],
+            "customer.credit.issue": [
+                ("provider_amount_minor", 1500),
+                ("credit_direction", "customer_debit"),
+            ],
+            "subscription.cancellation.schedule": [
+                ("cancel_at_period_end_before", True),
+                ("cancel_at_period_end_requested", False),
+            ],
+            "subscription.cancellation.withdraw": [
+                ("cancel_at_period_end_before", False),
+                ("canceled_at_before", "2026-08-10T12:00:00Z"),
+            ],
+            "support.case.resolve": [
+                ("current_stage_state", "CLOSED"),
+                ("requested_stage_state", "OPEN"),
+            ],
+        }[action]
+        for field, value in [*common_mutations, *action_mutations]:
+            mutated = copy.deepcopy(facts)
+            mutated[field] = value
+            if validator.is_valid(mutated):
+                raise ContractFailure(
+                    f"{consequence_type} accepted adversarial {field} mutation"
+                )
+
+    bound_profile_ids = {
+        entry["fact_profile_id"]
+        for entry in semantics_v8["entries"]
+        if entry.get("fact_profile_id") is not None
+    }
+    if bound_profile_ids != set(profiles_by_id):
+        raise ContractFailure(
+            "semantic registry v8 and fact profile registry v6 must bind exactly"
+        )
 
 
 def set_vector_path(document: dict[str, Any], path: list[Any], value: Any) -> None:
@@ -2081,19 +2318,26 @@ def validate_artifact_manifest() -> None:
         "semantic_registry/v6.schema.json",
         "semantic_registry/v7.json",
         "semantic_registry/v7.schema.json",
+        "semantic_registry/v8.json",
+        "semantic_registry/v8.schema.json",
         "presentation_registry/v4.json",
         "presentation_registry/v4.schema.json",
         "presentation_registry/v5.json",
         "presentation_registry/v5.schema.json",
         "presentation_registry/v6.json",
         "presentation_registry/v6.schema.json",
+        "presentation_registry/v7.json",
+        "presentation_registry/v7.schema.json",
         "consequence_registry/v1.json",
         "consequence_registry/v1.schema.json",
         "consequence_registry/v2.json",
         "consequence_registry/v2.schema.json",
+        "consequence_registry/v3.json",
+        "consequence_registry/v3.schema.json",
         "consequence_registry/test-vectors/v1.json",
         "consequence_registry/test-vectors/v2.json",
         "consequence_registry/test-vectors/v3.json",
+        "consequence_registry/test-vectors/v4.json",
         "spec/consequence-registry-v1.md",
         "presentation_registry/v2.json",
         "presentation_registry/v2.schema.json",
@@ -2111,8 +2355,12 @@ def validate_artifact_manifest() -> None:
         "fact_profiles/v4.schema.json",
         "fact_profiles/v5.json",
         "fact_profiles/v5.schema.json",
+        "fact_profiles/v6.json",
+        "fact_profiles/v6.schema.json",
         "schemas/database-exact-facts-v1.schema.json",
         "schemas/payment-ledger-exact-facts-v1.schema.json",
+        "schemas/transactional-cx-exact-facts-v1.schema.json",
+        "spec/transactional-cx-exact-action-contract-v1.md",
         "schemas/generate-text-exact-facts-v1.schema.json",
         "schemas/refund-exact-facts-v1.schema.json",
         "schemas/delegate-exact-facts-v1.schema.json",
@@ -2501,6 +2749,7 @@ def main() -> int:
     try:
         registry = schema_registry()
         validate_semantics_and_presentation(registry)
+        validate_transactional_cx_contract(registry)
         validate_human_artifact_contract(registry)
         validate_fact_profiles(registry)
         validate_work_contract(registry)

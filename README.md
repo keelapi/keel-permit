@@ -76,6 +76,7 @@ flowchart LR
 - [`spec/permit-human-artifact-v1.md`](spec/permit-human-artifact-v1.md) — Human-first AI Permit-to-X rendering, deterministic summaries, and downloadable package trust rules
 - [`spec/permit-universal-verification-v1.md`](spec/permit-universal-verification-v1.md) — Consequence-neutral exact claims, certified-boundary evidence, bounded use, privacy, and provider receipts
 - [`spec/verifier-claims-v2.md`](spec/verifier-claims-v2.md) — Composable structured claims for specific Permit-to-X verification
+- [`spec/transactional-cx-exact-action-contract-v1.md`](spec/transactional-cx-exact-action-contract-v1.md) — Exact Stripe and HubSpot customer-resolution action contracts
 
 ## Schemas
 
@@ -109,7 +110,7 @@ Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated f
 | Bounded Work contract | Strict payment-only Work schemas and four claim contracts are published contract-first; coordinated API producer and public-verifier support are separate release gates. |
 | Permit-to-X presentation | Specific titles require a trusted semantic selector result; presentation artifacts cannot change authorization or verifier verdicts. |
 | Consequence registry | Exact certified tool names can add consequence-specific selectors, typed fact profiles, and human titles without rewriting historical registries; caller labels and titles are never selector inputs. |
-| Permit-to-X fact profiles | Semantic registries can bind an eligible semantic to a typed fact profile; payment, refund, delegation, text-generation, five database consequences, and three Payment & Ledger consequences now have schema-pinned exact facts. |
+| Permit-to-X fact profiles | Semantic registries can bind an eligible semantic to a typed fact profile; payment, refund, delegation, text-generation, five database consequences, three Payment & Ledger consequences, and five Transactional CX consequences now have schema-pinned exact facts. |
 
 ## Examples
 

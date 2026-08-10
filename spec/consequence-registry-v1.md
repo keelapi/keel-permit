@@ -96,6 +96,19 @@ consequences and the new Payment & Ledger consequences under the latest
 registries, including adversarial profile, state, connector, and cross-action
 mutations.
 
+## Additive Transactional CX extension
+
+`consequence_registry/v3.json` preserves every v2 consequence byte-for-value
+and adds five exact Stripe and HubSpot mutations. It generates fact-profile
+registry v6, semantic registry v8, presentation registry v7, and v4 exact
+vectors. The action-specific provider mappings, state transitions, factual
+limits, and evidence ceilings are normative in
+[`transactional-cx-exact-action-contract-v1.md`](transactional-cx-exact-action-contract-v1.md).
+
+The new refund semantic is v2 and matches `operation=call.tools`; the historical
+refund v1 semantic continues to match `operation=payment.refund`. This prevents
+selector ambiguity and leaves historical pinned artifacts unchanged.
+
 ## Claim boundary
 
 A consequence entry and its title establish only the exact authorization
