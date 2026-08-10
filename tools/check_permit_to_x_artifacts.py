@@ -9,6 +9,7 @@ import hashlib
 import json
 import re
 import sys
+import unicodedata
 from pathlib import Path
 from typing import Any
 
@@ -117,6 +118,7 @@ def schema_registry() -> Registry:
             ROOT / "semantic_registry/v4.schema.json",
             ROOT / "presentation_registry/v1.schema.json",
             ROOT / "presentation_registry/v2.schema.json",
+            ROOT / "presentation_registry/v3.schema.json",
             ROOT / "fact_profiles/v1.schema.json",
             ROOT / "fact_profiles/v2.schema.json",
             ROOT / "fact_profiles/v3.schema.json",
@@ -200,6 +202,7 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
     semantics_v4 = load_json("semantic_registry/v4.json")
     presentations = load_json("presentation_registry/v1.json")
     presentations_v2 = load_json("presentation_registry/v2.json")
+    presentations_v3 = load_json("presentation_registry/v3.json")
     validate_instance(
         semantics,
         "semantic_registry/v1.schema.json",
@@ -236,21 +239,34 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
         registry,
         "presentation registry v2",
     )
+    validate_instance(
+        presentations_v3,
+        "presentation_registry/v3.schema.json",
+        registry,
+        "presentation registry v3",
+    )
 
     latest_semantic_ids = [entry["semantic_id"] for entry in semantics_v4["entries"]]
     latest_profile_ids = [
         profile["presentation_profile_id"]
-        for profile in presentations_v2["profiles"]
+        for profile in presentations_v3["profiles"]
     ]
     if len(latest_semantic_ids) != len(set(latest_semantic_ids)):
         raise ContractFailure("semantic registry v4 contains duplicate semantic ids")
     if len(latest_profile_ids) != len(set(latest_profile_ids)):
-        raise ContractFailure("presentation registry v2 contains duplicate profile ids")
+        raise ContractFailure("presentation registry v3 contains duplicate profile ids")
+    if {profile["semantic_id"] for profile in presentations_v3["profiles"]} != set(
+        latest_semantic_ids
+    ):
+        raise ContractFailure(
+            "presentation registry v3 must cover semantic registry v4 exactly"
+        )
+
     if {profile["semantic_id"] for profile in presentations_v2["profiles"]} != set(
         latest_semantic_ids
     ):
         raise ContractFailure(
-            "presentation registry v2 must cover semantic registry v4 exactly"
+            "historical presentation registry v2 must cover semantic registry v4 exactly"
         )
 
     semantic_ids = [entry["semantic_id"] for entry in semantics["entries"]]
@@ -335,6 +351,251 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
     after = select_semantic(semantics, candidate)
     if before != after or digest(semantics) != digest(copy.deepcopy(semantics)):
         raise ContractFailure("presentation-only change interfered with semantic selection")
+
+
+def set_vector_path(document: dict[str, Any], path: list[Any], value: Any) -> None:
+    current: Any = document
+    for segment in path[:-1]:
+        current = current[segment]
+    current[path[-1]] = value
+
+
+def normalize_summary_value(value: Any) -> str:
+    normalized = unicodedata.normalize("NFC", str(value))
+    return re.sub(r"\s+", " ", normalized).strip()
+
+
+def render_human_summary(
+    document: dict[str, Any],
+    summary_semantics: dict[str, Any],
+) -> str:
+    templates = summary_semantics["templates"]
+    artifact_kind = document["artifact_kind"]
+    authorization = document["authorization"]
+    lifecycle = document["lifecycle"]
+    outcome = document["outcome"]
+    verification = document["verification"]
+    values = {
+        "agent": normalize_summary_value(document["identity"].get("agent") or "the agent"),
+        "action": normalize_summary_value(authorization["action"]),
+        "target": normalize_summary_value(authorization["target"]),
+        "issued_at": normalize_summary_value(lifecycle.get("issued_at")),
+        "expires_at": normalize_summary_value(lifecycle.get("expires_at")),
+        "provider_state": normalize_summary_value(outcome.get("provider_state")),
+        "provider_object_id": normalize_summary_value(outcome.get("provider_object_id")),
+        "integrity_verdict": normalize_summary_value(verification["integrity_verdict"]),
+        "trust_mode": normalize_summary_value(verification["trust_mode"]),
+    }
+    sentences: list[str] = []
+    if artifact_kind == "denial":
+        sentences.append(templates["denial"].format(**values))
+    elif artifact_kind == "review":
+        sentences.append(templates["review"].format(**values))
+    else:
+        sentences.append(templates["permit_authorization"].format(**values))
+        if lifecycle.get("expires_at") is None:
+            sentences.append(templates["permit_validity_unbounded"].format(**values))
+        else:
+            sentences.append(templates["permit_validity_bounded"].format(**values))
+        if outcome["dispatch_state"] == "not_dispatched":
+            sentences.append(templates["not_dispatched"])
+        elif outcome.get("provider_state") and outcome.get("provider_object_id"):
+            sentences.append(templates["provider_observed_with_id"].format(**values))
+        elif outcome.get("provider_state"):
+            sentences.append(templates["provider_observed_without_id"].format(**values))
+        else:
+            sentences.append(templates["outcome_unknown"])
+    sentences.append(templates["verification"].format(**values))
+    return summary_semantics["output"]["sentence_separator"].join(sentences)
+
+
+def package_inventory_valid(document: dict[str, Any]) -> bool:
+    entries = document["entries"]
+    paths = [entry["path"] for entry in entries]
+    if len(paths) != len(set(paths)):
+        return False
+    role_by_path = {entry["path"]: entry["role"] for entry in entries}
+    return (
+        role_by_path.get(document["primary_view"]) == "human_view"
+        and role_by_path.get(document["signed_evidence"]) == "signed_evidence"
+    )
+
+
+def validate_human_artifact_contract(registry: Registry) -> None:
+    presentation = load_json("presentation_registry/v3.json")
+    vectors = load_json("presentation_registry/test-vectors/v2.json")
+    corpus = load_json("test-vectors/permit_human_artifact/v1/corpus.json")
+
+    human_contract = presentation["human_artifact_contract"]
+    if set(human_contract["lifecycle_fields"]["required"]) != {
+        "issued_at",
+        "expires_at",
+        "status",
+    }:
+        raise ContractFailure("human artifact lifecycle must require issued_at, expires_at, and status")
+    required_advanced = {
+        "signed_evidence_json",
+        "canonical_signed_bytes",
+        "canonical_signed_bytes_hex",
+        "canonical_signed_bytes_base64",
+        "signatures",
+        "digests",
+        "contract_pins",
+    }
+    if not required_advanced.issubset(set(human_contract["advanced_representations"])):
+        raise ContractFailure("human artifact contract omits an advanced representation")
+
+    profiles = {
+        profile["semantic_id"]: profile for profile in presentation["profiles"]
+    }
+    fallbacks = {
+        profile["presentation_profile_id"]: profile
+        for profile in presentation["fallback_profiles"]
+    }
+    state_titles = human_contract["state_titles"]
+    status_labels = human_contract["status_labels"]
+    for vector in vectors["title_vectors"]:
+        artifact_kind = vector["artifact_kind"]
+        if artifact_kind == "denial":
+            actual = state_titles["denial"]
+        elif artifact_kind == "review":
+            actual = state_titles["review"]
+        else:
+            profile = profiles.get(vector.get("semantic_id"))
+            if profile is None:
+                profile = fallbacks[vector["fallback"]]
+            actual = profile["customer_title"]
+        if actual != vector["expected_title"]:
+            raise ContractFailure(
+                f"human title vector {vector['id']} rendered {actual!r}"
+            )
+
+    expected_summary = vectors["summary_contract"]
+    actual_summary = human_contract["summary"]
+    if actual_summary["position"] != expected_summary["expected_position"]:
+        raise ContractFailure("human summary is not positioned at the end")
+    if actual_summary["derivation"] != expected_summary["expected_derivation"]:
+        raise ContractFailure("human summary is not verifier-derived")
+    if actual_summary["template"] != expected_summary["expected_template"]:
+        raise ContractFailure("human summary template drifted")
+    if set(actual_summary["required_inputs"]) != set(expected_summary["required_inputs"]):
+        raise ContractFailure("human summary input contract drifted")
+    if set(actual_summary["required_inputs"]).intersection(
+        expected_summary["forbidden_inputs"]
+    ):
+        raise ContractFailure("human summary admits an untrusted input")
+
+    summary_semantics = load_json(actual_summary["template"])
+    if summary_semantics.get("version") != "keel.permit.human_summary.v1":
+        raise ContractFailure("human summary semantic version is invalid")
+    security = summary_semantics.get("security", {})
+    if security.get("caller_supplied_title_allowed") is not False:
+        raise ContractFailure("human summary semantics admit a caller title")
+    if security.get("caller_supplied_summary_allowed") is not False:
+        raise ContractFailure("human summary semantics admit caller summary text")
+    if security.get("summary_is_authorization_input") is not False:
+        raise ContractFailure("human summary semantics interfere with authorization")
+    if security.get("summary_is_verifier_verdict_input") is not False:
+        raise ContractFailure("human summary semantics interfere with verdicts")
+
+    artifact_schema = load_json(corpus["artifact_schema"])
+    artifact_validator = jsonschema.Draft202012Validator(
+        artifact_schema,
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+    valid_artifacts: dict[str, dict[str, Any]] = {}
+    for vector in corpus["valid_artifacts"]:
+        document = vector["document"]
+        errors = list(artifact_validator.iter_errors(document))
+        if errors:
+            raise ContractFailure(
+                f"human artifact vector {vector['id']} is invalid: {errors[0].message}"
+            )
+        rendered_summary = render_human_summary(document, summary_semantics)
+        if document["summary"]["text"] != rendered_summary:
+            raise ContractFailure(
+                f"human artifact vector {vector['id']} summary drifted: "
+                f"{rendered_summary!r}"
+            )
+        expected_state_label = status_labels[document["lifecycle"]["status"]]
+        if document["state_label"] != expected_state_label:
+            raise ContractFailure(
+                f"human artifact vector {vector['id']} state label drifted"
+            )
+        valid_artifacts[vector["id"]] = document
+    for mutation in corpus["artifact_mutations"]:
+        document = copy.deepcopy(valid_artifacts[mutation["base"]])
+        set_vector_path(document, mutation["path"], mutation["value"])
+        if artifact_validator.is_valid(document):
+            raise ContractFailure(
+                f"human artifact mutation {mutation['id']} was accepted"
+            )
+    for mutation in corpus["render_mutations"]:
+        document = copy.deepcopy(valid_artifacts[mutation["base"]])
+        set_vector_path(document, mutation["path"], mutation["value"])
+        if not artifact_validator.is_valid(document):
+            raise ContractFailure(
+                f"human render mutation {mutation['id']} did not reach comparison"
+            )
+        if mutation["field"] == "summary":
+            comparison_failed = (
+                document["summary"]["text"]
+                != render_human_summary(document, summary_semantics)
+            )
+        elif mutation["field"] == "title":
+            semantic_id = document["source"]["semantic_id"]
+            expected_title = profiles[semantic_id]["customer_title"]
+            comparison_failed = document["title"] != expected_title
+        elif mutation["field"] == "state_label":
+            expected_state_label = status_labels[document["lifecycle"]["status"]]
+            comparison_failed = document["state_label"] != expected_state_label
+        else:
+            raise ContractFailure(
+                f"human render mutation {mutation['id']} has an unknown field"
+            )
+        if not comparison_failed:
+            raise ContractFailure(
+                f"human render mutation {mutation['id']} did not produce a mismatch"
+            )
+
+    package_schema = load_json(corpus["package_schema"])
+    package_validator = jsonschema.Draft202012Validator(
+        package_schema,
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+    valid_packages: dict[str, dict[str, Any]] = {}
+    for vector in corpus["valid_package_manifests"]:
+        document = vector["document"]
+        errors = list(package_validator.iter_errors(document))
+        if errors:
+            raise ContractFailure(
+                f"Permit package vector {vector['id']} is invalid: {errors[0].message}"
+            )
+        if not package_inventory_valid(document):
+            raise ContractFailure(
+                f"Permit package vector {vector['id']} has inconsistent inventory"
+            )
+        valid_packages[vector["id"]] = document
+    for mutation in corpus["package_mutations"]:
+        document = copy.deepcopy(valid_packages[mutation["base"]])
+        set_vector_path(document, mutation["path"], mutation["value"])
+        if package_validator.is_valid(document):
+            raise ContractFailure(
+                f"Permit package mutation {mutation['id']} was accepted"
+            )
+    for mutation in corpus["package_inventory_mutations"]:
+        document = copy.deepcopy(valid_packages[mutation["base"]])
+        set_vector_path(document, mutation["path"], mutation["value"])
+        if not package_validator.is_valid(document):
+            raise ContractFailure(
+                f"Permit package inventory mutation {mutation['id']} did not reach comparison"
+            )
+        if package_inventory_valid(document):
+            raise ContractFailure(
+                f"Permit package inventory mutation {mutation['id']} was accepted"
+            )
 
 
 def validate_fact_profiles(registry: Registry) -> None:
@@ -1455,6 +1716,14 @@ def validate_artifact_manifest() -> None:
         "semantic_registry/v4.schema.json",
         "presentation_registry/v2.json",
         "presentation_registry/v2.schema.json",
+        "presentation_registry/v3.json",
+        "presentation_registry/v3.schema.json",
+        "presentation_registry/test-vectors/v2.json",
+        "schemas/permit-human-artifact-v1.schema.json",
+        "schemas/permit-package-manifest-v1.schema.json",
+        "semantics/permit/human_summary_v1.json",
+        "spec/permit-human-artifact-v1.md",
+        "test-vectors/permit_human_artifact/v1/corpus.json",
         "fact_profiles/v3.json",
         "fact_profiles/v3.schema.json",
         "schemas/generate-text-exact-facts-v1.schema.json",
@@ -1584,7 +1853,7 @@ def validate_spec_document_pins() -> None:
 def validate_short_term_exact_profiles(registry: Registry) -> None:
     semantics = load_json("semantic_registry/v4.json")
     facts = load_json("fact_profiles/v3.json")
-    presentation = load_json("presentation_registry/v2.json")
+    presentation = load_json("presentation_registry/v3.json")
     validate_instance(
         semantics,
         "semantic_registry/v4.schema.json",
@@ -1599,9 +1868,9 @@ def validate_short_term_exact_profiles(registry: Registry) -> None:
     )
     validate_instance(
         presentation,
-        "presentation_registry/v2.schema.json",
+        "presentation_registry/v3.schema.json",
         registry,
-        "presentation registry v2",
+        "presentation registry v3",
     )
     semantic_by_id = {entry["semantic_id"]: entry for entry in semantics["entries"]}
     profile_by_id = {
@@ -1609,7 +1878,7 @@ def validate_short_term_exact_profiles(registry: Registry) -> None:
     }
     presented = {profile["semantic_id"] for profile in presentation["profiles"]}
     if presented != set(semantic_by_id):
-        raise ContractFailure("presentation v2 must cover every v4 semantic exactly")
+        raise ContractFailure("presentation v3 must cover every v4 semantic exactly")
     expected = {
         "keel.action.generate_text.v1": "keel.facts.generate_text_exact.v1",
         "keel.action.payment_refund.v1": "keel.facts.refund_exact.v1",
@@ -1845,6 +2114,7 @@ def main() -> int:
     try:
         registry = schema_registry()
         validate_semantics_and_presentation(registry)
+        validate_human_artifact_contract(registry)
         validate_fact_profiles(registry)
         validate_work_contract(registry)
         validate_claim_contracts()

@@ -391,6 +391,46 @@
       "id": "permit-to-x.test-vectors.enforcement-claims.v1",
       "path": "test-vectors/enforcement_claims/v1/corpus.json",
       "sha256": "4b9c380c9f1bb93b07bf21a9b4d9f9f5021309437c685379dff51287d7c94119"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v3",
+      "path": "presentation_registry/v3.json",
+      "sha256": "386577cf71fb117b63d59be316d4a217fee0a4fc2e82b9a91a75b188fdb77553"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v3.schema",
+      "path": "presentation_registry/v3.schema.json",
+      "sha256": "98f5dd8b54ee1072eeff7c5070c81bb7391d7ff9f5c5728916ebcf20d189e789"
+    },
+    {
+      "id": "permit-to-x.test-vectors.presentation-registry.v2",
+      "path": "presentation_registry/test-vectors/v2.json",
+      "sha256": "fe214e6dd3cb3e702b374a54f8a53094b93796e9debf17a5322a95c451c002ba"
+    },
+    {
+      "id": "keel.permit.human_artifact.v1.schema",
+      "path": "schemas/permit-human-artifact-v1.schema.json",
+      "sha256": "504575aadf8e8af05cf1141020bd7b585442d99fb354753e7e3337c9dd542b38"
+    },
+    {
+      "id": "keel.permit.package_manifest.v1.schema",
+      "path": "schemas/permit-package-manifest-v1.schema.json",
+      "sha256": "57c244454e69e9aaab77577a7f8e3d6756406426cd451300e6340661dbd7cf6a"
+    },
+    {
+      "id": "keel.permit.human_artifact.v1.spec",
+      "path": "spec/permit-human-artifact-v1.md",
+      "sha256": "e63b70d10c5dcd44f85fa0d6ca6668a604affd77a38ebbd830fbf23a9029b8fb"
+    },
+    {
+      "id": "permit-to-x.test-vectors.human-artifact.v1",
+      "path": "test-vectors/permit_human_artifact/v1/corpus.json",
+      "sha256": "d1ff60645328a48914d77444c9f2610469e0e4114490b98ce6376d3f88cb1e8e"
+    },
+    {
+      "id": "keel.permit.human_summary.v1",
+      "path": "semantics/permit/human_summary_v1.json",
+      "sha256": "3ef3977347117bbc8930c5f4d3a3c6b666d02a78aba6a905387c054ea533eeb7"
     }
   ]
 }

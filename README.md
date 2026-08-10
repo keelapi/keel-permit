@@ -73,6 +73,7 @@ flowchart LR
 - [`spec/permit-semantic-presentation-v1.md`](spec/permit-semantic-presentation-v1.md) — Trusted semantic selection and non-authorizing presentation
 - [`spec/permit-fact-profiles-v1.md`](spec/permit-fact-profiles-v1.md) — Typed, privacy-aware authorization facts for Permit-to-X
 - [`spec/permit-to-x-admission-v1.md`](spec/permit-to-x-admission-v1.md) — Twelve-gate admission test for specific Permit titles
+- [`spec/permit-human-artifact-v1.md`](spec/permit-human-artifact-v1.md) — Human-first AI Permit-to-X rendering, deterministic summaries, and downloadable package trust rules
 - [`spec/permit-universal-verification-v1.md`](spec/permit-universal-verification-v1.md) — Consequence-neutral exact claims, certified-boundary evidence, bounded use, privacy, and provider receipts
 - [`spec/verifier-claims-v2.md`](spec/verifier-claims-v2.md) — Composable structured claims for specific Permit-to-X verification
 
