@@ -836,6 +836,61 @@
       "id": "keel.permit.collections_exact_action_contract.v1.spec",
       "path": "spec/collections-exact-action-contract-v1.md",
       "sha256": "07f86765492caf6961c916b8864eeebc9b0c282e60b3e0920a656207207b6c8e"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v8",
+      "path": "consequence_registry/v8.json",
+      "sha256": "ce482f2b635e11f2ac49f1532b49f0d0a51fba4d9edf4b1b62ca302f251420c3"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v8.schema",
+      "path": "consequence_registry/v8.schema.json",
+      "sha256": "3b633f906e6062ffdae340c0d4fd73fa3f2c42b0aa6c44bc28618a39178d50a2"
+    },
+    {
+      "id": "keel.permit.insurance_claims_exact_facts.v1.schema",
+      "path": "schemas/insurance-claims-exact-facts-v1.schema.json",
+      "sha256": "a66827c627651ad6e285ff3e036b83000c94f9a55dcac82e9319fc3dbb6be1b7"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v11",
+      "path": "fact_profiles/v11.json",
+      "sha256": "aa17ba8b701dd20dc9e4f3a4c34381fe1e64d9a933bfe3005cd96f6f5cca5c36"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v11.schema",
+      "path": "fact_profiles/v11.schema.json",
+      "sha256": "066ea2c3cba62fba4781bf8255f30460f1b8d76dfa248a0ab3b1d99b4ac875fa"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v13",
+      "path": "semantic_registry/v13.json",
+      "sha256": "d4bcb07a42caae97760cfc6eaab4cc0e7b7eba62a7f966b44b41ec646a70cd2b"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v13.schema",
+      "path": "semantic_registry/v13.schema.json",
+      "sha256": "3e7e0cd4519e31951ea8d338064c5ae5703115d080ed129c5abb40fba9db5ffb"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v12",
+      "path": "presentation_registry/v12.json",
+      "sha256": "74a38e1fcfabab8e7d198f0d1aecad345703f0f226bd3661c264c78e0392e00a"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v12.schema",
+      "path": "presentation_registry/v12.schema.json",
+      "sha256": "a91de80409c70e88b89ef84fd5b9872a6fd678f27628053f3d045536226b69a6"
+    },
+    {
+      "id": "permit-to-x.test-vectors.consequence-registry.v9",
+      "path": "consequence_registry/test-vectors/v9.json",
+      "sha256": "592a18fd57953f9616ba8b48a61b7186e11d7b441d2aad0297927654cff1a78a"
+    },
+    {
+      "id": "keel.permit.insurance_claims_exact_action_contract.v1.spec",
+      "path": "spec/insurance-claims-exact-action-contract-v1.md",
+      "sha256": "80b468ea6539658ae1a6c3cde2032bde0168dc2f82971608ca820abe392eb4f9"
     }
   ]
 }
