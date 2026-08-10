@@ -63,6 +63,39 @@ source registry are independently schema-validated and pinned by
 title vector for every v1 consequence. Version 2 of those vectors adds valid
 authorization facts plus negative action/profile-substitution coverage.
 
+## Additive Payment & Ledger extension
+
+`consequence_registry/v2.json` preserves every v1 consequence byte-for-value
+and adds three distinct consequences:
+
+- `payment.invoice.pay.v1` → **AI Permit-to-Pay-Invoice**;
+- `ledger.entry.record.v1` → **AI Permit-to-Record-Ledger-Entry**; and
+- `payment.reconciliation.record.v1` → **AI Permit-to-Reconcile-Payment**.
+
+The extension generates `fact_profiles/v5.json`,
+`semantic_registry/v7.json`, and `presentation_registry/v6.json`. The exact
+fact objects validate against
+`schemas/payment-ledger-exact-facts-v1.schema.json`, whose mutually exclusive
+branches prevent cross-action fields and fact-profile IDs from validating.
+
+An invoice payment requires provider-derived open-invoice state and amount. A
+ledger entry requires a version precondition, distinct debit and credit
+accounts, and a trusted value-conservation result. A reconciliation requires
+bound provider and ledger observations, matching amount and currency, posted
+and completed states, and an expected current status of `unreconciled`.
+Caller assertions do not satisfy those requirements. Runtime producers must
+derive them at the enforced connector or workflow boundary.
+
+Each Payment & Ledger fact object also binds the observation time, expiry, and
+digest of a short-lived gateway-signed preflight snapshot. Runtime producers
+must verify that snapshot under a credential unavailable to the agent and must
+reject it after expiry or when it does not bind the exact action arguments.
+
+`consequence_registry/test-vectors/v3.json` covers both historical database
+consequences and the new Payment & Ledger consequences under the latest
+registries, including adversarial profile, state, connector, and cross-action
+mutations.
+
 ## Claim boundary
 
 A consequence entry and its title establish only the exact authorization

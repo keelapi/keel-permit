@@ -6,6 +6,19 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
+- Add three exact Payment & Ledger consequences: paying one provider-verified
+  open invoice, posting one version-checked double-entry ledger record, and
+  recording one matched payment reconciliation.
+- Publish additive consequence registry v2, semantic registry v7, fact-profile
+  registry v5, and presentation registry v6 without rewriting the released
+  database registry history.
+- Require invoice-state preflight, one-use idempotency, distinct balanced
+  ledger accounts, provider/ledger observation digests, matched amount and
+  currency, and expected-current reconciliation state before a specific
+  Payment & Ledger Permit is eligible.
+- Bind each exact action to a short-lived gateway-signed preflight snapshot;
+  caller-supplied state and expired or argument-mismatched snapshots are not
+  trusted authorization facts.
 - Add schema-validated exact authorization facts for insert, update, delete,
   migration, and dataset-export database consequences.
 - Bind each database action to its own fact-profile ID in additive semantic
