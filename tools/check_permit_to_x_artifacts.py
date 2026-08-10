@@ -116,9 +116,12 @@ def schema_registry() -> Registry:
             ROOT / "semantic_registry/v2.schema.json",
             ROOT / "semantic_registry/v3.schema.json",
             ROOT / "semantic_registry/v4.schema.json",
+            ROOT / "semantic_registry/v5.schema.json",
             ROOT / "presentation_registry/v1.schema.json",
             ROOT / "presentation_registry/v2.schema.json",
             ROOT / "presentation_registry/v3.schema.json",
+            ROOT / "presentation_registry/v4.schema.json",
+            ROOT / "consequence_registry/v1.schema.json",
             ROOT / "fact_profiles/v1.schema.json",
             ROOT / "fact_profiles/v2.schema.json",
             ROOT / "fact_profiles/v3.schema.json",
@@ -200,9 +203,11 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
     semantics_v2 = load_json("semantic_registry/v2.json")
     semantics_v3 = load_json("semantic_registry/v3.json")
     semantics_v4 = load_json("semantic_registry/v4.json")
+    semantics_v5 = load_json("semantic_registry/v5.json")
     presentations = load_json("presentation_registry/v1.json")
     presentations_v2 = load_json("presentation_registry/v2.json")
     presentations_v3 = load_json("presentation_registry/v3.json")
+    presentations_v4 = load_json("presentation_registry/v4.json")
     validate_instance(
         semantics,
         "semantic_registry/v1.schema.json",
@@ -228,6 +233,12 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
         "semantic registry v4",
     )
     validate_instance(
+        semantics_v5,
+        "semantic_registry/v5.schema.json",
+        registry,
+        "semantic registry v5",
+    )
+    validate_instance(
         presentations,
         "presentation_registry/v1.schema.json",
         registry,
@@ -245,25 +256,38 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
         registry,
         "presentation registry v3",
     )
+    validate_instance(
+        presentations_v4,
+        "presentation_registry/v4.schema.json",
+        registry,
+        "presentation registry v4",
+    )
 
-    latest_semantic_ids = [entry["semantic_id"] for entry in semantics_v4["entries"]]
+    latest_semantic_ids = [entry["semantic_id"] for entry in semantics_v5["entries"]]
     latest_profile_ids = [
         profile["presentation_profile_id"]
-        for profile in presentations_v3["profiles"]
+        for profile in presentations_v4["profiles"]
     ]
     if len(latest_semantic_ids) != len(set(latest_semantic_ids)):
-        raise ContractFailure("semantic registry v4 contains duplicate semantic ids")
+        raise ContractFailure("semantic registry v5 contains duplicate semantic ids")
     if len(latest_profile_ids) != len(set(latest_profile_ids)):
-        raise ContractFailure("presentation registry v3 contains duplicate profile ids")
-    if {profile["semantic_id"] for profile in presentations_v3["profiles"]} != set(
+        raise ContractFailure("presentation registry v4 contains duplicate profile ids")
+    if {profile["semantic_id"] for profile in presentations_v4["profiles"]} != set(
         latest_semantic_ids
     ):
         raise ContractFailure(
-            "presentation registry v3 must cover semantic registry v4 exactly"
+            "presentation registry v4 must cover semantic registry v5 exactly"
         )
 
+    v4_semantic_ids = {entry["semantic_id"] for entry in semantics_v4["entries"]}
+    if {profile["semantic_id"] for profile in presentations_v3["profiles"]} != (
+        v4_semantic_ids
+    ):
+        raise ContractFailure(
+            "historical presentation registry v3 must cover semantic registry v4 exactly"
+        )
     if {profile["semantic_id"] for profile in presentations_v2["profiles"]} != set(
-        latest_semantic_ids
+        v4_semantic_ids
     ):
         raise ContractFailure(
             "historical presentation registry v2 must cover semantic registry v4 exactly"
@@ -281,10 +305,10 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
     if not all("cost_permit" in entry["excluded_permit_products"] for entry in semantics["entries"]):
         raise ContractFailure("every initial semantic entry must preserve the cost-permit carve-out")
 
-    allowed_fields = set(presentations["allowed_leading_fields"])
-    allowed_sections = set(presentations["allowed_evidence_sections"])
+    allowed_fields = set(presentations_v4["allowed_leading_fields"])
+    allowed_sections = set(presentations_v4["allowed_evidence_sections"])
     forbidden_keys = {"claims", "verdict", "authorization_conditions", "policy_conditions"}
-    for profile in presentations["profiles"]:
+    for profile in presentations_v4["profiles"]:
         if any(field["field"] not in allowed_fields for field in profile["leading_fields"]):
             raise ContractFailure(f"{profile['presentation_profile_id']} uses an unknown leading field")
         if not set(profile["evidence_sections"]).issubset(allowed_sections):
@@ -351,6 +375,69 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
     after = select_semantic(semantics, candidate)
     if before != after or digest(semantics) != digest(copy.deepcopy(semantics)):
         raise ContractFailure("presentation-only change interfered with semantic selection")
+
+    consequence_registry = load_json("consequence_registry/v1.json")
+    validate_instance(
+        consequence_registry,
+        "consequence_registry/v1.schema.json",
+        registry,
+        "consequence registry v1",
+    )
+    consequences = consequence_registry["consequences"]
+    consequence_vectors = load_json("consequence_registry/test-vectors/v1.json")
+    consequence_types = [item["consequence_type"] for item in consequences]
+    consequence_semantics = [item["semantic_id"] for item in consequences]
+    consequence_tools = [
+        tool for item in consequences for tool in item["tool_names"]
+    ]
+    if len(consequence_types) != len(set(consequence_types)):
+        raise ContractFailure("consequence registry contains duplicate consequence types")
+    if len(consequence_semantics) != len(set(consequence_semantics)):
+        raise ContractFailure("consequence registry contains duplicate semantic ids")
+    if len(consequence_tools) != len(set(consequence_tools)):
+        raise ContractFailure("consequence registry contains overlapping tool names")
+    base_semantics = {entry["semantic_id"] for entry in semantics_v4["entries"]}
+    if base_semantics.intersection(consequence_semantics):
+        raise ContractFailure("consequence registry redefines a historical semantic")
+    by_v5_semantic = {entry["semantic_id"]: entry for entry in semantics_v5["entries"]}
+    by_v4_presentation = {
+        profile["semantic_id"]: profile for profile in presentations_v4["profiles"]
+    }
+    vector_by_id = {
+        vector["id"]: vector for vector in consequence_vectors["vectors"]
+    }
+    if set(vector_by_id) != set(consequence_types):
+        raise ContractFailure("consequence vectors must cover every consequence exactly")
+    for consequence in consequences:
+        if not {"connector_identity", "tool_contract"}.issubset(
+            set(consequence["trusted_fact_requirements"])
+        ):
+            raise ContractFailure(
+                f"{consequence['consequence_type']} omits connector trust requirements"
+            )
+        entry = by_v5_semantic.get(consequence["semantic_id"])
+        profile = by_v4_presentation.get(consequence["semantic_id"])
+        if entry is None or entry["match"].get("action_names") != consequence["tool_names"]:
+            raise ContractFailure(
+                f"{consequence['consequence_type']} did not generate its exact selector"
+            )
+        if profile is None or profile["customer_title"] != consequence["customer_title"]:
+            raise ContractFailure(
+                f"{consequence['consequence_type']} did not generate its presentation"
+            )
+        vector = vector_by_id[consequence["consequence_type"]]
+        candidate = vector["candidate"]
+        if select_semantic(semantics_v5, candidate) != (
+            vector["expected_semantic_id"],
+            None,
+        ):
+            raise ContractFailure(
+                f"{consequence['consequence_type']} is not selected exactly once"
+            )
+        if profile["customer_title"] != vector["expected_title"]:
+            raise ContractFailure(
+                f"{consequence['consequence_type']} vector title drifted"
+            )
 
 
 def set_vector_path(document: dict[str, Any], path: list[Any], value: Any) -> None:
@@ -422,7 +509,7 @@ def package_inventory_valid(document: dict[str, Any]) -> bool:
 
 
 def validate_human_artifact_contract(registry: Registry) -> None:
-    presentation = load_json("presentation_registry/v3.json")
+    presentation = load_json("presentation_registry/v4.json")
     vectors = load_json("presentation_registry/test-vectors/v2.json")
     corpus = load_json("test-vectors/permit_human_artifact/v1/corpus.json")
 
@@ -1714,6 +1801,14 @@ def validate_artifact_manifest() -> None:
     required_latest_paths = {
         "semantic_registry/v4.json",
         "semantic_registry/v4.schema.json",
+        "semantic_registry/v5.json",
+        "semantic_registry/v5.schema.json",
+        "presentation_registry/v4.json",
+        "presentation_registry/v4.schema.json",
+        "consequence_registry/v1.json",
+        "consequence_registry/v1.schema.json",
+        "consequence_registry/test-vectors/v1.json",
+        "spec/consequence-registry-v1.md",
         "presentation_registry/v2.json",
         "presentation_registry/v2.schema.json",
         "presentation_registry/v3.json",

@@ -431,6 +431,46 @@
       "id": "keel.permit.human_summary.v1",
       "path": "semantics/permit/human_summary_v1.json",
       "sha256": "3ef3977347117bbc8930c5f4d3a3c6b666d02a78aba6a905387c054ea533eeb7"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v1",
+      "path": "consequence_registry/v1.json",
+      "sha256": "fcd0976fb9b0bd2d01ed145fd64fb795988ed3c55120b5566b2bf4cf99f9499a"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v1.schema",
+      "path": "consequence_registry/v1.schema.json",
+      "sha256": "35ead79d1f59438d700672d8c87d0f737a5c5737a1c02052f2110126d793d88b"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v5",
+      "path": "semantic_registry/v5.json",
+      "sha256": "677a114c332a38a0d01ba4ec7cf87c6af1ee15ba21c62c653ae13c365bd760be"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v5.schema",
+      "path": "semantic_registry/v5.schema.json",
+      "sha256": "c0d0b7d1f61d993b77747a1e2972f1fad15a68bdaa5fced0633b058970cf5a09"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v4",
+      "path": "presentation_registry/v4.json",
+      "sha256": "548e7466d54e66eccfa73be747a27ecd389e6fb29dddb9df5dffd4eb3e8406f2"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v4.schema",
+      "path": "presentation_registry/v4.schema.json",
+      "sha256": "60b1c1d9ca373efc6ced76306a16ec450b347d142db7585b7122ce56bf398ce9"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v1.spec",
+      "path": "spec/consequence-registry-v1.md",
+      "sha256": "320a1d95d34de394efc1fc20e5476b06ea65b8512bd9a3664fc0a0fd1f4eaab0"
+    },
+    {
+      "id": "permit-to-x.test-vectors.consequence-registry.v1",
+      "path": "consequence_registry/test-vectors/v1.json",
+      "sha256": "c0baa3ee5e81fc8a1013f1a93f0864105989b60ece9509fc85c10765d7cd8740"
     }
   ]
 }
