@@ -6,6 +6,13 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
+- Add schema-validated exact authorization facts for insert, update, delete,
+  migration, and dataset-export database consequences.
+- Bind each database action to its own fact-profile ID in additive semantic
+  registry v6 and presentation registry v5 without rewriting v5/v4 history.
+- Reject cross-action fact-profile substitution and require connector,
+  tool-contract, exact-target, material-request, and enforced-path facts before
+  a database-specific Permit title is eligible for exact evidence.
 - Define the human-first AI Permit-to-X artifact and `.keelpermit` package
   inventory without creating a new authorization lifecycle or trust root.
 - Require verifier-derived titles, lifecycle fields, evidence boundaries, and

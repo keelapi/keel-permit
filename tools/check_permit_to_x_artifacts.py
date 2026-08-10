@@ -117,14 +117,17 @@ def schema_registry() -> Registry:
             ROOT / "semantic_registry/v3.schema.json",
             ROOT / "semantic_registry/v4.schema.json",
             ROOT / "semantic_registry/v5.schema.json",
+            ROOT / "semantic_registry/v6.schema.json",
             ROOT / "presentation_registry/v1.schema.json",
             ROOT / "presentation_registry/v2.schema.json",
             ROOT / "presentation_registry/v3.schema.json",
             ROOT / "presentation_registry/v4.schema.json",
+            ROOT / "presentation_registry/v5.schema.json",
             ROOT / "consequence_registry/v1.schema.json",
             ROOT / "fact_profiles/v1.schema.json",
             ROOT / "fact_profiles/v2.schema.json",
             ROOT / "fact_profiles/v3.schema.json",
+            ROOT / "fact_profiles/v4.schema.json",
         ]
     )
     for path in sorted(schema_paths):
@@ -204,10 +207,12 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
     semantics_v3 = load_json("semantic_registry/v3.json")
     semantics_v4 = load_json("semantic_registry/v4.json")
     semantics_v5 = load_json("semantic_registry/v5.json")
+    semantics_v6 = load_json("semantic_registry/v6.json")
     presentations = load_json("presentation_registry/v1.json")
     presentations_v2 = load_json("presentation_registry/v2.json")
     presentations_v3 = load_json("presentation_registry/v3.json")
     presentations_v4 = load_json("presentation_registry/v4.json")
+    presentations_v5 = load_json("presentation_registry/v5.json")
     validate_instance(
         semantics,
         "semantic_registry/v1.schema.json",
@@ -239,6 +244,12 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
         "semantic registry v5",
     )
     validate_instance(
+        semantics_v6,
+        "semantic_registry/v6.schema.json",
+        registry,
+        "semantic registry v6",
+    )
+    validate_instance(
         presentations,
         "presentation_registry/v1.schema.json",
         registry,
@@ -262,21 +273,27 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
         registry,
         "presentation registry v4",
     )
+    validate_instance(
+        presentations_v5,
+        "presentation_registry/v5.schema.json",
+        registry,
+        "presentation registry v5",
+    )
 
-    latest_semantic_ids = [entry["semantic_id"] for entry in semantics_v5["entries"]]
+    latest_semantic_ids = [entry["semantic_id"] for entry in semantics_v6["entries"]]
     latest_profile_ids = [
         profile["presentation_profile_id"]
-        for profile in presentations_v4["profiles"]
+        for profile in presentations_v5["profiles"]
     ]
     if len(latest_semantic_ids) != len(set(latest_semantic_ids)):
-        raise ContractFailure("semantic registry v5 contains duplicate semantic ids")
+        raise ContractFailure("semantic registry v6 contains duplicate semantic ids")
     if len(latest_profile_ids) != len(set(latest_profile_ids)):
-        raise ContractFailure("presentation registry v4 contains duplicate profile ids")
-    if {profile["semantic_id"] for profile in presentations_v4["profiles"]} != set(
+        raise ContractFailure("presentation registry v5 contains duplicate profile ids")
+    if {profile["semantic_id"] for profile in presentations_v5["profiles"]} != set(
         latest_semantic_ids
     ):
         raise ContractFailure(
-            "presentation registry v4 must cover semantic registry v5 exactly"
+            "presentation registry v5 must cover semantic registry v6 exactly"
         )
 
     v4_semantic_ids = {entry["semantic_id"] for entry in semantics_v4["entries"]}
@@ -305,10 +322,10 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
     if not all("cost_permit" in entry["excluded_permit_products"] for entry in semantics["entries"]):
         raise ContractFailure("every initial semantic entry must preserve the cost-permit carve-out")
 
-    allowed_fields = set(presentations_v4["allowed_leading_fields"])
-    allowed_sections = set(presentations_v4["allowed_evidence_sections"])
+    allowed_fields = set(presentations_v5["allowed_leading_fields"])
+    allowed_sections = set(presentations_v5["allowed_evidence_sections"])
     forbidden_keys = {"claims", "verdict", "authorization_conditions", "policy_conditions"}
-    for profile in presentations_v4["profiles"]:
+    for profile in presentations_v5["profiles"]:
         if any(field["field"] not in allowed_fields for field in profile["leading_fields"]):
             raise ContractFailure(f"{profile['presentation_profile_id']} uses an unknown leading field")
         if not set(profile["evidence_sections"]).issubset(allowed_sections):
@@ -385,6 +402,8 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
     )
     consequences = consequence_registry["consequences"]
     consequence_vectors = load_json("consequence_registry/test-vectors/v1.json")
+    exact_consequence_vectors = load_json("consequence_registry/test-vectors/v2.json")
+    latest_fact_registry = load_json("fact_profiles/v4.json")
     consequence_types = [item["consequence_type"] for item in consequences]
     consequence_semantics = [item["semantic_id"] for item in consequences]
     consequence_tools = [
@@ -403,11 +422,34 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
     by_v4_presentation = {
         profile["semantic_id"]: profile for profile in presentations_v4["profiles"]
     }
+    by_v6_semantic = {entry["semantic_id"]: entry for entry in semantics_v6["entries"]}
+    by_v5_presentation = {
+        profile["semantic_id"]: profile for profile in presentations_v5["profiles"]
+    }
+    by_latest_fact_profile = {
+        profile["fact_profile_id"]: profile
+        for profile in latest_fact_registry["profiles"]
+    }
+    database_facts_schema = load_json(
+        "schemas/database-exact-facts-v1.schema.json"
+    )
+    database_facts_validator = jsonschema.Draft202012Validator(
+        database_facts_schema,
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
     vector_by_id = {
         vector["id"]: vector for vector in consequence_vectors["vectors"]
     }
     if set(vector_by_id) != set(consequence_types):
         raise ContractFailure("consequence vectors must cover every consequence exactly")
+    exact_vector_by_id = {
+        vector["id"]: vector for vector in exact_consequence_vectors["vectors"]
+    }
+    if set(exact_vector_by_id) != set(consequence_types):
+        raise ContractFailure(
+            "exact consequence vectors must cover every consequence exactly"
+        )
     for consequence in consequences:
         if not {"connector_identity", "tool_contract"}.issubset(
             set(consequence["trusted_fact_requirements"])
@@ -437,6 +479,60 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
         if profile["customer_title"] != vector["expected_title"]:
             raise ContractFailure(
                 f"{consequence['consequence_type']} vector title drifted"
+            )
+        exact_vector = exact_vector_by_id[consequence["consequence_type"]]
+        exact_entry = by_v6_semantic.get(consequence["semantic_id"])
+        exact_profile = by_v5_presentation.get(consequence["semantic_id"])
+        expected_fact_profile_id = exact_vector["expected_fact_profile_id"]
+        fact_profile = by_latest_fact_profile.get(expected_fact_profile_id)
+        if exact_entry is None or exact_entry.get("fact_profile_id") != (
+            expected_fact_profile_id
+        ):
+            raise ContractFailure(
+                f"{consequence['consequence_type']} lacks its exact fact profile"
+            )
+        if fact_profile is None or consequence["semantic_id"] not in fact_profile[
+            "semantic_ids"
+        ]:
+            raise ContractFailure(
+                f"{consequence['consequence_type']} fact profile is not semantic-bound"
+            )
+        if exact_profile is None or exact_profile["customer_title"] != (
+            exact_vector["expected_title"]
+        ):
+            raise ContractFailure(
+                f"{consequence['consequence_type']} exact presentation drifted"
+            )
+        if select_semantic(semantics_v6, exact_vector["candidate"]) != (
+            exact_vector["expected_semantic_id"],
+            None,
+        ):
+            raise ContractFailure(
+                f"{consequence['consequence_type']} exact selector is ambiguous"
+            )
+        authorization_facts = exact_vector["valid_authorization_facts"]
+        facts_errors = list(
+            database_facts_validator.iter_errors(authorization_facts)
+        )
+        if facts_errors:
+            raise ContractFailure(
+                f"{consequence['consequence_type']} exact facts are invalid: "
+                f"{facts_errors[0].message}"
+            )
+        if authorization_facts["fact_profile_id"] != expected_fact_profile_id:
+            raise ContractFailure(
+                f"{consequence['consequence_type']} vector fact profile drifted"
+            )
+        mismatched_facts = copy.deepcopy(authorization_facts)
+        mismatched_facts["fact_profile_id"] = next(
+            profile_id
+            for profile_id in by_latest_fact_profile
+            if profile_id.startswith("keel.facts.database_")
+            and profile_id != expected_fact_profile_id
+        )
+        if database_facts_validator.is_valid(mismatched_facts):
+            raise ContractFailure(
+                f"{consequence['consequence_type']} accepted another action's fact profile"
             )
 
 
@@ -509,7 +605,7 @@ def package_inventory_valid(document: dict[str, Any]) -> bool:
 
 
 def validate_human_artifact_contract(registry: Registry) -> None:
-    presentation = load_json("presentation_registry/v4.json")
+    presentation = load_json("presentation_registry/v5.json")
     vectors = load_json("presentation_registry/test-vectors/v2.json")
     corpus = load_json("test-vectors/permit_human_artifact/v1/corpus.json")
 
@@ -764,13 +860,13 @@ def validate_fact_profiles(registry: Registry) -> None:
     if payment_entry.get("fact_profile_id") != "keel.facts.payment_exact.v1":
         raise ContractFailure("payment.execute is not bound to exact payment facts")
 
-    latest_fact_registry = load_json("fact_profiles/v3.json")
-    latest_semantics = load_json("semantic_registry/v4.json")
+    latest_fact_registry = load_json("fact_profiles/v4.json")
+    latest_semantics = load_json("semantic_registry/v6.json")
     validate_instance(
         latest_fact_registry,
-        "fact_profiles/v3.schema.json",
+        "fact_profiles/v4.schema.json",
         registry,
-        "fact profile registry v3",
+        "fact profile registry v4",
     )
     latest_semantic_ids = {
         entry["semantic_id"] for entry in latest_semantics["entries"]
@@ -779,17 +875,17 @@ def validate_fact_profiles(registry: Registry) -> None:
     for profile in latest_fact_registry["profiles"]:
         profile_id = profile["fact_profile_id"]
         if profile_id in latest_profile_ids:
-            raise ContractFailure("fact profile registry v3 contains duplicate ids")
+            raise ContractFailure("fact profile registry v4 contains duplicate ids")
         latest_profile_ids.add(profile_id)
         schema_path = profile["facts_schema"]
         if profile["facts_schema_digest"] != _sha256_file(ROOT / schema_path):
-            raise ContractFailure(f"{profile_id} v3 facts schema digest is stale")
+            raise ContractFailure(f"{profile_id} v4 facts schema digest is stale")
         unknown_semantics = sorted(
             set(profile["semantic_ids"]) - latest_semantic_ids
         )
         if unknown_semantics:
             raise ContractFailure(
-                f"{profile_id} v3 references unknown semantics: {unknown_semantics}"
+                f"{profile_id} v4 references unknown semantics: {unknown_semantics}"
             )
     bound_latest_profiles = {
         entry["fact_profile_id"]
@@ -798,7 +894,7 @@ def validate_fact_profiles(registry: Registry) -> None:
     }
     if bound_latest_profiles != latest_profile_ids:
         raise ContractFailure(
-            "semantic registry v4 and fact profile registry v3 must bind exactly"
+            "semantic registry v6 and fact profile registry v4 must bind exactly"
         )
 
     vectors = load_json("fact_profiles/test-vectors/v1.json")
@@ -1803,11 +1899,16 @@ def validate_artifact_manifest() -> None:
         "semantic_registry/v4.schema.json",
         "semantic_registry/v5.json",
         "semantic_registry/v5.schema.json",
+        "semantic_registry/v6.json",
+        "semantic_registry/v6.schema.json",
         "presentation_registry/v4.json",
         "presentation_registry/v4.schema.json",
+        "presentation_registry/v5.json",
+        "presentation_registry/v5.schema.json",
         "consequence_registry/v1.json",
         "consequence_registry/v1.schema.json",
         "consequence_registry/test-vectors/v1.json",
+        "consequence_registry/test-vectors/v2.json",
         "spec/consequence-registry-v1.md",
         "presentation_registry/v2.json",
         "presentation_registry/v2.schema.json",
@@ -1821,6 +1922,9 @@ def validate_artifact_manifest() -> None:
         "test-vectors/permit_human_artifact/v1/corpus.json",
         "fact_profiles/v3.json",
         "fact_profiles/v3.schema.json",
+        "fact_profiles/v4.json",
+        "fact_profiles/v4.schema.json",
+        "schemas/database-exact-facts-v1.schema.json",
         "schemas/generate-text-exact-facts-v1.schema.json",
         "schemas/refund-exact-facts-v1.schema.json",
         "schemas/delegate-exact-facts-v1.schema.json",
