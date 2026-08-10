@@ -465,12 +465,52 @@
     {
       "id": "keel.permit.consequence_registry.v1.spec",
       "path": "spec/consequence-registry-v1.md",
-      "sha256": "320a1d95d34de394efc1fc20e5476b06ea65b8512bd9a3664fc0a0fd1f4eaab0"
+      "sha256": "5edfda3caa94b2e7ca0d787ac17d72ea2f5640aac05507a22afb6783e59dc37a"
     },
     {
       "id": "permit-to-x.test-vectors.consequence-registry.v1",
       "path": "consequence_registry/test-vectors/v1.json",
       "sha256": "c0baa3ee5e81fc8a1013f1a93f0864105989b60ece9509fc85c10765d7cd8740"
+    },
+    {
+      "id": "keel.permit.database_exact_facts.v1.schema",
+      "path": "schemas/database-exact-facts-v1.schema.json",
+      "sha256": "9a366f6b8bb9afcdc6240a3afc513da3a1369d47250f2d5712c5d3bd86893db8"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v4",
+      "path": "fact_profiles/v4.json",
+      "sha256": "f3ce0ed61a0595435a384c1e149a8965b7f2832c82e6c11704da2100480185a1"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v4.schema",
+      "path": "fact_profiles/v4.schema.json",
+      "sha256": "cebaa8290249f2a42e83fabfb1b206446f6b50131a96fac4cd41e76a2f8adc69"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v6",
+      "path": "semantic_registry/v6.json",
+      "sha256": "5ca648e637488731b34483b7fa302b8bc52f540e84f56454a0526bba5b3fa520"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v6.schema",
+      "path": "semantic_registry/v6.schema.json",
+      "sha256": "8ca0572f377a7748600eedbcda0de5090307369788fd7224cfa468e8f2d916f1"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v5",
+      "path": "presentation_registry/v5.json",
+      "sha256": "b3d500fb9eee879a1a5b7ee6f7063abb8fc054446950eff1f49de8af0e3981ec"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v5.schema",
+      "path": "presentation_registry/v5.schema.json",
+      "sha256": "95b9d2a1fb68d99e541503b05b7e7b0a14f69fe003a6bbfa502a9f3c7623efbf"
+    },
+    {
+      "id": "permit-to-x.test-vectors.consequence-registry.v2",
+      "path": "consequence_registry/test-vectors/v2.json",
+      "sha256": "7eefb1685f77fef4f79499e7c49ebd2274890c4a7dcf3ba9676a7f3f85c7caad"
     }
   ]
 }

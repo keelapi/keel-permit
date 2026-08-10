@@ -49,6 +49,172 @@ def semantic_entry(consequence: dict) -> dict:
     }
 
 
+_DATABASE_FACT_PROFILES = {
+    "database.rows.insert.v1": {
+        "fact_profile_id": "keel.facts.database_rows_insert_exact.v1",
+        "target_fact_paths": ["/table", "/schema_version"],
+        "material_request_fact_paths": ["/rows_digest", "/request_digest"],
+    },
+    "database.rows.update.v1": {
+        "fact_profile_id": "keel.facts.database_rows_update_exact.v1",
+        "target_fact_paths": ["/table", "/predicate_digest"],
+        "material_request_fact_paths": ["/changes_digest", "/request_digest"],
+    },
+    "database.rows.delete.v1": {
+        "fact_profile_id": "keel.facts.database_rows_delete_exact.v1",
+        "target_fact_paths": ["/table", "/predicate_digest"],
+        "material_request_fact_paths": ["/request_digest"],
+    },
+    "database.migration.apply.v1": {
+        "fact_profile_id": "keel.facts.database_migration_apply_exact.v1",
+        "target_fact_paths": ["/migration_id", "/from_schema_version"],
+        "material_request_fact_paths": ["/migration_digest", "/request_digest"],
+    },
+    "database.dataset.export.v1": {
+        "fact_profile_id": "keel.facts.database_dataset_export_exact.v1",
+        "target_fact_paths": ["/table", "/predicate_digest", "/fields_digest"],
+        "material_request_fact_paths": ["/request_digest"],
+    },
+}
+
+
+_FACT_FIELD_TYPES = {
+    "connector_contract_hash": "digest",
+    "tool_schema_hash": "digest",
+    "decision_trace_hash": "digest",
+    "tool_arguments_hash": "digest",
+    "request_digest": "digest",
+    "table": "string",
+    "rows_digest": "digest",
+    "row_count": "integer",
+    "schema_version": "string",
+    "predicate_digest": "digest",
+    "changes_digest": "digest",
+    "row_limit": "integer",
+    "expected_current_version": "string",
+    "migration_id": "string",
+    "migration_digest": "digest",
+    "from_schema_version": "string",
+    "to_schema_version": "string",
+    "fields_digest": "digest",
+    "restricted_field_classification": "string",
+}
+
+
+def _fact_field(path: str) -> dict:
+    name = path.removeprefix("/")
+    value_type = _FACT_FIELD_TYPES.get(name, "string")
+    sensitive = name in {"table", "restricted_field_classification"}
+    return {
+        "path": path,
+        "value_type": value_type,
+        "required_for_authorization": True,
+        "classification": "sensitive_data" if sensitive else "operational",
+        "low_entropy_possible": value_type not in {"digest"},
+        "disclosure": {
+            "verifier_safe": "omit" if sensitive else "cleartext",
+            "authorized": "cleartext",
+            "private": "cleartext",
+        },
+        "retention": {
+            "class": "permit_evidence",
+            "max_days": None,
+            "erasable": False,
+            "erasure_action": "retain_signed_value",
+        },
+        "commitment_method": "signed_cleartext",
+    }
+
+
+def database_fact_profile(consequence: dict, *, schema_digest: str) -> dict:
+    contract = _DATABASE_FACT_PROFILES[consequence["consequence_type"]]
+    field_paths = [
+        "/connector_identity",
+        "/connector_contract_hash",
+        "/tool_schema_hash",
+        "/decision_trace_hash",
+        "/tool_arguments_hash",
+        "/request_digest",
+        *(f"/{name}" for name in consequence["required_material_fields"]),
+    ]
+    unique_paths = list(dict.fromkeys(field_paths))
+    return {
+        "fact_profile_id": contract["fact_profile_id"],
+        "semantic_ids": [consequence["semantic_id"]],
+        "authorized_action": consequence["tool_names"][0],
+        "facts_schema": "schemas/database-exact-facts-v1.schema.json",
+        "facts_schema_digest": f"sha256:{schema_digest}",
+        "target_fact_paths": contract["target_fact_paths"],
+        "material_request_fact_paths": contract["material_request_fact_paths"],
+        "fields": [_fact_field(path) for path in unique_paths],
+        "release_state": "eligible",
+    }
+
+
+def database_fact_vector(consequence: dict) -> dict:
+    action = consequence["tool_names"][0]
+    common = {
+        "version": "keel.database_exact_facts.v1",
+        "fact_profile_id": _DATABASE_FACT_PROFILES[
+            consequence["consequence_type"]
+        ]["fact_profile_id"],
+        "action": action,
+        "operation": "call.tools",
+        "connector_identity": "database.readwrite",
+        "connector_contract_hash": "0" * 64,
+        "tool_schema_hash": "1" * 64,
+        "decision_trace_hash": "2" * 64,
+        "tool_arguments_hash": "3" * 64,
+        "request_digest": "sha256:" + "4" * 64,
+        "enforcement_mode": "enforced_in_path",
+    }
+    action_specific = {
+        "database.rows.insert": {
+            "table": "customer_accounts",
+            "rows_digest": "sha256:" + "5" * 64,
+            "row_count": 1,
+            "schema_version": "2026-08-10.1",
+            "table_allowlist_digest": "sha256:" + "6" * 64,
+        },
+        "database.rows.update": {
+            "table": "customer_accounts",
+            "predicate_digest": "sha256:" + "5" * 64,
+            "predicate_present": True,
+            "changes_digest": "sha256:" + "6" * 64,
+            "row_limit": 1,
+            "expected_current_version": "7",
+            "table_allowlist_digest": "sha256:" + "7" * 64,
+        },
+        "database.rows.delete": {
+            "table": "customer_accounts",
+            "predicate_digest": "sha256:" + "5" * 64,
+            "predicate_present": True,
+            "row_limit": 1,
+            "expected_current_version": "7",
+            "table_allowlist_digest": "sha256:" + "6" * 64,
+        },
+        "database.migration.apply": {
+            "migration_id": "add_customer_risk_tier",
+            "migration_digest": "sha256:" + "5" * 64,
+            "from_schema_version": "2026-08-10.1",
+            "to_schema_version": "2026-08-10.2",
+            "migration_allowlist_digest": "sha256:" + "6" * 64,
+            "current_schema_version": "2026-08-10.1",
+        },
+        "database.dataset.export": {
+            "table": "customer_accounts",
+            "predicate_digest": "sha256:" + "5" * 64,
+            "predicate_present": True,
+            "fields_digest": "sha256:" + "6" * 64,
+            "row_limit": 100,
+            "table_allowlist_digest": "sha256:" + "7" * 64,
+            "restricted_field_classification": "none",
+            "field_classifier_version": "keel.database.fields.v1",
+        },
+    }
+    return {**common, **action_specific[action]}
+
+
 def presentation_profile(consequence: dict) -> dict:
     return {
         "semantic_id": consequence["semantic_id"],
@@ -111,6 +277,71 @@ def main() -> None:
     )
     write("presentation_registry/v4.schema.json", presentation_schema)
 
+    facts_schema_digest = sha256("schemas/database-exact-facts-v1.schema.json")
+    fact_registry = copy.deepcopy(load("fact_profiles/v3.json"))
+    fact_registry["$schema"] = "./v4.schema.json"
+    fact_registry["version"] = "keel.fact_profile_registry.v4"
+    fact_registry["profiles"].extend(
+        database_fact_profile(item, schema_digest=facts_schema_digest)
+        for item in consequence_registry["consequences"]
+    )
+    write("fact_profiles/v4.json", fact_registry)
+
+    fact_schema = copy.deepcopy(load("fact_profiles/v3.schema.json"))
+    fact_schema["$id"] = (
+        "https://github.com/keelapi/keel-permit/fact_profiles/v4.schema.json"
+    )
+    fact_schema["title"] = "Keel Permit fact profile registry v4"
+    fact_schema["properties"]["version"]["const"] = (
+        "keel.fact_profile_registry.v4"
+    )
+    write("fact_profiles/v4.schema.json", fact_schema)
+
+    semantic_v6 = copy.deepcopy(semantic)
+    semantic_v6["$schema"] = "./v6.schema.json"
+    semantic_v6["version"] = "keel.semantic_selector_registry.v6"
+    fact_profile_by_semantic = {
+        item["semantic_ids"][0]: item["fact_profile_id"]
+        for item in fact_registry["profiles"]
+        if item.get("semantic_ids")
+    }
+    for entry in semantic_v6["entries"]:
+        fact_profile_id = fact_profile_by_semantic.get(entry.get("semantic_id"))
+        if fact_profile_id is not None:
+            entry["fact_profile_id"] = fact_profile_id
+    write("semantic_registry/v6.json", semantic_v6)
+
+    semantic_v6_schema = copy.deepcopy(semantic_schema)
+    semantic_v6_schema["$id"] = (
+        "https://github.com/keelapi/keel-permit/semantic_registry/v6.schema.json"
+    )
+    semantic_v6_schema["title"] = "Keel Permit semantic selector registry v6"
+    semantic_v6_schema["properties"]["version"]["const"] = (
+        "keel.semantic_selector_registry.v6"
+    )
+    write("semantic_registry/v6.schema.json", semantic_v6_schema)
+
+    presentation_v5 = copy.deepcopy(presentation)
+    presentation_v5["$schema"] = "./v5.schema.json"
+    presentation_v5["version"] = "keel.presentation_registry.v5"
+    presentation_v5["semantic_registry_version"] = (
+        "keel.semantic_selector_registry.v6"
+    )
+    write("presentation_registry/v5.json", presentation_v5)
+
+    presentation_v5_schema = copy.deepcopy(presentation_schema)
+    presentation_v5_schema["$id"] = (
+        "https://github.com/keelapi/keel-permit/presentation_registry/v5.schema.json"
+    )
+    presentation_v5_schema["title"] = "Keel Permit presentation registry v5"
+    presentation_v5_schema["properties"]["version"]["const"] = (
+        "keel.presentation_registry.v5"
+    )
+    presentation_v5_schema["properties"]["semantic_registry_version"]["const"] = (
+        "keel.semantic_selector_registry.v6"
+    )
+    write("presentation_registry/v5.schema.json", presentation_v5_schema)
+
     consequence_vectors = {
         "version": "keel.consequence_registry.test_vectors.v1",
         "consequence_registry_version": consequence_registry["version"],
@@ -139,6 +370,22 @@ def main() -> None:
         ],
     }
     write("consequence_registry/test-vectors/v1.json", consequence_vectors)
+
+    exact_vectors = copy.deepcopy(consequence_vectors)
+    exact_vectors["version"] = "keel.consequence_registry.test_vectors.v2"
+    exact_vectors["semantic_registry_version"] = semantic_v6["version"]
+    exact_vectors["presentation_registry_version"] = presentation_v5["version"]
+    for vector in exact_vectors["vectors"]:
+        vector["expected_fact_profile_id"] = fact_profile_by_semantic[
+            vector["expected_semantic_id"]
+        ]
+        consequence = next(
+            item
+            for item in consequence_registry["consequences"]
+            if item["consequence_type"] == vector["id"]
+        )
+        vector["valid_authorization_facts"] = database_fact_vector(consequence)
+    write("consequence_registry/test-vectors/v2.json", exact_vectors)
 
     manifest_path = "artifact-manifests/permit-to-x-v1.json"
     manifest = load(manifest_path)
@@ -171,6 +418,35 @@ def main() -> None:
         (
             "keel.permit.presentation_registry.v4.schema",
             "presentation_registry/v4.schema.json",
+        ),
+        (
+            "keel.permit.database_exact_facts.v1.schema",
+            "schemas/database-exact-facts-v1.schema.json",
+        ),
+        ("keel.permit.fact_profile_registry.v4", "fact_profiles/v4.json"),
+        (
+            "keel.permit.fact_profile_registry.v4.schema",
+            "fact_profiles/v4.schema.json",
+        ),
+        (
+            "keel.permit.semantic_selector_registry.v6",
+            "semantic_registry/v6.json",
+        ),
+        (
+            "keel.permit.semantic_selector_registry.v6.schema",
+            "semantic_registry/v6.schema.json",
+        ),
+        (
+            "keel.permit.presentation_registry.v5",
+            "presentation_registry/v5.json",
+        ),
+        (
+            "keel.permit.presentation_registry.v5.schema",
+            "presentation_registry/v5.schema.json",
+        ),
+        (
+            "permit-to-x.test-vectors.consequence-registry.v2",
+            "consequence_registry/test-vectors/v2.json",
         ),
     ]
     existing_by_path = {item["path"]: item for item in manifest["artifacts"]}

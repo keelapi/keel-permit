@@ -108,8 +108,8 @@ Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated f
 | Reference verifier status | The reference verifier verifies `v7` permit decisions and rejects unsigned account-selector drift. |
 | Bounded Work contract | Strict payment-only Work schemas and four claim contracts are published contract-first; coordinated API producer and public-verifier support are separate release gates. |
 | Permit-to-X presentation | Specific titles require a trusted semantic selector result; presentation artifacts cannot change authorization or verifier verdicts. |
-| Consequence registry | Exact certified tool names can add consequence-specific selectors and human titles without rewriting historical registries; caller labels and titles are never selector inputs. |
-| Permit-to-X fact profiles | Semantic registry v3 can bind an eligible semantic to a typed fact profile; exact payment facts use integer minor units, currency, recipient commitments, payment rail, and exact request digest. |
+| Consequence registry | Exact certified tool names can add consequence-specific selectors, typed fact profiles, and human titles without rewriting historical registries; caller labels and titles are never selector inputs. |
+| Permit-to-X fact profiles | Semantic registries can bind an eligible semantic to a typed fact profile; payment, refund, delegation, text-generation, and five database consequences now have schema-pinned exact facts. |
 
 ## Examples
 
