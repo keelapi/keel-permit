@@ -616,6 +616,61 @@
       "id": "keel.permit.transactional_cx_contract.v1.spec",
       "path": "spec/transactional-cx-exact-action-contract-v1.md",
       "sha256": "9698140b9f4004fc25fd50ef9f1eecc0a0b6d72dcbed4c235d71a0f7776fd5b7"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v4",
+      "path": "consequence_registry/v4.json",
+      "sha256": "7868ed478fda355621aa31bedd9e74a1af95a6bd7f51c4e478c09d1ececa64a1"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v4.schema",
+      "path": "consequence_registry/v4.schema.json",
+      "sha256": "2ca423c7e55fff9e8e295496598c313fc90a892c52c0ea207e73d35a2919f302"
+    },
+    {
+      "id": "keel.permit.release_exact_facts.v1.schema",
+      "path": "schemas/release-exact-facts-v1.schema.json",
+      "sha256": "05c7ea35e5c9bb4b447af82bc7d4d0cabcafe06b2208020a1d58c9915ab94ee1"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v7",
+      "path": "fact_profiles/v7.json",
+      "sha256": "3ba92864d7322ce790cbb7a08c54920fa1e27b5c72f985160d35ecec51556a33"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v7.schema",
+      "path": "fact_profiles/v7.schema.json",
+      "sha256": "7026c6bccecd06e32ea809cce5aa9f461ed4717a51874d200935c8d75ee7af37"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v9",
+      "path": "semantic_registry/v9.json",
+      "sha256": "82a7056ea14069317341fe04cfd65f5c1c3ef2da73e41613899986d33fd9cef0"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v9.schema",
+      "path": "semantic_registry/v9.schema.json",
+      "sha256": "4fc685ce4d93aacbb44ce3fa0517cb05b992f68d8727b4658853118cc0a3abfb"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v8",
+      "path": "presentation_registry/v8.json",
+      "sha256": "18b7ce3d2c3d05ec2d3e27238258fffebfa6d329ef2f142f209cd6c5e2f727f1"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v8.schema",
+      "path": "presentation_registry/v8.schema.json",
+      "sha256": "47726a3238ca3db0e9ef6dede14e288f22c35bc4c31ed478f1c10bc73ef336da"
+    },
+    {
+      "id": "permit-to-x.test-vectors.consequence-registry.v5",
+      "path": "consequence_registry/test-vectors/v5.json",
+      "sha256": "8ed570d500e2b2b65f935209150f1fe137ff5238f43ff0765c03a3701c5ce2d1"
+    },
+    {
+      "id": "keel.permit.release_exact_action_contract.v1.spec",
+      "path": "spec/release-exact-action-contract-v1.md",
+      "sha256": "638246fd5ee5762ee844eaa7bd2af7faeb32d14e20025c678b9875046883da81"
     }
   ]
 }

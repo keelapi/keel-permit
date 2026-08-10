@@ -951,6 +951,249 @@ def validate_transactional_cx_contract(registry: Registry) -> None:
         )
 
 
+def validate_release_contract(registry: Registry) -> None:
+    consequence_v3 = load_json("consequence_registry/v3.json")
+    consequence_v4 = load_json("consequence_registry/v4.json")
+    validate_instance(
+        consequence_v4,
+        "consequence_registry/v4.schema.json",
+        registry,
+        "consequence registry v4",
+    )
+    prior_consequences = consequence_v3["consequences"]
+    consequences = consequence_v4["consequences"]
+    if consequences[: len(prior_consequences)] != prior_consequences:
+        raise ContractFailure(
+            "consequence registry v4 must preserve every v3 entry byte-for-value"
+        )
+
+    facts_v6 = load_json("fact_profiles/v6.json")
+    facts_v7 = load_json("fact_profiles/v7.json")
+    semantics_v8 = load_json("semantic_registry/v8.json")
+    semantics_v9 = load_json("semantic_registry/v9.json")
+    presentations_v7 = load_json("presentation_registry/v7.json")
+    presentations_v8 = load_json("presentation_registry/v8.json")
+    vectors_v5 = load_json("consequence_registry/test-vectors/v5.json")
+
+    validate_instance(
+        facts_v7,
+        "fact_profiles/v7.schema.json",
+        registry,
+        "fact profile registry v7",
+    )
+    validate_instance(
+        semantics_v9,
+        "semantic_registry/v9.schema.json",
+        registry,
+        "semantic registry v9",
+    )
+    validate_instance(
+        presentations_v8,
+        "presentation_registry/v8.schema.json",
+        registry,
+        "presentation registry v8",
+    )
+    if facts_v7["profiles"][: len(facts_v6["profiles"])] != facts_v6["profiles"]:
+        raise ContractFailure("fact profile registry v7 is not an additive v6 extension")
+    if semantics_v9["entries"][: len(semantics_v8["entries"])] != semantics_v8[
+        "entries"
+    ]:
+        raise ContractFailure("semantic registry v9 is not an additive v8 extension")
+    if presentations_v8["profiles"][: len(presentations_v7["profiles"])] != (
+        presentations_v7["profiles"]
+    ):
+        raise ContractFailure("presentation registry v8 is not an additive v7 extension")
+
+    consequence_types = [item["consequence_type"] for item in consequences]
+    semantic_ids = [item["semantic_id"] for item in consequences]
+    tool_names = [tool for item in consequences for tool in item["tool_names"]]
+    if len(consequence_types) != len(set(consequence_types)):
+        raise ContractFailure("consequence registry v4 contains duplicate types")
+    if len(semantic_ids) != len(set(semantic_ids)):
+        raise ContractFailure("consequence registry v4 contains duplicate semantics")
+    if len(tool_names) != len(set(tool_names)):
+        raise ContractFailure("consequence registry v4 contains overlapping tools")
+
+    vectors_by_id = {vector["id"]: vector for vector in vectors_v5["vectors"]}
+    if set(vectors_by_id) != set(consequence_types):
+        raise ContractFailure(
+            "v5 exact consequence vectors must cover consequence registry v4"
+        )
+    profiles_by_id = {
+        profile["fact_profile_id"]: profile for profile in facts_v7["profiles"]
+    }
+    semantics_by_id = {
+        entry["semantic_id"]: entry for entry in semantics_v9["entries"]
+    }
+    presentations_by_id = {
+        profile["semantic_id"]: profile
+        for profile in presentations_v8["profiles"]
+    }
+    if len(profiles_by_id) != len(facts_v7["profiles"]):
+        raise ContractFailure("fact profile registry v7 contains duplicate ids")
+    if len(semantics_by_id) != len(semantics_v9["entries"]):
+        raise ContractFailure("semantic registry v9 contains duplicate ids")
+    if len(presentations_by_id) != len(presentations_v8["profiles"]):
+        raise ContractFailure("presentation registry v8 contains duplicate semantics")
+
+    schema_path = "schemas/release-exact-facts-v1.schema.json"
+    schema = load_json(schema_path)
+    validator = jsonschema.Draft202012Validator(
+        schema,
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+    previous_count = len(prior_consequences)
+    release_consequences = consequences[previous_count:]
+    expected_titles = {
+        "repository.pull_request.merge": "AI Permit-to-Merge-Pull-Request",
+        "deployment.commit.deploy": "AI Permit-to-Deploy-Commit",
+        "deployment.rollback": "AI Permit-to-Roll-Back-Deployment",
+    }
+
+    def release_invariants_hold(facts: dict[str, Any]) -> bool:
+        action = facts.get("action")
+        if action == "repository.pull_request.merge":
+            return (
+                facts.get("observed_approving_reviews", 0)
+                >= facts.get("required_approving_reviews", 1)
+                and facts.get("required_status_checks_count", 0) >= 1
+                and facts.get("required_status_checks_state") == "success"
+                and facts.get("pull_request_state") == "open"
+                and facts.get("mergeable_state") == "clean"
+            )
+        if action == "deployment.commit.deploy":
+            return (
+                facts.get("artifact_revision_sha") == facts.get("source_commit_sha")
+                and facts.get("current_image_digest") != facts.get("target_image_digest")
+                and facts.get("current_config_digest") != facts.get("target_config_digest")
+                and facts.get("source_commit_signature_verified") is True
+                and facts.get("artifact_revision_matches_source_commit") is True
+            )
+        if action == "deployment.rollback":
+            return (
+                facts.get("current_image_digest")
+                != facts.get("rollback_target_image_digest")
+                and facts.get("current_config_digest")
+                != facts.get("rollback_target_config_digest")
+                and facts.get("current_release_instance_id")
+                != facts.get("prior_release_instance_id")
+            )
+        return False
+
+    for consequence in release_consequences:
+        consequence_type = consequence["consequence_type"]
+        vector = vectors_by_id[consequence_type]
+        semantic_id = consequence["semantic_id"]
+        profile_id = vector["expected_fact_profile_id"]
+        entry = semantics_by_id.get(semantic_id)
+        profile = profiles_by_id.get(profile_id)
+        presentation = presentations_by_id.get(semantic_id)
+        if entry is None or entry.get("fact_profile_id") != profile_id:
+            raise ContractFailure(f"{consequence_type} lacks its exact semantic binding")
+        if profile is None or profile.get("facts_schema") != schema_path:
+            raise ContractFailure(f"{consequence_type} lacks its release fact profile")
+        if semantic_id not in profile.get("semantic_ids", []):
+            raise ContractFailure(f"{consequence_type} fact profile semantic drifted")
+        action = consequence["tool_names"][0]
+        if presentation is None or presentation.get("customer_title") != expected_titles[
+            action
+        ]:
+            raise ContractFailure(f"{consequence_type} lacks its exact human title")
+        if presentation.get("does_not_establish") != consequence.get(
+            "does_not_establish"
+        ):
+            raise ContractFailure(f"{consequence_type} presentation limits drifted")
+        if "gateway_preflight_hmac" not in consequence.get(
+            "trusted_fact_requirements", []
+        ):
+            raise ContractFailure(f"{consequence_type} omits authenticated preflight")
+        if select_semantic(semantics_v9, vector["candidate"]) != (semantic_id, None):
+            raise ContractFailure(
+                f"{consequence_type} is not selected exactly once in semantic v9"
+            )
+
+        facts = vector["valid_authorization_facts"]
+        errors = list(validator.iter_errors(facts))
+        if errors:
+            raise ContractFailure(
+                f"{consequence_type} exact facts are invalid: {errors[0].message}"
+            )
+        if not release_invariants_hold(facts):
+            raise ContractFailure(f"{consequence_type} vector violates release invariants")
+        if facts.get("fact_profile_id") != profile_id or facts.get("action") != action:
+            raise ContractFailure(f"{consequence_type} vector identity drifted")
+        if profile.get("facts_schema_digest") != _sha256_file(ROOT / schema_path):
+            raise ContractFailure(f"{consequence_type} facts schema digest is stale")
+
+        adversarial_profile = copy.deepcopy(facts)
+        adversarial_profile["fact_profile_id"] = next(
+            item["fact_profile_id"]
+            for item in facts_v7["profiles"]
+            if item["fact_profile_id"] != profile_id
+            and item["facts_schema"] == schema_path
+        )
+        if validator.is_valid(adversarial_profile):
+            raise ContractFailure(
+                f"{consequence_type} accepts another release fact profile"
+            )
+
+        common_mutations = [
+            ("preflight_expires_at", "not-a-time"),
+            ("preflight_snapshot_digest", "sha256:short"),
+            (
+                "connector_identity",
+                "fly" if facts["connector_identity"] == "github" else "github",
+            ),
+        ]
+        action_mutations = {
+            "repository.pull_request.merge": [
+                ("head_commit_sha", "short"),
+                ("draft", True),
+                ("strict_status_checks", False),
+                ("observed_approving_reviews", 0),
+            ],
+            "deployment.commit.deploy": [
+                ("artifact_revision_sha", "c" * 40),
+                (
+                    "target_image_digest",
+                    facts.get("current_image_digest", "sha256:" + "0" * 64),
+                ),
+                ("machine_lease_required", False),
+                ("config_delta", "arbitrary"),
+            ],
+            "deployment.rollback": [
+                (
+                    "rollback_target_image_digest",
+                    facts.get("current_image_digest", "sha256:" + "0" * 64),
+                ),
+                (
+                    "rollback_target_config_digest",
+                    facts.get("current_config_digest", "sha256:" + "0" * 64),
+                ),
+                ("release_ledger_version", "untrusted"),
+                ("machine_lease_required", False),
+            ],
+        }[action]
+        for field, value in [*common_mutations, *action_mutations]:
+            mutated = copy.deepcopy(facts)
+            mutated[field] = value
+            if validator.is_valid(mutated) and release_invariants_hold(mutated):
+                raise ContractFailure(
+                    f"{consequence_type} accepted adversarial {field} mutation"
+                )
+
+    bound_profile_ids = {
+        entry["fact_profile_id"]
+        for entry in semantics_v9["entries"]
+        if entry.get("fact_profile_id") is not None
+    }
+    if bound_profile_ids != set(profiles_by_id):
+        raise ContractFailure(
+            "semantic registry v9 and fact profile registry v7 must bind exactly"
+        )
+
+
 def set_vector_path(document: dict[str, Any], path: list[Any], value: Any) -> None:
     current: Any = document
     for segment in path[:-1]:
@@ -2750,6 +2993,7 @@ def main() -> int:
         registry = schema_registry()
         validate_semantics_and_presentation(registry)
         validate_transactional_cx_contract(registry)
+        validate_release_contract(registry)
         validate_human_artifact_contract(registry)
         validate_fact_profiles(registry)
         validate_work_contract(registry)
