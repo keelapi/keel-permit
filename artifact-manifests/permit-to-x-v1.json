@@ -946,6 +946,61 @@
       "id": "keel.permit.erp_crm_exact_action_contract.v1.spec",
       "path": "spec/erp-crm-exact-action-contract-v1.md",
       "sha256": "04f09dc48f4f9ec1fd91c3d6cfa2bdf6491c1a3bd06c5129f5868a9997c960c8"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v10",
+      "path": "consequence_registry/v10.json",
+      "sha256": "ba19ccafc2460d074e6f8095fa2e59f49e89292d562029ae5923c83088b53a21"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v10.schema",
+      "path": "consequence_registry/v10.schema.json",
+      "sha256": "c8b648263e41357e025b4355cf3e91a3248bddaf8c2de6b26ce020ad4c0d9756"
+    },
+    {
+      "id": "keel.permit.procurement_ap_exact_facts.v1.schema",
+      "path": "schemas/procurement-ap-exact-facts-v1.schema.json",
+      "sha256": "380c9c8db5240164018fda9b75ca0434045b8664187d1e5c775adf1c9ca78f7f"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v13",
+      "path": "fact_profiles/v13.json",
+      "sha256": "dd72a2862c78e38891f8d1d606dfe246a33a62916f85935c01d0287a95afc963"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v13.schema",
+      "path": "fact_profiles/v13.schema.json",
+      "sha256": "2f9df2a06424d7749e61376134212d3ab5f0802fa33857e106467538058dd1a1"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v15",
+      "path": "semantic_registry/v15.json",
+      "sha256": "2dc32fc864ec39bbe8ffbe0ca50dd04b87b67585e53e9760054d0fa62d5c970c"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v15.schema",
+      "path": "semantic_registry/v15.schema.json",
+      "sha256": "86c1e84f8fae99f298583f8c4eeafee79052afbe201bef7177d5d37b19dac11b"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v14",
+      "path": "presentation_registry/v14.json",
+      "sha256": "78f224396f6f906a8c741864f3bad6eade4e5c374bed5ce11c01696914d83e50"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v14.schema",
+      "path": "presentation_registry/v14.schema.json",
+      "sha256": "6b8280ad20f6cdf3b714431744206a2c0a6b81aaeaf8562ba8597a66cb22bee9"
+    },
+    {
+      "id": "permit-to-x.test-vectors.consequence-registry.v11",
+      "path": "consequence_registry/test-vectors/v11.json",
+      "sha256": "4e4c496c39fbadba4118b32508db20624b03d6ee906412527d3c8dabf845d7a9"
+    },
+    {
+      "id": "keel.permit.procurement_ap_exact_action_contract.v1.spec",
+      "path": "spec/procurement-ap-exact-action-contract-v1.md",
+      "sha256": "95d52fbd0f2a3f9389f43c358e8ad091e75cfecda5ea0a9e8fac1f4c3cef6806"
     }
   ]
 }
