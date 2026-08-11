@@ -2462,6 +2462,286 @@ def validate_erp_crm_contract(registry: Registry) -> None:
         )
 
 
+def validate_procurement_ap_contract(registry: Registry) -> None:
+    consequence_v9 = load_json("consequence_registry/v9.json")
+    consequence_v10 = load_json("consequence_registry/v10.json")
+    facts_v12 = load_json("fact_profiles/v12.json")
+    facts_v13 = load_json("fact_profiles/v13.json")
+    semantics_v14 = load_json("semantic_registry/v14.json")
+    semantics_v15 = load_json("semantic_registry/v15.json")
+    presentations_v13 = load_json("presentation_registry/v13.json")
+    presentations_v14 = load_json("presentation_registry/v14.json")
+    vectors_v10 = load_json("consequence_registry/test-vectors/v10.json")
+    vectors_v11 = load_json("consequence_registry/test-vectors/v11.json")
+
+    for instance, schema_path, label in (
+        (
+            consequence_v10,
+            "consequence_registry/v10.schema.json",
+            "consequence registry v10",
+        ),
+        (facts_v13, "fact_profiles/v13.schema.json", "fact profile registry v13"),
+        (
+            semantics_v15,
+            "semantic_registry/v15.schema.json",
+            "semantic registry v15",
+        ),
+        (
+            presentations_v14,
+            "presentation_registry/v14.schema.json",
+            "presentation registry v14",
+        ),
+    ):
+        validate_instance(instance, schema_path, registry, label)
+
+    additive_pairs = (
+        (consequence_v9, consequence_v10, "consequences", "consequence v10"),
+        (facts_v12, facts_v13, "profiles", "fact profiles v13"),
+        (semantics_v14, semantics_v15, "entries", "semantic v15"),
+        (presentations_v13, presentations_v14, "profiles", "presentation v14"),
+        (vectors_v10, vectors_v11, "vectors", "consequence vectors v11"),
+    )
+    for prior, current, key, label in additive_pairs:
+        if current[key][: len(prior[key])] != prior[key]:
+            raise ContractFailure(f"{label} is not an additive extension")
+
+    expected_actions = {
+        "procurement.vendor.create.v1": "procurement.vendor.create",
+        "procurement.purchase_order.issue.v1": "procurement.purchase_order.issue",
+        "procurement.spend.commit.v1": "procurement.spend.commit",
+        "ap.invoice.approve.v1": "ap.invoice.approve",
+        "ap.invoice.duplicate.reject.v1": "ap.invoice.duplicate.reject",
+        "ap.invoice.payment.release.v1": "ap.invoice.payment.release",
+    }
+    expected_titles = {
+        "procurement.vendor.create": "AI Permit-to-Create-Vendor",
+        "procurement.purchase_order.issue": "AI Permit-to-Issue-Purchase-Order",
+        "procurement.spend.commit": "AI Permit-to-Commit-Procurement-Spend",
+        "ap.invoice.approve": "AI Permit-to-Approve-Invoice",
+        "ap.invoice.duplicate.reject": "AI Permit-to-Reject-Duplicate-Invoice",
+        "ap.invoice.payment.release": "AI Permit-to-Release-Invoice-Payment",
+    }
+    prior_consequences = consequence_v9["consequences"]
+    consequences = consequence_v10["consequences"]
+    added = consequences[len(prior_consequences) :]
+    if {item["consequence_type"]: item["tool_names"][0] for item in added} != (
+        expected_actions
+    ):
+        raise ContractFailure("consequence registry v10 procurement/AP action set drifted")
+
+    for key, values in (
+        ("consequence type", [item["consequence_type"] for item in consequences]),
+        ("semantic id", [item["semantic_id"] for item in consequences]),
+        ("tool", [tool for item in consequences for tool in item["tool_names"]]),
+    ):
+        if len(values) != len(set(values)):
+            raise ContractFailure(f"consequence registry v10 duplicates {key}")
+
+    vectors_by_id = {vector["id"]: vector for vector in vectors_v11["vectors"]}
+    if set(vectors_by_id) != {item["consequence_type"] for item in consequences}:
+        raise ContractFailure(
+            "v11 exact consequence vectors must cover consequence registry v10"
+        )
+    profiles_by_id = {
+        profile["fact_profile_id"]: profile for profile in facts_v13["profiles"]
+    }
+    semantics_by_id = {
+        entry["semantic_id"]: entry for entry in semantics_v15["entries"]
+    }
+    presentations_by_id = {
+        profile["semantic_id"]: profile
+        for profile in presentations_v14["profiles"]
+    }
+    if len(profiles_by_id) != len(facts_v13["profiles"]):
+        raise ContractFailure("fact profile registry v13 contains duplicate ids")
+    if len(semantics_by_id) != len(semantics_v15["entries"]):
+        raise ContractFailure("semantic registry v15 contains duplicate ids")
+    if len(presentations_by_id) != len(presentations_v14["profiles"]):
+        raise ContractFailure("presentation registry v14 contains duplicate semantics")
+
+    schema_path = "schemas/procurement-ap-exact-facts-v1.schema.json"
+    validator = jsonschema.Draft202012Validator(
+        load_json(schema_path),
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+
+    def invariants_hold(facts: dict[str, Any]) -> bool:
+        if not (
+            facts.get("connector_identity") == "odoo"
+            and facts.get("record_is_synthetic") is True
+            and facts.get("max_uses") == 1
+        ):
+            return False
+        action = facts.get("action")
+        expected_environment = (
+            "self_hosted_plus_provider_sandbox"
+            if action == "ap.invoice.payment.release"
+            else "self_hosted_synthetic"
+        )
+        if facts.get("provider_environment") != expected_environment:
+            return False
+        if action == "procurement.vendor.create":
+            return (
+                facts.get("supplier_rank_requested") == 1
+                and facts.get("duplicate_vendor_count") == 0
+                and facts.get("required_fields_complete") is True
+                and facts.get("bank_account_created") is False
+            )
+        if action == "procurement.purchase_order.issue":
+            return (
+                facts.get("total_amount_minor", 0) > 0
+                and facts.get("purchase_order_status_before") == "absent"
+                and facts.get("requested_purchase_order_status") == "draft"
+                and facts.get("spend_committed") is False
+                and facts.get("supplier_notification_sent") is False
+                and facts.get("total_matches_provider_pricing") is True
+            )
+        if action == "procurement.spend.commit":
+            return (
+                0 < facts.get("total_amount_minor", 0)
+                <= facts.get("available_budget_minor", -1)
+                and facts.get("amount_within_budget") is True
+                and facts.get("current_purchase_order_status") == "draft"
+                and facts.get("requested_purchase_order_status") == "purchase"
+                and facts.get("spend_committed_before") is False
+                and facts.get("spend_committed_after") is True
+                and facts.get("payment_released") is False
+            )
+        if action == "ap.invoice.approve":
+            return (
+                facts.get("current_invoice_status") == "draft"
+                and facts.get("requested_invoice_status") == "posted"
+                and facts.get("payment_status") == "not_paid"
+                and facts.get("duplicate_candidate_count") == 0
+                and facts.get("three_way_match_complete") is True
+                and facts.get("invoice_total_matches_purchase_order") is True
+                and facts.get("receipt_quantity_covers_invoice") is True
+                and facts.get("accounting_period_open") is True
+            )
+        if action == "ap.invoice.duplicate.reject":
+            return (
+                facts.get("current_invoice_status") == "draft"
+                and facts.get("requested_invoice_status") == "cancel"
+                and facts.get("payment_status") == "not_paid"
+                and facts.get("payment_released") is False
+                and facts.get("duplicate_match_method")
+                == "provider_vendor_number_and_total_exact.v1"
+                and facts.get("vendor_reference_matches") is True
+                and facts.get("invoice_number_matches") is True
+                and facts.get("total_amount_matches") is True
+            )
+        if action == "ap.invoice.payment.release":
+            return (
+                facts.get("invoice_status") == "posted"
+                and facts.get("payment_status") == "not_paid"
+                and facts.get("three_way_match_complete") is True
+                and facts.get("stripe_livemode") is False
+                and facts.get("stripe_transfer_status_before") == "absent"
+                and facts.get("existing_transfer_count") == 0
+                and facts.get("workflow_step_count") == 2
+                and facts.get("odoo_payment_registration_required") is True
+                and facts.get("value_conservation_valid") is True
+            )
+        return False
+
+    allowed_leading_fields = set(presentations_v14["allowed_leading_fields"])
+    allowed_sections = set(presentations_v14["allowed_evidence_sections"])
+    for consequence in added:
+        consequence_type = consequence["consequence_type"]
+        action = consequence["tool_names"][0]
+        semantic_id = consequence["semantic_id"]
+        vector = vectors_by_id[consequence_type]
+        profile_id = vector["expected_fact_profile_id"]
+        semantic = semantics_by_id.get(semantic_id)
+        profile = profiles_by_id.get(profile_id)
+        presentation = presentations_by_id.get(semantic_id)
+        if semantic is None or semantic.get("fact_profile_id") != profile_id:
+            raise ContractFailure(f"{consequence_type} lacks exact semantic binding")
+        if profile is None or profile.get("facts_schema") != schema_path:
+            raise ContractFailure(f"{consequence_type} lacks exact fact profile")
+        if presentation is None or presentation.get("customer_title") != (
+            expected_titles[action]
+        ):
+            raise ContractFailure(f"{consequence_type} lacks exact human title")
+        if not {
+            item["field"] for item in presentation.get("leading_fields", [])
+        }.issubset(allowed_leading_fields):
+            raise ContractFailure(f"{consequence_type} uses unknown leading field")
+        if not set(presentation.get("evidence_sections", [])).issubset(
+            allowed_sections
+        ):
+            raise ContractFailure(f"{consequence_type} uses unknown evidence section")
+        if presentation.get("does_not_establish") != consequence.get(
+            "does_not_establish"
+        ):
+            raise ContractFailure(f"{consequence_type} presentation limits drifted")
+        requirements = consequence.get("trusted_fact_requirements", [])
+        if not {
+            "gateway_pinned_self_hosted_database",
+            "gateway_preflight_hmac",
+        }.issubset(requirements):
+            raise ContractFailure(f"{consequence_type} omits gateway custody controls")
+        if select_semantic(semantics_v15, vector["candidate"]) != (
+            semantic_id,
+            None,
+        ):
+            raise ContractFailure(f"{consequence_type} is not selected exactly once")
+
+        facts = vector["valid_authorization_facts"]
+        errors = list(validator.iter_errors(facts))
+        if errors:
+            raise ContractFailure(
+                f"{consequence_type} exact facts are invalid: {errors[0].message}"
+            )
+        if not invariants_hold(facts):
+            raise ContractFailure(f"{consequence_type} violates exact invariants")
+        if facts.get("fact_profile_id") != profile_id or facts.get("action") != action:
+            raise ContractFailure(f"{consequence_type} vector identity drifted")
+        if profile.get("facts_schema_digest") != _sha256_file(ROOT / schema_path):
+            raise ContractFailure(f"{consequence_type} schema digest is stale")
+
+        mutations = [
+            ("record_is_synthetic", False),
+            ("max_uses", 2),
+            ("preflight_expires_at", "not-a-time"),
+        ]
+        if action == "procurement.spend.commit":
+            mutations.append(
+                ("total_amount_minor", facts.get("available_budget_minor", 0) + 1)
+            )
+        elif action == "ap.invoice.payment.release":
+            mutations.extend(
+                [("stripe_livemode", True), ("existing_transfer_count", 1)]
+            )
+        else:
+            boolean_fields = [
+                name
+                for name, value in facts.items()
+                if isinstance(value, bool) and name != "record_is_synthetic"
+            ]
+            if boolean_fields:
+                name = boolean_fields[0]
+                mutations.append((name, not facts[name]))
+        for field, value in mutations:
+            mutated = copy.deepcopy(facts)
+            mutated[field] = value
+            if validator.is_valid(mutated) and invariants_hold(mutated):
+                raise ContractFailure(
+                    f"{consequence_type} accepted adversarial {field} mutation"
+                )
+
+    bound_profile_ids = {
+        entry["fact_profile_id"]
+        for entry in semantics_v15["entries"]
+        if entry.get("fact_profile_id") is not None
+    }
+    if bound_profile_ids != set(profiles_by_id):
+        raise ContractFailure(
+            "semantic registry v15 and fact profile registry v13 must bind exactly"
+        )
+
+
 def set_vector_path(document: dict[str, Any], path: list[Any], value: Any) -> None:
     current: Any = document
     for segment in path[:-1]:
@@ -3843,6 +4123,8 @@ def validate_artifact_manifest() -> None:
         "semantic_registry/v13.schema.json",
         "semantic_registry/v14.json",
         "semantic_registry/v14.schema.json",
+        "semantic_registry/v15.json",
+        "semantic_registry/v15.schema.json",
         "presentation_registry/v4.json",
         "presentation_registry/v4.schema.json",
         "presentation_registry/v5.json",
@@ -3863,6 +4145,8 @@ def validate_artifact_manifest() -> None:
         "presentation_registry/v12.schema.json",
         "presentation_registry/v13.json",
         "presentation_registry/v13.schema.json",
+        "presentation_registry/v14.json",
+        "presentation_registry/v14.schema.json",
         "consequence_registry/v1.json",
         "consequence_registry/v1.schema.json",
         "consequence_registry/v2.json",
@@ -3881,6 +4165,8 @@ def validate_artifact_manifest() -> None:
         "consequence_registry/v8.schema.json",
         "consequence_registry/v9.json",
         "consequence_registry/v9.schema.json",
+        "consequence_registry/v10.json",
+        "consequence_registry/v10.schema.json",
         "consequence_registry/test-vectors/v1.json",
         "consequence_registry/test-vectors/v2.json",
         "consequence_registry/test-vectors/v3.json",
@@ -3891,6 +4177,7 @@ def validate_artifact_manifest() -> None:
         "consequence_registry/test-vectors/v8.json",
         "consequence_registry/test-vectors/v9.json",
         "consequence_registry/test-vectors/v10.json",
+        "consequence_registry/test-vectors/v11.json",
         "spec/consequence-registry-v1.md",
         "presentation_registry/v2.json",
         "presentation_registry/v2.schema.json",
@@ -3922,6 +4209,8 @@ def validate_artifact_manifest() -> None:
         "fact_profiles/v11.schema.json",
         "fact_profiles/v12.json",
         "fact_profiles/v12.schema.json",
+        "fact_profiles/v13.json",
+        "fact_profiles/v13.schema.json",
         "schemas/database-exact-facts-v1.schema.json",
         "schemas/payment-ledger-exact-facts-v1.schema.json",
         "schemas/transactional-cx-exact-facts-v1.schema.json",
@@ -3936,6 +4225,8 @@ def validate_artifact_manifest() -> None:
         "spec/insurance-claims-exact-action-contract-v1.md",
         "schemas/erp-crm-exact-facts-v1.schema.json",
         "spec/erp-crm-exact-action-contract-v1.md",
+        "schemas/procurement-ap-exact-facts-v1.schema.json",
+        "spec/procurement-ap-exact-action-contract-v1.md",
         "schemas/identity-security-exact-facts-v1.schema.json",
         "spec/identity-security-exact-action-contract-v1.md",
         "schemas/generate-text-exact-facts-v1.schema.json",
@@ -4333,6 +4624,7 @@ def main() -> int:
         validate_collections_contract(registry)
         validate_insurance_claims_contract(registry)
         validate_erp_crm_contract(registry)
+        validate_procurement_ap_contract(registry)
         validate_human_artifact_contract(registry)
         validate_fact_profiles(registry)
         validate_work_contract(registry)
