@@ -2742,6 +2742,176 @@ def validate_procurement_ap_contract(registry: Registry) -> None:
         )
 
 
+def validate_commerce_regulated_contract(registry: Registry) -> None:
+    consequence_v10 = load_json("consequence_registry/v10.json")
+    consequence_v11 = load_json("consequence_registry/v11.json")
+    facts_v13 = load_json("fact_profiles/v13.json")
+    facts_v14 = load_json("fact_profiles/v14.json")
+    semantics_v15 = load_json("semantic_registry/v15.json")
+    semantics_v16 = load_json("semantic_registry/v16.json")
+    presentations_v14 = load_json("presentation_registry/v14.json")
+    presentations_v15 = load_json("presentation_registry/v15.json")
+    vectors_v11 = load_json("consequence_registry/test-vectors/v11.json")
+    vectors_v12 = load_json("consequence_registry/test-vectors/v12.json")
+
+    for instance, schema_path, label in (
+        (consequence_v11, "consequence_registry/v11.schema.json", "consequence registry v11"),
+        (facts_v14, "fact_profiles/v14.schema.json", "fact profile registry v14"),
+        (semantics_v16, "semantic_registry/v16.schema.json", "semantic registry v16"),
+        (presentations_v15, "presentation_registry/v15.schema.json", "presentation registry v15"),
+    ):
+        validate_instance(instance, schema_path, registry, label)
+
+    for prior, current, key, label in (
+        (consequence_v10, consequence_v11, "consequences", "consequence v11"),
+        (facts_v13, facts_v14, "profiles", "fact profiles v14"),
+        (semantics_v15, semantics_v16, "entries", "semantic v16"),
+        (presentations_v14, presentations_v15, "profiles", "presentation v15"),
+        (vectors_v11, vectors_v12, "vectors", "consequence vectors v12"),
+    ):
+        if current[key][: len(prior[key])] != prior[key]:
+            raise ContractFailure(f"{label} is not an additive extension")
+
+    expected_titles = {
+        "commerce.order.place": "AI Permit-to-Place-Order",
+        "commerce.merchant.pay": "AI Permit-to-Pay-Merchant",
+        "commerce.inventory.reserve": "AI Permit-to-Reserve-Inventory",
+        "benefits.case.grant": "AI Permit-to-Grant-Benefit",
+        "benefits.case.deny": "AI Permit-to-Deny-Benefit",
+        "benefits.eligibility.change": "AI Permit-to-Change-Benefit-Eligibility",
+        "benefits.payment.issue": "AI Permit-to-Issue-Benefit-Payment",
+        "benefits.determination.notice.send": "AI Permit-to-Send-Benefit-Determination-Notice",
+        "healthcare.prior_authorization.submit": "AI Permit-to-Submit-Prior-Authorization",
+        "healthcare.prior_authorization.clinical_information.request": "AI Permit-to-Request-Clinical-Information",
+        "healthcare.prior_authorization.approve": "AI Permit-to-Approve-Prior-Authorization",
+        "healthcare.prior_authorization.deny": "AI Permit-to-Deny-Prior-Authorization",
+        "healthcare.appointment.schedule": "AI Permit-to-Schedule-Appointment",
+        "healthcare.claim.submit": "AI Permit-to-Submit-Healthcare-Claim",
+        "healthcare.patient_administrative_record.update": "AI Permit-to-Update-Patient-Administrative-Record",
+    }
+    added = consequence_v11["consequences"][len(consequence_v10["consequences"]) :]
+    if {item["tool_names"][0] for item in added} != set(expected_titles):
+        raise ContractFailure("consequence registry v11 commerce/regulated action set drifted")
+
+    consequences = consequence_v11["consequences"]
+    for key, values in (
+        ("consequence type", [item["consequence_type"] for item in consequences]),
+        ("semantic id", [item["semantic_id"] for item in consequences]),
+        ("tool", [tool for item in consequences for tool in item["tool_names"]]),
+    ):
+        if len(values) != len(set(values)):
+            raise ContractFailure(f"consequence registry v11 duplicates {key}")
+
+    vectors_by_id = {vector["id"]: vector for vector in vectors_v12["vectors"]}
+    if set(vectors_by_id) != {item["consequence_type"] for item in consequences}:
+        raise ContractFailure("v12 exact vectors must cover consequence registry v11")
+    profiles_by_id = {item["fact_profile_id"]: item for item in facts_v14["profiles"]}
+    semantics_by_id = {item["semantic_id"]: item for item in semantics_v16["entries"]}
+    presentations_by_id = {item["semantic_id"]: item for item in presentations_v15["profiles"]}
+    for label, mapping, source in (
+        ("fact profile", profiles_by_id, facts_v14["profiles"]),
+        ("semantic", semantics_by_id, semantics_v16["entries"]),
+        ("presentation", presentations_by_id, presentations_v15["profiles"]),
+    ):
+        if len(mapping) != len(source):
+            raise ContractFailure(f"registry v11 contains duplicate {label} ids")
+
+    schema_path = "schemas/commerce-regulated-exact-facts-v1.schema.json"
+    validator = jsonschema.Draft202012Validator(
+        load_json(schema_path), registry=registry, format_checker=jsonschema.FormatChecker()
+    )
+
+    def invariants_hold(facts: dict[str, Any]) -> bool:
+        if facts.get("record_is_synthetic") is not True or facts.get("max_uses") != 1:
+            return False
+        action = facts.get("action")
+        if action == "commerce.inventory.reserve":
+            return (
+                facts.get("inventory_sufficient") is True
+                and facts.get("available_unit_count", -1) >= facts.get("requested_unit_count", 0) > 0
+            )
+        if action == "benefits.eligibility.change":
+            return facts.get("current_eligibility_status") != facts.get("requested_eligibility_status")
+        if action == "healthcare.appointment.schedule":
+            start = facts.get("appointment_start_at", "")
+            end = facts.get("appointment_end_at", "")
+            return start < end and facts.get("schedule_conflict_count") == 0
+        if action == "healthcare.patient_administrative_record.update":
+            return (
+                facts.get("requested_record_version") == facts.get("record_version_before", -1) + 1
+                and facts.get("clinical_field_mutation_requested") is False
+            )
+        if action in {"commerce.merchant.pay", "benefits.payment.issue"}:
+            return facts.get("stripe_livemode") is False and facts.get("existing_payment_count") == 0
+        if action in {"benefits.case.grant", "benefits.case.deny"}:
+            expected = "granted" if action.endswith("grant") else "denied"
+            return facts.get("requested_determination_status") == expected
+        return True
+
+    allowed_leading_fields = set(presentations_v15["allowed_leading_fields"])
+    allowed_sections = set(presentations_v15["allowed_evidence_sections"])
+    for consequence in added:
+        consequence_type = consequence["consequence_type"]
+        action_name = consequence["tool_names"][0]
+        semantic_id = consequence["semantic_id"]
+        vector = vectors_by_id[consequence_type]
+        profile_id = vector["expected_fact_profile_id"]
+        semantic = semantics_by_id.get(semantic_id)
+        profile = profiles_by_id.get(profile_id)
+        presentation = presentations_by_id.get(semantic_id)
+        if semantic is None or semantic.get("fact_profile_id") != profile_id:
+            raise ContractFailure(f"{consequence_type} lacks exact semantic binding")
+        if profile is None or profile.get("facts_schema") != schema_path:
+            raise ContractFailure(f"{consequence_type} lacks exact fact profile")
+        if presentation is None or presentation.get("customer_title") != expected_titles[action_name]:
+            raise ContractFailure(f"{consequence_type} lacks exact human title")
+        if not {item["field"] for item in presentation.get("leading_fields", [])}.issubset(allowed_leading_fields):
+            raise ContractFailure(f"{consequence_type} uses unknown leading field")
+        if not set(presentation.get("evidence_sections", [])).issubset(allowed_sections):
+            raise ContractFailure(f"{consequence_type} uses unknown evidence section")
+        if presentation.get("does_not_establish") != consequence.get("does_not_establish"):
+            raise ContractFailure(f"{consequence_type} presentation limits drifted")
+        if "gateway_preflight_hmac" not in consequence.get("trusted_fact_requirements", []):
+            raise ContractFailure(f"{consequence_type} omits authenticated preflight")
+        if select_semantic(semantics_v16, vector["candidate"]) != (semantic_id, None):
+            raise ContractFailure(f"{consequence_type} is not selected exactly once")
+
+        facts = vector["valid_authorization_facts"]
+        errors = list(validator.iter_errors(facts))
+        if errors:
+            raise ContractFailure(f"{consequence_type} exact facts are invalid: {errors[0].message}")
+        if not invariants_hold(facts):
+            raise ContractFailure(f"{consequence_type} violates exact invariants")
+        if facts.get("fact_profile_id") != profile_id or facts.get("action") != action_name:
+            raise ContractFailure(f"{consequence_type} vector identity drifted")
+        if profile.get("facts_schema_digest") != _sha256_file(ROOT / schema_path):
+            raise ContractFailure(f"{consequence_type} schema digest is stale")
+
+        mutations = [("record_is_synthetic", False), ("max_uses", 2), ("preflight_expires_at", "not-a-time")]
+        if action_name == "commerce.inventory.reserve":
+            mutations.append(("available_unit_count", 0))
+        elif action_name == "benefits.eligibility.change":
+            mutations.append(("requested_eligibility_status", facts["current_eligibility_status"]))
+        elif action_name == "healthcare.appointment.schedule":
+            mutations.append(("appointment_end_at", facts["appointment_start_at"]))
+        elif action_name == "healthcare.patient_administrative_record.update":
+            mutations.append(("requested_record_version", facts["record_version_before"] + 2))
+        elif action_name in {"commerce.merchant.pay", "benefits.payment.issue"}:
+            mutations.append(("stripe_livemode", True))
+        for field, value in mutations:
+            mutated = copy.deepcopy(facts)
+            mutated[field] = value
+            if validator.is_valid(mutated) and invariants_hold(mutated):
+                raise ContractFailure(f"{consequence_type} accepted adversarial {field} mutation")
+
+    bound_profile_ids = {
+        entry["fact_profile_id"] for entry in semantics_v16["entries"]
+        if entry.get("fact_profile_id") is not None
+    }
+    if bound_profile_ids != set(profiles_by_id):
+        raise ContractFailure("semantic registry v16 and fact profile registry v14 must bind exactly")
+
+
 def set_vector_path(document: dict[str, Any], path: list[Any], value: Any) -> None:
     current: Any = document
     for segment in path[:-1]:
@@ -4625,6 +4795,7 @@ def main() -> int:
         validate_insurance_claims_contract(registry)
         validate_erp_crm_contract(registry)
         validate_procurement_ap_contract(registry)
+        validate_commerce_regulated_contract(registry)
         validate_human_artifact_contract(registry)
         validate_fact_profiles(registry)
         validate_work_contract(registry)
