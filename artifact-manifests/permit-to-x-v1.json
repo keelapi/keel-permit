@@ -891,6 +891,61 @@
       "id": "keel.permit.insurance_claims_exact_action_contract.v1.spec",
       "path": "spec/insurance-claims-exact-action-contract-v1.md",
       "sha256": "80b468ea6539658ae1a6c3cde2032bde0168dc2f82971608ca820abe392eb4f9"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v9",
+      "path": "consequence_registry/v9.json",
+      "sha256": "08868027281e04c85e12064edb0709c91e8b768b24f6b1f4f5f484825b4acb4e"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v9.schema",
+      "path": "consequence_registry/v9.schema.json",
+      "sha256": "421946f02252c792f46ec5fa06fc66d5b7bc471228d3d2cba784e3605013807e"
+    },
+    {
+      "id": "keel.permit.erp_crm_exact_facts.v1.schema",
+      "path": "schemas/erp-crm-exact-facts-v1.schema.json",
+      "sha256": "85c38c6c38f8e022ae0244547a930e50abca076499a5448bf2bdd8a03a3844fa"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v12",
+      "path": "fact_profiles/v12.json",
+      "sha256": "1cc7a438a1db58b61e775cdf4a39caf6e335aef207cc2996cb7adb49d148ea65"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v12.schema",
+      "path": "fact_profiles/v12.schema.json",
+      "sha256": "670605ca0899bb38a38f37634997e258843b440f538b76d06f56623b6372a49c"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v14",
+      "path": "semantic_registry/v14.json",
+      "sha256": "67447564595548aaa8ee27379b45a830d9a0a1fb50425525216aa69e80b7d1dd"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v14.schema",
+      "path": "semantic_registry/v14.schema.json",
+      "sha256": "07dc33adc44c815dbc5b108c13627de88be1eb641fb8ffdc786db144113d1b20"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v13",
+      "path": "presentation_registry/v13.json",
+      "sha256": "763015087a29a3260f240c472600c7a88522105c5ac1bcb3d5145eb42823d14e"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v13.schema",
+      "path": "presentation_registry/v13.schema.json",
+      "sha256": "7d4d4678c81cdd92ba0212e275945b4cc14b2dafa7ed5890cd3d456365d1bde1"
+    },
+    {
+      "id": "permit-to-x.test-vectors.consequence-registry.v10",
+      "path": "consequence_registry/test-vectors/v10.json",
+      "sha256": "213aa4f191e4ea1a8708d7211df23d3d00649f113b70841f1a6846a05efb4f0e"
+    },
+    {
+      "id": "keel.permit.erp_crm_exact_action_contract.v1.spec",
+      "path": "spec/erp-crm-exact-action-contract-v1.md",
+      "sha256": "04f09dc48f4f9ec1fd91c3d6cfa2bdf6491c1a3bd06c5129f5868a9997c960c8"
     }
   ]
 }
