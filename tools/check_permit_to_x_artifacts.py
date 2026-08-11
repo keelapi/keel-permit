@@ -2207,6 +2207,261 @@ def validate_insurance_claims_contract(registry: Registry) -> None:
         )
 
 
+def validate_erp_crm_contract(registry: Registry) -> None:
+    consequence_v8 = load_json("consequence_registry/v8.json")
+    consequence_v9 = load_json("consequence_registry/v9.json")
+    validate_instance(
+        consequence_v9,
+        "consequence_registry/v9.schema.json",
+        registry,
+        "consequence registry v9",
+    )
+    prior = consequence_v8["consequences"]
+    consequences = consequence_v9["consequences"]
+    if consequences[: len(prior)] != prior:
+        raise ContractFailure(
+            "consequence registry v9 must preserve every v8 entry byte-for-value"
+        )
+
+    facts_v11 = load_json("fact_profiles/v11.json")
+    facts_v12 = load_json("fact_profiles/v12.json")
+    semantics_v13 = load_json("semantic_registry/v13.json")
+    semantics_v14 = load_json("semantic_registry/v14.json")
+    presentations_v12 = load_json("presentation_registry/v12.json")
+    presentations_v13 = load_json("presentation_registry/v13.json")
+    vectors_v9 = load_json("consequence_registry/test-vectors/v9.json")
+    vectors_v10 = load_json("consequence_registry/test-vectors/v10.json")
+
+    for instance, schema_path, label in (
+        (facts_v12, "fact_profiles/v12.schema.json", "fact profile registry v12"),
+        (
+            semantics_v14,
+            "semantic_registry/v14.schema.json",
+            "semantic registry v14",
+        ),
+        (
+            presentations_v13,
+            "presentation_registry/v13.schema.json",
+            "presentation registry v13",
+        ),
+    ):
+        validate_instance(instance, schema_path, registry, label)
+    if facts_v12["profiles"][: len(facts_v11["profiles"])] != facts_v11["profiles"]:
+        raise ContractFailure("fact profile registry v12 is not an additive v11 extension")
+    if semantics_v14["entries"][: len(semantics_v13["entries"])] != semantics_v13[
+        "entries"
+    ]:
+        raise ContractFailure("semantic registry v14 is not an additive v13 extension")
+    if presentations_v13["profiles"][: len(presentations_v12["profiles"])] != (
+        presentations_v12["profiles"]
+    ):
+        raise ContractFailure(
+            "presentation registry v13 is not an additive v12 extension"
+        )
+    if vectors_v10["vectors"][: len(vectors_v9["vectors"])] != vectors_v9["vectors"]:
+        raise ContractFailure("consequence vectors v10 are not an additive v9 extension")
+
+    consequence_types = [item["consequence_type"] for item in consequences]
+    semantic_ids = [item["semantic_id"] for item in consequences]
+    tool_names = [tool for item in consequences for tool in item["tool_names"]]
+    if len(consequence_types) != len(set(consequence_types)):
+        raise ContractFailure("consequence registry v9 contains duplicate types")
+    if len(semantic_ids) != len(set(semantic_ids)):
+        raise ContractFailure("consequence registry v9 contains duplicate semantics")
+    if len(tool_names) != len(set(tool_names)):
+        raise ContractFailure("consequence registry v9 contains overlapping tools")
+
+    vectors_by_id = {vector["id"]: vector for vector in vectors_v10["vectors"]}
+    if len(vectors_by_id) != len(vectors_v10["vectors"]):
+        raise ContractFailure("consequence vectors v10 contain duplicate ids")
+    if set(vectors_by_id) != set(consequence_types):
+        raise ContractFailure(
+            "v10 exact consequence vectors must cover consequence registry v9"
+        )
+    profiles_by_id = {
+        profile["fact_profile_id"]: profile for profile in facts_v12["profiles"]
+    }
+    semantics_by_id = {
+        entry["semantic_id"]: entry for entry in semantics_v14["entries"]
+    }
+    presentations_by_id = {
+        profile["semantic_id"]: profile for profile in presentations_v13["profiles"]
+    }
+    if len(profiles_by_id) != len(facts_v12["profiles"]):
+        raise ContractFailure("fact profile registry v12 contains duplicate ids")
+    if len(semantics_by_id) != len(semantics_v14["entries"]):
+        raise ContractFailure("semantic registry v14 contains duplicate ids")
+    if len(presentations_by_id) != len(presentations_v13["profiles"]):
+        raise ContractFailure("presentation registry v13 contains duplicate semantics")
+
+    schema_path = "schemas/erp-crm-exact-facts-v1.schema.json"
+    validator = jsonschema.Draft202012Validator(
+        load_json(schema_path),
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+    added = consequences[len(prior) :]
+    expected_actions = {
+        "crm.deal.stage.change.v1": "crm.deal.stage.change",
+        "crm.customer.record.update.v1": "crm.customer.record.update",
+        "crm.quote.create.v1": "crm.quote.create",
+    }
+    expected_titles = {
+        "crm.deal.stage.change": "AI Permit-to-Change-Deal-Stage",
+        "crm.customer.record.update": "AI Permit-to-Update-Customer-Record",
+        "crm.quote.create": "AI Permit-to-Create-Quote",
+    }
+    if {item["consequence_type"]: item["tool_names"][0] for item in added} != (
+        expected_actions
+    ):
+        raise ContractFailure("consequence registry v9 ERP/CRM action set drifted")
+
+    def invariants_hold(facts: dict[str, Any]) -> bool:
+        if not (
+            facts.get("connector_identity") == "hubspot"
+            and facts.get("provider_environment") == "developer_test"
+            and facts.get("provider_account_type") == "DEVELOPER_TEST"
+            and facts.get("record_is_synthetic") is True
+            and facts.get("max_uses") == 1
+        ):
+            return False
+        action = facts.get("action")
+        if action == "crm.deal.stage.change":
+            return (
+                facts.get("current_stage_id") != facts.get("requested_stage_id")
+                and facts.get("transition_allowlisted") is True
+            )
+        if action == "crm.customer.record.update":
+            return (
+                facts.get("property_name") in {"jobtitle", "lifecyclestage", "phone"}
+                and facts.get("property_allowlisted") is True
+                and facts.get("property_read_only") is False
+                and facts.get("value_before_commitment")
+                != facts.get("value_after_commitment")
+            )
+        if action == "crm.quote.create":
+            subtotal = facts.get("subtotal_amount_minor", -1)
+            discount = facts.get("discount_amount_minor", -1)
+            tax = facts.get("tax_amount_minor", -1)
+            return (
+                subtotal > 0
+                and discount >= 0
+                and tax >= 0
+                and subtotal - discount + tax == facts.get("total_amount_minor")
+                and facts.get("total_matches_provider_pricing") is True
+                and facts.get("quote_status") == "DRAFT"
+                and facts.get("payment_enabled") is False
+                and facts.get("e_signature_enabled") is False
+                and facts.get("publication_status") == "not_published"
+                and facts.get("existing_quote_count_for_idempotency_key") == 0
+            )
+        return False
+
+    allowed_leading_fields = set(presentations_v13["allowed_leading_fields"])
+    allowed_sections = set(presentations_v13["allowed_evidence_sections"])
+    for consequence in added:
+        consequence_type = consequence["consequence_type"]
+        vector = vectors_by_id[consequence_type]
+        semantic_id = consequence["semantic_id"]
+        profile_id = vector["expected_fact_profile_id"]
+        action = consequence["tool_names"][0]
+        entry = semantics_by_id.get(semantic_id)
+        profile = profiles_by_id.get(profile_id)
+        presentation = presentations_by_id.get(semantic_id)
+        if vector.get("expected_semantic_id") != semantic_id:
+            raise ContractFailure(f"{consequence_type} vector semantic drifted")
+        if entry is None or entry.get("fact_profile_id") != profile_id:
+            raise ContractFailure(f"{consequence_type} lacks its exact semantic binding")
+        if profile is None or profile.get("facts_schema") != schema_path:
+            raise ContractFailure(f"{consequence_type} lacks its ERP/CRM fact profile")
+        if semantic_id not in profile.get("semantic_ids", []):
+            raise ContractFailure(f"{consequence_type} fact profile semantic drifted")
+        if presentation is None or presentation.get("customer_title") != expected_titles[
+            action
+        ]:
+            raise ContractFailure(f"{consequence_type} lacks its exact human title")
+        if not {
+            field["field"] for field in presentation.get("leading_fields", [])
+        }.issubset(allowed_leading_fields):
+            raise ContractFailure(f"{consequence_type} uses an unknown leading field")
+        if not set(presentation.get("evidence_sections", [])).issubset(
+            allowed_sections
+        ):
+            raise ContractFailure(f"{consequence_type} uses an unknown evidence section")
+        if presentation.get("does_not_establish") != consequence.get(
+            "does_not_establish"
+        ):
+            raise ContractFailure(f"{consequence_type} presentation limits drifted")
+        requirements = consequence.get("trusted_fact_requirements", [])
+        if "gateway_preflight_hmac" not in requirements:
+            raise ContractFailure(f"{consequence_type} omits authenticated preflight")
+        if "gateway_pinned_developer_test_portal" not in requirements:
+            raise ContractFailure(f"{consequence_type} omits portal custody boundary")
+        if select_semantic(semantics_v14, vector["candidate"]) != (
+            semantic_id,
+            None,
+        ):
+            raise ContractFailure(
+                f"{consequence_type} is not selected exactly once in semantic v14"
+            )
+
+        facts = vector["valid_authorization_facts"]
+        errors = list(validator.iter_errors(facts))
+        if errors:
+            raise ContractFailure(
+                f"{consequence_type} exact facts are invalid: {errors[0].message}"
+            )
+        if not invariants_hold(facts):
+            raise ContractFailure(f"{consequence_type} vector violates ERP/CRM invariants")
+        if facts.get("fact_profile_id") != profile_id or facts.get("action") != action:
+            raise ContractFailure(f"{consequence_type} vector identity drifted")
+        if profile.get("facts_schema_digest") != _sha256_file(ROOT / schema_path):
+            raise ContractFailure(f"{consequence_type} facts schema digest is stale")
+
+        common_mutations = [
+            ("provider_environment", "production"),
+            ("provider_account_type", "STANDARD"),
+            ("record_is_synthetic", False),
+            ("preflight_expires_at", "not-a-time"),
+            ("max_uses", 2),
+        ]
+        action_mutations = {
+            "crm.deal.stage.change": [
+                ("requested_stage_id", facts.get("current_stage_id")),
+                ("transition_allowlisted", False),
+            ],
+            "crm.customer.record.update": [
+                ("property_name", "email"),
+                ("property_read_only", True),
+                ("value_after_commitment", facts.get("value_before_commitment")),
+            ],
+            "crm.quote.create": [
+                ("quote_status", "APPROVAL_NOT_NEEDED"),
+                ("payment_enabled", True),
+                ("e_signature_enabled", True),
+                ("total_amount_minor", facts.get("total_amount_minor", 0) + 1),
+                ("existing_quote_count_for_idempotency_key", 1),
+            ],
+        }[action]
+        for field, value in [*common_mutations, *action_mutations]:
+            mutated = copy.deepcopy(facts)
+            mutated[field] = value
+            if validator.is_valid(mutated) and invariants_hold(mutated):
+                raise ContractFailure(
+                    f"{consequence_type} accepted adversarial {field} mutation"
+                )
+
+    bound_profile_ids = {
+        entry["fact_profile_id"]
+        for entry in semantics_v14["entries"]
+        if entry.get("fact_profile_id") is not None
+    }
+    if bound_profile_ids != set(profiles_by_id):
+        raise ContractFailure(
+            "semantic registry v14 and fact profile registry v12 must bind exactly"
+        )
+
+
 def set_vector_path(document: dict[str, Any], path: list[Any], value: Any) -> None:
     current: Any = document
     for segment in path[:-1]:
@@ -3586,6 +3841,8 @@ def validate_artifact_manifest() -> None:
         "semantic_registry/v12.schema.json",
         "semantic_registry/v13.json",
         "semantic_registry/v13.schema.json",
+        "semantic_registry/v14.json",
+        "semantic_registry/v14.schema.json",
         "presentation_registry/v4.json",
         "presentation_registry/v4.schema.json",
         "presentation_registry/v5.json",
@@ -3604,6 +3861,8 @@ def validate_artifact_manifest() -> None:
         "presentation_registry/v11.schema.json",
         "presentation_registry/v12.json",
         "presentation_registry/v12.schema.json",
+        "presentation_registry/v13.json",
+        "presentation_registry/v13.schema.json",
         "consequence_registry/v1.json",
         "consequence_registry/v1.schema.json",
         "consequence_registry/v2.json",
@@ -3620,6 +3879,8 @@ def validate_artifact_manifest() -> None:
         "consequence_registry/v7.schema.json",
         "consequence_registry/v8.json",
         "consequence_registry/v8.schema.json",
+        "consequence_registry/v9.json",
+        "consequence_registry/v9.schema.json",
         "consequence_registry/test-vectors/v1.json",
         "consequence_registry/test-vectors/v2.json",
         "consequence_registry/test-vectors/v3.json",
@@ -3629,6 +3890,7 @@ def validate_artifact_manifest() -> None:
         "consequence_registry/test-vectors/v7.json",
         "consequence_registry/test-vectors/v8.json",
         "consequence_registry/test-vectors/v9.json",
+        "consequence_registry/test-vectors/v10.json",
         "spec/consequence-registry-v1.md",
         "presentation_registry/v2.json",
         "presentation_registry/v2.schema.json",
@@ -3658,6 +3920,8 @@ def validate_artifact_manifest() -> None:
         "fact_profiles/v10.schema.json",
         "fact_profiles/v11.json",
         "fact_profiles/v11.schema.json",
+        "fact_profiles/v12.json",
+        "fact_profiles/v12.schema.json",
         "schemas/database-exact-facts-v1.schema.json",
         "schemas/payment-ledger-exact-facts-v1.schema.json",
         "schemas/transactional-cx-exact-facts-v1.schema.json",
@@ -3670,6 +3934,8 @@ def validate_artifact_manifest() -> None:
         "spec/collections-exact-action-contract-v1.md",
         "schemas/insurance-claims-exact-facts-v1.schema.json",
         "spec/insurance-claims-exact-action-contract-v1.md",
+        "schemas/erp-crm-exact-facts-v1.schema.json",
+        "spec/erp-crm-exact-action-contract-v1.md",
         "schemas/identity-security-exact-facts-v1.schema.json",
         "spec/identity-security-exact-action-contract-v1.md",
         "schemas/generate-text-exact-facts-v1.schema.json",
@@ -4066,6 +4332,7 @@ def main() -> int:
         validate_coding_workspace_contract(registry)
         validate_collections_contract(registry)
         validate_insurance_claims_contract(registry)
+        validate_erp_crm_contract(registry)
         validate_human_artifact_contract(registry)
         validate_fact_profiles(registry)
         validate_work_contract(registry)
