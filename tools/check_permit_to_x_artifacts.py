@@ -2912,6 +2912,223 @@ def validate_commerce_regulated_contract(registry: Registry) -> None:
         raise ContractFailure("semantic registry v16 and fact profile registry v14 must bind exactly")
 
 
+def validate_wave5_breadth_contract(registry: Registry) -> None:
+    consequence_v11 = load_json("consequence_registry/v11.json")
+    consequence_v12 = load_json("consequence_registry/v12.json")
+    facts_v14 = load_json("fact_profiles/v14.json")
+    facts_v15 = load_json("fact_profiles/v15.json")
+    semantics_v16 = load_json("semantic_registry/v16.json")
+    semantics_v17 = load_json("semantic_registry/v17.json")
+    presentations_v15 = load_json("presentation_registry/v15.json")
+    presentations_v16 = load_json("presentation_registry/v16.json")
+    vectors_v12 = load_json("consequence_registry/test-vectors/v12.json")
+    vectors_v13 = load_json("consequence_registry/test-vectors/v13.json")
+
+    for instance, schema_path, label in (
+        (consequence_v12, "consequence_registry/v12.schema.json", "consequence registry v12"),
+        (facts_v15, "fact_profiles/v15.schema.json", "fact profile registry v15"),
+        (semantics_v17, "semantic_registry/v17.schema.json", "semantic registry v17"),
+        (presentations_v16, "presentation_registry/v16.schema.json", "presentation registry v16"),
+    ):
+        validate_instance(instance, schema_path, registry, label)
+
+    for prior, current, key, label in (
+        (consequence_v11, consequence_v12, "consequences", "consequence v12"),
+        (facts_v14, facts_v15, "profiles", "fact profiles v15"),
+        (semantics_v16, semantics_v17, "entries", "semantic v17"),
+        (presentations_v15, presentations_v16, "profiles", "presentation v16"),
+        (vectors_v12, vectors_v13, "vectors", "consequence vectors v13"),
+    ):
+        if current[key][: len(prior[key])] != prior[key]:
+            raise ContractFailure(f"{label} is not an additive extension")
+
+    expected_titles = {
+        "trust_safety.content.remove": "AI Permit-to-Remove-Community-Content",
+        "trust_safety.member.suspend": "AI Permit-to-Suspend-Community-Member",
+        "trust_safety.member.restore": "AI Permit-to-Restore-Community-Member",
+        "recruiting.candidate.advance": "AI Permit-to-Advance-Candidate",
+        "recruiting.candidate.reject": "AI Permit-to-Reject-Candidate",
+        "recruiting.offer.send": "AI Permit-to-Send-Employment-Offer",
+        "legal.agreement.send": "AI Permit-to-Send-Agreement",
+        "legal.agreement.void": "AI Permit-to-Void-Agreement",
+        "trading.paper.order.place": "AI Permit-to-Place-Paper-Trade",
+        "trading.paper.order.cancel": "AI Permit-to-Cancel-Paper-Trade",
+        "supply.replenishment_order.issue": "AI Permit-to-Issue-Replenishment-Order",
+        "supply.shipment.create": "AI Permit-to-Create-Shipment",
+        "supply.shipping_label.purchase": "AI Permit-to-Purchase-Test-Shipping-Label",
+        "supply.shipment.route.change": "AI Permit-to-Change-Shipment-Route",
+        "legacy.customer.address.change": "AI Permit-to-Change-Customer-Address",
+        "sales.email.send": "AI Permit-to-Send-Sales-Email",
+        "sales.discount.offer": "AI Permit-to-Offer-Discount",
+        "calendar.event.create": "AI Permit-to-Create-Calendar-Event",
+        "email.message.send": "AI Permit-to-Send-Email",
+        "commerce.item.purchase": "AI Permit-to-Purchase-Item",
+        "marketing.content.publish": "AI Permit-to-Publish-Content",
+        "marketing.campaign.launch": "AI Permit-to-Launch-Campaign",
+        "marketing.campaign.budget.change": "AI Permit-to-Change-Campaign-Budget",
+        "education.student.enroll": "AI Permit-to-Enroll-Student",
+        "education.enrollment.drop": "AI Permit-to-Drop-Enrollment",
+        "education.transcript.release": "AI Permit-to-Release-Transcript",
+        "research.dataset.purchase": "AI Permit-to-Purchase-Dataset",
+        "research.artifact.publish": "AI Permit-to-Publish-Research-Artifact",
+        "metered.api.usage.purchase": "AI Permit-to-Purchase-API-Usage",
+        "metered.compute.units.purchase": "AI Permit-to-Purchase-Compute-Units",
+        "physical.access.unlock": "AI Permit-to-Unlock-Demo-Door",
+        "physical.relay.actuate": "AI Permit-to-Actuate-Demo-Relay",
+        "physical.arm.move": "AI Permit-to-Move-Demo-Arm",
+    }
+    added = consequence_v12["consequences"][len(consequence_v11["consequences"]) :]
+    if {item["tool_names"][0] for item in added} != set(expected_titles):
+        raise ContractFailure("consequence registry v12 Wave 5 action set drifted")
+
+    consequences = consequence_v12["consequences"]
+    for key, values in (
+        ("consequence type", [item["consequence_type"] for item in consequences]),
+        ("semantic id", [item["semantic_id"] for item in consequences]),
+        ("tool", [tool for item in consequences for tool in item["tool_names"]]),
+    ):
+        if len(values) != len(set(values)):
+            raise ContractFailure(f"consequence registry v12 duplicates {key}")
+
+    prior_tools = {
+        tool: item for item in consequence_v11["consequences"] for tool in item["tool_names"]
+    }
+    if prior_tools.get("crm.deal.stage.change", {}).get("customer_title") != (
+        "AI Permit-to-Change-Deal-Stage"
+    ):
+        raise ContractFailure("Wave 5 SDR habitat lost its existing exact CRM-stage action")
+
+    vectors_by_id = {vector["id"]: vector for vector in vectors_v13["vectors"]}
+    if set(vectors_by_id) != {item["consequence_type"] for item in consequences}:
+        raise ContractFailure("v13 exact vectors must cover consequence registry v12")
+    profiles_by_id = {item["fact_profile_id"]: item for item in facts_v15["profiles"]}
+    semantics_by_id = {item["semantic_id"]: item for item in semantics_v17["entries"]}
+    presentations_by_id = {item["semantic_id"]: item for item in presentations_v16["profiles"]}
+    for label, mapping, source in (
+        ("fact profile", profiles_by_id, facts_v15["profiles"]),
+        ("semantic", semantics_by_id, semantics_v17["entries"]),
+        ("presentation", presentations_by_id, presentations_v16["profiles"]),
+    ):
+        if len(mapping) != len(source):
+            raise ContractFailure(f"registry v12 contains duplicate {label} ids")
+
+    schema_path = "schemas/wave5-breadth-exact-facts-v1.schema.json"
+    validator = jsonschema.Draft202012Validator(
+        load_json(schema_path), registry=registry, format_checker=jsonschema.FormatChecker()
+    )
+    allowed_leading_fields = set(presentations_v16["allowed_leading_fields"])
+    allowed_sections = set(presentations_v16["allowed_evidence_sections"])
+    spec = (ROOT / "spec/wave5-breadth-exact-action-contract-v1.md").read_text(
+        encoding="utf-8"
+    )
+
+    def invariants_hold(facts: dict[str, Any]) -> bool:
+        if facts.get("target_is_dedicated_demo") is not True or facts.get("max_uses") != 1:
+            return False
+        action = facts.get("action")
+        if action == "sales.discount.offer":
+            return facts.get("discount_basis_points", 0) <= facts.get(
+                "discount_ceiling_basis_points", -1
+            )
+        if action == "marketing.campaign.budget.change":
+            return facts.get("requested_daily_budget_minor", 0) <= facts.get(
+                "daily_budget_ceiling_minor", -1
+            )
+        if action in {"calendar.event.create"}:
+            return facts.get("event_start_at", "") < facts.get("event_end_at", "")
+        if action in {"sales.email.send", "email.message.send"}:
+            return facts.get("daily_send_count_before", 0) < facts.get("daily_send_limit", 0)
+        if action == "physical.relay.actuate":
+            return facts.get("relay_state_before") != facts.get("requested_relay_state")
+        if action and action.startswith("physical."):
+            return all(
+                facts.get(field) is True
+                for field in (
+                    "physical_safety_interlock_armed",
+                    "human_safety_signoff_present",
+                    "emergency_stop_verified",
+                )
+            )
+        return True
+
+    for consequence in added:
+        consequence_type = consequence["consequence_type"]
+        action_name = consequence["tool_names"][0]
+        semantic_id = consequence["semantic_id"]
+        vector = vectors_by_id[consequence_type]
+        profile_id = vector["expected_fact_profile_id"]
+        semantic = semantics_by_id.get(semantic_id)
+        profile = profiles_by_id.get(profile_id)
+        presentation = presentations_by_id.get(semantic_id)
+        if semantic is None or semantic.get("fact_profile_id") != profile_id:
+            raise ContractFailure(f"{consequence_type} lacks exact semantic binding")
+        if profile is None or profile.get("facts_schema") != schema_path:
+            raise ContractFailure(f"{consequence_type} lacks exact fact profile")
+        expected_title = expected_titles[action_name]
+        if presentation is None or presentation.get("customer_title") != expected_title:
+            raise ContractFailure(f"{consequence_type} lacks exact human title")
+        if expected_title not in spec:
+            raise ContractFailure(f"{consequence_type} title is absent from the Wave 5 spec")
+        if not {item["field"] for item in presentation.get("leading_fields", [])}.issubset(
+            allowed_leading_fields
+        ):
+            raise ContractFailure(f"{consequence_type} uses unknown leading field")
+        if not set(presentation.get("evidence_sections", [])).issubset(allowed_sections):
+            raise ContractFailure(f"{consequence_type} uses unknown evidence section")
+        if presentation.get("does_not_establish") != consequence.get("does_not_establish"):
+            raise ContractFailure(f"{consequence_type} presentation limits drifted")
+        trusted = set(consequence.get("trusted_fact_requirements", []))
+        if not {"gateway_preflight_hmac", "gateway_pinned_dedicated_demo_target"}.issubset(
+            trusted
+        ):
+            raise ContractFailure(f"{consequence_type} omits authenticated demo preflight")
+        if select_semantic(semantics_v17, vector["candidate"]) != (semantic_id, None):
+            raise ContractFailure(f"{consequence_type} is not selected exactly once")
+
+        facts = vector["valid_authorization_facts"]
+        errors = list(validator.iter_errors(facts))
+        if errors:
+            raise ContractFailure(
+                f"{consequence_type} exact facts are invalid: {errors[0].message}"
+            )
+        if not invariants_hold(facts):
+            raise ContractFailure(f"{consequence_type} violates exact invariants")
+        if facts.get("fact_profile_id") != profile_id or facts.get("action") != action_name:
+            raise ContractFailure(f"{consequence_type} vector identity drifted")
+        if profile.get("facts_schema_digest") != _sha256_file(ROOT / schema_path):
+            raise ContractFailure(f"{consequence_type} schema digest is stale")
+
+        for field, value in (
+            ("target_is_dedicated_demo", False),
+            ("max_uses", 2),
+            ("preflight_expires_at", "not-a-time"),
+        ):
+            mutated = copy.deepcopy(facts)
+            mutated[field] = value
+            if validator.is_valid(mutated) and invariants_hold(mutated):
+                raise ContractFailure(f"{consequence_type} accepted adversarial {field} mutation")
+        if action_name.startswith("physical."):
+            for field in (
+                "physical_safety_interlock_armed",
+                "human_safety_signoff_present",
+                "emergency_stop_verified",
+            ):
+                mutated = copy.deepcopy(facts)
+                mutated[field] = False
+                if validator.is_valid(mutated) and invariants_hold(mutated):
+                    raise ContractFailure(
+                        f"{consequence_type} accepted unsafe {field} mutation"
+                    )
+
+    bound_profile_ids = {
+        entry["fact_profile_id"]
+        for entry in semantics_v17["entries"]
+        if entry.get("fact_profile_id") is not None
+    }
+    if bound_profile_ids != set(profiles_by_id):
+        raise ContractFailure("semantic registry v17 and fact profile registry v15 must bind exactly")
+
+
 def set_vector_path(document: dict[str, Any], path: list[Any], value: Any) -> None:
     current: Any = document
     for segment in path[:-1]:
@@ -4295,6 +4512,10 @@ def validate_artifact_manifest() -> None:
         "semantic_registry/v14.schema.json",
         "semantic_registry/v15.json",
         "semantic_registry/v15.schema.json",
+        "semantic_registry/v16.json",
+        "semantic_registry/v16.schema.json",
+        "semantic_registry/v17.json",
+        "semantic_registry/v17.schema.json",
         "presentation_registry/v4.json",
         "presentation_registry/v4.schema.json",
         "presentation_registry/v5.json",
@@ -4317,6 +4538,10 @@ def validate_artifact_manifest() -> None:
         "presentation_registry/v13.schema.json",
         "presentation_registry/v14.json",
         "presentation_registry/v14.schema.json",
+        "presentation_registry/v15.json",
+        "presentation_registry/v15.schema.json",
+        "presentation_registry/v16.json",
+        "presentation_registry/v16.schema.json",
         "consequence_registry/v1.json",
         "consequence_registry/v1.schema.json",
         "consequence_registry/v2.json",
@@ -4337,6 +4562,10 @@ def validate_artifact_manifest() -> None:
         "consequence_registry/v9.schema.json",
         "consequence_registry/v10.json",
         "consequence_registry/v10.schema.json",
+        "consequence_registry/v11.json",
+        "consequence_registry/v11.schema.json",
+        "consequence_registry/v12.json",
+        "consequence_registry/v12.schema.json",
         "consequence_registry/test-vectors/v1.json",
         "consequence_registry/test-vectors/v2.json",
         "consequence_registry/test-vectors/v3.json",
@@ -4348,6 +4577,8 @@ def validate_artifact_manifest() -> None:
         "consequence_registry/test-vectors/v9.json",
         "consequence_registry/test-vectors/v10.json",
         "consequence_registry/test-vectors/v11.json",
+        "consequence_registry/test-vectors/v12.json",
+        "consequence_registry/test-vectors/v13.json",
         "spec/consequence-registry-v1.md",
         "presentation_registry/v2.json",
         "presentation_registry/v2.schema.json",
@@ -4381,6 +4612,10 @@ def validate_artifact_manifest() -> None:
         "fact_profiles/v12.schema.json",
         "fact_profiles/v13.json",
         "fact_profiles/v13.schema.json",
+        "fact_profiles/v14.json",
+        "fact_profiles/v14.schema.json",
+        "fact_profiles/v15.json",
+        "fact_profiles/v15.schema.json",
         "schemas/database-exact-facts-v1.schema.json",
         "schemas/payment-ledger-exact-facts-v1.schema.json",
         "schemas/transactional-cx-exact-facts-v1.schema.json",
@@ -4397,6 +4632,10 @@ def validate_artifact_manifest() -> None:
         "spec/erp-crm-exact-action-contract-v1.md",
         "schemas/procurement-ap-exact-facts-v1.schema.json",
         "spec/procurement-ap-exact-action-contract-v1.md",
+        "schemas/commerce-regulated-exact-facts-v1.schema.json",
+        "spec/commerce-regulated-exact-action-contract-v1.md",
+        "schemas/wave5-breadth-exact-facts-v1.schema.json",
+        "spec/wave5-breadth-exact-action-contract-v1.md",
         "schemas/identity-security-exact-facts-v1.schema.json",
         "spec/identity-security-exact-action-contract-v1.md",
         "schemas/generate-text-exact-facts-v1.schema.json",
@@ -4796,6 +5035,7 @@ def main() -> int:
         validate_erp_crm_contract(registry)
         validate_procurement_ap_contract(registry)
         validate_commerce_regulated_contract(registry)
+        validate_wave5_breadth_contract(registry)
         validate_human_artifact_contract(registry)
         validate_fact_profiles(registry)
         validate_work_contract(registry)
