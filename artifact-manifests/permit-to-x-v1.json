@@ -1056,6 +1056,61 @@
       "id": "keel.permit.commerce_regulated_exact_action_contract.v1.spec",
       "path": "spec/commerce-regulated-exact-action-contract-v1.md",
       "sha256": "46b93b2fb4b3d160e86dbcde077b908806b8cfc0376271870a048da7b9e8ce63"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v12",
+      "path": "consequence_registry/v12.json",
+      "sha256": "4425da8fb72f0b0b79c70d87a0f1754d19f87d05c0bea50dfeb8889c9956f97a"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v12.schema",
+      "path": "consequence_registry/v12.schema.json",
+      "sha256": "80a0d61fba8ea964c36f92d8c49dbdee680fe4b50a2ba4a5d23d10f831e0da53"
+    },
+    {
+      "id": "keel.permit.wave5_breadth_exact_facts.v1.schema",
+      "path": "schemas/wave5-breadth-exact-facts-v1.schema.json",
+      "sha256": "753986f8b6e34f1aca4666b506848d6a89d3193d4db3a26fa5acca06231165da"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v15",
+      "path": "fact_profiles/v15.json",
+      "sha256": "1500b31557c5ddc68b1a7eaae5bceba09c58446077383b638f1fd1e2b1650c21"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v15.schema",
+      "path": "fact_profiles/v15.schema.json",
+      "sha256": "1c03e0894aa147c27217843f14dd898dc3e8a5f6f0487063640e125addc51d6a"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v17",
+      "path": "semantic_registry/v17.json",
+      "sha256": "64079b7dae5d1275d331a41924200e5b2d5e586320827cc6dbac67928bad1942"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v17.schema",
+      "path": "semantic_registry/v17.schema.json",
+      "sha256": "33c3b29bf2d53bac79669505fcda9b0e496ba5bee610a02cfa180a0818133ba1"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v16",
+      "path": "presentation_registry/v16.json",
+      "sha256": "b33ec0c6b49c54c0a0391a93c478b738b90bae15f6f822533415c006370edbbf"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v16.schema",
+      "path": "presentation_registry/v16.schema.json",
+      "sha256": "04b219818399863d99a50f34bd2c596de77001921bdaca93361afcc6252edc2d"
+    },
+    {
+      "id": "permit-to-x.test-vectors.consequence-registry.v13",
+      "path": "consequence_registry/test-vectors/v13.json",
+      "sha256": "47f87bb8fcbf1d1674b3969463789f5f07604af76cec2aed702404991b346cbd"
+    },
+    {
+      "id": "keel.permit.wave5_breadth_exact_action_contract.v1.spec",
+      "path": "spec/wave5-breadth-exact-action-contract-v1.md",
+      "sha256": "5c7151fc3b5231b72d76d2de9e0ae383358a007ba1c9b75b14902c1b75159f39"
     }
   ]
 }
