@@ -1111,6 +1111,56 @@
       "id": "keel.permit.wave5_breadth_exact_action_contract.v1.spec",
       "path": "spec/wave5-breadth-exact-action-contract-v1.md",
       "sha256": "5c7151fc3b5231b72d76d2de9e0ae383358a007ba1c9b75b14902c1b75159f39"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v13",
+      "path": "consequence_registry/v13.json",
+      "sha256": "82bf2dcb7ec550e79d62864f5917991711841ff4c39506735c59e8d25dbeb5b8"
+    },
+    {
+      "id": "keel.permit.consequence_registry.v13.schema",
+      "path": "consequence_registry/v13.schema.json",
+      "sha256": "2d998e05c4fa641e821e9a594046097c3dca2b50e06eda02386d07606fd865fa"
+    },
+    {
+      "id": "keel.permit.goal3a_portfolio_exact_facts.v1.schema",
+      "path": "schemas/goal3a-portfolio-exact-facts-v1.schema.json",
+      "sha256": "c4533ba6989f29ccf388f760f7897a432cc7e495f289e9c1d9aa9eff4ffb690b"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v16",
+      "path": "fact_profiles/v16.json",
+      "sha256": "3b07874af30026e1dbb8f308c596743e75468e83a342b8e6411c3cde46634ab2"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v16.schema",
+      "path": "fact_profiles/v16.schema.json",
+      "sha256": "505ef890a00a2bcfab1a762eb8285af5f390f0f13fbc69928192a1a9fe22276c"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v18",
+      "path": "semantic_registry/v18.json",
+      "sha256": "e88388b90b171beff08bc75d6eef724319823db1fa399f750fea7e23dccd0acb"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v18.schema",
+      "path": "semantic_registry/v18.schema.json",
+      "sha256": "a0bf165cc697e067c8a08a3c290634fb298014bb37628a06febb4e7b6dc70576"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v17",
+      "path": "presentation_registry/v17.json",
+      "sha256": "4bec5d632db6b3942456da182dc57d2022fec046e578a4b87f0c6fc3b60db441"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v17.schema",
+      "path": "presentation_registry/v17.schema.json",
+      "sha256": "2a9f7768bfd255162f941029ea3833b62935fb453279219801a945beb552a7cf"
+    },
+    {
+      "id": "permit-to-x.test-vectors.consequence-registry.v14",
+      "path": "consequence_registry/test-vectors/v14.json",
+      "sha256": "bc49db28c036763a9afb629b41be299b333b4a617f458c7404ff677863817e7d"
     }
   ]
 }
