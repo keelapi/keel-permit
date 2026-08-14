@@ -1,7 +1,9 @@
 # Human Permit Artifact and Package v1
 
 This contract defines the default human presentation of a verified Permit and
-the inventory format for a downloadable `.keelpermit` package. It does not
+the inventory format for a legacy downloadable `.keelpermit` package. The
+default customer download is a compact, signed, human-readable JSON evidence
+bundle named for its consequence-specific AI Permit-to-X title. It does not
 create authority, change a Policy decision, or introduce a new trust root.
 
 ## 1. Trust model

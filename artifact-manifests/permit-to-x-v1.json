@@ -378,6 +378,11 @@
       "sha256": "a76ac1981de156113e9ac9fc3b567f63af877a220436b5299660a3804cab469a"
     },
     {
+      "id": "keel.permit.exact_pack.v4.schema",
+      "path": "schemas/permit-exact-pack-v4.schema.json",
+      "sha256": "32f6af8d5a7897c61c3539279f4421e82442463c7d7d4c1d6ed04d200b068495"
+    },
+    {
       "id": "keel.verifier_claim_registry.v5",
       "path": "claim_registry/v5.json",
       "sha256": "14b028e81b610c905ab923ce449c480352d56922e211023a6075e46592ce93d0"
@@ -420,7 +425,7 @@
     {
       "id": "keel.permit.human_artifact.v1.spec",
       "path": "spec/permit-human-artifact-v1.md",
-      "sha256": "e63b70d10c5dcd44f85fa0d6ca6668a604affd77a38ebbd830fbf23a9029b8fb"
+      "sha256": "3ec070381e3497d20e55a969fd89bd16a131ab314246bf54af1b336708c3c57c"
     },
     {
       "id": "permit-to-x.test-vectors.human-artifact.v1",
@@ -945,7 +950,7 @@
     {
       "id": "keel.permit.erp_crm_exact_action_contract.v1.spec",
       "path": "spec/erp-crm-exact-action-contract-v1.md",
-      "sha256": "04f09dc48f4f9ec1fd91c3d6cfa2bdf6491c1a3bd06c5129f5868a9997c960c8"
+      "sha256": "31ca3fcb477ac433c6fc66e3654ae8c785617f4a0b6734149d64d6546d5a884d"
     },
     {
       "id": "keel.permit.consequence_registry.v10",
@@ -1110,7 +1115,7 @@
     {
       "id": "keel.permit.wave5_breadth_exact_action_contract.v1.spec",
       "path": "spec/wave5-breadth-exact-action-contract-v1.md",
-      "sha256": "5c7151fc3b5231b72d76d2de9e0ae383358a007ba1c9b75b14902c1b75159f39"
+      "sha256": "aed282079539ce72a9425aa2f154a4be94f3e093ac1586258b2cfd4bb073e110"
     },
     {
       "id": "keel.permit.consequence_registry.v13",

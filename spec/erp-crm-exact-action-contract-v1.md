@@ -84,6 +84,8 @@ Every action carries:
 - the pinned portal commitment, developer-test account assertion, and provider
   API version.
 
-The `.keelpermit` proves Keel's authorization decision over those signed facts.
+The consequence-titled signed JSON AI Permit-to-X proves Keel's authorization
+decision over those signed facts. Legacy `.keelpermit` packages remain valid
+verifier inputs.
 Provider and habitat readbacks are separate observations and are not independent
 attestations merely because Keel recorded them.

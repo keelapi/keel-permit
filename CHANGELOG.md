@@ -6,6 +6,14 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
+- Add compact exact evidence profile `keel.permit_exact/v4`. It preserves v3
+  verification semantics while allowing contract pins to omit duplicated
+  bytes and resolve strictly by identity, version, and SHA-256 digest against
+  an offline verifier's allowlisted historical contracts.
+- Make compact, consequence-titled JSON the default downloadable AI
+  Permit-to-X artifact; retain `.keelpermit` ZIP packages as legacy-compatible
+  verifier inputs.
+
 ## 1.18.0
 
 - Add five provider-exact Transactional CX consequences: Stripe payment
