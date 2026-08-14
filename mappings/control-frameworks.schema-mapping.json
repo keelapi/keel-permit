@@ -3,12 +3,12 @@
   "$id": "https://github.com/keelapi/keel-permit/blob/main/mappings/control-frameworks.schema-mapping.json",
   "title": "Permit v1 → Control Framework Mappings",
   "description": "Public mapping from Permit v1 wire-format fields and audit-export-bundle artifacts to selected evidence needs in AI, security, privacy, and compliance frameworks. Evidence labels describe the role of a Permit field or artifact for a control; customers and assessors determine applicability and sufficiency.",
-  "version": "0.1.0-draft",
-  "generated_at": "2026-05-10",
+  "version": "0.2.0-draft",
+  "generated_at": "2026-08-13",
   "spec_repository": "github.com/keelapi/keel-permit",
   "license": "Apache-2.0",
   "verification_status": {
-    "summary": "Draft 0.1.0 public evidence-support mapping. Framework references were checked against public or authoritative sources where available; customers and assessors determine applicability and sufficiency.",
+    "summary": "Draft 0.2.0 public evidence-support mapping. Framework references were checked against public or authoritative sources where available; customers and assessors determine applicability and sufficiency. The AIUC-1 Q3-2026 entry is partially verified: four control titles were confirmed verbatim on 2026-08-13, while the E015 series is corroborated only and is labelled per mapping.",
     "verified_frameworks_2026_05_10": [
       "CCPA §1798.105(d)",
       "11 CCR §7001/§7150/§7152/§7155",
@@ -28,7 +28,17 @@
     "corroborated_frameworks_2026_05_10": [
       "ISO/IEC 42001:2023 Annex A control IDs and title substance were corroborated from multiple public summaries; use the official standard for verbatim quotation."
     ],
-    "unverified_frameworks": []
+    "unverified_frameworks": [],
+    "verified_frameworks_2026_08_13": [
+      "AIUC-1 Q3-2026 scoping facts: 50 requirements, mandatory or optional; Statement of Applicability signed off by the auditor",
+      "AIUC-1 A008.3 control title: Secure storage of user-provided credentials (Mandatory control)",
+      "AIUC-1 B006.3 control title: Execution-level safeguards (Supplemental control)",
+      "AIUC-1 D003 control title: Restrict unsafe tool calls (Mandatory control)",
+      "AIUC-1 D004 control title: Third-party testing of tool calls (Mandatory control), including the qualified-third-party-assessor and at-least-every-quarter language"
+    ],
+    "corroborated_frameworks_2026_08_13": [
+      "AIUC-1 E015 series (including E015.2 and E015.4) identifiers, subject matter, and Supplemental classification were corroborated from secondary sources only. The aiuc-1.com/evidence fetch on 2026-08-13 truncated before E015; the highest control reached was E014 'Log AI system activity'. Confirm the E-series numbering against the full evidence catalog before quoting verbatim or promoting these entries to verified."
+    ]
   },
   "frameworks": {
     "ccpa": {
@@ -484,6 +494,30 @@
       },
       "verification": "Chapter IDs (V1-V17) and verbatim titles confirmed against the ASVS v5.0.0 source folder at github.com/OWASP/ASVS/tree/master/5.0/en on 2026-05-10. Permit primitive natural mappings concentrate in V4 (API and Web Service), V8 (Authorization), V13 (Configuration), V14 (Data Protection), and V16 (Security Logging and Error Handling). Other chapters (V1, V3, V5, V7, V17) are not load-bearing for Permit evidence.",
       "verification_date": "2026-05-10 (verbatim)"
+    },
+    "aiuc_1_q3_2026": {
+      "name": "AIUC-1 — AI agent security certification standard",
+      "publisher": "AIUC (the AI Underwriting Company)",
+      "edition": "Q3-2026 (quarterly standard update dated July 14, 2026)",
+      "scope": "Certification standard for AI agents. AIUC-1 has 50 requirements that are either mandatory or optional; the applicable set is fixed per agent in a Statement of Applicability signed off by the auditor. All mandatory requirements and core controls apply by default, a mandatory requirement can only be excluded with a documented, legitimate business reason signed off by the auditor, and organizations may add optional requirements and supplemental controls to scope. Certification is granted by an accredited third-party auditor. The standard is revised quarterly.",
+      "source": "https://www.aiuc-1.com/scoping (scoping and Statement of Applicability), https://www.aiuc-1.com/evidence (requirement and control catalog), https://www.aiuc-1.com/research/2026-q3-standard-update (Q3-2026 update)",
+      "verification": "Control titles for A008.3, B006.3, D003, and D004, and the scoping facts (50 requirements; auditor-signed Statement of Applicability), were checked verbatim against the cited aiuc-1.com sources on 2026-08-13. The E015 series is corroborated from secondary sources only and is labelled per mapping. Mappings are evidence-support only and are pinned to the Q3-2026 edition; reverify each quarter, because AIUC-1 revises quarterly.",
+      "verification_date": "2026-08-13 (A008.3, B006.3, D003, D004 verbatim; E015 series corroborated only)",
+      "framing": {
+        "statement": "Keel is not AIUC-1 certified and does not make an agent AIUC-1 compliant. AIUC-1 certification is per-agent, scoped through an auditor-signed Statement of Applicability, and granted by an accredited auditor. These mappings describe where Permit evidence can support a customer's own AIUC-1 control implementation.",
+        "evidence_support": [
+          "Permit records, hash-chained governance events, and signed exports can support agent-activity-logging evidence needs.",
+          "Pre-execution Permit decisions can support unsafe-tool-call authorization evidence needs.",
+          "Managed-execution credential custody can support secure-credential-storage evidence needs."
+        ],
+        "do_not_claim": [
+          "Keel is AIUC-1 certified or AIUC-1 compliant.",
+          "Keel makes a customer's agent AIUC-1 compliant.",
+          "Keel completes an AIUC-1 requirement by itself.",
+          "Keel satisfies D004. Third-party testing of tool calls is performed by qualified third-party assessors, not by Keel's own conformance tests.",
+          "AIUC-1 alignment is evidence of NIST, ISO, MITRE, or OWASP compliance. AIUC-1 crosswalks identify overlap only; use the direct framework mappings in this artifact instead."
+        ]
+      }
     }
   },
   "mappings": [
@@ -529,6 +563,18 @@
           "control_id": "Article 12(2)(a)",
           "evidence_type": "necessary",
           "rationale": "Article 12 logging requires recordkeeping of AI system events; the decision is the central event."
+        },
+        {
+          "framework": "aiuc_1_q3_2026",
+          "control_id": "D003 (Restrict unsafe tool calls)",
+          "evidence_type": "direct_support",
+          "rationale": "The Permit decision is the pre-dispatch authorization outcome for a tool call: allow / deny / throttle / challenge, recorded before managed provider dispatch, with only allow authorizing execution. Control title verified verbatim 2026-08-13."
+        },
+        {
+          "framework": "aiuc_1_q3_2026",
+          "control_id": "B006.3 (Execution-level safeguards)",
+          "evidence_type": "partial",
+          "rationale": "Maps to the pre-execution hook / policy-engine component of B006.3 only. The sandbox and container configuration, filesystem and network restriction, and tool-definition integrity components are out of Permit scope. Control title verified verbatim 2026-08-13."
         }
       ]
     },
@@ -590,6 +636,12 @@
           "control_id": "11 CCR §7152(a)(1)",
           "evidence_type": "partial",
           "rationale": "Action name supports identifying the purpose for processing; full purpose documentation is broader and lives in policy_id/policy_version."
+        },
+        {
+          "framework": "aiuc_1_q3_2026",
+          "control_id": "D003 (Restrict unsafe tool calls)",
+          "evidence_type": "partial",
+          "rationale": "action_name identifies the specific operation being authorized, which is what tool-call validation and authorization is applied against. Pairs with customer-owned review of tool-usage patterns."
         }
       ]
     },
@@ -680,6 +732,12 @@
           "control_id": "CC8.1 (Change Management)",
           "evidence_type": "necessary",
           "rationale": "Policy version on every decision enables traceability to a specific change-management record."
+        },
+        {
+          "framework": "aiuc_1_q3_2026",
+          "control_id": "B006.3 (Execution-level safeguards)",
+          "evidence_type": "partial",
+          "rationale": "policy_id + policy_version identify the exact policy-engine configuration in force at decision time, supporting the pre-execution policy-engine configuration evidence B006.3 describes."
         }
       ]
     },
@@ -744,6 +802,12 @@
           "control_id": "Article 26(6)",
           "evidence_type": "direct_support",
           "rationale": "Provides a cryptographically verifiable retention substrate for high-risk AI deployer logs kept under deployer control for the customer-defined, legally reviewed retention period."
+        },
+        {
+          "framework": "aiuc_1_q3_2026",
+          "control_id": "E015 series (agent activity logging; reported sub-controls E015.2, E015.4)",
+          "evidence_type": "direct_support",
+          "rationale": "Hash-chained governance events with Ed25519-signed export manifests, externally anchored checkpoints, and RFC 3161 timestamp receipts make recorded log continuity independently checkable without access to Keel-internal systems, detecting gaps, omissions, and reordering. CORROBORATED ONLY — not verbatim-verified. The aiuc-1.com/evidence fetch on 2026-08-13 truncated before E015 (highest control reached: E014 'Log AI system activity'). The E015 identifiers and the Supplemental classification come from secondary sources. Verify against the full evidence catalog before quoting verbatim."
         }
       ]
     },
@@ -1579,6 +1643,44 @@
           "permit_evidence": "Per-project hash chain + Ed25519 signatures + RFC 3161 timestamps provide tamper-evident security logging for the AI surface. Tampering-detection codes (WALK_RECORD_HASH_MISMATCH, etc.) provide specific error classification. Independent verifier CLI enables verification without vendor account."
         }
       ]
+    },
+    "aiuc_1_q3_2026": {
+      "scope_note": "Evidence-support mapping for selected AIUC-1 controls, pinned to the Q3-2026 edition. AIUC-1 certification is per-agent and is granted by an accredited auditor; the applicable control set is fixed in an auditor-signed Statement of Applicability. Nothing here is a certification claim. Reverify each quarter.",
+      "verification_note": "A008.3, B006.3, D003, and D004 control titles were verified verbatim on 2026-08-13. The E015 series is corroborated only — see the per-control verification field.",
+      "control_mappings": [
+        {
+          "control_id": "A008.3",
+          "control_title": "Secure storage of user-provided credentials",
+          "control_type": "Mandatory control",
+          "evidence_type": "partial",
+          "permit_evidence": "In managed-execution mode the calling agent holds only a Keel credential; downstream provider credentials are custodied by Keel and retrieved at point of use, so the agent never holds them. This supports the per-tool and per-session scoping and just-in-time retrieval expectations. Secret management for the customer's own systems remains customer-owned.",
+          "verification": "control title verified verbatim against aiuc-1.com/evidence 2026-08-13"
+        },
+        {
+          "control_id": "B006.3",
+          "control_title": "Execution-level safeguards",
+          "control_type": "Supplemental control",
+          "evidence_type": "partial",
+          "permit_evidence": "Maps to the pre-execution hook / policy-engine component only. An AI Permit records allow / deny / throttle / challenge before managed provider dispatch, and only allow authorizes execution. The sandbox and container configuration, filesystem and network restriction, and tool-definition integrity components of B006.3 are out of Permit scope and are covered in explicit_non_mappings.",
+          "verification": "control title verified verbatim against aiuc-1.com/evidence 2026-08-13"
+        },
+        {
+          "control_id": "D003",
+          "control_title": "Restrict unsafe tool calls",
+          "control_type": "Mandatory control",
+          "evidence_type": "direct_support",
+          "permit_evidence": "decision + action_name + policy_id/policy_version record tool-call validation and authorization before dispatch. Approval-required is available as a policy outcome for sensitive tool operations, with sign-off captured against actor identity and policy version. Pairs with customer-owned review of tool-usage patterns.",
+          "verification": "control title verified verbatim against aiuc-1.com/evidence 2026-08-13"
+        },
+        {
+          "control_id": "E015 series (reported sub-controls E015.2, E015.4)",
+          "control_title": "Agent activity logging — reported to cover full-execution-chain records including authorization events (E015.2) and tamper-evident, independently verifiable logs (E015.4)",
+          "control_type": "reported as Supplemental for E015.4; classification not verbatim-verified",
+          "evidence_type": "direct_support",
+          "permit_evidence": "Per-project hash-chained governance events, Ed25519-signed export bundles, externally anchored checkpoints, and RFC 3161 timestamp receipts make recorded log continuity independently checkable without access to Keel-internal systems, detecting gaps, omissions, and reordering. parent_permit_id + delegation_depth reconstruct the execution chain, and the Permit decision is itself the recorded authorization event.",
+          "verification": "CORROBORATED ONLY — not verbatim-verified. The aiuc-1.com/evidence fetch on 2026-08-13 truncated before E015 (highest control reached: E014 'Log AI system activity'). The E015 identifiers and the Supplemental classification come from secondary sources. Verify against the full evidence catalog before quoting verbatim."
+        }
+      ]
     }
   },
   "explicit_non_mappings": [
@@ -1671,6 +1773,42 @@
       "control_id": "Controls 1, 2, 5, 7, 9, 10, 11, 12, 13, 14, 18 (12 of 18 controls)",
       "status": "OUT OF SCOPE FOR PERMIT SUBSTRATE",
       "rationale": "Of the 18 CIS Controls v8.1, 12 are entirely outside Permit substrate scope (asset inventory, software inventory, account management, vulnerability management, email/browser, malware defense, data recovery, network management, network monitoring, training, penetration testing). Permit substrate covers ~6 of 18 with varying strength; CIS Control 8 (Audit Log Management) is the only direct-support fit; Controls 3, 4, 6, 15, 16, 17 have partial alignment."
+    },
+    {
+      "framework": "aiuc_1_q3_2026",
+      "control_id": "AIUC-1 certification (entirely)",
+      "status": "NOT A CERTIFICATION CLAIM",
+      "rationale": "Keel is not AIUC-1 certified and does not make an agent AIUC-1 compliant. Certification is per-agent, scoped through an auditor-signed Statement of Applicability, and granted by an accredited auditor. This artifact maps Permit evidence to selected customer-side AIUC-1 evidence needs only."
+    },
+    {
+      "framework": "aiuc_1_q3_2026",
+      "control_id": "D004 (Third-party testing of tool calls)",
+      "status": "THIRD-PARTY ASSESSMENT REQUIRED",
+      "rationale": "D004 requires appointing qualified third-party assessors and performing assessments of tool calls at least every quarter. Keel's own conformance tests do not satisfy it, and this is distinct from AIUC's separate re-run of its technical evaluations at re-certification. Control title and the assessor and quarterly language verified verbatim 2026-08-13."
+    },
+    {
+      "framework": "aiuc_1_q3_2026",
+      "control_id": "B006.3 sandbox, container, filesystem, network, and tool-definition-integrity components",
+      "status": "OUT OF SCOPE FOR PERMIT SUBSTRATE",
+      "rationale": "Permit evidence covers the pre-execution hook / policy-engine component of B006.3 only. Sandbox and container configuration, filesystem and network restriction for agent code execution environments, and detection of unauthorized post-approval tool-definition changes are customer-owned."
+    },
+    {
+      "framework": "aiuc_1_q3_2026",
+      "control_id": "Content-safety controls",
+      "status": "OUT OF SCOPE FOR PERMIT SUBSTRATE",
+      "rationale": "Keel is not a content-safety or model-evaluation platform. Permit evidence records the authorization decision and its enforcement, not the safety of model output."
+    },
+    {
+      "framework": "aiuc_1_q3_2026",
+      "control_id": "B010 (secure code generation) and generated-code vulnerability controls",
+      "status": "OUT OF SCOPE FOR PERMIT SUBSTRATE",
+      "rationale": "B010 was added as a new mandatory requirement in the Q3-2026 update and concerns vulnerability prevention in generated code. Permit evidence does not analyze generated code."
+    },
+    {
+      "framework": "aiuc_1_q3_2026",
+      "control_id": "Red-teaming and adversarial-testing controls",
+      "status": "CUSTOMER RESPONSIBILITY",
+      "rationale": "Red-teaming, including the interim quarterly red-teaming AIUC-1 expects, is performed by the customer and its assessors. Permit evidence is not a substitute for adversarial testing."
     }
   ]
 }
