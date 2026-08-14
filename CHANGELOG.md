@@ -6,6 +6,8 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
+## 1.18.0
+
 - Add five provider-exact Transactional CX consequences: Stripe payment
   refund, account credit, period-end cancellation scheduling, pending
   cancellation withdrawal, and HubSpot support-case resolution.

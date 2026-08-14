@@ -3129,6 +3129,106 @@ def validate_wave5_breadth_contract(registry: Registry) -> None:
         raise ContractFailure("semantic registry v17 and fact profile registry v15 must bind exactly")
 
 
+def validate_goal3a_portfolio_contract(registry: Registry) -> None:
+    consequence_v12 = load_json("consequence_registry/v12.json")
+    consequence_v13 = load_json("consequence_registry/v13.json")
+    facts_v15 = load_json("fact_profiles/v15.json")
+    facts_v16 = load_json("fact_profiles/v16.json")
+    semantics_v17 = load_json("semantic_registry/v17.json")
+    semantics_v18 = load_json("semantic_registry/v18.json")
+    presentations_v16 = load_json("presentation_registry/v16.json")
+    presentations_v17 = load_json("presentation_registry/v17.json")
+    vectors_v14 = load_json("consequence_registry/test-vectors/v14.json")
+    vectors_v15 = load_json("consequence_registry/test-vectors/v15.json")
+
+    for instance, schema_path, label in (
+        (consequence_v13, "consequence_registry/v13.schema.json", "consequence registry v13"),
+        (facts_v16, "fact_profiles/v16.schema.json", "fact profile registry v16"),
+        (semantics_v18, "semantic_registry/v18.schema.json", "semantic registry v18"),
+        (presentations_v17, "presentation_registry/v17.schema.json", "presentation registry v17"),
+    ):
+        validate_instance(instance, schema_path, registry, label)
+
+    for prior, current, key, label in (
+        (consequence_v12, consequence_v13, "consequences", "consequence v13"),
+        (facts_v15, facts_v16, "profiles", "fact profiles v16"),
+        (presentations_v16, presentations_v17, "profiles", "presentation v17"),
+        (vectors_v14, vectors_v15, "vectors", "portfolio vectors v15"),
+    ):
+        if current[key][: len(prior[key])] != prior[key]:
+            raise ContractFailure(f"{label} is not an additive extension")
+
+    expected_semantic_prefix = copy.deepcopy(semantics_v17["entries"])
+    for entry in expected_semantic_prefix:
+        if entry.get("semantic_id") == "keel.action.payment_execute.v1":
+            entry["match"]["action_names"].append("stripe.payment_intent.create")
+            entry["match"]["operations"].append("call.tools")
+        elif entry.get("semantic_id") == "keel.action.payment_refund.v2":
+            entry["match"]["action_names"].append("stripe.refund.create")
+    if semantics_v18["entries"][: len(expected_semantic_prefix)] != (
+        expected_semantic_prefix
+    ):
+        raise ContractFailure(
+            "semantic v18 changed history beyond the two Great Bank aliases"
+        )
+
+    vectors = vectors_v15.get("vectors", [])
+    action_names = [vector["candidate"]["action_name"] for vector in vectors]
+    if len(vectors) != 96 or len(action_names) != len(set(action_names)):
+        raise ContractFailure(
+            "portfolio vectors v15 must cover exactly 96 unique consequential actions"
+        )
+    if {vector["candidate"]["action_name"] for vector in vectors[-2:]} != {
+        "stripe.payment_intent.create",
+        "stripe.refund.create",
+    }:
+        raise ContractFailure("portfolio vectors v15 lost the two Great Bank aliases")
+
+    semantic_by_id = {
+        entry["semantic_id"]: entry for entry in semantics_v18["entries"]
+    }
+    profile_by_id = {
+        profile["fact_profile_id"]: profile for profile in facts_v16["profiles"]
+    }
+    presentation_by_semantic = {
+        profile["semantic_id"]: profile
+        for profile in presentations_v17["profiles"]
+    }
+    for vector in vectors:
+        vector_id = vector["id"]
+        actual_semantic, fallback = select_semantic(
+            semantics_v18, vector["candidate"]
+        )
+        expected_semantic = vector["expected_semantic_id"]
+        if actual_semantic != expected_semantic or fallback is not None:
+            raise ContractFailure(
+                f"{vector_id} selected {(actual_semantic, fallback)!r}"
+            )
+        semantic = semantic_by_id[expected_semantic]
+        expected_profile = vector["expected_fact_profile_id"]
+        if semantic.get("fact_profile_id") != expected_profile:
+            raise ContractFailure(f"{vector_id} selected the wrong fact profile")
+        profile = profile_by_id[expected_profile]
+        facts = vector["valid_authorization_facts"]
+        if (
+            facts.get("fact_profile_id") != expected_profile
+            or facts.get("action") != profile.get("authorized_action")
+        ):
+            raise ContractFailure(f"{vector_id} exact-fact identity drifted")
+        validate_instance(
+            facts,
+            str(profile["facts_schema"]),
+            registry,
+            f"{vector_id} exact facts",
+        )
+        presentation = presentation_by_semantic.get(expected_semantic)
+        if (
+            presentation is None
+            or presentation.get("customer_title") != vector["expected_title"]
+        ):
+            raise ContractFailure(f"{vector_id} rendered the wrong AI Permit-to-X")
+
+
 def set_vector_path(document: dict[str, Any], path: list[Any], value: Any) -> None:
     current: Any = document
     for segment in path[:-1]:
@@ -4516,6 +4616,8 @@ def validate_artifact_manifest() -> None:
         "semantic_registry/v16.schema.json",
         "semantic_registry/v17.json",
         "semantic_registry/v17.schema.json",
+        "semantic_registry/v18.json",
+        "semantic_registry/v18.schema.json",
         "presentation_registry/v4.json",
         "presentation_registry/v4.schema.json",
         "presentation_registry/v5.json",
@@ -4542,6 +4644,8 @@ def validate_artifact_manifest() -> None:
         "presentation_registry/v15.schema.json",
         "presentation_registry/v16.json",
         "presentation_registry/v16.schema.json",
+        "presentation_registry/v17.json",
+        "presentation_registry/v17.schema.json",
         "consequence_registry/v1.json",
         "consequence_registry/v1.schema.json",
         "consequence_registry/v2.json",
@@ -4566,6 +4670,8 @@ def validate_artifact_manifest() -> None:
         "consequence_registry/v11.schema.json",
         "consequence_registry/v12.json",
         "consequence_registry/v12.schema.json",
+        "consequence_registry/v13.json",
+        "consequence_registry/v13.schema.json",
         "consequence_registry/test-vectors/v1.json",
         "consequence_registry/test-vectors/v2.json",
         "consequence_registry/test-vectors/v3.json",
@@ -4579,6 +4685,8 @@ def validate_artifact_manifest() -> None:
         "consequence_registry/test-vectors/v11.json",
         "consequence_registry/test-vectors/v12.json",
         "consequence_registry/test-vectors/v13.json",
+        "consequence_registry/test-vectors/v14.json",
+        "consequence_registry/test-vectors/v15.json",
         "spec/consequence-registry-v1.md",
         "presentation_registry/v2.json",
         "presentation_registry/v2.schema.json",
@@ -4616,6 +4724,9 @@ def validate_artifact_manifest() -> None:
         "fact_profiles/v14.schema.json",
         "fact_profiles/v15.json",
         "fact_profiles/v15.schema.json",
+        "fact_profiles/v16.json",
+        "fact_profiles/v16.schema.json",
+        "schemas/goal3a-portfolio-exact-facts-v1.schema.json",
         "schemas/database-exact-facts-v1.schema.json",
         "schemas/payment-ledger-exact-facts-v1.schema.json",
         "schemas/transactional-cx-exact-facts-v1.schema.json",
@@ -5036,6 +5147,7 @@ def main() -> int:
         validate_procurement_ap_contract(registry)
         validate_commerce_regulated_contract(registry)
         validate_wave5_breadth_contract(registry)
+        validate_goal3a_portfolio_contract(registry)
         validate_human_artifact_contract(registry)
         validate_fact_profiles(registry)
         validate_work_contract(registry)
