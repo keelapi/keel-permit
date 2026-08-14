@@ -297,6 +297,57 @@ def main() -> None:
         )
     write("consequence_registry/test-vectors/v14.json", vectors)
 
+    # v14 proved the four newly minted Goal 3A consequences, but omitted the
+    # two Great Bank provider-shaped aliases that were added to semantic v18.
+    # Keep v14 immutable and publish a complete 96-action portfolio corpus.
+    portfolio_vectors = copy.deepcopy(vectors)
+    portfolio_vectors["version"] = "keel.consequence_registry.test_vectors.v15"
+    refund_vector = next(
+        vector
+        for vector in vectors["vectors"]
+        if vector["id"] == "payment.refund.execute.v2"
+    )
+    stripe_refund_vector = copy.deepcopy(refund_vector)
+    stripe_refund_vector["id"] = "stripe.refund.create.alias.v1"
+    stripe_refund_vector["candidate"]["action_name"] = "stripe.refund.create"
+    portfolio_vectors["vectors"].append(stripe_refund_vector)
+    portfolio_vectors["vectors"].append(
+        {
+            "id": "stripe.payment_intent.create.alias.v1",
+            "candidate": {
+                "trusted_source_kind": "action_verb_execute",
+                "permit_product": "permit",
+                "action_name": "stripe.payment_intent.create",
+                "operation": "call.tools",
+                "chain_role": "action_child",
+                "governed_surface": "mcp_tool",
+                "evidence_capabilities": [
+                    "authorization",
+                    "dispatch",
+                    "provider_outcome",
+                    "settlement_optional",
+                ],
+            },
+            "expected_semantic_id": "keel.action.payment_execute.v1",
+            "expected_title": "AI Permit-to-Pay",
+            "expected_fact_profile_id": "keel.facts.payment_exact.v1",
+            "valid_authorization_facts": {
+                "version": "keel.payment_exact_facts.v1",
+                "fact_profile_id": "keel.facts.payment_exact.v1",
+                "action": "payment.execute",
+                "amount_minor": 500,
+                "currency": "USD",
+                "recipient_reference_commitment": {
+                    "method": "keel.salted_sha256_jcs.v1",
+                    "digest": "sha256:" + "5" * 64,
+                },
+                "payment_rail": "stripe.payment_intent",
+                "request_digest": "sha256:" + "4" * 64,
+            },
+        }
+    )
+    write("consequence_registry/test-vectors/v15.json", portfolio_vectors)
+
     manifest_path = "artifact-manifests/permit-to-x-v1.json"
     manifest = load(manifest_path)
     additions = [
@@ -310,6 +361,7 @@ def main() -> None:
         ("keel.permit.presentation_registry.v17", "presentation_registry/v17.json"),
         ("keel.permit.presentation_registry.v17.schema", "presentation_registry/v17.schema.json"),
         ("permit-to-x.test-vectors.consequence-registry.v14", "consequence_registry/test-vectors/v14.json"),
+        ("permit-to-x.test-vectors.consequence-registry.v15", "consequence_registry/test-vectors/v15.json"),
     ]
     existing = {item["path"]: item for item in manifest["artifacts"]}
     for artifact_id, path in additions:

@@ -1161,6 +1161,11 @@
       "id": "permit-to-x.test-vectors.consequence-registry.v14",
       "path": "consequence_registry/test-vectors/v14.json",
       "sha256": "bc49db28c036763a9afb629b41be299b333b4a617f458c7404ff677863817e7d"
+    },
+    {
+      "id": "permit-to-x.test-vectors.consequence-registry.v15",
+      "path": "consequence_registry/test-vectors/v15.json",
+      "sha256": "5e3c32b5bee5a7096f95ba0c90dcd7dff291da8e63b5628448b1573e730e9277"
     }
   ]
 }
