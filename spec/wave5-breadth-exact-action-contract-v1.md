@@ -66,4 +66,4 @@ The registries are additive:
 
 ## Certification requirement
 
-Each feasible habitat must show a real provider or self-hosted state change, a provider readback, an allow path, a deny path with zero provider calls, an independently downloadable `.keelpermit`, offline verification under a pinned key, and material-tamper rejection. Provider credentials remain exclusively in the controlled gateway. External prerequisites that cannot be supplied by code must be recorded precisely and may not be replaced with a claimed real outcome.
+Each feasible habitat must show a real provider or self-hosted state change, a provider readback, an allow path, a deny path with zero provider calls, an independently downloadable consequence-titled signed JSON AI Permit-to-X, offline verification under a pinned key, and material-tamper rejection. Legacy `.keelpermit` packages remain valid verifier inputs. Provider credentials remain exclusively in the controlled gateway. External prerequisites that cannot be supplied by code must be recorded precisely and may not be replaced with a claimed real outcome.
