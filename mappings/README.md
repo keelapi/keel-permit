@@ -11,7 +11,7 @@ control design, control operation, framework applicability, and audit conclusion
 
 ## Status
 
-- Version: `0.1.0-draft`
+- Version: `0.2.0-draft`
 - Artifact: `control-frameworks.schema-mapping.json`
 - Scope: Permit v1 fields, signed export artifacts, checkpoint artifacts, and
   verifier-facing integrity evidence.
@@ -32,11 +32,22 @@ The current draft includes mappings for:
 - FedRAMP / NIST SP 800-53 Rev 5 evidence support
 - CIS Controls v8.1
 - PCI DSS v4.0.1 evidence support for in-scope CDE use cases
+- AIUC-1 (Q3-2026 edition) evidence support for selected agent-security controls
 
 FedRAMP and PCI DSS entries are evidence-support mappings only. Keel is not a
 FedRAMP-authorized Cloud Service Offering and is not a PCI DSS validated service
 provider. Those mappings describe where Permit evidence can support a customer's
 own applicable control environment.
+
+The AIUC-1 entry is likewise evidence support only. Keel is not AIUC-1 certified
+and does not make an agent AIUC-1 compliant: certification is per-agent, scoped
+through an auditor-signed Statement of Applicability, and granted by an
+accredited auditor. AIUC-1 revises quarterly, so the entry is pinned to the
+Q3-2026 edition and should be reverified each quarter. Verification is partial —
+the A008.3, B006.3, D003, and D004 control titles were confirmed verbatim on
+2026-08-13, while the E015 series is corroborated from secondary sources only and
+is labelled as such on every mapping. Do not quote the E015 identifiers verbatim
+or promote them to verified without checking the full evidence catalog.
 
 ## Schema Summary
 
