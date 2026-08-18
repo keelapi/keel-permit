@@ -8,7 +8,8 @@ from its own manifest and the corpus would quietly stop meaning what it says.
 
 Checks performed:
 
-1. Every file path referenced by a corpus record exists on disk.
+1. Every file path referenced by a corpus record exists on disk, unless the
+   record explicitly declares it in `expected_missing_paths`.
 2. Every declared `content_hash` matches SHA-256 over the export file bytes.
 3. Every archive member list matches the manifest's `files` declaration, so a
    binary fixture cannot gain or lose a member unnoticed.
@@ -49,18 +50,31 @@ def referenced_paths(node: Any, found: set[str]) -> None:
         found.add(node)
 
 
-def expects_absence(record: dict[str, Any]) -> bool:
-    """True when a record's expected failure is itself an absent artifact.
+def declared_missing(record: dict[str, Any], errors: list[str]) -> set[str]:
+    """Paths a record declares as deliberately absent.
 
-    Negative fixtures such as scope-faithfulness-neg-sidecar-missing declare a
-    path and then deliberately omit the file, because the omission is the
-    condition under test. Requiring those paths to exist would make the corpus
-    unable to express a missing-evidence case.
+    Negative fixtures such as scope-faithfulness-neg-sidecar-missing reference a
+    path and then omit the file, because the omission is the condition under
+    test. Requiring those paths to exist would make the corpus unable to express
+    a missing-evidence case.
+
+    This is read from an explicit `expected_missing_paths` field rather than
+    inferred from how a failure code happens to be spelled. Inferring semantics
+    from string content is how a check quietly stops meaning what it says.
     """
-    codes = json.dumps(
-        [record.get("expected_code"), record.get("expected_current"), record.get("claims")]
-    ).upper()
-    return "MISSING" in codes or "ABSENT" in codes
+    declared = record.get("expected_missing_paths")
+    if declared is None:
+        return set()
+    if not isinstance(declared, list) or not all(isinstance(item, str) for item in declared):
+        fail(errors, f"{record.get('id', '?')}: expected_missing_paths must be a list of strings")
+        return set()
+    for path in declared:
+        if (CORPUS_ROOT / path).exists():
+            fail(
+                errors,
+                f"{record.get('id', '?')}: {path} is declared in expected_missing_paths but exists on disk",
+            )
+    return set(declared)
 
 
 def check_referenced_files_exist(records: list[dict[str, Any]], errors: list[str]) -> tuple[int, int]:
@@ -70,13 +84,18 @@ def check_referenced_files_exist(records: list[dict[str, Any]], errors: list[str
         refs: set[str] = set()
         referenced_paths(record, refs)
         seen |= refs
+        expected_missing = declared_missing(record, errors)
         for ref in sorted(refs):
             if (CORPUS_ROOT / ref).exists():
                 continue
-            if expects_absence(record):
+            if ref in expected_missing:
                 intentional += 1
                 continue
-            fail(errors, f"{record.get('id', '?')}: references missing file {ref}")
+            fail(
+                errors,
+                f"{record.get('id', '?')}: references missing file {ref} "
+                "(declare it in expected_missing_paths if the absence is intentional)",
+            )
     return len(seen), intentional
 
 
