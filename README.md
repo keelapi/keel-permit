@@ -3,6 +3,7 @@
 [![License](https://img.shields.io/github/license/keelapi/keel-permit)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/keelapi/keel-permit?label=release)](https://github.com/keelapi/keel-permit/releases)
 ![Spec version](https://img.shields.io/badge/spec-1.19.0-blue)
+[![OpenSSF Baseline](https://www.bestpractices.dev/projects/14125/baseline)](https://www.bestpractices.dev/projects/14125)
 
 A pre-execution decision record for AI agent systems. A Permit records that an action was evaluated and decided, and, for dispatched allow executions, can be bound to the final provider or tool request. A Permit JSON object alone is not self-authenticating; verification is performed from signed export artifacts and the relevant public keys or key manifest. Those artifacts are verifiable without contacting the issuer when the verifier has the signed export artifacts and relevant public keys/key manifest.
 
@@ -172,6 +173,15 @@ The wire formats and hash algorithms in this spec are stable. A breaking change 
 ## Project Stewardship
 
 Permit Spec is maintained by Keel API, Inc.
+
+Maintainer with write and administrative access to this repository:
+[@sftimeless](https://github.com/sftimeless). Changes reach `main` only through
+pull requests that pass the `repo-integrity` check; direct commits to `main` are
+blocked for all users including administrators.
+
+The OpenSSF badge above records an OSPS Baseline Level 1 **self-assessment**
+published on the OpenSSF Best Practices site. It is a self-attestation, not an
+independent audit, certification, or third-party assessment.
 
 - Website: https://keelapi.com
 - Reference implementation: keel-api (Keel-internal, not publicly readable)
