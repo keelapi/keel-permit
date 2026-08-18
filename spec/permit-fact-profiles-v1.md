@@ -55,12 +55,30 @@ requester is authorized to receive it, an exact-permit evidence pack may carry
 the value and random salt so the verifier can recompute the commitment.
 Low-entropy names MUST NOT use an unsalted hash.
 
-A salt MUST be at least 128 bits and MUST be generated with a
-cryptographically secure random number generator. A salt MUST NOT be
-reused across commitments, derived from the committed value, or produced by
-a non-cryptographic generator. The commitment's resistance to brute-force
-recovery of a low-entropy recipient reference depends entirely on the salt;
-a predictable or short salt makes the commitment recoverable by enumeration.
+> **Security note (non-normative).** This profile does not constrain how a salt
+> is generated. It requires a salt for low-entropy values but sets no minimum
+> length and does not require a cryptographically secure generator, so a
+> conforming v1 issuer may produce a commitment whose hiding property is weak:
+> the resistance of a commitment over a low-entropy recipient reference to
+> brute-force recovery depends entirely on the salt, and a short or predictable
+> salt leaves it recoverable by enumeration.
+>
+> This limitation is not repaired here. `keel.fact_profile_registry.v1` is
+> frozen, and changing what v1 requires would change the meaning of evidence
+> already issued under it — two artifacts both pinned to v1 would be judged by
+> different rules depending on when they were issued. Offline verification
+> depends on v1 meaning in 2030 what it meant in 2026.
+>
+> Implementations issuing new evidence should use fact-profile v2, where the
+> low-entropy disclosure contract is operative
+> (`disclosure_contract.plain_hash_for_low_entropy_forbidden`, with per-field
+> `low_entropy_possible` flags) and
+> [`permit-universal-verification-v1.md`](permit-universal-verification-v1.md)
+> §8 states the 128-bit entropy requirement normatively.
+>
+> Evidence already issued under v1 remains conforming and verifiable. It simply
+> carries a weaker hiding guarantee than v2 evidence, and that is a property of
+> the artifact rather than a defect to patch.
 
 ## 5. Privacy and disclosure
 

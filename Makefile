@@ -17,6 +17,7 @@ test:
 	python3 tools/check_repo_integrity.py --require-jsonschema
 	python3 tools/check_permit_to_x_artifacts.py
 	python3 tools/check_pack_integrity.py
+	python3 tools/check_fact_profile_freeze.py
 	python3 test-vectors/action_classification_derivation/v1/reference_executor.py
 	node test-vectors/permit_co_signature/v1/reference_verify.mjs
 	node test-vectors/permit_co_signature/v2/reference_verify.mjs
