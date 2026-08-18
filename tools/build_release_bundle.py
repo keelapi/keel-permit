@@ -54,11 +54,25 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def commit_of(ref: str) -> str:
+    """Resolve a ref to its commit.
+
+    `git rev-parse <annotated-tag>` returns the tag object, not the commit it
+    points at. Recording that as the source commit publishes an identifier that
+    does not name a commit at all, so the ^{commit} peel is required.
+    """
+    sha = run(["git", "rev-parse", f"{ref}^{{commit}}"]).decode().strip()
+    kind = run(["git", "cat-file", "-t", sha]).decode().strip()
+    if kind != "commit":
+        raise SystemExit(f"{ref} resolved to a {kind} object, not a commit: {sha}")
+    return sha
+
+
 def resolve_version(ref: str) -> str:
     """A tag names its own version; any other ref is identified by commit."""
     if ref.startswith("v") and ref[1:2].isdigit():
         return ref[1:]
-    return run(["git", "rev-parse", "--short", ref]).decode().strip()
+    return commit_of(ref)[:7]
 
 
 def build_bundle(ref: str, out_dir: Path, version: str) -> Path:
@@ -73,7 +87,7 @@ def build_bundle(ref: str, out_dir: Path, version: str) -> Path:
 
 
 def manifest_for(bundle: Path, ref: str, version: str) -> dict:
-    commit = run(["git", "rev-parse", ref]).decode().strip()
+    commit = commit_of(ref)
     files = []
     with tarfile.open(bundle, "r:gz") as archive:
         for member in archive.getmembers():
