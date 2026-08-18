@@ -165,9 +165,22 @@ Each tagged release publishes three assets:
 
 | Asset | What it is |
 |---|---|
-| `keel-permit-<version>.tar.gz` | The normative artifact set: specification text, schemas, registries, semantics, mappings, examples, and the conformance corpus. Development tooling is excluded. |
+| `keel-permit-<version>.tar.gz` | The published specification distribution. Development tooling is excluded. Not all of it is normative — see below. |
 | `release-manifest.json` | SHA-256 of the bundle, plus a per-file digest for all 733 artifacts, the source commit, and the command to reproduce the bundle. |
 | `SHA256SUMS` | `sha256sum`-compatible digests of the published assets. |
+
+### What is in the distribution
+
+`release-manifest.json` classifies every member, because "shipped in the release"
+and "normative" are not the same thing:
+
+| Class | Paths |
+|---|---|
+| **Normative** | `spec/`, `schemas/`, the registries, `semantics/`, `artifact-manifests/` |
+| **Conformance artifacts** | `test-vectors/` — test material, not specification text |
+| **Illustrative** | `examples/` — reference artifacts illustrating the wire formats; hashes and signatures are placeholders unless marked otherwise |
+| **Draft evidence support** | `mappings/` — control-framework mappings, version `0.2.0-draft`, explicitly not a compliance certification |
+| **Project documentation** | README, CHANGELOG, CONTRIBUTING, GOVERNANCE, SECURITY, LICENSE |
 
 ### Verify a release
 
