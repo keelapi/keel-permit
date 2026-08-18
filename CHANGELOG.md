@@ -6,6 +6,10 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
+- No unreleased changes.
+
+## [1.20.1] — 2026-08-18
+
 - Record the source commit correctly in `release-manifest.json`. `git rev-parse`
   on an annotated tag returns the tag object rather than the commit it points
   at, so the v1.20.0 manifest published `commit` as a tag-object SHA that names
@@ -14,6 +18,10 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 - Gate the manifest's commit identity in the release workflow, so a manifest
   whose recorded commit disagrees with the tag fails the release rather than
   shipping.
+
+Supersedes 1.20.0, whose bundle and attestation are sound but whose manifest
+carries an incorrect `commit` value. 1.20.0 remains published; the correction
+trail is more useful than a deleted release.
 
 ## [1.20.0] — 2026-08-18
 
