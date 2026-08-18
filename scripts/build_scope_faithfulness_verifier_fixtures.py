@@ -14,10 +14,10 @@ import importlib.util
 import json
 import shutil
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable
-
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 PERMIT_SCRIPT = ROOT / "scripts" / "build_scope_faithfulness_fixtures.py"

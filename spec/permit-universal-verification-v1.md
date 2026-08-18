@@ -99,6 +99,14 @@ that claim. It MUST NOT silently omit a failed declared claim.
 
 ## 6. Certified enforcement
 
+"Certification" in this document names a specific signed artifact defined here.
+It is issued by Keel against an exact adapter version and consequence set. It is
+**not** a third-party accreditation, an independent audit opinion, or a
+conformance mark granted by a standards body or accredited assessor. A reader
+evaluating this evidence should treat an adapter certification as a first-party
+attestation whose value rests on the signature, the trust-key resolution, and the
+digest bindings required below — not on the word "certified".
+
 An adapter certification establishes conformance for an exact adapter version
 and consequence set. A deployment assurance establishes that a customer
 deployment uses that adapter without a known side route around the named

@@ -9,7 +9,6 @@ from typing import Any
 import build_procurement_ap_registries as base
 from build_transactional_cx_registries import load, sha256, write
 
-
 FACT_SCHEMA = "schemas/commerce-regulated-exact-facts-v1.schema.json"
 FACT_VERSION = "keel.commerce_regulated_exact_facts.v1"
 

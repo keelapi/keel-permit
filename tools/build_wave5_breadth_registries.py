@@ -8,9 +8,8 @@ from typing import Any
 
 import build_commerce_regulated_registries as base
 from build_collections_registries import digest as sample_digest
-from build_transactional_cx_registries import load, sha256, write
 from build_transactional_cx_registries import commitment as sample_commitment
-
+from build_transactional_cx_registries import load, sha256, write
 
 FACT_SCHEMA = "schemas/wave5-breadth-exact-facts-v1.schema.json"
 FACT_VERSION = "keel.wave5_breadth_exact_facts.v1"

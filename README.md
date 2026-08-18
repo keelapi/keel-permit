@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/github/license/keelapi/keel-permit)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/keelapi/keel-permit?label=release)](https://github.com/keelapi/keel-permit/releases)
-![Spec version](https://img.shields.io/badge/spec-1.10.0-blue)
+![Spec version](https://img.shields.io/badge/spec-1.19.0-blue)
 
 A pre-execution decision record for AI agent systems. A Permit records that an action was evaluated and decided, and, for dispatched allow executions, can be bound to the final provider or tool request. A Permit JSON object alone is not self-authenticating; verification is performed from signed export artifacts and the relevant public keys or key manifest. Those artifacts are verifiable without contacting the issuer when the verifier has the signed export artifacts and relevant public keys/key manifest.
 
@@ -12,17 +12,17 @@ This repository contains the wire-format specification, JSON schemas, and verifi
 
 | | |
 |---|---|
-| Spec document version | 1.10.0 |
+| Spec document version | 1.19.0 |
 | Permit wire format | `v1` |
 | Permit binding versions | `v1`-`v7` (`v6` frozen; `v7` additive/c7) |
 | Closure record format | `closure_v1`, `closure_v2` |
 | Chain entry hash format | `v1` |
-| Reference implementation | [keel-api](https://github.com/keelapi/keel-api) |
+| Reference implementation | keel-api (Keel-internal, not publicly readable) |
 | Reference verifier | [keel-verifier](https://github.com/keelapi/keel-verifier) (`pip install keel-verifier`) |
 
 ## Why this exists
 
-AI agents increasingly act faster than humans can review every step. Permit gives systems a standard way to record what was authorized before execution and prove it later from signed, offline-verifiable evidence.
+AI agents increasingly act faster than humans can review every step. Permit gives systems a standard way to record what was authorized before execution and to establish later, from signed offline-verifiable evidence, what was authorized and what request was bound to it. Verification does not establish that execution occurred or what its real-world effect was.
 
 ```mermaid
 flowchart LR
@@ -80,7 +80,7 @@ flowchart LR
 
 ## Schemas
 
-Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated from the reference implementation's Pydantic models and then post-processed with public wire-format constraints. Regenerate with [`tools/export_schemas.py`](tools/export_schemas.py). `schemas/closure-v2.schema.json`, `schemas/audit-export-manifest.schema.json`, and the four WebAuthn co-signature contract schemas are hand-maintained because they define repository-native protocol envelopes rather than generated reference-implementation models.
+Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated from the reference implementation's Pydantic models and then post-processed with public wire-format constraints. Regenerate with [`tools/export_schemas.py`](tools/export_schemas.py). Note that regeneration requires a checked-out copy of the Keel-internal `keel-api` repository, which is not publicly readable — third parties consume the committed schemas in [`schemas/`](schemas/) as published source rather than rebuilding them. The schemas are self-contained: verifying an artifact against them requires no Keel code. `schemas/closure-v2.schema.json`, `schemas/audit-export-manifest.schema.json`, and the four WebAuthn co-signature contract schemas are hand-maintained because they define repository-native protocol envelopes rather than generated reference-implementation models.
 
 ## Released artifacts
 
@@ -124,7 +124,9 @@ See [`mappings/README.md`](mappings/README.md) for status, scope, evidence-suppo
 
 ## Conformance test vectors
 
-[`test-vectors/`](test-vectors/) — a versioned conformance fixture set that any verifier (Keel's reference verifier or independent third-party implementations) can be tested against. Each fixture has an `expected.json` defining the required outcome; a verifier that disagrees on any fixture is non-conforming.
+[`test-vectors/`](test-vectors/) — a versioned conformance fixture set that any verifier (Keel's reference verifier or independent third-party implementations) can be tested against. Each populated fixture has an `expected.json` defining the required outcome; a verifier that disagrees on a populated fixture is non-conforming.
+
+The suite is not uniformly populated. The executable corpora — `permit_co_signature/v1` and `v2`, `verifier_claims/v0`, `semantics/`, and `vectors/cat-08-permit-chains/` — carry real bytes and run in CI. The byte-level scaffolds under `vectors/cat-01-baseline/` and `vectors/cat-02-tamper-chain/` still carry **placeholder hashes and signatures** pending the deterministic fixture generator, and the `keel-conformance` runner CLI is planned rather than shipped. See [`test-vectors/README.md`](test-vectors/README.md) for per-corpus status before citing a conformance result.
 
 Current conformance artifacts include the pinned-semantics golden corpus in [`test-vectors/verifier_claims/`](test-vectors/verifier_claims/), semantic-artifact conformance records in [`test-vectors/semantics/`](test-vectors/semantics/), and self-contained Permit Chain semantic vectors under [`test-vectors/vectors/cat-08-permit-chains/`](test-vectors/vectors/cat-08-permit-chains/). See [`test-vectors/README.md`](test-vectors/README.md) and [`test-vectors/CONFORMANCE.md`](test-vectors/CONFORMANCE.md).
 
@@ -155,12 +157,24 @@ A Permit verifier conforms if it implements the failure codes in [`spec/failure-
 
 The wire formats and hash algorithms in this spec are stable. A breaking change to any wire format requires a new format version (`v2`, `closure_v3`, etc.); the previous version remains valid indefinitely so that historical artifacts continue to verify. See [`CHANGELOG.md`](CHANGELOG.md).
 
+## Feedback and bug reports
+
+- **Bugs, spec ambiguities, and schema problems** — open an issue at
+  [github.com/keelapi/keel-permit/issues](https://github.com/keelapi/keel-permit/issues).
+  Useful reports name the affected spec section, schema, or fixture, and state
+  the verifier behaviour you expected.
+- **Questions and proposals** — use
+  [GitHub Discussions](https://github.com/keelapi/keel-permit/discussions).
+- **Contributions** — see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+- **Security vulnerabilities** — do **not** open a public issue. Follow
+  [`SECURITY.md`](SECURITY.md) and report privately to `security@keelapi.com`.
+
 ## Project Stewardship
 
 Permit Spec is maintained by Keel API, Inc.
 
 - Website: https://keelapi.com
-- Reference implementation: https://github.com/keelapi/keel-api
+- Reference implementation: keel-api (Keel-internal, not publicly readable)
 - Reference verifier: https://github.com/keelapi/keel-verifier
 
 ## License

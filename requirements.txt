@@ -1,0 +1,7 @@
+# Dependencies for the repository check suite (tools/check_*.py and the
+# published reference executors under test-vectors/).
+# Verifying a Permit artifact requires no Keel code; these are development-time
+# dependencies for validating this repository's own contents.
+jsonschema>=4.21,<5
+rfc8785>=0.1.4,<1
+ruff>=0.6,<1
