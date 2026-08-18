@@ -6,18 +6,36 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
-- Publish deterministic release bundles. Each tag now produces
-  `keel-permit-<version>.tar.gz` containing the normative artifact set,
-  a `release-manifest.json` carrying per-file digests and the command to
-  reproduce the bundle, and `SHA256SUMS`. Development tooling is excluded from
-  the bundle through `export-ignore`.
-- Attest release provenance with Sigstore-backed GitHub artifact attestations,
-  verifiable with `gh attestation verify`.
-- Verify in CI that a release actually reproduces from its own published
-  instruction, so a release cannot ship an instruction that does not work.
-- Document both verification paths in the README, and state plainly that they
-  establish bundle provenance rather than specification correctness or artifact
-  validity. The release manifest records `"signed": false`.
+- No unreleased changes.
+
+## [1.20.0] — 2026-08-18
+
+### Release integrity
+
+- Publish deterministic release bundles. Each tag produces
+  `keel-permit-<version>.tar.gz` containing the published specification
+  distribution, a `release-manifest.json` carrying per-file digests and the
+  command to reproduce the bundle, and `SHA256SUMS`. Development tooling is
+  excluded through `export-ignore`, so the bundle holds only what a consumer
+  needs.
+- Build with `git archive`, which is byte-deterministic for a given tree.
+  Anyone can rebuild a published release from its tag and compare digests
+  without trusting the publisher. A signature attests who built an artifact;
+  rebuilding attests what is in it.
+- Attest release provenance with Sigstore-backed GitHub artifact attestations
+  over the bundle, the manifest, and `SHA256SUMS`, verifiable with
+  `gh attestation verify`.
+- Verify in CI that a release reproduces from its own published instruction, so
+  a release cannot ship an instruction that does not work.
+- Classify every distribution member rather than calling all of it normative.
+  `release-manifest.json` records `content_classes`: normative specification
+  material, conformance artifacts, illustrative examples, draft
+  evidence-support mappings, and project documentation.
+- Record signing state explicitly. The manifest carries no embedded signature
+  and says so, alongside the provenance path that does cover it and the exact
+  command to verify.
+
+### Specification
 
 - Document, non-normatively, that `permit-fact-profiles-v1` does not constrain
   salt generation: it requires a salt for low-entropy values but sets no minimum
@@ -27,16 +45,25 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
   changing what v1 requires would change the meaning of evidence already issued
   under it. New issuance should use fact-profile v2, where the low-entropy
   disclosure contract is operative and the 128-bit requirement is normative.
+- Document in `permit-co-signature-v1` §4.1 that the deterministic Permit-bound
+  challenge is a deliberate deviation from typical WebAuthn practice, and that
+  the contract therefore does not establish assertion freshness or single use.
+- State in `permit-universal-verification-v1` §6 that "certification" names a
+  Keel-issued signed artifact and is not a third-party accreditation.
+
+### Repository integrity
+
+- Add `tools/check_pack_integrity.py`, which recomputes all 82 declared
+  verifier-claim pack `content_hash` values, extracts every archive, verifies
+  the declared member set, and parses every JSON and JSONL member. These
+  integrity declarations were previously unenforced.
 - Add `tools/check_fact_profile_freeze.py`, which asserts that the v1 registry
   stays free of the v2 low-entropy disclosure contract and that v2 continues to
   carry it, so neither the freeze nor the successor's stronger rule can drift
   unnoticed.
-- Document in `permit-co-signature-v1` §4.1 that the deterministic
-  Permit-bound challenge is a deliberate deviation from typical WebAuthn
-  practice, and that the contract therefore does not establish assertion
-  freshness or single use.
-- State in `permit-universal-verification-v1` §6 that "certification" names a
-  Keel-issued signed artifact and is not a third-party accreditation.
+- Declare intentional absence in the conformance corpus through an explicit
+  `expected_missing_paths` field rather than inferring it from failure-code
+  spelling.
 
 ## [1.19.0] — 2026-08-13
 
