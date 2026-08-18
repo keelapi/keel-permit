@@ -1,5 +1,5 @@
 # Repository check suite. Mirrors the repo-integrity job in .github/workflows/ci.yml.
-.PHONY: check lint test install-deps
+.PHONY: check lint test dco install-deps
 
 check: lint test
 
@@ -8,6 +8,9 @@ install-deps:
 
 lint:
 	ruff check .
+
+dco:
+	@python3 tools/check_dco.py origin/main HEAD
 
 test:
 	python3 tools/check_public_hygiene.py
