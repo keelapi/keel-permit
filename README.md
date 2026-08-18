@@ -54,6 +54,7 @@ flowchart LR
 
 ## Specifications
 
+- [`spec/system-design-v1.md`](spec/system-design-v1.md) — Actors, actions, trust boundaries, and attack surface
 - [`spec/permit-v1.md`](spec/permit-v1.md) — Permit object
 - [`spec/permit-v2.md`](spec/permit-v2.md) — Permit v2 multi-party signature slots
 - [`spec/permit-co-signature-v1.md`](spec/permit-co-signature-v1.md) — WebAuthn human co-signature claim and policy/key contracts
@@ -173,6 +174,8 @@ The wire formats and hash algorithms in this spec are stable. A breaking change 
 ## Project Stewardship
 
 Permit Spec is maintained by Keel API, Inc.
+
+Governance, roles, and access are documented in [`GOVERNANCE.md`](GOVERNANCE.md).
 
 Maintainer with write and administrative access to this repository:
 [@sftimeless](https://github.com/sftimeless). Changes reach `main` only through
