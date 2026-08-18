@@ -52,11 +52,12 @@ jobs:
           test "$CLAIMED" = "$ACTUAL"
 
       - name: Attest build provenance
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: |
             dist/keel-permit-*.tar.gz
             dist/release-manifest.json
+            dist/SHA256SUMS
 
       - name: Upload release assets
         env:

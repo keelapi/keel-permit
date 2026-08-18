@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Build a deterministic release bundle and its digest manifest.
 
-A release of this project is the normative artifact set at a given tag:
-specification text, JSON Schemas, registries, semantics, mappings, examples, and
-the conformance corpus. Development-time tooling is excluded via `export-ignore`
+A release of this project is the published specification distribution at a given
+tag. Not all of it is normative, and the manifest says which parts are: the
+specification text, JSON Schemas, registries and semantics are normative; the
+conformance corpus is a test artifact; the examples are illustrative; the control
+framework mappings are a draft evidence-support aid. Development-time tooling is excluded via `export-ignore`
 in `.gitattributes`, because a consumer needs none of it to verify a Permit
 artifact.
 
@@ -20,9 +22,10 @@ Produces, for version X:
     SHA256SUMS               sha256sum-compatible digests of the release assets
     release-manifest.json    per-file digests and bundle digest
 
-The manifest is unsigned. Signing is a separate step with a key held outside
-this process; the manifest records `"signed": false` rather than implying an
-assurance it does not carry.
+The manifest carries no embedded signature. It records that explicitly, along
+with the provenance path that does cover it: a Sigstore-backed GitHub artifact
+attestation over the published assets. A maintainer-held signing key is a
+separate, additive path.
 """
 
 from __future__ import annotations
@@ -99,9 +102,30 @@ def manifest_for(bundle: Path, ref: str, version: str) -> dict:
             "size": bundle.stat().st_size,
             "sha256": sha256_file(bundle),
         },
+        "content_classes": {
+            "normative": ["spec/", "schemas/", "claim_registry/", "semantic_registry/",
+                          "presentation_registry/", "consequence_registry/",
+                          "comparator_registry/", "fact_profiles/", "semantics/",
+                          "artifact-manifests/"],
+            "conformance_artifacts": ["test-vectors/"],
+            "illustrative": ["examples/"],
+            "draft_evidence_support": ["mappings/"],
+            "project_documentation": ["README.md", "CHANGELOG.md", "CONTRIBUTING.md",
+                                      "GOVERNANCE.md", "SECURITY.md", "LICENSE",
+                                      "PUBLIC_DOCS_POLICY.md"],
+        },
         "file_count": len(files),
         "files": files,
-        "signed": False,
+        "signing": {
+            "manifest_embedded_signature": False,
+            "release_provenance": "github-artifact-attestation",
+            "verify": f"gh attestation verify {bundle.name} -R keelapi/keel-permit",
+            "note": (
+                "This manifest carries no embedded signature. The published release assets, "
+                "including this manifest, are subjects of a Sigstore-backed GitHub artifact "
+                "attestation bound to the workflow identity that built them."
+            ),
+        },
         "reproduce": (
             f"git archive --prefix=keel-permit-{version}/ --format=tar.gz {ref} "
             f"| sha256sum  # expect {sha256_file(bundle)}"
