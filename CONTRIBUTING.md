@@ -42,6 +42,7 @@ Or run the steps individually:
 ```sh
 python tools/check_public_hygiene.py
 python tools/check_repo_integrity.py
+python tools/check_pack_integrity.py
 ```
 
 If `jsonschema` is installed, run the stricter check:

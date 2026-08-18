@@ -139,8 +139,20 @@ They are present deliberately. The audit-export bundle format is a signed
 archive, so verifying pack-level behaviour — file-set completeness, declaration
 presence, and gzip member handling — requires a real archive rather than a
 description of one. They contain no executable code and no private key material.
-The contents of each archive are enumerated in the fixture's `expected.json`, and
-any archive can be listed with `unzip -l` or `gzip -l` for review.
+
+They are reviewable, and that is enforced rather than asserted:
+
+- Each archive's members are enumerated by name and schema in its
+  `pack/manifest.json`, which is plain JSON in source.
+- Each archive's exact bytes are pinned by a `content_hash` in that same
+  manifest, and `corpus.json` declares which record each pack belongs to.
+- `tools/check_pack_integrity.py` runs on every pull request. It recomputes all
+  82 declared content hashes, extracts every archive, checks that the member
+  list matches the manifest, and parses every JSON and JSONL member. An archive
+  that drifts from its manifest — by a byte, a member, or a malformed record —
+  fails CI.
+- Every member is UTF-8 JSON or JSONL and can be read directly after
+  extraction with standard tooling.
 
 ## Relationship to keel-permit/examples/
 
