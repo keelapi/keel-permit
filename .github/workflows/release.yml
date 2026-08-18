@@ -59,11 +59,21 @@ jobs:
             dist/release-manifest.json
             dist/SHA256SUMS
 
-      - name: Upload release assets
+      - name: Publish release assets
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.inputs.ref || github.ref_name }}
         run: |
-          gh release upload "${{ github.event.inputs.ref || github.ref_name }}" \
+          set -euo pipefail
+          # Pushing a tag does not create a Release, and `gh release upload`
+          # requires one to exist. This repository has five tags with no
+          # release, which is exactly the state that would make an upload-only
+          # step fail on its first run.
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            echo "No release for $TAG; creating it."
+            gh release create "$TAG" --title "keel-permit $TAG" --generate-notes
+          fi
+          gh release upload "$TAG" \
             dist/keel-permit-*.tar.gz \
             dist/release-manifest.json \
             dist/SHA256SUMS \
