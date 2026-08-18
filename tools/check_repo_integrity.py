@@ -11,7 +11,6 @@ import sys
 from pathlib import Path
 from typing import Any
 
-
 ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 CODE_RE = re.compile(r"`([A-Z][A-Z0-9_]+)`")
@@ -45,7 +44,7 @@ def check_json_parse(files: list[Path], errors: list[str]) -> None:
             continue
         try:
             json.loads(path.read_text(encoding="utf-8"))
-        except Exception as exc:  # noqa: BLE001 - report parser detail.
+        except Exception as exc:
             fail(errors, f"{path.relative_to(ROOT)}: invalid JSON: {exc}")
 
 
@@ -112,7 +111,7 @@ def check_claim_registry_v1_superset(errors: list[str]) -> None:
         path = ROOT / "claim_registry" / f"{version}.json"
         try:
             payload = json.loads(path.read_text(encoding="utf-8"))
-        except Exception as exc:  # noqa: BLE001 - report parser detail.
+        except Exception as exc:
             fail(errors, f"{path.relative_to(ROOT)} could not be loaded: {exc}")
             return
         if not isinstance(payload, dict):
@@ -196,7 +195,12 @@ def check_version_metadata(errors: list[str]) -> None:
 
     badge_match = re.search(r"img\.shields\.io/badge/spec-([0-9A-Za-z.-]+)-blue", readme)
     status_match = re.search(r"\| Spec document version \| ([0-9A-Za-z.-]+) \|", readme)
-    latest_changelog_match = re.search(r"^## \[([0-9A-Za-z.-]+)\]", changelog, re.MULTILINE)
+    # Match both "## [1.19.0]" and "## 1.19.0" headings. A bracket-only pattern
+    # silently skips a heading written without brackets and falls through to an
+    # older release, which lets README drift behind CHANGELOG undetected.
+    latest_changelog_match = re.search(
+        r"^## \[?(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)\]?", changelog, re.MULTILINE
+    )
 
     if not badge_match:
         fail(errors, "README spec badge version is missing")
@@ -208,19 +212,30 @@ def check_version_metadata(errors: list[str]) -> None:
     if badge_match and status_match and badge_match.group(1) != status_match.group(1):
         fail(errors, f"README spec badge {badge_match.group(1)} does not match status table {status_match.group(1)}")
     if status_match and latest_changelog_match and status_match.group(1) != latest_changelog_match.group(1):
-        fail(errors, f"README spec version {status_match.group(1)} does not match latest CHANGELOG version {latest_changelog_match.group(1)}")
+        fail(
+            errors,
+            f"README spec version {status_match.group(1)} does not match "
+            f"latest CHANGELOG version {latest_changelog_match.group(1)}",
+        )
 
+    # test-vectors/MANIFEST.json records the fixture suite's spec baseline, not
+    # the current repository release (see test-vectors/README.md). Requiring it
+    # to equal the README version would force it to claim the vectors were
+    # rebuilt against every spec release. Instead require that it names a spec
+    # version the CHANGELOG actually documents.
+    released_versions = set(
+        re.findall(r"^## \[?(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)\]?", changelog, re.MULTILINE)
+    )
     permit_spec_version = manifest.get("permit_spec_version")
     if not isinstance(permit_spec_version, str) or not permit_spec_version:
         fail(errors, "test-vectors/MANIFEST.json permit_spec_version is missing")
     elif not SEMVER_RE.fullmatch(permit_spec_version):
         fail(errors, f"test-vectors/MANIFEST.json permit_spec_version is not semver-like: {permit_spec_version!r}")
-    elif status_match and permit_spec_version != status_match.group(1):
+    elif released_versions and permit_spec_version not in released_versions:
         fail(
             errors,
             "test-vectors/MANIFEST.json permit_spec_version "
-            f"{permit_spec_version} does not match README spec version "
-            f"{status_match.group(1)}",
+            f"{permit_spec_version} is not a version documented in CHANGELOG.md",
         )
 
 
@@ -259,7 +274,7 @@ def check_json_schemas_self_validate(require_jsonschema: bool, errors: list[str]
         try:
             schema = json.loads(schema_path.read_text(encoding="utf-8"))
             jsonschema.Draft202012Validator.check_schema(schema)
-        except Exception as exc:  # noqa: BLE001 - report parser/validator detail.
+        except Exception as exc:
             fail(errors, f"{schema_path.relative_to(ROOT)} is not a valid draft-2020-12 schema: {exc}")
 
 

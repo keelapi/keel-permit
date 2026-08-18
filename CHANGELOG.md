@@ -6,6 +6,21 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
+- Require commitment salts in `permit-fact-profiles-v1` to be at least 128 bits,
+  generated with a cryptographically secure random number generator, never
+  reused, and never derived from the committed value. Previously the profile
+  required a salt for low-entropy values without constraining its generation,
+  so a conforming implementation could use a predictable or short salt and leave
+  the commitment recoverable by enumeration.
+- Document in `permit-co-signature-v1` §4.1 that the deterministic
+  Permit-bound challenge is a deliberate deviation from typical WebAuthn
+  practice, and that the contract therefore does not establish assertion
+  freshness or single use.
+- State in `permit-universal-verification-v1` §6 that "certification" names a
+  Keel-issued signed artifact and is not a third-party accreditation.
+
+## [1.19.0] — 2026-08-13
+
 - Add compact exact evidence profile `keel.permit_exact/v4`. It preserves v3
   verification semantics while allowing contract pins to omit duplicated
   bytes and resolve strictly by identity, version, and SHA-256 digest against
@@ -13,8 +28,15 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 - Make compact, consequence-titled JSON the default downloadable AI
   Permit-to-X artifact; retain `.keelpermit` ZIP packages as legacy-compatible
   verifier inputs.
+- Add the edition-pinned `aiuc_1_q3_2026` evidence-support entry to the control
+  framework mapping, with the same framing and do-not-claim guardrails already
+  used for FedRAMP and PCI DSS, and an explicit guard against transitive
+  compliance claims.
+- Record AIUC-1 `D004` as an explicit non-mapping: it requires qualified
+  third-party assessors at least quarterly, which the project's own conformance
+  tests do not satisfy.
 
-## 1.18.0
+## [1.18.0] — 2026-08-13
 
 - Add five provider-exact Transactional CX consequences: Stripe payment
   refund, account credit, period-end cancellation scheduling, pending
@@ -28,6 +50,13 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 - Distinguish withdrawing a pending cancellation from falsely claiming to
   reinstate an already canceled subscription, and require provider-declared
   `ticketState=CLOSED` metadata rather than trusting a ticket-stage label.
+- Close the portfolio contract layer across identity and security, merge and
+  deployment, coding workspace, collections, insurance claims, ERP/CRM,
+  procurement and accounts payable, commerce and regulated, and Wave 5 breadth
+  consequences, covering all 96 portfolio Permit-to-X contracts.
+
+## [1.17.0] — 2026-08-10
+
 - Add three exact Payment & Ledger consequences: paying one provider-verified
   open invoice, posting one version-checked double-entry ledger record, and
   recording one matched payment reconciliation.
@@ -41,6 +70,9 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 - Bind each exact action to a short-lived gateway-signed preflight snapshot;
   caller-supplied state and expired or argument-mismatched snapshots are not
   trusted authorization facts.
+
+## [1.16.0] — 2026-08-09
+
 - Add schema-validated exact authorization facts for insert, update, delete,
   migration, and dataset-export database consequences.
 - Bind each database action to its own fact-profile ID in additive semantic
@@ -48,6 +80,26 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 - Reject cross-action fact-profile substitution and require connector,
   tool-contract, exact-target, material-request, and enforced-path facts before
   a database-specific Permit title is eligible for exact evidence.
+
+## [1.15.0] — 2026-08-09
+
+- Add the versioned `keel.consequence_registry.v1` source contract with five
+  exact database consequences: insert rows, update rows, delete rows, apply
+  migration, and export dataset.
+- Record material-field, trusted-fact, canonicalizer, provider-operation, risk,
+  and claim-boundary metadata for each consequence.
+- Add a deterministic generator that composes those entries onto immutable
+  semantic registry v4 and presentation registry v3, producing v5/v4 without
+  rewriting released history.
+- Require `connector_identity` and `tool_contract` plus action-specific trusted
+  facts for every consequence; unknown, overlapping, or untrusted actions stay
+  generic and presentation never establishes dispatch or provider success.
+- Add `spec/consequence-registry-v1.md`, the registry schema, exact-byte
+  artifact-manifest pins, and one published selector/title conformance vector
+  per consequence.
+
+## [1.14.0] — 2026-08-09
+
 - Define the human-first AI Permit-to-X artifact and `.keelpermit` package
   inventory without creating a new authorization lifecycle or trust root.
 - Require verifier-derived titles, lifecycle fields, evidence boundaries, and
@@ -55,6 +107,55 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 - Keep denial and pending-review records distinct from issued Permits and keep
   raw canonical bytes, hex, Base64, signatures, and digests in an advanced
   representation layer.
+
+## [1.13.0] — 2026-08-02
+
+- Define conditional issuance-time and dispatch-time Work enforcement regime
+  claims, and pin them in universal verification v4 without applying them to
+  unrelated Permit types.
+- Add historical, tamper, impossible-tuple, off/deny, root/child, and
+  current-config exclusion vectors, and make the vectors and new artifacts
+  mandatory repository-integrity checks.
+- Scope the claim ceiling explicitly: these claims establish the signed
+  historical regime record only. They do not establish current project
+  configuration, universal implementation correctness, absence outside the
+  governed boundary, or external outcome.
+
+## [1.12.0] — 2026-08-02
+
+- Add `permit-enforcement-state-v1`, the issuance-time enforcement snapshot
+  carried in `resource_attributes` and therefore already covered by
+  `resource_attributes_canonical_hash`. No binding-version bump: `v6` and `v7`
+  stay frozen.
+- Extend the existing pre-effect dispatch record as
+  `runtime-enforcement-proof-v2` rather than introducing a competing contract,
+  so one dispatch cannot produce two records that disagree.
+- Add `permit-exact-pack-v3`, which accepts either proof version so packs
+  spanning the change stay verifiable. Pack v2 stays frozen.
+- Keep "issued under", "executed under", and "current availability" as three
+  separate facts that are never derived from one another.
+
+## [1.11.0] — 2026-08-01
+
+- Admit `keel.action.generate_text.v1`, `keel.action.payment_refund.v1`, and
+  `keel.action.agent_delegate.v1` as `exact_action` semantics in semantic
+  registry v4, keeping existing admitted semantics and
+  `exactly_one_match_else_fallback` selection unchanged.
+- Add fact-profile registry v3 with exact fact profiles for Generate Text,
+  Refund, and Delegate, including per-field classification, disclosure tiers,
+  retention, and commitment methods.
+- Add claim registry v3/v4 with `permit.delegate_child_linkage.v1`,
+  `permit.generate_text_exact_request.v1`, and
+  `permit.refund_original_payment_bound.v1`, each pinning its predecessor
+  registry by SHA-256.
+- Add closed schemas for delegate child-linkage and the three exact fact
+  profiles, plus consequence-claim and delegate-linkage test vectors.
+- Add `tools/check_permit_to_x_artifacts.py` and wire it into the
+  `repo-integrity` check.
+- Give every new claim an explicit `does_not_establish` list. None of them
+  assert provider completion, settlement, funds returned, real-world outcome,
+  correctness of generated content, or independent real-world identity behind
+  a commitment.
 
 ## [1.10.0] — 2026-07-30
 

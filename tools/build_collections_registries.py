@@ -8,7 +8,6 @@ from typing import Any
 
 from build_transactional_cx_registries import commitment, load, sha256, write
 
-
 FACT_SCHEMA = "schemas/collections-exact-facts-v1.schema.json"
 
 COMMON_PATHS = [

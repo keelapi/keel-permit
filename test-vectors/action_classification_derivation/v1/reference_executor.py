@@ -23,9 +23,12 @@ from pathlib import Path
 import rfc8785
 
 HERE = Path(__file__).resolve().parent
-S = lambda *p: HERE.joinpath(*p)
+def S(*p):
+    return HERE.joinpath(*p)
 CORPUS = json.loads(S("corpus.json").read_text())
-RULESET = json.loads(S("..", "..", "..", "semantics", "permit", "action_classification_derivation_v1.json").read_text())["body"]
+RULESET = json.loads(
+    S("..", "..", "..", "semantics", "permit", "action_classification_derivation_v1.json").read_text()
+)["body"]
 REG_PATH = S("..", "..", "..", "semantics", "permit", "value_movement_classification_v1.json")
 REGISTRY = json.loads(REG_PATH.read_text())
 
@@ -52,9 +55,9 @@ def execute(facts, given):
 
     # Step 1 COMMON ENVELOPE — common signed-field syntax BEFORE variant dispatch.
     if not DIGEST_RE.match(reg_digest):
-        return "invalid", t + [f"1:malformed common registry digest {reg_digest!r}"]
+        return "invalid", [*t, f"1:malformed common registry digest {reg_digest!r}"]
     if not DIGEST_RE.match(in_digest):
-        return "invalid", t + [f"1:malformed common input digest {in_digest!r}"]
+        return "invalid", [*t, f"1:malformed common input digest {in_digest!r}"]
     t.append("1:common envelope ok")
 
     # Step 2 SUBJECT DISPATCH
@@ -63,15 +66,15 @@ def execute(facts, given):
         for label in ("connector_identity", "canonical_tool_name"):
             v = subject.get(label, "")
             if not subject.get(label) or not GRAMMAR.match(v):
-                return "invalid", t + [f"2:variant field/grammar fail {label}={v!r}"]
+                return "invalid", [*t, f"2:variant field/grammar fail {label}={v!r}"]
         t.append("2:known variant, fields+grammar ok")
     else:
-        return "no_derivation", t + [f"2:unknown subject kind {kind!r} (common envelope already validated)"]
+        return "no_derivation", [*t, f"2:unknown subject kind {kind!r} (common envelope already validated)"]
 
     # Step 3 DEPENDENCY RESOLUTION (hash-verifying, byte-concrete)
     trusted = set(given.get("trusted_registry_digests", []))
     if reg_digest not in trusted:
-        return "unverifiable", t + [f"3:registry {reg_digest[:14]}.. not trusted -> artifact_unavailable"]
+        return "unverifiable", [*t, f"3:registry {reg_digest[:14]}.. not trusted -> artifact_unavailable"]
     # Resolve bytes: the pinned registry for its own digest, else the store.
     store = {e["digest"]: e["content_utf8"].encode() for e in given.get("store", [])}
     if reg_digest == PINNED:
@@ -79,9 +82,9 @@ def execute(facts, given):
     elif reg_digest in store:
         reg_bytes = store[reg_digest]
     else:
-        return "unverifiable", t + ["3:trusted digest but no bytes in store -> artifact_unavailable"]
+        return "unverifiable", [*t, "3:trusted digest but no bytes in store -> artifact_unavailable"]
     if "sha256:" + hashlib.sha256(reg_bytes).hexdigest() != reg_digest:
-        return "invalid", t + ["3:store bytes do not hash to trusted digest -> dependency_integrity"]
+        return "invalid", [*t, "3:store bytes do not hash to trusted digest -> dependency_integrity"]
     t.append("3:resolved by exact digest, hash-verified")
 
     # Step 4 DEPENDENCY VALIDATION
@@ -94,14 +97,14 @@ def execute(facts, given):
     except Exception:
         valid = False
     if not valid:
-        return "invalid", t + ["4:resolved registry fails schema/version -> dependency_artifact_invalid"]
+        return "invalid", [*t, "4:resolved registry fails schema/version -> dependency_artifact_invalid"]
     t.append("4:dependency registry valid")
 
     # Step 5 INTERNAL DIGEST AGREEMENT — v1: exactly one authoritative ref, no-op.
 
     # Step 6 INPUT DIGEST (self-contained)
     if in_digest != _input_digest(subject["connector_identity"], subject["canonical_tool_name"]):
-        return "invalid", t + ["6:input_digest mismatch"]
+        return "invalid", [*t, "6:input_digest mismatch"]
     t.append("6:input_digest ok")
 
     # Step 7 RULE MATCH SET
@@ -115,9 +118,9 @@ def execute(facts, given):
     matched = [r for r in RULESET["rules"]
                if all(fact_at(c["fact"]) == c["value"] for c in r["applies_when"]["all"])]
     if len(matched) == 0:
-        return "no_derivation", t + ["7:zero rules match"]
+        return "no_derivation", [*t, "7:zero rules match"]
     if len(matched) > 1:
-        return "invalid", t + [f"7:{len(matched)} rules match -> invalid"]
+        return "invalid", [*t, f"7:{len(matched)} rules match -> invalid"]
     rule = matched[0]
     t.append(f"7:exactly one rule ({rule['rule_id']})")
 
@@ -125,18 +128,20 @@ def execute(facts, given):
     known_predicates = {"classification_registry_membership"}
     for req in rule["requires"]:
         if "predicate" in req and req["predicate"] not in known_predicates:
-            return "invalid", t + [f"8a:unevaluable predicate {req['predicate']}"]  # 8a
+            return "invalid", [*t, f"8a:unevaluable predicate {req['predicate']}"]  # 8a
     for req in rule["requires"]:  # 8b membership (only per-rule predicate)
-        if req.get("predicate") == "classification_registry_membership":
-            if (subject["connector_identity"], subject["canonical_tool_name"]) not in MEMBERS:
-                return "no_derivation", t + ["8b:membership absent -> no_derivation"]
+        if (
+            req.get("predicate") == "classification_registry_membership"
+            and (subject["connector_identity"], subject["canonical_tool_name"]) not in MEMBERS
+        ):
+            return "no_derivation", [*t, "8b:membership absent -> no_derivation"]
     for req in rule["requires"]:  # 8c enforcement
         if "fact" in req and fact_at(req["fact"]) != req["value"]:
-            return "no_derivation", t + [f"8c:{req['fact']} != {req['value']} -> no_derivation"]
+            return "no_derivation", [*t, f"8c:{req['fact']} != {req['value']} -> no_derivation"]
     t.append("8:requires ok")
 
     # Step 9 DERIVE
-    return "valid", t + [f"9:derive {rule['derives']['authorized_action']}"]
+    return "valid", [*t, f"9:derive {rule['derives']['authorized_action']}"]
 
 
 def main():

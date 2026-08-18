@@ -26,7 +26,6 @@ from typing import Any
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 
-
 ROOT = Path(__file__).resolve().parents[1]
 CORPUS_ROOT = ROOT / "test-vectors" / "verifier_claims" / "v0"
 FIXTURE_ROOT = CORPUS_ROOT / "fixtures"

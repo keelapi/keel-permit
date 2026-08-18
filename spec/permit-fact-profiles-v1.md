@@ -55,6 +55,13 @@ requester is authorized to receive it, an exact-permit evidence pack may carry
 the value and random salt so the verifier can recompute the commitment.
 Low-entropy names MUST NOT use an unsalted hash.
 
+A salt MUST be at least 128 bits and MUST be generated with a
+cryptographically secure random number generator. A salt MUST NOT be
+reused across commitments, derived from the committed value, or produced by
+a non-cryptographic generator. The commitment's resistance to brute-force
+recovery of a low-entropy recipient reference depends entirely on the salt;
+a predictable or short salt makes the commitment recoverable by enumeration.
+
 ## 5. Privacy and disclosure
 
 Fact profiles distinguish bulk compliance exports from exact-permit evidence

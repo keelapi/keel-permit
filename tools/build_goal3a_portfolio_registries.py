@@ -8,7 +8,6 @@ import copy
 import build_wave5_breadth_registries as base
 from build_transactional_cx_registries import load, sha256, write
 
-
 FACT_SCHEMA = "schemas/goal3a-portfolio-exact-facts-v1.schema.json"
 FACT_VERSION = "keel.goal3a_portfolio_exact_facts.v1"
 

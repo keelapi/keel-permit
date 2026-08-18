@@ -45,7 +45,6 @@ import sys
 from pathlib import Path
 from typing import Any
 
-
 _SANITIZED_REASON_METADATA_DESCRIPTION = (
     "Supplemental routing diagnostics. Issuer-defined; readers MUST treat "
     "unknown fields as opaque."
@@ -322,7 +321,10 @@ def _tighten_bundle(schema: dict) -> dict:
             "else": {
                 "not": {
                     "anyOf": [
-                        {"properties": {"include_chain_entries": {"const": True}}, "required": ["include_chain_entries"]},
+                        {
+                            "properties": {"include_chain_entries": {"const": True}},
+                            "required": ["include_chain_entries"],
+                        },
                     ]
                 }
             },

@@ -118,13 +118,29 @@ The original conformance levels cover the cryptographic fixture categories (`cat
    - `expected.json` — the expected verifier output, in the schema defined in `CONFORMANCE.md`.
    - `input/` — directory containing the artifacts under test.
 4. Add an entry to `MANIFEST.json`.
-5. Open a PR. CI runs the reference verifier against all fixtures; if it disagrees with any `expected.json`, CI fails.
+5. Open a PR. CI runs the executable corpora — `permit_co_signature/v1` and `v2`, and the
+   `action_classification_derivation/v1` corpus — against their `expected.json` outcomes; a
+   disagreement fails the build. Corpora that are still placeholder scaffolds are not executed,
+   so adding a fixture to a scaffold directory does not by itself gate CI.
 
 ## Cryptographic content disclosure
 
 **Most fixtures use placeholder hashes and signatures.** A "tampered" fixture is constructed by editing a known-good fixture and recording the expected failure mode — the signature in the fixture is intentionally invalid, the hash in the fixture is intentionally wrong, etc.
 
-**A small subset of "golden path" fixtures use real cryptographic material** signed with dedicated test-only keys (NOT production keys). These keys are committed in `tools/test-keys/` and rotated only when test vectors are regenerated. Production verifiers MUST reject test-key signatures in production mode — see `CONFORMANCE.md` §6.
+**A small subset of "golden path" fixtures use real cryptographic material** signed with dedicated test-only keys (NOT production keys). Public keys and COSE key records are committed alongside the fixtures that use them, under the relevant corpus directory — for example `permit_co_signature/v1/vectors/`. No private key material is committed to this repository. Production verifiers MUST reject test-key signatures in production mode — see `CONFORMANCE.md` §6.
+
+## Binary fixtures
+
+Five fixtures are binary archives rather than reviewable text:
+`verifier_claims/v0/fixtures/*/pack/incident.zip` and
+`.../valid-governance-events-jsonl-gzip/pack/governance_events.jsonl.gz`.
+
+They are present deliberately. The audit-export bundle format is a signed
+archive, so verifying pack-level behaviour — file-set completeness, declaration
+presence, and gzip member handling — requires a real archive rather than a
+description of one. They contain no executable code and no private key material.
+The contents of each archive are enumerated in the fixture's `expected.json`, and
+any archive can be listed with `unzip -l` or `gzip -l` for review.
 
 ## Relationship to keel-permit/examples/
 

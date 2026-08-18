@@ -20,9 +20,24 @@ This repository is a public specification and conformance-artifact repo. Changes
 - Do not commit local filesystem paths, private implementation notes, credentials, production keys, or customer data.
 - Use LF line endings. `.gitattributes` enforces this for text fixtures.
 
+## Test Policy
+
+New normative behaviour must ship with automated coverage in the same change.
+Concretely: a new claim type, failure code, wire-format field, or semantic
+artifact must come with either conformance vectors carrying an `expected.json`,
+or an integrity check in `tools/`, wired into the `repo-integrity` CI job so it
+runs on every pull request. A change that only clarifies existing prose does not
+need new coverage.
+
 ## Before Opening a PR
 
-Run:
+Run the full check suite:
+
+```sh
+make check
+```
+
+Or run the steps individually:
 
 ```sh
 python tools/check_public_hygiene.py
@@ -34,6 +49,9 @@ If `jsonschema` is installed, run the stricter check:
 ```sh
 python tools/check_repo_integrity.py --require-jsonschema
 ```
+
+Install the pinned check dependencies with `pip install -r requirements.txt`.
+Lint with `ruff check .` before opening a PR; CI enforces it.
 
 ## Generated Schemas
 

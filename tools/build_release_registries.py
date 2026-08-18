@@ -7,7 +7,6 @@ import copy
 
 from build_transactional_cx_registries import commitment, load, sha256, write
 
-
 FACT_SCHEMA = "schemas/release-exact-facts-v1.schema.json"
 
 

@@ -88,6 +88,24 @@ Equivalently, a verifier can compare `clientDataJSON.challenge` to the
 unpadded base64url encoding of the raw canonical-hash bytes. Comparing the
 client-data string directly to the 64-character hexadecimal field is wrong.
 
+### 4.1 Deviation from typical WebAuthn practice
+
+WebAuthn relying parties normally issue a freshly generated random challenge per
+ceremony. This contract deliberately does not: the challenge is the Permit's
+canonical hash, so the assertion binds to a specific Permit rather than to a
+server-side session. The rationale for deriving rather than randomising is in
+section 6 — including the co-signature in its own challenge would be circular.
+
+Implementers MUST understand the consequence. Because the challenge is a pure
+function of the frozen Permit bytes, it is identical for every ceremony against
+that Permit. The assertion is therefore replayable *for the same Permit*: this
+contract establishes that the registered credential signed that Permit, not that
+it did so once, at a particular moment, or in a particular session. Freshness and
+single-use enforcement are not provided here. A deployment that needs them MUST
+obtain them elsewhere — for example from the enclosing signed pack, dispatch
+records, or an issuer-side one-use control. Cross-Permit replay is a separate
+concern and is addressed by the binding comparison in section 5.
+
 ## 5. `permit.co_signature.v1` claim
 
 The closed claim is defined by

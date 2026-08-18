@@ -16,7 +16,6 @@ from typing import Any
 import jsonschema
 from referencing import Registry, Resource
 
-
 ROOT = Path(__file__).resolve().parents[1]
 VERDICTS = {
     "supported",
@@ -388,12 +387,11 @@ def validate_semantics_and_presentation(registry: Registry) -> None:
     presentation_vectors = load_json("presentation_registry/test-vectors/v1.json")
     for vector in presentation_vectors["vectors"]:
         profile = by_semantic.get(vector.get("semantic_id"))
-        if vector.get("pinned_profile") and (
-            profile is None
-            or profile["presentation_profile_id"] != vector["pinned_profile"]
-        ):
-            profile = fallback_by_id[vector["fallback"]]
-        elif profile is None:
+        needs_fallback = profile is None or (
+            vector.get("pinned_profile")
+            and profile["presentation_profile_id"] != vector["pinned_profile"]
+        )
+        if needs_fallback:
             profile = fallback_by_id[vector["fallback"]]
         if profile["customer_title"] != vector["expected_title"]:
             raise ContractFailure(f"presentation vector {vector['id']} rendered the wrong title")
@@ -3514,12 +3512,14 @@ def validate_fact_profiles(registry: Registry) -> None:
                 f"{profile['fact_profile_id']} contains duplicate field paths"
             )
         for field in profile["fields"]:
-            if field["classification"] in {"personal_data", "free_text", "secret"}:
-                if field["bulk_export_disclosure"] != "omit":
-                    raise ContractFailure(
-                        f"{profile['fact_profile_id']} exposes sensitive field "
-                        f"{field['path']} in bulk exports"
-                    )
+            if (
+                field["classification"] in {"personal_data", "free_text", "secret"}
+                and field["bulk_export_disclosure"] != "omit"
+            ):
+                raise ContractFailure(
+                    f"{profile['fact_profile_id']} exposes sensitive field "
+                    f"{field['path']} in bulk exports"
+                )
             if field["classification"] in {"personal_data", "free_text"} and (
                 field["commitment_method"] == "none"
             ):

@@ -9,7 +9,6 @@ from typing import Any
 import build_collections_registries as base
 from build_transactional_cx_registries import load, sha256, write
 
-
 FACT_SCHEMA = "schemas/erp-crm-exact-facts-v1.schema.json"
 FACT_VERSION = "keel.erp_crm_exact_facts.v1"
 

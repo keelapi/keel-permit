@@ -1,0 +1,23 @@
+# Lint configuration for the repository's Python tooling.
+# The published artifacts are specification text, JSON Schemas, and conformance
+# fixtures; this covers the generators and checkers that produce and validate them.
+target-version = "py312"
+line-length = 120
+
+[lint]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "W",    # pycodestyle warnings
+    "I",    # import sorting
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "SIM",  # flake8-simplify
+    "RUF",  # ruff-specific
+]
+
+[lint.per-file-ignores]
+# Generators embed long literal registry strings that must stay byte-stable.
+"tools/build_*.py" = ["E501"]
+"scripts/build_*.py" = ["E501"]
