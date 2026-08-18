@@ -1815,6 +1815,9 @@
           "CHECKPOINT_SCOPE_STATE_MISSING"
         ]
       },
+      "expected_missing_paths": [
+        "fixtures/scope-faithfulness-neg-sidecar-missing/sidecars/scope-faithfulness-neg-sidecar-missing-checkpoint-scope-state-v1.json"
+      ],
       "expected_verdict": "insufficient_evidence",
       "id": "scope-faithfulness-neg-sidecar-missing",
       "kind": "export",
