@@ -6,7 +6,14 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
-- No unreleased changes.
+- Record the source commit correctly in `release-manifest.json`. `git rev-parse`
+  on an annotated tag returns the tag object rather than the commit it points
+  at, so the v1.20.0 manifest published `commit` as a tag-object SHA that names
+  no commit. The builder now peels with `^{commit}` and rejects anything that
+  does not resolve to a commit object.
+- Gate the manifest's commit identity in the release workflow, so a manifest
+  whose recorded commit disagrees with the tag fails the release rather than
+  shipping.
 
 ## [1.20.0] — 2026-08-18
 

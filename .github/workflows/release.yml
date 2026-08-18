@@ -51,6 +51,16 @@ jobs:
           echo "rebuilt: $ACTUAL"
           test "$CLAIMED" = "$ACTUAL"
 
+          # The manifest's commit must be the commit the ref points at. An
+          # annotated tag rev-parses to the tag object, so a manifest can
+          # otherwise publish an identifier that names no commit at all.
+          TAG="${{ github.event.inputs.ref || github.ref_name }}"
+          MCOMMIT=$(python -c "import json;print(json.load(open('dist/release-manifest.json'))['commit'])")
+          TCOMMIT=$(git rev-list -n1 "$TAG")
+          echo "manifest commit: $MCOMMIT"
+          echo "ref commit     : $TCOMMIT"
+          test "$MCOMMIT" = "$TCOMMIT"
+
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v4
         with:
