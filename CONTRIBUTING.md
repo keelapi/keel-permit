@@ -43,6 +43,7 @@ Or run the steps individually:
 python tools/check_public_hygiene.py
 python tools/check_repo_integrity.py
 python tools/check_pack_integrity.py
+python tools/check_fact_profile_freeze.py
 ```
 
 If `jsonschema` is installed, run the stricter check:

@@ -6,12 +6,18 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
-- Require commitment salts in `permit-fact-profiles-v1` to be at least 128 bits,
-  generated with a cryptographically secure random number generator, never
-  reused, and never derived from the committed value. Previously the profile
-  required a salt for low-entropy values without constraining its generation,
-  so a conforming implementation could use a predictable or short salt and leave
-  the commitment recoverable by enumeration.
+- Document, non-normatively, that `permit-fact-profiles-v1` does not constrain
+  salt generation: it requires a salt for low-entropy values but sets no minimum
+  length and does not require a CSPRNG, so a conforming v1 issuer may produce a
+  commitment that is recoverable by enumeration. The limitation is recorded
+  rather than repaired, because `keel.fact_profile_registry.v1` is frozen and
+  changing what v1 requires would change the meaning of evidence already issued
+  under it. New issuance should use fact-profile v2, where the low-entropy
+  disclosure contract is operative and the 128-bit requirement is normative.
+- Add `tools/check_fact_profile_freeze.py`, which asserts that the v1 registry
+  stays free of the v2 low-entropy disclosure contract and that v2 continues to
+  carry it, so neither the freeze nor the successor's stronger rule can drift
+  unnoticed.
 - Document in `permit-co-signature-v1` §4.1 that the deterministic
   Permit-bound challenge is a deliberate deviation from typical WebAuthn
   practice, and that the contract therefore does not establish assertion

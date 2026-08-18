@@ -38,6 +38,8 @@ jobs:
         run: python tools/check_permit_to_x_artifacts.py
       - name: Check verifier-claim pack integrity
         run: python tools/check_pack_integrity.py
+      - name: Check fact-profile freeze
+        run: python tools/check_fact_profile_freeze.py
       - name: Verify action-classification derivation corpus
         run: python test-vectors/action_classification_derivation/v1/reference_executor.py
       - name: Verify permit co-signature golden vectors
