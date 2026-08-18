@@ -159,6 +159,52 @@ A Permit verifier conforms if it implements the failure codes in [`spec/failure-
 
 The wire formats and hash algorithms in this spec are stable. A breaking change to any wire format requires a new format version (`v2`, `closure_v3`, etc.); the previous version remains valid indefinitely so that historical artifacts continue to verify. See [`CHANGELOG.md`](CHANGELOG.md).
 
+## Releases and verification
+
+Each tagged release publishes three assets:
+
+| Asset | What it is |
+|---|---|
+| `keel-permit-<version>.tar.gz` | The normative artifact set: specification text, schemas, registries, semantics, mappings, examples, and the conformance corpus. Development tooling is excluded. |
+| `release-manifest.json` | SHA-256 of the bundle, plus a per-file digest for all 733 artifacts, the source commit, and the command to reproduce the bundle. |
+| `SHA256SUMS` | `sha256sum`-compatible digests of the published assets. |
+
+### Verify a release
+
+Two independent checks. Use either; using both is stronger.
+
+**Rebuild it yourself.** The bundle is produced with `git archive`, which is
+byte-deterministic for a given tree, so you do not have to trust the publisher:
+
+```sh
+git clone https://github.com/keelapi/keel-permit && cd keel-permit
+git archive --prefix=keel-permit-1.19.0/ --format=tar.gz v1.19.0 | sha256sum
+# compare with .bundle.sha256 in release-manifest.json
+```
+
+If the digest matches, the published bundle is exactly the tagged tree. This is
+the stronger check: a signature attests who built an artifact, whereas rebuilding
+attests what is in it.
+
+**Check the build provenance.** Releases carry a Sigstore-backed GitHub artifact
+attestation binding the bundle to the workflow and commit that produced it:
+
+```sh
+gh attestation verify keel-permit-1.19.0.tar.gz -R keelapi/keel-permit
+```
+
+### What these checks do and do not establish
+
+They establish that the bundle matches the tagged source and was built by the
+declared workflow. They do not establish that the specification is correct, that
+an implementation conforms, or that any Permit artifact you hold is valid — that
+is what the conformance corpus and a verifier are for.
+
+The release manifest is currently **unsigned** and records `"signed": false`
+rather than implying an assurance it does not carry. Maintainer-signed tags and
+a Keel-native signed release manifest are separate, additive trust paths; see
+[`GOVERNANCE.md`](GOVERNANCE.md).
+
 ## Feedback and bug reports
 
 - **Bugs, spec ambiguities, and schema problems** — open an issue at
