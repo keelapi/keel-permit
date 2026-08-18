@@ -11,3 +11,6 @@ venv/
 _internal-local/
 research-local/
 compliance-research-local/
+
+# Release build output
+dist/

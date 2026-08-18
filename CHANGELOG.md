@@ -6,6 +6,19 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
+- Publish deterministic release bundles. Each tag now produces
+  `keel-permit-<version>.tar.gz` containing the normative artifact set,
+  a `release-manifest.json` carrying per-file digests and the command to
+  reproduce the bundle, and `SHA256SUMS`. Development tooling is excluded from
+  the bundle through `export-ignore`.
+- Attest release provenance with Sigstore-backed GitHub artifact attestations,
+  verifiable with `gh attestation verify`.
+- Verify in CI that a release actually reproduces from its own published
+  instruction, so a release cannot ship an instruction that does not work.
+- Document both verification paths in the README, and state plainly that they
+  establish bundle provenance rather than specification correctness or artifact
+  validity. The release manifest records `"signed": false`.
+
 - Document, non-normatively, that `permit-fact-profiles-v1` does not constrain
   salt generation: it requires a salt for low-entropy values but sets no minimum
   length and does not require a CSPRNG, so a conforming v1 issuer may produce a

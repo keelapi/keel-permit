@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Tag to build (e.g. v1.19.0)"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write        # attach assets to the release
+      id-token: write        # Sigstore OIDC identity for attestation
+      attestations: write    # record the provenance attestation
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so the tag and its tree resolve.
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.ref || github.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build deterministic release bundle
+        id: build
+        run: |
+          python tools/build_release_bundle.py \
+            --ref "${{ github.event.inputs.ref || github.ref_name }}" \
+            --out dist
+          echo "version=$(python -c "import json;print(json.load(open('dist/release-manifest.json'))['version'])")" >> "$GITHUB_OUTPUT"
+
+      - name: Verify the bundle reproduces
+        # The published reproduce instruction is a claim. Check it here so a
+        # release cannot ship with an instruction that does not work.
+        run: |
+          set -euo pipefail
+          V="${{ steps.build.outputs.version }}"
+          CLAIMED=$(python -c "import json;print(json.load(open('dist/release-manifest.json'))['bundle']['sha256'])")
+          ACTUAL=$(git archive --prefix="keel-permit-$V/" --format=tar.gz \
+            "${{ github.event.inputs.ref || github.ref_name }}" | sha256sum | cut -d' ' -f1)
+          echo "claimed: $CLAIMED"
+          echo "rebuilt: $ACTUAL"
+          test "$CLAIMED" = "$ACTUAL"
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            dist/keel-permit-*.tar.gz
+            dist/release-manifest.json
+
+      - name: Upload release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "${{ github.event.inputs.ref || github.ref_name }}" \
+            dist/keel-permit-*.tar.gz \
+            dist/release-manifest.json \
+            dist/SHA256SUMS \
+            --clobber
