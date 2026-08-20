@@ -4803,6 +4803,37 @@ def validate_universal_verification_contract(registry: Registry) -> dict[str, An
             "universal verification v4 Work enforcement claims are incomplete"
         )
 
+    universal_v5 = load_json("semantics/permit/universal_verification_v5.json")
+    universal_v5_extension = universal_v5.get("extends")
+    if not isinstance(universal_v5_extension, dict):
+        raise ContractFailure("universal verification v5 must pin v4")
+    if universal_v5_extension.get("artifact_id") != (
+        "keel.permit.universal_verification.v4"
+    ):
+        raise ContractFailure("universal verification v5 extends the wrong artifact")
+    if universal_v5_extension.get("sha256") != _sha256_file(
+        ROOT / "semantics/permit/universal_verification_v4.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("universal verification v5 has a stale base digest")
+    if universal_v5.get("body", {}).get("claim_registry_version") != (
+        "verifier-claims.v6"
+    ):
+        raise ContractFailure("universal verification v5 pins the wrong claim registry")
+    work_v2_claims = universal_v5.get("body", {}).get(
+        "work_chain_profiles", {}
+    ).get("work-chain.v2")
+    expected_work_v2_claims = [
+        "permit.work_authority_manifest.v2",
+        "permit.work_child_containment.v2",
+        "permit_chain.execution_authorized_at_boundary.v2",
+        "permit.work_value_conservation.v2",
+        "permit.work_exact_review.v1",
+    ]
+    if work_v2_claims != expected_work_v2_claims:
+        raise ContractFailure(
+            "universal verification v5 Work v2 claim mapping is incomplete"
+        )
+
     validate_enforcement_claim_vectors()
 
     consequence_vectors = load_json(
@@ -5438,6 +5469,8 @@ def validate_artifact_manifest() -> None:
         "claim_registry/v5.json",
         "semantics/permit/universal_verification_v4.json",
         "test-vectors/enforcement_claims/v1/corpus.json",
+        "claim_registry/v6.json",
+        "semantics/permit/universal_verification_v5.json",
     }
     missing_latest = sorted(required_latest_paths - paths)
     if missing_latest:

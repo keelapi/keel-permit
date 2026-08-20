@@ -1193,6 +1193,11 @@
       "sha256": "294f3bb5c9358037d3cea1b29e80ce38b17f3ecbe42b89b710789a1f892d5378"
     },
     {
+      "id": "keel.permit.universal_verification.v5",
+      "path": "semantics/permit/universal_verification_v5.json",
+      "sha256": "c390fd3b68c79cbdfafd83a5be5056c54b75d29c19d6e0cadd2972203d7bfbdc"
+    },
+    {
       "id": "keel.permit.fact_profile_registry.v17",
       "path": "fact_profiles/v17.json",
       "sha256": "72ab995984c37561f2210ea2f33d6c4e6005fbeea54561c12908ce9561cc38f5"
