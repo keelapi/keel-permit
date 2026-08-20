@@ -85,7 +85,7 @@
     {
       "id": "keel.work_action_authority.v2",
       "path": "comparator_registry/work-action-authority-v2.json",
-      "sha256": "eebfdb64471ea362d40a275a0e705354178c6ff87c8852028fc625d4a3ebb3a5"
+      "sha256": "b6b7f949ee10933a570db69945df60a304638e215744ca41454522f12005f4be"
     },
     {
       "id": "keel.permit.work_authority_manifest.v1",
@@ -1235,7 +1235,7 @@
     {
       "id": "keel.work_binding.v2.schema",
       "path": "schemas/work-binding-v2.schema.json",
-      "sha256": "a20ecde1364fc0a2a3e77805c6f38cd9538fa09feb610cc4419ef9cfaf318fd4"
+      "sha256": "104d8dfe4a837e716e807f0cb4b26c7c7e64e004dbaf090d5cc21d5aa78aeeb6"
     },
     {
       "id": "keel.work_chain_pack.v2.schema",
@@ -1280,7 +1280,7 @@
     {
       "id": "keel.permit.work_child_containment.v2",
       "path": "semantics/work/child_containment_v2.json",
-      "sha256": "440e84b55afa4dccaea682b376f229eeec09c7deac076bcc626ab62b7d722cfb"
+      "sha256": "47a4d827ebf8ed5edfbb9402dbb04819d07b895dae4c855224800c62ccf673fd"
     },
     {
       "id": "keel.permit.work_exact_review.v1",
@@ -1315,7 +1315,7 @@
     {
       "id": "permit-to-x.test-vectors.permit-to-work-contract.v2",
       "path": "test-vectors/permit_to_work/v2/contract-vectors.json",
-      "sha256": "91fece3df9ded02f97a01ea82723b252253cb113610ca8535f330e9fe81e12f4"
+      "sha256": "a6db38172bec0083be7e606d26095317a5b9fe48d29d6c0958b1263d8bfd7176"
     },
     {
       "id": "permit-to-x.test-vectors.telephony-call-outbound.v1",

@@ -101,7 +101,13 @@
         "delegated_principal_id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
         "delegation_id": "dddddddd-dddd-4ddd-8ddd-dddddddddd01",
         "authenticated_credential_id_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
-      }
+      },
+      "value_request": {
+        "version": "keel.work_value_request.v2",
+        "value_binding": "none"
+      },
+      "provider_wire_body_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "exact_request_review_hash": null
     },
     {
       "version": "keel.work_binding.v2",
@@ -115,7 +121,15 @@
         "delegated_principal_id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
         "delegation_id": "dddddddd-dddd-4ddd-8ddd-dddddddddd02",
         "authenticated_credential_id_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
-      }
+      },
+      "value_request": {
+        "version": "keel.work_value_request.v2",
+        "value_binding": "declared_bounded",
+        "declared_amount_minor": 6000,
+        "currency": "USD"
+      },
+      "provider_wire_body_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "exact_request_review_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     }
   ],
   "value_events": [

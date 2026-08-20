@@ -51,7 +51,8 @@
   "missing_required_field_rule": "disproved",
   "cross_checks": [
     "signed and relational root_permit_id and authority_id must match",
-    "signed work_binding_v1 authority_canonical_hash must match the resolved authority",
+    "signed work_binding_v2 authority_canonical_hash must match the resolved authority",
+    "signed work_binding_v2 value_request must bind the exact declared amount for declared_bounded lanes and must carry no caller-declared amount for none or provider_verified lanes",
     "signed exercised_by must match the authenticated live principal and the root delegation",
     "a value_binding='none' lane must never reserve or consume root customer monetary value",
     "a value_binding='provider_verified' lane must not consume caller-asserted value and is unverifiable without supported trusted provider facts",

@@ -4219,7 +4219,28 @@ def validate_work_v2_contract_objects(registry: Registry) -> None:
     def binding_matches(candidate: dict[str, Any]) -> bool:
         authority_id = candidate.get("authority_id")
         exercised = candidate.get("exercised_by")
-        if authority_id not in issued or not isinstance(exercised, dict):
+        value_request = candidate.get("value_request")
+        authority = authorities.get(authority_id)
+        if (
+            authority_id not in issued
+            or not isinstance(exercised, dict)
+            or not isinstance(value_request, dict)
+            or authority is None
+            or value_request.get("version") != "keel.work_value_request.v2"
+            or value_request.get("value_binding") != authority.get("value_binding")
+        ):
+            return False
+        if authority.get("value_binding") == "declared_bounded":
+            amount = value_request.get("declared_amount_minor")
+            if (
+                not isinstance(amount, int)
+                or isinstance(amount, bool)
+                or amount < 1
+                or amount > authority.get("value_max_minor", 0)
+                or value_request.get("currency") != authority.get("currency")
+            ):
+                return False
+        elif set(value_request) != {"version", "value_binding"}:
             return False
         if candidate.get("root_manifest_hash") != package_hash:
             return False
@@ -4251,6 +4272,15 @@ def validate_work_v2_contract_objects(registry: Registry) -> None:
     )
     if binding_matches(swapped_credential_identity):
         raise ContractFailure("Work binding v2 accepted credential/principal swapping")
+    changed_declared_value = copy.deepcopy(bindings[1])
+    changed_declared_value["value_request"]["declared_amount_minor"] = 50_001
+    if binding_matches(changed_declared_value):
+        raise ContractFailure("Work binding v2 accepted a declared amount above its lane cap")
+    fake_phone_value = copy.deepcopy(bindings[0])
+    fake_phone_value["value_request"]["declared_amount_minor"] = 1
+    fake_phone_value["value_request"]["currency"] = "USD"
+    if binding_matches(fake_phone_value):
+        raise ContractFailure("Work binding v2 let a non-monetary lane declare customer value")
     changed_package = copy.deepcopy(package)
     changed_package["authority_delegations"][0]["delegated_principal_id"] = (
         "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee"

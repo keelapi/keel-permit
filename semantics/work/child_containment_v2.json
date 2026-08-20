@@ -9,6 +9,8 @@
     "checks": [
       "resolve each signed work_binding_v2 to the exact root package and authority hashes",
       "require exact trusted action, semantic, resource, time and request correspondence",
+      "require the signed work binding value_request to match the authority value_binding and exact declared amount when caller-declared value is used",
+      "require the signed provider wire body and exact-review commitments to match downstream evidence",
       "require exercised_by to match the root principal or exact signed lane delegation",
       "require the authenticated credential identifier digest to be signed into the child binding",
       "require value_binding none to carry no monetary reservation or consumption",
