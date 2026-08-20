@@ -1240,7 +1240,7 @@
     {
       "id": "keel.work_chain_pack.v2.schema",
       "path": "schemas/work-chain-pack-v2.schema.json",
-      "sha256": "aba71074a0e952680356e0d9e16543c1c9aaceba0ef849869dfa5ab0d5374361"
+      "sha256": "ee817d250ae2cda0d68cdc2ca2485a93902b214940ec5c1bf4893f45b86f9d94"
     },
     {
       "id": "keel.work_dispatch_boundary.v2.schema",
@@ -1290,7 +1290,7 @@
     {
       "id": "keel.permit_chain.execution_authorized_at_boundary.v2",
       "path": "semantics/work/execution_authorized_at_boundary_v2.json",
-      "sha256": "2e8ef8a4cb5dd0fd9599f8ccdb76e310e76351274c813aba3c3263340d895d6d"
+      "sha256": "6882ddefaa9d671864921d0401f0f9da25cbf080d30a030a83256a68d08face4"
     },
     {
       "id": "keel.permit.work_value_conservation.v2",

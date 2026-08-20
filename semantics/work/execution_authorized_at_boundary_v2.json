@@ -9,6 +9,7 @@
     "checks": [
       "resolve one pre-effect signed dispatch-boundary artifact to the exact child request",
       "verify root, authority, child, delegation, principal and authenticated credential liveness",
+      "reconstruct scoped root, authority, child, delegation, principal and credential revocations through the boundary time",
       "verify exact review, current Policy, reservation, revocation, expiry and idempotency state",
       "verify the provider wire body digest equals the authorized final request digest",
       "require dispatch ownership to commit before provider network egress"

@@ -228,13 +228,18 @@
             "work.issued",
             "work.closed",
             "permit.revoked",
+            "work.authority.revoked",
+            "work.delegation.revoked",
             "principal.revoked",
             "credential.revoked",
             "dispatch.egress_bound"
           ]
         },
         "permit_id": {"type": "string", "format": "uuid"},
+        "authority_id": {"$ref": "#/$defs/authority_id"},
+        "delegation_id": {"type": "string", "format": "uuid"},
         "principal_id": {"type": "string", "format": "uuid"},
+        "authenticated_credential_id_digest": {"$ref": "#/$defs/digest"},
         "occurred_at": {"type": "string", "format": "date-time"},
         "event_digest": {"$ref": "#/$defs/digest"}
       }

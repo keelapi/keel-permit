@@ -4101,6 +4101,23 @@ def validate_work_v2_contract_objects(registry: Registry) -> None:
     """Validate the strict v2 objects and cross-object invariants."""
 
     vectors = load_json("test-vectors/permit_to_work/v2/contract-vectors.json")
+    pack_schema = load_json("schemas/work-chain-pack-v2.schema.json")
+    lifecycle = pack_schema["$defs"]["lifecycle_event"]
+    lifecycle_types = set(lifecycle["properties"]["event_type"]["enum"])
+    if not {
+        "work.authority.revoked",
+        "work.delegation.revoked",
+        "principal.revoked",
+        "credential.revoked",
+    }.issubset(lifecycle_types):
+        raise ContractFailure("Work v2 lifecycle cannot express every dispatch revocation")
+    if not {
+        "authority_id",
+        "delegation_id",
+        "principal_id",
+        "authenticated_credential_id_digest",
+    }.issubset(lifecycle["properties"]):
+        raise ContractFailure("Work v2 lifecycle revocations lack exact subject identifiers")
     authority_vectors = load_json(
         "test-vectors/permit_to_work/v2/authority-vectors.json"
     )
