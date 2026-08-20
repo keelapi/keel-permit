@@ -26,7 +26,8 @@ public verifier remains mandatory before external support claims.
 | [`v2.json`](v2.json) | `verifier-claims.v2` | Released historical |
 | [`v3.json`](v3.json) | `verifier-claims.v3` | Released historical |
 | [`v4.json`](v4.json) | `verifier-claims.v4` | Released historical |
-| [`v5.json`](v5.json) | `verifier-claims.v5` | Current candidate |
+| [`v5.json`](v5.json) | `verifier-claims.v5` | Released historical |
+| [`v6.json`](v6.json) | `verifier-claims.v6` | Current candidate |
 
 ## Hash-addressing
 

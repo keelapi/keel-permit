@@ -18,6 +18,14 @@ Work authority. It does not extend or replace `authority-envelope.v0`, and it
 is not a Policy evaluator. Unknown fields fail closed as
 `unverifiable_scope` until a new comparator version is published.
 
+[`work-action-authority-v2.json`](work-action-authority-v2.json) is the
+additive heterogeneous-action comparator. It requires one exact trusted action
+and an explicit value binding. `none` cannot draw on customer monetary
+authority, `declared_bounded` draws only the exact signed request amount, and
+`provider_verified` remains unverifiable without supported trusted provider
+facts bound to the exact request and provider body. Customer monetary value and
+AI/model compute spend are separate authority and ledger domains.
+
 ## Hash-addressing
 
 A signed evidence pack containing a permit chain MUST either inline the registry artifact OR hash-address it in the bundle manifest. A verifier walking permit-chain claims that cannot resolve the registry from the pack MUST return `insufficient_evidence` and emit `WALK_PERMIT_CHAIN_MISSING_COMPARATOR`. See `spec/permit-chain-v1.md` §4.2.

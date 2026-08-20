@@ -72,6 +72,7 @@ flowchart LR
 - [`spec/key-status-completeness-v1.md`](spec/key-status-completeness-v1.md) — Key-status completeness verifier claim
 - [`spec/dispatch-absence-after-revocation-v1.md`](spec/dispatch-absence-after-revocation-v1.md) — Scope-faithful absence adjudication after revocation
 - [`spec/permit-to-work-v1.md`](spec/permit-to-work-v1.md) — Bounded Work authority, linked exact actions, payment-value events, and `work-chain.v1`
+- [`spec/permit-to-work-v2.md`](spec/permit-to-work-v2.md) — Heterogeneous multi-principal Work, one customer-value pool, exact review, trusted provider facts, and derived summaries
 - [`spec/permit-semantic-presentation-v1.md`](spec/permit-semantic-presentation-v1.md) — Trusted semantic selection and non-authorizing presentation
 - [`spec/permit-fact-profiles-v1.md`](spec/permit-fact-profiles-v1.md) — Typed, privacy-aware authorization facts for Permit-to-X
 - [`spec/permit-to-x-admission-v1.md`](spec/permit-to-x-admission-v1.md) — Twelve-gate admission test for specific Permit titles

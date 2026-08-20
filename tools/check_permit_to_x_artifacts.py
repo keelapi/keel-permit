@@ -29,6 +29,13 @@ WORK_CLAIMS = {
     "permit_chain.execution_authorized_at_boundary.v1",
     "permit.work_value_conservation.v1",
 }
+WORK_V2_CLAIMS = {
+    "permit.work_authority_manifest.v2",
+    "permit.work_child_containment.v2",
+    "permit_chain.execution_authorized_at_boundary.v2",
+    "permit.work_value_conservation.v2",
+    "permit.work_exact_review.v1",
+}
 UNIVERSAL_CLAIMS = {
     "permit.type.v1",
     "permit.exact_target.v1",
@@ -58,6 +65,7 @@ TRUSTED_SOURCE_KINDS = {
     "action_verb_execute",
     "realtime_session_service",
     "agent_delegation_service",
+    "telephony_origination_service",
 }
 POPULATION_PATHS = {
     "work_authorities": "authorities",
@@ -3878,6 +3886,564 @@ def validate_work_contract(registry: Registry) -> None:
             )
 
 
+def validate_work_authority_v2_contract(registry: Registry) -> None:
+    """Validate the additive heterogeneous authority contract and mutations."""
+
+    vectors = load_json("test-vectors/permit_to_work/v2/authority-vectors.json")
+    schema = load_json("schemas/work-authority-v2.schema.json")
+    comparator = load_json("comparator_registry/work-action-authority-v2.json")
+    validator = jsonschema.Draft202012Validator(
+        schema,
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+
+    if vectors.get("version") != "keel.permit_to_work_authority_vectors.v2":
+        raise ContractFailure("Work authority v2 vectors have the wrong version")
+    if vectors.get("canonicalization_profile") != "keel.canonical_json.payload.v1":
+        raise ContractFailure("Work authority v2 vectors use an unsupported canonicalization profile")
+    if comparator.get("version") != "work-action-authority.v2":
+        raise ContractFailure("Work authority v2 comparator has the wrong version")
+    if set(comparator.get("value_bindings", {})) != {
+        "none",
+        "declared_bounded",
+        "provider_verified",
+    }:
+        raise ContractFailure("Work authority v2 comparator changed its value-binding modes")
+
+    valid_by_id: dict[str, dict[str, Any]] = {}
+    for entry in vectors.get("valid", []):
+        vector_id = entry.get("id")
+        authority = entry.get("authority")
+        if not isinstance(vector_id, str) or not isinstance(authority, dict):
+            raise ContractFailure("Work authority v2 valid vector is malformed")
+        if vector_id in valid_by_id:
+            raise ContractFailure(f"duplicate Work authority v2 vector id: {vector_id}")
+        errors = list(validator.iter_errors(authority))
+        if errors:
+            raise ContractFailure(
+                f"Work authority v2 vector {vector_id} failed schema: {errors[0].message}"
+            )
+        preimage = copy.deepcopy(authority)
+        expected_hash = preimage.pop("authority_canonical_hash")
+        actual_hash = digest(preimage)
+        if actual_hash != expected_hash:
+            raise ContractFailure(
+                f"Work authority v2 vector {vector_id} has stale canonical hash: "
+                f"{expected_hash!r} != {actual_hash!r}"
+            )
+        valid_by_id[vector_id] = authority
+
+    for mutation in vectors.get("negative_mutations", []):
+        mutation_id = mutation.get("id")
+        base_id = mutation.get("base")
+        if base_id not in valid_by_id:
+            raise ContractFailure(
+                f"Work authority v2 mutation {mutation_id} names unknown base {base_id!r}"
+            )
+        authority = copy.deepcopy(valid_by_id[base_id])
+        current: Any = authority
+        path = mutation.get("path")
+        if not isinstance(path, list) or not path:
+            raise ContractFailure(f"Work authority v2 mutation {mutation_id} has no path")
+        for part in path[:-1]:
+            current = current[part]
+        final = path[-1]
+        if mutation.get("operation") == "delete":
+            del current[final]
+        else:
+            current[final] = copy.deepcopy(mutation.get("value"))
+
+        if validator.is_valid(authority):
+            raise ContractFailure(
+                f"Work authority v2 mutation {mutation_id} was accepted by the schema"
+            )
+        if authority.get("version") != "keel.work_authority.v2":
+            actual_failure = "WORK_VERSION_UNSUPPORTED"
+        elif authority.get("comparator_version") != "work-action-authority.v2":
+            actual_failure = "WORK_AUTHORITY_SCOPE_MISMATCH"
+        else:
+            actual_failure = "WORK_AUTHORITY_MANIFEST_SCHEMA_INVALID"
+        expected_failure = mutation.get("expected_failure_code")
+        if actual_failure != expected_failure:
+            raise ContractFailure(
+                f"Work authority v2 mutation {mutation_id} got {actual_failure!r}, "
+                f"expected {expected_failure!r}"
+            )
+
+
+def validate_concierge_semantic_contract(registry: Registry) -> None:
+    """Prove the outbound-call title is server-selected and fact-bound."""
+
+    base_semantics = load_json("semantic_registry/v18.json")
+    semantics = load_json("semantic_registry/v19.json")
+    base_presentations = load_json("presentation_registry/v17.json")
+    presentations = load_json("presentation_registry/v18.json")
+    base_facts = load_json("fact_profiles/v16.json")
+    fact_profiles = load_json("fact_profiles/v17.json")
+    vectors = load_json("test-vectors/telephony-call-outbound-v1.json")
+
+    validate_instance(
+        semantics,
+        "semantic_registry/v19.schema.json",
+        registry,
+        "Concierge semantic registry v19",
+    )
+    validate_instance(
+        presentations,
+        "presentation_registry/v18.schema.json",
+        registry,
+        "Concierge presentation registry v18",
+    )
+    validate_instance(
+        fact_profiles,
+        "fact_profiles/v17.schema.json",
+        registry,
+        "Concierge fact profile registry v17",
+    )
+    if semantics["entries"][:-1] != base_semantics["entries"]:
+        raise ContractFailure("semantic registry v19 is not an additive v18 extension")
+    if presentations["profiles"][:-1] != base_presentations["profiles"]:
+        raise ContractFailure("presentation registry v18 is not an additive v17 extension")
+    if fact_profiles["profiles"][:-1] != base_facts["profiles"]:
+        raise ContractFailure("fact profile registry v17 is not an additive v16 extension")
+    if len(semantics["entries"]) != len(base_semantics["entries"]) + 1:
+        raise ContractFailure("semantic registry v19 must add exactly one semantic")
+    if len(presentations["profiles"]) != len(base_presentations["profiles"]) + 1:
+        raise ContractFailure("presentation registry v18 must add exactly one profile")
+    if len(fact_profiles["profiles"]) != len(base_facts["profiles"]) + 1:
+        raise ContractFailure("fact profile registry v17 must add exactly one profile")
+
+    semantic_id = vectors["expected_semantic_id"]
+    semantic = next(
+        (entry for entry in semantics["entries"] if entry["semantic_id"] == semantic_id),
+        None,
+    )
+    presentation = next(
+        (
+            profile
+            for profile in presentations["profiles"]
+            if profile["semantic_id"] == semantic_id
+        ),
+        None,
+    )
+    fact_profile_id = vectors["expected_fact_profile_id"]
+    fact_profile = next(
+        (
+            profile
+            for profile in fact_profiles["profiles"]
+            if profile["fact_profile_id"] == fact_profile_id
+        ),
+        None,
+    )
+    if semantic is None or presentation is None or fact_profile is None:
+        raise ContractFailure("outbound-call semantic, presentation, or fact profile is absent")
+    if semantic.get("trusted_source_kinds") != ["telephony_origination_service"]:
+        raise ContractFailure("outbound-call semantic source is not server-controlled")
+    if semantic.get("fact_profile_id") != fact_profile_id:
+        raise ContractFailure("outbound-call semantic names the wrong fact profile")
+    if presentation.get("customer_title") != vectors["expected_title"]:
+        raise ContractFailure("outbound-call presentation title changed")
+    if not {
+        "the_content_of_anything_said_on_the_call",
+        "authorization_of_commitments_made_verbally_during_the_call",
+    }.issubset(set(presentation.get("does_not_establish", []))):
+        raise ContractFailure("outbound-call title lacks its conversation-governance ceiling")
+    if "/provider_wire_body_digest" not in fact_profile.get(
+        "material_request_fact_paths", []
+    ):
+        raise ContractFailure("outbound-call facts do not bind the provider wire body")
+
+    actual_semantic, fallback = select_semantic(semantics, vectors["candidate"])
+    if actual_semantic != semantic_id or fallback is not None:
+        raise ContractFailure(
+            f"outbound-call selector returned {(actual_semantic, fallback)!r}"
+        )
+    facts_schema_path = "schemas/telephony-call-outbound-exact-facts-v1.schema.json"
+    facts_schema = load_json(facts_schema_path)
+    facts_validator = jsonschema.Draft202012Validator(
+        facts_schema,
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+    valid_facts = vectors["valid_authorization_facts"]
+    if not facts_validator.is_valid(valid_facts):
+        raise ContractFailure("valid outbound-call authorization facts failed schema")
+    serialized_facts = json.dumps(valid_facts, sort_keys=True)
+    if "+14155550123" in serialized_facts or '"destination"' in serialized_facts:
+        raise ContractFailure("outbound-call verifier-safe facts expose a raw destination")
+
+    for case in vectors["negative_cases"]:
+        mutated = copy.deepcopy(vectors)
+        parts = case["target"].split(".")
+        current: Any = mutated
+        for part in parts[:-1]:
+            current = current[part]
+        if case.get("operation") == "delete":
+            del current[parts[-1]]
+        else:
+            current[parts[-1]] = copy.deepcopy(case.get("value"))
+        if case["expected"] == "fallback":
+            selected, selected_fallback = select_semantic(
+                semantics, mutated["candidate"]
+            )
+            if selected is not None or selected_fallback is None:
+                raise ContractFailure(
+                    f"outbound-call case {case['id']} did not fall back safely"
+                )
+        elif facts_validator.is_valid(mutated["valid_authorization_facts"]):
+            raise ContractFailure(
+                f"outbound-call case {case['id']} earned facts with invalid material"
+            )
+
+
+def validate_work_v2_contract_objects(registry: Registry) -> None:
+    """Validate the strict v2 objects and cross-object invariants."""
+
+    vectors = load_json("test-vectors/permit_to_work/v2/contract-vectors.json")
+    authority_vectors = load_json(
+        "test-vectors/permit_to_work/v2/authority-vectors.json"
+    )
+    request = vectors["request"]
+    package = vectors["package"]
+    bindings = vectors["bindings"]
+    value_events = vectors["value_events"]
+    review_transition = vectors["review_transition"]
+    provider_value_fact = vectors["provider_value_fact"]
+    summary = vectors["summary"]
+
+    validate_instance(request, "schemas/work-request-v2.schema.json", registry, "Work request v2")
+    validate_instance(package, "schemas/work-package-v2.schema.json", registry, "Work package v2")
+    for index, binding in enumerate(bindings):
+        validate_instance(
+            binding,
+            "schemas/work-binding-v2.schema.json",
+            registry,
+            f"Work binding v2 {index}",
+        )
+    for index, event in enumerate(value_events):
+        validate_instance(
+            event,
+            "schemas/work-value-event-v2.schema.json",
+            registry,
+            f"Work value event v2 {index}",
+        )
+    validate_instance(
+        review_transition,
+        "schemas/work-review-transition-v1.schema.json",
+        registry,
+        "Work review transition v1",
+    )
+    validate_instance(
+        provider_value_fact,
+        "schemas/provider-value-fact-v1.schema.json",
+        registry,
+        "provider value fact v1",
+    )
+    validate_instance(summary, "schemas/work-summary-v1.schema.json", registry, "Work summary v1")
+
+    authorities = {
+        entry["authority"]["authority_id"]: entry["authority"]
+        for entry in authority_vectors["valid"]
+    }
+
+    def request_invariants_hold(candidate: dict[str, Any]) -> bool:
+        lanes = candidate.get("requested_authorities")
+        if not isinstance(lanes, list):
+            return False
+        lane_ids = [lane.get("authority_id") for lane in lanes if isinstance(lane, dict)]
+        if len(lane_ids) != len(lanes) or len(lane_ids) != len(set(lane_ids)):
+            return False
+        if not set(candidate.get("required_authority_ids", [])).issubset(lane_ids):
+            return False
+        monetary = [
+            lane
+            for lane in lanes
+            if lane.get("requested_value_binding") != "none"
+        ]
+        pool = candidate.get("customer_value_pool")
+        if bool(monetary) != isinstance(pool, dict):
+            return False
+        return not monetary or not any(
+            lane.get("currency") != pool.get("currency") for lane in monetary
+        )
+
+    if not request_invariants_hold(request):
+        raise ContractFailure("valid Work request v2 violates root-pool invariants")
+    request_without_pool = copy.deepcopy(request)
+    request_without_pool.pop("customer_value_pool")
+    if request_invariants_hold(request_without_pool):
+        raise ContractFailure("monetary Work request v2 was accepted without a root pool")
+
+    issued = {
+        item["authority_id"]: item["authority_canonical_hash"]
+        for item in package["issued_authorities"]
+    }
+    if set(issued) != {"phone-lane", "restaurant-deposit-lane"}:
+        raise ContractFailure("Work package v2 issued set differs from the contract vector")
+    if any(
+        authority_id not in authorities
+        or authorities[authority_id]["authority_canonical_hash"] != authority_hash
+        for authority_id, authority_hash in issued.items()
+    ):
+        raise ContractFailure("Work package v2 authority references do not match canonical lanes")
+    monetary_authorities = [
+        authorities[authority_id]
+        for authority_id in issued
+        if authorities[authority_id]["value_binding"] != "none"
+    ]
+    pool = package.get("customer_value_pool")
+    if not isinstance(pool, dict) or any(
+        authority.get("currency") != pool.get("currency")
+        for authority in monetary_authorities
+    ):
+        raise ContractFailure("Work package v2 pool does not cover every monetary lane")
+    delegations = package["authority_delegations"]
+    delegation_by_authority = {
+        item["authority_id"]: item for item in delegations
+    }
+    if len(delegation_by_authority) != len(delegations) or not set(
+        delegation_by_authority
+    ).issubset(issued):
+        raise ContractFailure("Work package v2 contains duplicate or unknown delegations")
+
+    package_hash = digest(package)
+
+    def binding_matches(candidate: dict[str, Any]) -> bool:
+        authority_id = candidate.get("authority_id")
+        exercised = candidate.get("exercised_by")
+        if authority_id not in issued or not isinstance(exercised, dict):
+            return False
+        if candidate.get("root_manifest_hash") != package_hash:
+            return False
+        if candidate.get("authority_canonical_hash") != issued[authority_id]:
+            return False
+        if exercised.get("root_principal_id") != package.get("verified_root_principal_id"):
+            return False
+        delegation = delegation_by_authority.get(authority_id)
+        if delegation is None:
+            return (
+                exercised.get("verified_principal_id")
+                == package.get("verified_root_principal_id")
+                and exercised.get("delegated_principal_id") is None
+                and exercised.get("delegation_id") is None
+            )
+        return (
+            exercised.get("verified_principal_id")
+            == delegation.get("delegated_principal_id")
+            and exercised.get("delegated_principal_id")
+            == delegation.get("delegated_principal_id")
+            and exercised.get("delegation_id") == delegation.get("delegation_id")
+        )
+
+    if not all(binding_matches(binding) for binding in bindings):
+        raise ContractFailure("valid Work binding v2 does not match the signed delegation")
+    swapped_credential_identity = copy.deepcopy(bindings[0])
+    swapped_credential_identity["exercised_by"]["verified_principal_id"] = (
+        bindings[1]["exercised_by"]["verified_principal_id"]
+    )
+    if binding_matches(swapped_credential_identity):
+        raise ContractFailure("Work binding v2 accepted credential/principal swapping")
+    changed_package = copy.deepcopy(package)
+    changed_package["authority_delegations"][0]["delegated_principal_id"] = (
+        "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee"
+    )
+    if digest(changed_package) == package_hash:
+        raise ContractFailure("Work package delegation mutation did not change its hash")
+
+    def value_ledger_holds(events: list[dict[str, Any]]) -> bool:
+        reserved_by_id: dict[str, int] = {}
+        reserved_total = 0
+        consumed_total = 0
+        previous_hash: str | None = None
+        seen_ids: set[str] = set()
+        seen_idempotency: set[str] = set()
+        for expected_sequence, event in enumerate(events, start=1):
+            if (
+                event.get("event_id") in seen_ids
+                or event.get("idempotency_key_digest") in seen_idempotency
+                or event.get("root_sequence") != expected_sequence
+                or event.get("previous_root_event_hash") != previous_hash
+                or event.get("root_permit_id")
+                != summary.get("root_permit_id")
+                or event.get("currency") != pool.get("currency")
+                or event.get("value_domain") != "customer_economic_value"
+            ):
+                return False
+            authority = authorities.get(event.get("authority_id"))
+            if authority is None or authority.get("value_binding") == "none":
+                return False
+            preimage = copy.deepcopy(event)
+            event_hash = preimage.pop("event_canonical_hash", None)
+            if digest(preimage) != event_hash:
+                return False
+            reservation_id = event.get("reservation_id")
+            amount = event.get("amount_minor")
+            event_type = event.get("event_type")
+            if event_type == "reserved":
+                if reservation_id in reserved_by_id:
+                    return False
+                reserved_by_id[reservation_id] = amount
+                reserved_total += amount
+            elif event_type in {"released", "reconciled_release"}:
+                if reserved_by_id.get(reservation_id, 0) < amount:
+                    return False
+                reserved_by_id[reservation_id] -= amount
+                reserved_total -= amount
+            elif event_type in {"consumed", "reconciled_consume"}:
+                if reserved_by_id.get(reservation_id, 0) < amount:
+                    return False
+                reserved_by_id[reservation_id] -= amount
+                reserved_total -= amount
+                consumed_total += amount
+            else:
+                return False
+            remaining = pool["value_max_minor"] - reserved_total - consumed_total
+            if reserved_total < 0 or consumed_total < 0 or remaining < 0:
+                return False
+            if event.get("root_value_state_after") != {
+                "value_domain": "customer_economic_value",
+                "value_max_minor": pool["value_max_minor"],
+                "currency": pool["currency"],
+                "reserved_value_minor": reserved_total,
+                "consumed_value_minor": consumed_total,
+                "remaining_value_minor": remaining,
+            }:
+                return False
+            seen_ids.add(event["event_id"])
+            seen_idempotency.add(event["idempotency_key_digest"])
+            previous_hash = event_hash
+        return True
+
+    if not value_ledger_holds(value_events):
+        raise ContractFailure("valid Work v2 root value ledger failed reconstruction")
+    overdrawn = copy.deepcopy(value_events)
+    overdrawn[0]["amount_minor"] = pool["value_max_minor"] + 1
+    if value_ledger_holds(overdrawn):
+        raise ContractFailure("Work v2 root value ledger accepted an overdraw")
+    call_value_event = copy.deepcopy(value_events[0])
+    call_value_event["authority_id"] = "phone-lane"
+    if value_ledger_holds([call_value_event]):
+        raise ContractFailure("non-monetary Work v2 lane consumed caller-supplied value")
+
+    for label, signed_object in (
+        ("review transition", review_transition),
+        ("provider value fact", provider_value_fact),
+    ):
+        preimage = copy.deepcopy(signed_object)
+        canonical_hash = preimage.pop("canonical_hash")
+        preimage.pop("signature")
+        if digest(preimage) != canonical_hash:
+            raise ContractFailure(f"Work v2 {label} has a stale canonical hash")
+    if review_transition["human_outcome"] != "approve" or review_transition[
+        "final_decision"
+    ] != "deny":
+        raise ContractFailure("Work v2 review vector no longer proves approval then denial")
+    mutated_review = copy.deepcopy(review_transition)
+    mutated_review["frozen_request_digest"] = "sha256:" + "0" * 64
+    review_preimage = copy.deepcopy(mutated_review)
+    stale_review_hash = review_preimage.pop("canonical_hash")
+    review_preimage.pop("signature")
+    if digest(review_preimage) == stale_review_hash:
+        raise ContractFailure("Work v2 review mutation did not fail closed")
+
+    expected_pool_state = value_events[-1]["root_value_state_after"]
+    presentation_by_semantic = {
+        item["semantic_id"]: item
+        for item in load_json("presentation_registry/v18.json")["profiles"]
+    }
+    decision_counts = {
+        authority_id: {"allow": 0, "deny": 0, "challenge": 0}
+        for authority_id in issued
+    }
+    for child in vectors["child_decisions"]:
+        if child["authority_id"] not in decision_counts:
+            raise ContractFailure("Work summary source names an unknown lane")
+        decision_counts[child["authority_id"]][child["decision"]] += 1
+    derived_lanes: list[dict[str, Any]] = []
+    for authority_id in sorted(issued):
+        authority = authorities[authority_id]
+        delegation = delegation_by_authority.get(authority_id)
+        expected_principal = (
+            delegation["delegated_principal_id"]
+            if delegation is not None
+            else package["verified_root_principal_id"]
+        )
+        presentation = presentation_by_semantic.get(authority["semantic_id"])
+        if presentation is None:
+            raise ContractFailure(f"Work summary lane {authority_id} has no presentation")
+        derived_lanes.append(
+            {
+                "authority_id": authority_id,
+                "action": authority["trusted_action"],
+                "permit_title": presentation["customer_title"],
+                "principal_id": expected_principal,
+                "value_binding": authority["value_binding"],
+                "max_uses": authority["max_uses"],
+                "child_decisions": decision_counts[authority_id],
+            }
+        )
+
+    def display_minor(amount: int, currency: str) -> str:
+        # The vector uses USD, whose public contract exponent is two. Runtime
+        # implementations must use their pinned currency metadata rather than
+        # guessing an exponent from the code alone.
+        if currency == "USD":
+            return f"USD {amount // 100}.{amount % 100:02d}"
+        return f"{amount} minor units in {currency}"
+
+    pool_currency = expected_pool_state["currency"]
+    displayed_limit = display_minor(expected_pool_state["value_max_minor"], pool_currency)
+    displayed_reserved = display_minor(
+        expected_pool_state["reserved_value_minor"], pool_currency
+    )
+    displayed_consumed = display_minor(
+        expected_pool_state["consumed_value_minor"], pool_currency
+    )
+    displayed_remaining = display_minor(
+        expected_pool_state["remaining_value_minor"], pool_currency
+    )
+    derived_summary = {
+        "version": "keel.work_summary.v1",
+        "derivation": "verifier_from_verified_work_fields",
+        "title": "AI Permit-to-Work",
+        "state_label": vectors["root_state"],
+        "text": (
+            f"Keel authorized a bounded Work with {len(issued)} lanes. "
+            f"Customer economic value is limited to {displayed_limit}; "
+            f"{displayed_reserved} is reserved, {displayed_consumed} is consumed, "
+            f"and {displayed_remaining} "
+            "remains. AI and model compute spend is governed separately. "
+            "This evidence does not establish provider completion, settlement, call content, or agreement."
+        ),
+        "root_permit_id": summary["root_permit_id"],
+        "customer_value_pool": expected_pool_state,
+        "ai_compute_budget_boundary": (
+            "separate_keel_authority_not_in_work_customer_value_pool"
+        ),
+        "lanes": derived_lanes,
+        "evidence_boundary": {
+            "establishes": [
+                "bounded heterogeneous Work authority",
+                "signed worker delegation and child containment",
+                "root customer-value conservation through the declared cutoff",
+            ],
+            "does_not_establish": [
+                "provider completion",
+                "financial settlement",
+                "call answer, conversation content, or agreement",
+                "AI or model compute spend",
+            ],
+        },
+    }
+    if summary != derived_summary:
+        raise ContractFailure("Work summary is not the deterministic verifier projection")
+    tampered_summary = copy.deepcopy(summary)
+    tampered_summary["text"] += " Provider completion established."
+    if tampered_summary == derived_summary:
+        raise ContractFailure("Work summary mutation did not fail closed")
+
+
 def validate_claim_contracts() -> None:
     registry = load_json("claim_registry/v0.json")
     claims = {claim["name"]: claim for claim in registry["claims"]}
@@ -3893,6 +4459,52 @@ def validate_claim_contracts() -> None:
         "permit.work_value_conservation.v1": "semantics/work/value_conservation_v1.json",
     }
     for claim_name, path in semantic_files.items():
+        artifact = load_json(path)
+        if artifact.get("body", {}).get("claim") != claim_name:
+            raise ContractFailure(f"{path} does not bind claim {claim_name}")
+
+    claims_v5_path = ROOT / "claim_registry/v5.json"
+    claims_v5 = load_json("claim_registry/v5.json")
+    claims_v6 = load_json("claim_registry/v6.json")
+    extension = claims_v6.get("extends")
+    if not isinstance(extension, dict):
+        raise ContractFailure("claim_registry/v6.json must pin v5")
+    if extension.get("artifact_id") != "keel.verifier_claim_registry.v5":
+        raise ContractFailure("claim_registry/v6.json extends the wrong artifact")
+    if extension.get("version") != claims_v5.get("version"):
+        raise ContractFailure("claim_registry/v6.json extends the wrong version")
+    if extension.get("sha256") != _sha256_file(claims_v5_path).removeprefix(
+        "sha256:"
+    ):
+        raise ContractFailure("claim_registry/v6.json has a stale base digest")
+    v6_claims = claims_v6.get("claims")
+    if not isinstance(v6_claims, list):
+        raise ContractFailure("claim_registry/v6.json must add Work v2 claims")
+    v6_names = {
+        claim.get("name") for claim in v6_claims if isinstance(claim, dict)
+    }
+    if v6_names != WORK_V2_CLAIMS:
+        raise ContractFailure(
+            f"claim_registry/v6.json Work v2 claim mismatch: {sorted(v6_names)}"
+        )
+    for claim in v6_claims:
+        if set(claim.get("verdict_enum", [])) != VERDICTS:
+            raise ContractFailure(
+                f"{claim.get('name')} changed the stable verdict enum"
+            )
+        if not claim.get("does_not_establish"):
+            raise ContractFailure(
+                f"{claim.get('name')} lacks a claim-level evidence ceiling"
+            )
+
+    semantic_v2_files = {
+        "permit.work_authority_manifest.v2": "semantics/work/authority_manifest_v2.json",
+        "permit.work_child_containment.v2": "semantics/work/child_containment_v2.json",
+        "permit_chain.execution_authorized_at_boundary.v2": "semantics/work/execution_authorized_at_boundary_v2.json",
+        "permit.work_value_conservation.v2": "semantics/work/value_conservation_v2.json",
+        "permit.work_exact_review.v1": "semantics/work/exact_review_v1.json",
+    }
+    for claim_name, path in semantic_v2_files.items():
         artifact = load_json(path)
         if artifact.get("body", {}).get("claim") != claim_name:
             raise ContractFailure(f"{path} does not bind claim {claim_name}")
@@ -5151,6 +5763,9 @@ def main() -> int:
         validate_human_artifact_contract(registry)
         validate_fact_profiles(registry)
         validate_work_contract(registry)
+        validate_work_authority_v2_contract(registry)
+        validate_concierge_semantic_contract(registry)
+        validate_work_v2_contract_objects(registry)
         validate_claim_contracts()
         exact_pack = validate_universal_verification_contract(registry)
         validate_short_term_exact_profiles(registry)
