@@ -9,6 +9,8 @@
     "canonicalization_profile": "keel.canonical_json.payload.v1",
     "checks": [
       "validate strict work_package_v2 and every work_authority_v2",
+      "require the exact work_request_v2 preimage and work_package_v2 to be signed into the root Permit",
+      "recompute requested_authority_set_hash from the exported request and require every requested lane to be issued or explicitly excluded",
       "recompute every authority_canonical_hash with that field omitted",
       "recompute the sorted issued authority set and root package hashes",
       "require exact project, root, resource, Policy and time correspondence",

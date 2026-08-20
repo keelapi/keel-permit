@@ -181,9 +181,10 @@
     "root_evidence": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["permit_artifact", "work_package", "semantic_binding"],
+      "required": ["permit_artifact", "work_request", "work_package", "semantic_binding"],
       "properties": {
         "permit_artifact": {"$ref": "#/$defs/artifact_reference"},
+        "work_request": {"$ref": "https://github.com/keelapi/keel-permit/schemas/work-request-v2.schema.json"},
         "work_package": {"$ref": "https://github.com/keelapi/keel-permit/schemas/work-package-v2.schema.json"},
         "semantic_binding": {"$ref": "https://github.com/keelapi/keel-permit/schemas/permit-semantic-binding-v2.schema.json"}
       }

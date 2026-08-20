@@ -4102,6 +4102,9 @@ def validate_work_v2_contract_objects(registry: Registry) -> None:
 
     vectors = load_json("test-vectors/permit_to_work/v2/contract-vectors.json")
     pack_schema = load_json("schemas/work-chain-pack-v2.schema.json")
+    root_required = set(pack_schema["$defs"]["root_evidence"]["required"])
+    if "work_request" not in root_required:
+        raise ContractFailure("Work v2 evidence omits the requested-authority preimage")
     lifecycle = pack_schema["$defs"]["lifecycle_event"]
     lifecycle_types = set(lifecycle["properties"]["event_type"]["enum"])
     if not {

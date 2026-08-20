@@ -165,6 +165,10 @@ commitment covers exact populations for authorities, children, root value
 events, lifecycle events, review transitions, and authorization/provider fact
 references through one declared checkpoint.
 
+The evidence root carries the exact signed `work_request_v2` preimage as well
+as `work_package_v2`. Verifiers recompute the requested authority-set hash and
+the complete issued/excluded partition; an opaque request digest is not enough.
+
 All references used by a claim MUST resolve exactly once to embedded bytes and
 the referenced digest MUST match the canonical payload. The verifier
 reconstructs authority hashes, root-package hash, child containment,

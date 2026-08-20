@@ -1240,7 +1240,7 @@
     {
       "id": "keel.work_chain_pack.v2.schema",
       "path": "schemas/work-chain-pack-v2.schema.json",
-      "sha256": "ee817d250ae2cda0d68cdc2ca2485a93902b214940ec5c1bf4893f45b86f9d94"
+      "sha256": "c7895a7efe24663abbd9f0e6b77d1fd04c9efbbad4578a9ace2a14d2b13b81d2"
     },
     {
       "id": "keel.work_dispatch_boundary.v2.schema",
@@ -1275,7 +1275,7 @@
     {
       "id": "keel.permit.work_authority_manifest.v2",
       "path": "semantics/work/authority_manifest_v2.json",
-      "sha256": "1600553695515aa9893fe3d78c344ce3b8c6f712f3ed48c02b05b891d07df8b9"
+      "sha256": "8c30548c481866a68243b1708a14a39bb300f3db22b2c14b8298d1059b816ecb"
     },
     {
       "id": "keel.permit.work_child_containment.v2",
@@ -1310,7 +1310,7 @@
     {
       "id": "keel.permit_to_work.v2.spec",
       "path": "spec/permit-to-work-v2.md",
-      "sha256": "ec941330d340051581a20d73aa11646ff1a1456ac33100ced5b6dd987d17a600"
+      "sha256": "3a076ff1ddea9cdc1f55f272f519f0608b095cfaa0471689484d1ab9f69e3b2b"
     },
     {
       "id": "permit-to-x.test-vectors.permit-to-work-contract.v2",
