@@ -1295,7 +1295,7 @@
     {
       "id": "keel.permit.work_value_conservation.v2",
       "path": "semantics/work/value_conservation_v2.json",
-      "sha256": "8171610c421693bb6733c03a03c357b7398dc96ffb658ed6ead8436408747056"
+      "sha256": "3496402313da462ac539e2f396e2b0b3f8539c22eadd2fe62066ddc3701fa687"
     },
     {
       "id": "keel.work.provider_value_fact.v1",
