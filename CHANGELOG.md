@@ -8,6 +8,41 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 - No unreleased changes.
 
+## [1.21.0] — 2026-08-20
+
+### Heterogeneous multi-principal Work
+
+- Define `keel.work_authority.v2` and `work-action-authority.v2` for exact
+  action, resource, identity, credential, delegation, time, use-count, and
+  value-mode containment across heterogeneous Work lanes.
+- Define one finite root customer-economic-value pool shared by every monetary
+  lane while keeping AI/model compute authority in a separate, non-fungible
+  policy domain.
+- Add signed delegation and scoped root, authority, delegation, principal, and
+  credential revocation evidence so liveness can be re-evaluated at the final
+  pre-effect dispatch boundary.
+- Define `none`, `declared_bounded`, and `provider_verified` value binding;
+  provider-verified value requires signed, exact provider facts and cannot be
+  self-certified by the caller.
+
+### Exact review and independently verifiable evidence
+
+- Bind a frozen request and human review outcome separately from the final
+  authorization decision, including approval followed by denial after current
+  root authority is re-evaluated.
+- Require the exact signed Work request preimage, complete issued/excluded
+  partition, root-wide hash-linked value ledger, pre-effect dispatch records,
+  and a derived non-authorizing `AI Permit-to-Work` summary.
+- Add conformance and mutation vectors for action, principal, delegation,
+  value mode, root cap, amount, request, review, dispatch, and summary changes.
+
+### Outbound-call semantic profile
+
+- Register `AI Permit-to-Place-Outbound-Call` for server-controlled telephony
+  origination only, with normalized destination commitment and provider wire
+  body binding. Raw phone numbers are forbidden from verifier-safe facts.
+- Add schemas and registry revisions for the Work v2 and telephony contracts.
+
 ## [1.20.1] — 2026-08-18
 
 - Record the source commit correctly in `release-manifest.json`. `git rev-parse`
