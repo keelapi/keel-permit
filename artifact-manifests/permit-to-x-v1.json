@@ -1275,7 +1275,7 @@
     {
       "id": "keel.permit.work_authority_manifest.v2",
       "path": "semantics/work/authority_manifest_v2.json",
-      "sha256": "8c30548c481866a68243b1708a14a39bb300f3db22b2c14b8298d1059b816ecb"
+      "sha256": "a1ab39775c2ce917174c4b882aa1ada0fb2042703a5922e1a1377a2045291350"
     },
     {
       "id": "keel.permit.work_child_containment.v2",
