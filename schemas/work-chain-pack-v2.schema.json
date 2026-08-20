@@ -185,7 +185,7 @@
       "properties": {
         "permit_artifact": {"$ref": "#/$defs/artifact_reference"},
         "work_package": {"$ref": "https://github.com/keelapi/keel-permit/schemas/work-package-v2.schema.json"},
-        "semantic_binding": {"$ref": "https://github.com/keelapi/keel-permit/schemas/permit-semantic-binding-v1.schema.json"}
+        "semantic_binding": {"$ref": "https://github.com/keelapi/keel-permit/schemas/permit-semantic-binding-v2.schema.json"}
       }
     },
     "child_permit_evidence": {
@@ -206,7 +206,7 @@
         "decision": {"enum": ["allow", "deny", "challenge"]},
         "request_digest": {"$ref": "#/$defs/digest"},
         "work_binding": {"$ref": "https://github.com/keelapi/keel-permit/schemas/work-binding-v2.schema.json"},
-        "semantic_binding": {"$ref": "https://github.com/keelapi/keel-permit/schemas/permit-semantic-binding-v1.schema.json"},
+        "semantic_binding": {"$ref": "https://github.com/keelapi/keel-permit/schemas/permit-semantic-binding-v2.schema.json"},
         "authorization_fact_artifacts": {
           "type": "array",
           "items": {"$ref": "#/$defs/artifact_reference"}

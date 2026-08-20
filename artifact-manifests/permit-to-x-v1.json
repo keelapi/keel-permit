@@ -1240,7 +1240,7 @@
     {
       "id": "keel.work_chain_pack.v2.schema",
       "path": "schemas/work-chain-pack-v2.schema.json",
-      "sha256": "b539b8eea9db7a6b0542313247c656a3705133b8731d4aa92514bd5fdd03962f"
+      "sha256": "aba71074a0e952680356e0d9e16543c1c9aaceba0ef849869dfa5ab0d5374361"
     },
     {
       "id": "keel.work_dispatch_boundary.v2.schema",
