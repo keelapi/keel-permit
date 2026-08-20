@@ -4110,6 +4110,7 @@ def validate_work_v2_contract_objects(registry: Registry) -> None:
     value_events = vectors["value_events"]
     review_transition = vectors["review_transition"]
     provider_value_fact = vectors["provider_value_fact"]
+    dispatch_boundary = vectors["dispatch_boundary"]
     summary = vectors["summary"]
 
     validate_instance(request, "schemas/work-request-v2.schema.json", registry, "Work request v2")
@@ -4139,6 +4140,12 @@ def validate_work_v2_contract_objects(registry: Registry) -> None:
         "schemas/provider-value-fact-v1.schema.json",
         registry,
         "provider value fact v1",
+    )
+    validate_instance(
+        dispatch_boundary,
+        "schemas/work-dispatch-boundary-v2.schema.json",
+        registry,
+        "Work dispatch boundary v2",
     )
     validate_instance(summary, "schemas/work-summary-v1.schema.json", registry, "Work summary v1")
 
@@ -4329,6 +4336,7 @@ def validate_work_v2_contract_objects(registry: Registry) -> None:
     for label, signed_object in (
         ("review transition", review_transition),
         ("provider value fact", provider_value_fact),
+        ("dispatch boundary", dispatch_boundary),
     ):
         preimage = copy.deepcopy(signed_object)
         canonical_hash = preimage.pop("canonical_hash")
@@ -4339,6 +4347,12 @@ def validate_work_v2_contract_objects(registry: Registry) -> None:
         "final_decision"
     ] != "deny":
         raise ContractFailure("Work v2 review vector no longer proves approval then denial")
+    if (
+        dispatch_boundary["upstream_called"] is not False
+        or dispatch_boundary["pre_effect"] is not True
+        or not all(dispatch_boundary["liveness"].values())
+    ):
+        raise ContractFailure("Work v2 dispatch boundary is not a complete pre-effect gate")
     mutated_review = copy.deepcopy(review_transition)
     mutated_review["frozen_request_digest"] = "sha256:" + "0" * 64
     review_preimage = copy.deepcopy(mutated_review)

@@ -1243,6 +1243,11 @@
       "sha256": "b539b8eea9db7a6b0542313247c656a3705133b8731d4aa92514bd5fdd03962f"
     },
     {
+      "id": "keel.work_dispatch_boundary.v2.schema",
+      "path": "schemas/work-dispatch-boundary-v2.schema.json",
+      "sha256": "0460589bb911b9a5be52897ac7108be3ff90c4da673d7c06a533de24d56a57d4"
+    },
+    {
       "id": "keel.work_package.v2.schema",
       "path": "schemas/work-package-v2.schema.json",
       "sha256": "91bade0d9c28c5a495e23bc68a712cb99f8796e0ca06289a3fe276543efdbfe0"
@@ -1293,6 +1298,16 @@
       "sha256": "8171610c421693bb6733c03a03c357b7398dc96ffb658ed6ead8436408747056"
     },
     {
+      "id": "keel.work.provider_value_fact.v1",
+      "path": "semantics/work/provider_value_fact_v1.json",
+      "sha256": "188ce961f1d151f151915ebb329eec56c7baba52a188fc7d05cca067c810a397"
+    },
+    {
+      "id": "keel.work.summary.v1",
+      "path": "semantics/work/summary_v1.json",
+      "sha256": "3bd5459a6ac9c3e0c3941b96a61b9cdeef7106e25f78392356abc9298cb7e300"
+    },
+    {
       "id": "keel.permit_to_work.v2.spec",
       "path": "spec/permit-to-work-v2.md",
       "sha256": "ec941330d340051581a20d73aa11646ff1a1456ac33100ced5b6dd987d17a600"
@@ -1300,7 +1315,7 @@
     {
       "id": "permit-to-x.test-vectors.permit-to-work-contract.v2",
       "path": "test-vectors/permit_to_work/v2/contract-vectors.json",
-      "sha256": "43a7318ff29bef413337aa45f709604ac2e30a10fde503a8f7bca8e904c6905b"
+      "sha256": "91fece3df9ded02f97a01ea82723b252253cb113610ca8535f330e9fe81e12f4"
     },
     {
       "id": "permit-to-x.test-vectors.telephony-call-outbound.v1",
