@@ -66,6 +66,7 @@ TRUSTED_SOURCE_KINDS = {
     "realtime_session_service",
     "agent_delegation_service",
     "telephony_origination_service",
+    "action_gateway_service",
 }
 POPULATION_PATHS = {
     "work_authorities": "authorities",
@@ -4097,6 +4098,108 @@ def validate_concierge_semantic_contract(registry: Registry) -> None:
             )
 
 
+def validate_action_gateway_semantic_contract(registry: Registry) -> None:
+    """Prove reusable message/calendar titles require exact server facts."""
+
+    base_semantics = load_json("semantic_registry/v19.json")
+    semantics = load_json("semantic_registry/v20.json")
+    base_presentations = load_json("presentation_registry/v18.json")
+    presentations = load_json("presentation_registry/v19.json")
+    base_profiles = load_json("fact_profiles/v17.json")
+    profiles = load_json("fact_profiles/v18.json")
+    vectors = load_json("test-vectors/action-gateway-v1.json")
+
+    validate_instance(
+        semantics,
+        "semantic_registry/v20.schema.json",
+        registry,
+        "action-gateway semantic registry v20",
+    )
+    validate_instance(
+        presentations,
+        "presentation_registry/v19.schema.json",
+        registry,
+        "action-gateway presentation registry v19",
+    )
+    validate_instance(
+        profiles,
+        "fact_profiles/v18.schema.json",
+        registry,
+        "action-gateway fact profile registry v18",
+    )
+    for current, prior, key, label in (
+        (semantics, base_semantics, "entries", "semantic"),
+        (presentations, base_presentations, "profiles", "presentation"),
+        (profiles, base_profiles, "profiles", "fact profile"),
+    ):
+        if current[key][: len(prior[key])] != prior[key]:
+            raise ContractFailure(f"action-gateway {label} registry changed history")
+        if len(current[key]) != len(prior[key]) + 2:
+            raise ContractFailure(f"action-gateway {label} registry must add two rows")
+
+    facts_schema_path = "schemas/action-gateway-exact-facts-v1.schema.json"
+    facts_validator = jsonschema.Draft202012Validator(
+        load_json(facts_schema_path),
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    )
+    semantics_by_id = {item["semantic_id"]: item for item in semantics["entries"]}
+    presentations_by_id = {
+        item["semantic_id"]: item for item in presentations["profiles"]
+    }
+    profiles_by_id = {
+        item["fact_profile_id"]: item for item in profiles["profiles"]
+    }
+    cases_by_id = {item["id"]: item for item in vectors["cases"]}
+    for case in vectors["cases"]:
+        semantic_id = case["expected_semantic_id"]
+        profile_id = case["expected_fact_profile_id"]
+        semantic = semantics_by_id.get(semantic_id)
+        presentation = presentations_by_id.get(semantic_id)
+        profile = profiles_by_id.get(profile_id)
+        if semantic is None or presentation is None or profile is None:
+            raise ContractFailure(f"action-gateway case {case['id']} lacks public contracts")
+        if semantic.get("trusted_source_kinds") != ["action_gateway_service"]:
+            raise ContractFailure(f"action-gateway case {case['id']} has a caller-selectable source")
+        if semantic.get("fact_profile_id") != profile_id:
+            raise ContractFailure(f"action-gateway case {case['id']} has a mismatched fact profile")
+        if profile.get("authorized_action") != case["candidate"]["action_name"]:
+            raise ContractFailure(f"action-gateway case {case['id']} has a mismatched action")
+        if profile.get("facts_schema") != facts_schema_path or profile.get(
+            "facts_schema_digest"
+        ) != _sha256_file(ROOT / facts_schema_path):
+            raise ContractFailure(f"action-gateway case {case['id']} has stale facts schema material")
+        if presentation.get("customer_title") != case["expected_title"]:
+            raise ContractFailure(f"action-gateway case {case['id']} title changed")
+        selected, fallback = select_semantic(semantics, case["candidate"])
+        if (selected, fallback) != (semantic_id, None):
+            raise ContractFailure(f"action-gateway case {case['id']} did not select exactly once")
+        facts = case["valid_authorization_facts"]
+        if not facts_validator.is_valid(facts):
+            raise ContractFailure(f"action-gateway case {case['id']} valid facts failed schema")
+        forbidden = {"destination", "body", "calendar_id", "attendees", "title", "description"}
+        if forbidden.intersection(facts):
+            raise ContractFailure(f"action-gateway case {case['id']} exposes raw private fields")
+
+    for mutation in vectors["negative_cases"]:
+        case = copy.deepcopy(cases_by_id[mutation.get("case", "message-send")])
+        root_name, *parts = mutation["target"].split(".")
+        current: Any = case[root_name]
+        for part in parts[:-1]:
+            current = current[part]
+        current[parts[-1]] = copy.deepcopy(mutation.get("value"))
+        if mutation["expected"] == "fallback":
+            selected, fallback = select_semantic(semantics, case["candidate"])
+            if selected is not None or fallback is None:
+                raise ContractFailure(
+                    f"action-gateway mutation {mutation['id']} did not fall back"
+                )
+        elif facts_validator.is_valid(case["valid_authorization_facts"]):
+            raise ContractFailure(
+                f"action-gateway mutation {mutation['id']} earned invalid facts"
+            )
+
+
 def validate_work_v2_contract_objects(registry: Registry) -> None:
     """Validate the strict v2 objects and cross-object invariants."""
 
@@ -5325,6 +5428,10 @@ def validate_artifact_manifest() -> None:
         "semantic_registry/v17.schema.json",
         "semantic_registry/v18.json",
         "semantic_registry/v18.schema.json",
+        "semantic_registry/v19.json",
+        "semantic_registry/v19.schema.json",
+        "semantic_registry/v20.json",
+        "semantic_registry/v20.schema.json",
         "presentation_registry/v4.json",
         "presentation_registry/v4.schema.json",
         "presentation_registry/v5.json",
@@ -5353,6 +5460,10 @@ def validate_artifact_manifest() -> None:
         "presentation_registry/v16.schema.json",
         "presentation_registry/v17.json",
         "presentation_registry/v17.schema.json",
+        "presentation_registry/v18.json",
+        "presentation_registry/v18.schema.json",
+        "presentation_registry/v19.json",
+        "presentation_registry/v19.schema.json",
         "consequence_registry/v1.json",
         "consequence_registry/v1.schema.json",
         "consequence_registry/v2.json",
@@ -5433,6 +5544,12 @@ def validate_artifact_manifest() -> None:
         "fact_profiles/v15.schema.json",
         "fact_profiles/v16.json",
         "fact_profiles/v16.schema.json",
+        "fact_profiles/v17.json",
+        "fact_profiles/v17.schema.json",
+        "fact_profiles/v18.json",
+        "fact_profiles/v18.schema.json",
+        "schemas/action-gateway-exact-facts-v1.schema.json",
+        "test-vectors/action-gateway-v1.json",
         "schemas/goal3a-portfolio-exact-facts-v1.schema.json",
         "schemas/database-exact-facts-v1.schema.json",
         "schemas/payment-ledger-exact-facts-v1.schema.json",
@@ -5862,6 +5979,7 @@ def main() -> int:
         validate_work_contract(registry)
         validate_work_authority_v2_contract(registry)
         validate_concierge_semantic_contract(registry)
+        validate_action_gateway_semantic_contract(registry)
         validate_work_v2_contract_objects(registry)
         validate_claim_contracts()
         exact_pack = validate_universal_verification_contract(registry)
