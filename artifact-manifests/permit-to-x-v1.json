@@ -63,6 +63,11 @@
       "sha256": "33a47eb5c05be566116ff15287c4b32d38469e5d4f09afb71212a5aa9c90763f"
     },
     {
+      "id": "keel.work_authority.v2.schema",
+      "path": "schemas/work-authority-v2.schema.json",
+      "sha256": "3a38d3bb9c914846190ef5fd668fdb8742feb21e7ee62ea320167aa0fcd230d0"
+    },
+    {
       "id": "keel.work_value_event.v1.schema",
       "path": "schemas/work-value-event-v1.schema.json",
       "sha256": "4ac66ae3c485d5d2c5d71cfc5e871821d84b6f167245abc18fe62112c705d046"
@@ -76,6 +81,11 @@
       "id": "keel.work_payment_authority.v1",
       "path": "comparator_registry/work-payment-authority-v1.json",
       "sha256": "1c4dfb67f2277224a3cbdc88fba7280a91a9b405fcfeb99baa7888d93c5daf79"
+    },
+    {
+      "id": "keel.work_action_authority.v2",
+      "path": "comparator_registry/work-action-authority-v2.json",
+      "sha256": "b6b7f949ee10933a570db69945df60a304638e215744ca41454522f12005f4be"
     },
     {
       "id": "keel.permit.work_authority_manifest.v1",
@@ -101,6 +111,11 @@
       "id": "permit-to-x.test-vectors.permit-to-work.v1",
       "path": "test-vectors/permit_to_work/v1/corpus.json",
       "sha256": "15781c680dd05e230ad7cf98e6fa71c992b4894b552140a7a6a63ab6065e157e"
+    },
+    {
+      "id": "permit-to-x.test-vectors.permit-to-work-authority.v2",
+      "path": "test-vectors/permit_to_work/v2/authority-vectors.json",
+      "sha256": "5bddf591ffb932000df2647864097ebcfd9a88eb9dbb7a32ce65419670a632cf"
     },
     {
       "id": "permit-to-x.test-vectors.semantic-registry.v1",
@@ -1171,6 +1186,216 @@
       "id": "permit-to-x.test-vectors.consequence-registry.v15",
       "path": "consequence_registry/test-vectors/v15.json",
       "sha256": "5e3c32b5bee5a7096f95ba0c90dcd7dff291da8e63b5628448b1573e730e9277"
+    },
+    {
+      "id": "keel.verifier_claim_registry.v6",
+      "path": "claim_registry/v6.json",
+      "sha256": "294f3bb5c9358037d3cea1b29e80ce38b17f3ecbe42b89b710789a1f892d5378"
+    },
+    {
+      "id": "keel.permit.universal_verification.v5",
+      "path": "semantics/permit/universal_verification_v5.json",
+      "sha256": "c390fd3b68c79cbdfafd83a5be5056c54b75d29c19d6e0cadd2972203d7bfbdc"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v17",
+      "path": "fact_profiles/v17.json",
+      "sha256": "72ab995984c37561f2210ea2f33d6c4e6005fbeea54561c12908ce9561cc38f5"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v17.schema",
+      "path": "fact_profiles/v17.schema.json",
+      "sha256": "02ea2e3777f24551e4a6da610936e479893a375df9ab6c9cbb2151c668ad5968"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v18",
+      "path": "presentation_registry/v18.json",
+      "sha256": "6d9d87c25a4c238103b526ce4ecf02291067635de4057fca92f76a864c9061b5"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v18.schema",
+      "path": "presentation_registry/v18.schema.json",
+      "sha256": "84f53a0b82f4ad97a31df4fb2d366a2024edd4f9ff22d158a3c758267f42500d"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v19",
+      "path": "semantic_registry/v19.json",
+      "sha256": "987ec070df02508aff1ace3792566668845aa818414c4e795c7b2ba1af82862a"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v19.schema",
+      "path": "semantic_registry/v19.schema.json",
+      "sha256": "6f08c44d4985ff17c3f9ab64364a1d213c1748f265002e5a76aeebce835bea00"
+    },
+    {
+      "id": "keel.provider_value_fact.v1.schema",
+      "path": "schemas/provider-value-fact-v1.schema.json",
+      "sha256": "afaa2b50df9eb7fcbdab2fd4f0b547e971eee9ebed9e7b87e0d7097e11bb3cc6"
+    },
+    {
+      "id": "keel.provider_value_fact.v2.schema",
+      "path": "schemas/provider-value-fact-v2.schema.json",
+      "sha256": "400c62d241476b98bff903cb80d29c9dee48e42bd28513430248c58bb386cfa4"
+    },
+    {
+      "id": "keel.telephony_call_outbound_exact_facts.v1.schema",
+      "path": "schemas/telephony-call-outbound-exact-facts-v1.schema.json",
+      "sha256": "dcdbcf1a155440022a252577fa582d7ee3469083bf8cc4eb35c69aaf31f7dc3c"
+    },
+    {
+      "id": "keel.work_binding.v2.schema",
+      "path": "schemas/work-binding-v2.schema.json",
+      "sha256": "67a1335e9813157c425ae7dc7bc607a2ab123e40631d664026d79204e5cbaf86"
+    },
+    {
+      "id": "keel.work_chain_pack.v2.schema",
+      "path": "schemas/work-chain-pack-v2.schema.json",
+      "sha256": "c7895a7efe24663abbd9f0e6b77d1fd04c9efbbad4578a9ace2a14d2b13b81d2"
+    },
+    {
+      "id": "keel.work_dispatch_boundary.v2.schema",
+      "path": "schemas/work-dispatch-boundary-v2.schema.json",
+      "sha256": "0460589bb911b9a5be52897ac7108be3ff90c4da673d7c06a533de24d56a57d4"
+    },
+    {
+      "id": "keel.work_package.v2.schema",
+      "path": "schemas/work-package-v2.schema.json",
+      "sha256": "91bade0d9c28c5a495e23bc68a712cb99f8796e0ca06289a3fe276543efdbfe0"
+    },
+    {
+      "id": "keel.work_request.v2.schema",
+      "path": "schemas/work-request-v2.schema.json",
+      "sha256": "90ee7d7f48854c756708af68510466d0cb812e210715b3697f499f4adf749eff"
+    },
+    {
+      "id": "keel.work_review_transition.v1.schema",
+      "path": "schemas/work-review-transition-v1.schema.json",
+      "sha256": "b8ce3b3e98da13868e73bc8cc74c56a2cea44a0be97012fcba02144b0ed0e470"
+    },
+    {
+      "id": "keel.work_summary.v1.schema",
+      "path": "schemas/work-summary-v1.schema.json",
+      "sha256": "e116b03c6fb374182888259a40b4d456fedff2e406ba0013ee684b38a8cdbfe5"
+    },
+    {
+      "id": "keel.work_value_event.v2.schema",
+      "path": "schemas/work-value-event-v2.schema.json",
+      "sha256": "4286574255c1554937bac76a7af7bb82cabaad4a6808291fa704521d56fbea6c"
+    },
+    {
+      "id": "keel.permit.work_authority_manifest.v2",
+      "path": "semantics/work/authority_manifest_v2.json",
+      "sha256": "a1ab39775c2ce917174c4b882aa1ada0fb2042703a5922e1a1377a2045291350"
+    },
+    {
+      "id": "keel.permit.work_child_containment.v2",
+      "path": "semantics/work/child_containment_v2.json",
+      "sha256": "47a4d827ebf8ed5edfbb9402dbb04819d07b895dae4c855224800c62ccf673fd"
+    },
+    {
+      "id": "keel.permit.work_exact_review.v1",
+      "path": "semantics/work/exact_review_v1.json",
+      "sha256": "752d0bb3eca841f4e3d50dc57919ca5fc28bcc05639cd01cd93198fc4cef17f8"
+    },
+    {
+      "id": "keel.permit_chain.execution_authorized_at_boundary.v2",
+      "path": "semantics/work/execution_authorized_at_boundary_v2.json",
+      "sha256": "6882ddefaa9d671864921d0401f0f9da25cbf080d30a030a83256a68d08face4"
+    },
+    {
+      "id": "keel.permit.work_value_conservation.v2",
+      "path": "semantics/work/value_conservation_v2.json",
+      "sha256": "3496402313da462ac539e2f396e2b0b3f8539c22eadd2fe62066ddc3701fa687"
+    },
+    {
+      "id": "keel.work.provider_value_fact.v1",
+      "path": "semantics/work/provider_value_fact_v1.json",
+      "sha256": "188ce961f1d151f151915ebb329eec56c7baba52a188fc7d05cca067c810a397"
+    },
+    {
+      "id": "keel.work.provider_value_fact.v2",
+      "path": "semantics/work/provider_value_fact_v2.json",
+      "sha256": "d2e947e333edff19a14b7099dc59143ef509b2900a84e498e20a764ae572392a"
+    },
+    {
+      "id": "keel.work.summary.v1",
+      "path": "semantics/work/summary_v1.json",
+      "sha256": "3bd5459a6ac9c3e0c3941b96a61b9cdeef7106e25f78392356abc9298cb7e300"
+    },
+    {
+      "id": "keel.permit_to_work.v2.spec",
+      "path": "spec/permit-to-work-v2.md",
+      "sha256": "39673125948a2256079064a5c333ba6330af2026461d32188b222126380041ea"
+    },
+    {
+      "id": "permit-to-x.test-vectors.permit-to-work-contract.v2",
+      "path": "test-vectors/permit_to_work/v2/contract-vectors.json",
+      "sha256": "7a24044955ef78d10a8b1921afe1e083ecaca0ad886ed24c14da5d5e59a64afb"
+    },
+    {
+      "id": "permit-to-x.test-vectors.telephony-call-outbound.v1",
+      "path": "test-vectors/telephony-call-outbound-v1.json",
+      "sha256": "ba7f193ddb2122bfefb94f98f132f33228a4713c406d219a19b822507e886620"
+    },
+    {
+      "id": "keel.action_gateway_exact_facts.v1.schema",
+      "path": "schemas/action-gateway-exact-facts-v1.schema.json",
+      "sha256": "d37aafa4331f5a77b925041ab42cba857b85a011a1e9f9e1bfc72779ad316997"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v18",
+      "path": "fact_profiles/v18.json",
+      "sha256": "6565719bb5f737af43b017df620cb2fe17128fc48a607f737f45deabd9da91e3"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v18.schema",
+      "path": "fact_profiles/v18.schema.json",
+      "sha256": "108963c759a9c7f12c7e838ffae0496772d01ce2bf494adaa6a619cc084861a4"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v20",
+      "path": "semantic_registry/v20.json",
+      "sha256": "65af1608fec493a52819c165acfc78e5fc75ed976e76c89e776d1f7682e6f88e"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v20.schema",
+      "path": "semantic_registry/v20.schema.json",
+      "sha256": "7348b1dcc00c2937da4e29c79620fbae445d8bf2e7d49e6dc732c7bccad78582"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v19",
+      "path": "presentation_registry/v19.json",
+      "sha256": "77e4829d6a46a53fe697873d0d31a66e39930ec7649d18f1a0e3449236cb52ff"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v19.schema",
+      "path": "presentation_registry/v19.schema.json",
+      "sha256": "b275dddfc7044aff8a5c636e592afa5c0b2d91a03543b32585eafaec5f24e011"
+    },
+    {
+      "id": "permit-to-x.test-vectors.action-gateway.v1",
+      "path": "test-vectors/action-gateway-v1.json",
+      "sha256": "66e19e5c708f07925d59b1e80d5ca8e7b0421e403fdb64922b9117bb3fbd054c"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v21",
+      "path": "semantic_registry/v21.json",
+      "sha256": "e4c7ccc34baea0caa8826646be9a9efc772f4023546ab3724718da30c1b83b9e"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v21.schema",
+      "path": "semantic_registry/v21.schema.json",
+      "sha256": "aabc82ac21ed14e94e333c8fe742b31681a0c65f4f6c8c53f24d4e4bbe434b98"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v20",
+      "path": "presentation_registry/v20.json",
+      "sha256": "720259d81f98edec5ee4c9ef38bc00a20709f371ef47cc809e318f02648d86d6"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v20.schema",
+      "path": "presentation_registry/v20.schema.json",
+      "sha256": "a7dbc6fdfb17bee8d579f8ac37908de7a0d46aa3b9b1c8e3daf91566e0164a79"
     }
   ]
 }
