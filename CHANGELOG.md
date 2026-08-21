@@ -8,6 +8,17 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 - No unreleased changes.
 
+## [1.21.1] — 2026-08-20
+
+- Allow Work value-event v2 evidence to reference either historical
+  `keel.provider_value_fact.v1` or the newly published
+  `keel.provider_value_fact.v2`. Version 1.21.0 defined the v2 fact but left the
+  value-event reference fixed to v1, making genuine v2 evidence structurally
+  impossible. All other 1.21.0 contracts and bytes remain unchanged.
+
+Supersedes 1.21.0 for new provider-verified Work evidence. Version 1.21.0
+remains published so the correction trail is explicit.
+
 ## [1.21.0] — 2026-08-20
 
 ### Heterogeneous multi-principal Work

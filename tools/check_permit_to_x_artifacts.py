@@ -4364,6 +4364,35 @@ def validate_work_v2_contract_objects(registry: Registry) -> None:
         format_checker=jsonschema.FormatChecker(),
     ).is_valid(unbounded_provider_fact):
         raise ContractFailure("provider value fact v2 accepted an unbounded window")
+    value_event_with_v2_fact = copy.deepcopy(value_events[0])
+    value_event_with_v2_fact["trusted_value_fact"] = {
+        "artifact_id": "urn:x-keel:artifact:provider_value_fact:v2",
+        "artifact_type": "keel.provider_value_fact.v2",
+        "artifact_digest": digest(provider_value_fact_v2),
+    }
+    value_event_with_v2_fact["event_canonical_hash"] = digest(
+        {
+            key: value
+            for key, value in value_event_with_v2_fact.items()
+            if key != "event_canonical_hash"
+        }
+    )
+    validate_instance(
+        value_event_with_v2_fact,
+        "schemas/work-value-event-v2.schema.json",
+        registry,
+        "Work value event with provider value fact v2",
+    )
+    unsupported_value_event = copy.deepcopy(value_event_with_v2_fact)
+    unsupported_value_event["trusted_value_fact"]["artifact_type"] = (
+        "keel.provider_value_fact.v3"
+    )
+    if jsonschema.Draft202012Validator(
+        load_json("schemas/work-value-event-v2.schema.json"),
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    ).is_valid(unsupported_value_event):
+        raise ContractFailure("Work value event accepted an unsupported provider fact")
     validate_instance(
         dispatch_boundary,
         "schemas/work-dispatch-boundary-v2.schema.json",

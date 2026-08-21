@@ -1280,7 +1280,7 @@
     {
       "id": "keel.work_value_event.v2.schema",
       "path": "schemas/work-value-event-v2.schema.json",
-      "sha256": "4286574255c1554937bac76a7af7bb82cabaad4a6808291fa704521d56fbea6c"
+      "sha256": "775f1473a8e87bb8dfdab249bfea6f7e44c346067c06ca50a06604ffbf6d9477"
     },
     {
       "id": "keel.permit.work_authority_manifest.v2",
