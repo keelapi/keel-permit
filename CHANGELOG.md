@@ -24,6 +24,10 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 - Define `none`, `declared_bounded`, and `provider_verified` value binding;
   provider-verified value requires signed, exact provider facts and cannot be
   self-certified by the caller.
+- Add the backward-compatible provider-value-fact v2 contract for new
+  provider-verified issuance. It binds a code-pinned provider parser and exact
+  object commitment to a signed validity window capped at 900 seconds, while
+  retaining v1 verification for historical evidence.
 
 ### Exact review and independently verifiable evidence
 

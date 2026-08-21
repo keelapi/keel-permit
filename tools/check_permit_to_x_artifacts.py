@@ -4334,6 +4334,36 @@ def validate_work_v2_contract_objects(registry: Registry) -> None:
         registry,
         "provider value fact v1",
     )
+    provider_value_fact_v2 = copy.deepcopy(provider_value_fact)
+    provider_value_fact_v2.update(
+        {
+            "version": "keel.provider_value_fact.v2",
+            "fact_profile_id": "keel.facts.lodging_booking_value.v2",
+            "provider_contract_profile_id": (
+                "keel.provider_contract.sabre_lodging_quote.v1"
+            ),
+            "valid_until": "2026-08-20T20:10:00Z",
+            "validity_seconds": 300,
+        }
+    )
+    provider_value_fact_v2.pop("canonical_hash")
+    provider_value_fact_v2.pop("signature")
+    provider_value_fact_v2["canonical_hash"] = digest(provider_value_fact_v2)
+    provider_value_fact_v2["signature"] = provider_value_fact["signature"]
+    validate_instance(
+        provider_value_fact_v2,
+        "schemas/provider-value-fact-v2.schema.json",
+        registry,
+        "provider value fact v2",
+    )
+    unbounded_provider_fact = copy.deepcopy(provider_value_fact_v2)
+    unbounded_provider_fact["validity_seconds"] = 901
+    if jsonschema.Draft202012Validator(
+        load_json("schemas/provider-value-fact-v2.schema.json"),
+        registry=registry,
+        format_checker=jsonschema.FormatChecker(),
+    ).is_valid(unbounded_provider_fact):
+        raise ContractFailure("provider value fact v2 accepted an unbounded window")
     validate_instance(
         dispatch_boundary,
         "schemas/work-dispatch-boundary-v2.schema.json",
@@ -5623,6 +5653,8 @@ def validate_artifact_manifest() -> None:
         "fact_profiles/v18.json",
         "fact_profiles/v18.schema.json",
         "schemas/action-gateway-exact-facts-v1.schema.json",
+        "schemas/provider-value-fact-v2.schema.json",
+        "semantics/work/provider_value_fact_v2.json",
         "test-vectors/action-gateway-v1.json",
         "schemas/goal3a-portfolio-exact-facts-v1.schema.json",
         "schemas/database-exact-facts-v1.schema.json",

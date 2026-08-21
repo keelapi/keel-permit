@@ -152,6 +152,14 @@ binds the project, Work root, lane, child request digest, connector identity,
 provider environment, exact provider-body digest, amount, currency, response
 digest, observation time, and signing key.
 
+New provider-verified issuance MUST use `keel.provider_value_fact.v2`. V2 also
+requires a code-pinned provider contract profile, a provider object
+commitment, and a signed validity window of no more than 900 seconds. The
+verifier MUST reconstruct the window and require
+`observed_at <= child.issued_at < valid_until`; neither the caller nor an agent
+may supply, extend, or refresh those trusted fields. V1 remains verifiable for
+backward compatibility but does not establish quote freshness.
+
 The provider fact establishes only what the supported connector observed. It
 does not by itself establish dispatch, acceptance, completion, settlement, or
 conversation governance. Provider-specific semantic titles require their own
