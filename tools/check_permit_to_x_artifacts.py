@@ -4200,6 +4200,76 @@ def validate_action_gateway_semantic_contract(registry: Registry) -> None:
             )
 
 
+def validate_payment_action_gateway_semantic_contract(registry: Registry) -> None:
+    """Prove payment gateway admission is an append-only source-kind delta."""
+
+    prior_semantics = load_json("semantic_registry/v20.json")
+    semantics = load_json("semantic_registry/v21.json")
+    prior_presentations = load_json("presentation_registry/v19.json")
+    presentations = load_json("presentation_registry/v20.json")
+
+    validate_instance(
+        semantics,
+        "semantic_registry/v21.schema.json",
+        registry,
+        "payment action-gateway semantic registry v21",
+    )
+    validate_instance(
+        presentations,
+        "presentation_registry/v20.schema.json",
+        registry,
+        "payment action-gateway presentation registry v20",
+    )
+
+    expected_semantics = copy.deepcopy(prior_semantics)
+    expected_semantics["$schema"] = "./v21.schema.json"
+    expected_semantics["version"] = "keel.semantic_selector_registry.v21"
+    expected_payment = next(
+        item
+        for item in expected_semantics["entries"]
+        if item["semantic_id"] == "keel.action.payment_execute.v1"
+    )
+    expected_payment["trusted_source_kinds"].append("action_gateway_service")
+    if semantics != expected_semantics:
+        raise ContractFailure(
+            "semantic registry v21 must differ from v20 only by the payment "
+            "action-gateway trusted source"
+        )
+
+    expected_presentations = copy.deepcopy(prior_presentations)
+    expected_presentations["$schema"] = "./v20.schema.json"
+    expected_presentations["version"] = "keel.presentation_registry.v20"
+    expected_presentations["semantic_registry_version"] = semantics["version"]
+    if presentations != expected_presentations:
+        raise ContractFailure(
+            "presentation registry v20 must preserve every v19 profile while "
+            "pairing exactly with semantic registry v21"
+        )
+
+    candidate = {
+        "trusted_source_kind": "action_gateway_service",
+        "permit_product": "permit",
+        "action_name": "payment.execute",
+        "operation": "payment.execute",
+        "chain_role": "action_child",
+        "evidence_capabilities": [
+            "authorization",
+            "dispatch",
+            "provider_outcome",
+            "settlement_optional",
+        ],
+    }
+    selected, fallback = select_semantic(semantics, candidate)
+    if (selected, fallback) != ("keel.action.payment_execute.v1", None):
+        raise ContractFailure(
+            "server-owned payment action gateway does not select exact payment semantics"
+        )
+    legacy_candidate = {**candidate, "trusted_source_kind": "action_verb_execute"}
+    selected, fallback = select_semantic(semantics, legacy_candidate)
+    if (selected, fallback) != ("keel.action.payment_execute.v1", None):
+        raise ContractFailure("semantic registry v21 broke legacy payment admission")
+
+
 def validate_work_v2_contract_objects(registry: Registry) -> None:
     """Validate the strict v2 objects and cross-object invariants."""
 
@@ -5432,6 +5502,8 @@ def validate_artifact_manifest() -> None:
         "semantic_registry/v19.schema.json",
         "semantic_registry/v20.json",
         "semantic_registry/v20.schema.json",
+        "semantic_registry/v21.json",
+        "semantic_registry/v21.schema.json",
         "presentation_registry/v4.json",
         "presentation_registry/v4.schema.json",
         "presentation_registry/v5.json",
@@ -5464,6 +5536,8 @@ def validate_artifact_manifest() -> None:
         "presentation_registry/v18.schema.json",
         "presentation_registry/v19.json",
         "presentation_registry/v19.schema.json",
+        "presentation_registry/v20.json",
+        "presentation_registry/v20.schema.json",
         "consequence_registry/v1.json",
         "consequence_registry/v1.schema.json",
         "consequence_registry/v2.json",
@@ -5980,6 +6054,7 @@ def main() -> int:
         validate_work_authority_v2_contract(registry)
         validate_concierge_semantic_contract(registry)
         validate_action_gateway_semantic_contract(registry)
+        validate_payment_action_gateway_semantic_contract(registry)
         validate_work_v2_contract_objects(registry)
         validate_claim_contracts()
         exact_pack = validate_universal_verification_contract(registry)

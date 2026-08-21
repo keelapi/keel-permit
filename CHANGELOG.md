@@ -43,6 +43,15 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
   body binding. Raw phone numbers are forbidden from verifier-safe facts.
 - Add schemas and registry revisions for the Work v2 and telephony contracts.
 
+### Reusable Keel-controlled action gateways
+
+- Define exact, server-sourced semantic and fact contracts for customer-hosted
+  message and calendar gateways behind Keel's credential and dispatch boundary.
+- Admit `payment.execute` through the same server-owned gateway boundary by an
+  append-only selector registry revision. Historical registry bytes remain
+  immutable, the existing payment title and fact profile are unchanged, and
+  legacy `action_verb_execute` admission remains supported.
+
 ## [1.20.1] — 2026-08-18
 
 - Record the source commit correctly in `release-manifest.json`. `git rev-parse`

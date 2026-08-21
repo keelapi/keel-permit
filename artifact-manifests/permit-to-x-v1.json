@@ -1366,6 +1366,26 @@
       "id": "permit-to-x.test-vectors.action-gateway.v1",
       "path": "test-vectors/action-gateway-v1.json",
       "sha256": "66e19e5c708f07925d59b1e80d5ca8e7b0421e403fdb64922b9117bb3fbd054c"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v21",
+      "path": "semantic_registry/v21.json",
+      "sha256": "e4c7ccc34baea0caa8826646be9a9efc772f4023546ab3724718da30c1b83b9e"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v21.schema",
+      "path": "semantic_registry/v21.schema.json",
+      "sha256": "aabc82ac21ed14e94e333c8fe742b31681a0c65f4f6c8c53f24d4e4bbe434b98"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v20",
+      "path": "presentation_registry/v20.json",
+      "sha256": "720259d81f98edec5ee4c9ef38bc00a20709f371ef47cc809e318f02648d86d6"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v20.schema",
+      "path": "presentation_registry/v20.schema.json",
+      "sha256": "a7dbc6fdfb17bee8d579f8ac37908de7a0d46aa3b9b1c8e3daf91566e0164a79"
     }
   ]
 }
