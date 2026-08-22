@@ -335,6 +335,7 @@ def main() -> None:
                 "authorization_of_any_separate_transfer_dtmf_sms_or_hangup",
                 "consent_of_any_call_participant",
                 "provider_success_or_call_completion",
+                "governance_of_the_later_live_conversation",
             ],
             "fallback_profile": "generic_ai_permit",
             "release_state": "eligible",

@@ -1425,7 +1425,7 @@
     {
       "id": "keel.permit.presentation_registry.v21",
       "path": "presentation_registry/v21.json",
-      "sha256": "4de34106ddeb7620dc4623952877fe5b49575695eb8a0ff0da96ca336e37b07c"
+      "sha256": "c9c8a85a325cdccef25897e9863b2b5672ce932104a4fbd5a22b05bdec939b6f"
     },
     {
       "id": "keel.permit.presentation_registry.v21.schema",
