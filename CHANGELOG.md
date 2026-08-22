@@ -8,6 +8,24 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 - No unreleased changes.
 
+## [1.22.0] — 2026-08-21
+
+### Added
+
+- Add provider-neutral, server-controlled exact-fact contracts for
+  `call.outbound` and `call.respond` through a Keel action gateway.
+- Bind each telephony fact to the authenticated principal, Work root,
+  authority lane, exact provider wire body, and exact idempotency request.
+- Add a narrowly scoped `AI Permit-to-Respond-to-Voice-Turn` presentation;
+  transfer, DTMF, SMS, hangup, consent, and broader conversation governance
+  remain explicitly outside that title.
+
+### Compatibility
+
+- Preserve the historical direct Vocal Bridge outbound-call schema and title
+  byte-for-byte. The new contracts use additive v22/v19/v21 registries and a
+  distinct trusted source kind.
+
 ## [1.21.1] — 2026-08-20
 
 - Allow Work value-event v2 evidence to reference either historical
