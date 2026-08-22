@@ -12,9 +12,8 @@ import copy
 
 from build_transactional_cx_registries import load, sha256, write
 
-
 FACT_SCHEMA = "schemas/telephony-call-outbound-gateway-exact-facts-v1.schema.json"
-SEMANTIC_ID = "keel.action.telephony_call_outbound_gateway.v1"
+SEMANTIC_ID = "keel.action.telephony_call_outbound.v1"
 FACT_PROFILE_ID = "keel.facts.telephony_call_outbound_gateway_exact.v1"
 RESPONSE_FACT_SCHEMA = "schemas/telephony-call-respond-gateway-exact-facts-v1.schema.json"
 RESPONSE_SEMANTIC_ID = "keel.action.telephony_call_respond_gateway.v1"
@@ -162,26 +161,11 @@ def main() -> None:
     semantics = copy.deepcopy(load("semantic_registry/v21.json"))
     semantics["$schema"] = "./v22.schema.json"
     semantics["version"] = "keel.semantic_selector_registry.v22"
-    semantics["entries"].append(
-        {
-            "semantic_id": SEMANTIC_ID,
-            "semantic_kind": "exact_action",
-            "trusted_source_kinds": [SOURCE_KIND],
-            "fact_profile_id": FACT_PROFILE_ID,
-            "match": {
-                "action_names": ["call.outbound"],
-                "operations": ["call.outbound"],
-                "allowed_chain_roles": ["session_root", "action_child"],
-                "required_evidence_capabilities": [
-                    "authorization",
-                    "dispatch",
-                    "provider_outcome",
-                ],
-            },
-            "excluded_permit_products": ["cost_permit"],
-            "release_state": "eligible",
-        }
+    outbound_entry = next(
+        entry for entry in semantics["entries"] if entry["semantic_id"] == SEMANTIC_ID
     )
+    outbound_entry["trusted_source_kinds"].append(SOURCE_KIND)
+    outbound_entry["fact_profile_id"] = FACT_PROFILE_ID
     semantics["entries"].append(
         {
             "semantic_id": RESPONSE_SEMANTIC_ID,
@@ -313,43 +297,13 @@ def main() -> None:
     presentations["$schema"] = "./v21.schema.json"
     presentations["version"] = "keel.presentation_registry.v21"
     presentations["semantic_registry_version"] = semantics["version"]
-    presentations["profiles"].append(
-        {
-            "semantic_id": SEMANTIC_ID,
-            "presentation_profile_id": "telephony_call_outbound_gateway.r1",
-            "customer_title": "AI Permit-to-Place-Outbound-Call",
-            "type_definition": (
-                "Exact authorization to originate one outbound telephone call "
-                "to one allowlisted destination through a pinned Keel-controlled "
-                "telephony gateway"
-            ),
-            "leading_fields": [
-                {"field": "recipient", "label": "Allowlisted destination"},
-                {"field": "provider", "label": "Telephony gateway"},
-                {"field": "request_digest", "label": "Bound call request"},
-                {"field": "linked_to", "label": "Linked to"},
-            ],
-            "evidence_sections": [
-                "record_identity",
-                "authorization",
-                "approval",
-                "relationship",
-                "limits",
-                "dispatch",
-                "provider_outcome",
-                "evidence_scope",
-            ],
-            "does_not_establish": [
-                "that_the_destination_answered_or_the_call_connected",
-                "the_content_of_anything_said_on_the_call",
-                "authorization_of_commitments_made_verbally_during_the_call",
-                "consent_of_the_called_party",
-                "governance_of_the_later_live_conversation",
-                "provider_success_or_call_completion",
-            ],
-            "fallback_profile": "generic_ai_permit",
-            "release_state": "eligible",
-        }
+    outbound_presentation = next(
+        profile
+        for profile in presentations["profiles"]
+        if profile["semantic_id"] == SEMANTIC_ID
+    )
+    outbound_presentation["does_not_establish"].append(
+        "governance_of_the_later_live_conversation"
     )
     presentations["profiles"].append(
         {
