@@ -1396,6 +1396,46 @@
       "id": "keel.permit.presentation_registry.v20.schema",
       "path": "presentation_registry/v20.schema.json",
       "sha256": "a7dbc6fdfb17bee8d579f8ac37908de7a0d46aa3b9b1c8e3daf91566e0164a79"
+    },
+    {
+      "id": "keel.telephony_call_outbound_gateway_exact_facts.v1.schema",
+      "path": "schemas/telephony-call-outbound-gateway-exact-facts-v1.schema.json",
+      "sha256": "84c47917f6a70ae32ad6096f7661ba539179faf7004d42b6e3127b19b7a97608"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v19",
+      "path": "fact_profiles/v19.json",
+      "sha256": "84feba7ee8facd5294cabbf49adf7942c9eed34eff249fd72e0770a3c0f0ae61"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v19.schema",
+      "path": "fact_profiles/v19.schema.json",
+      "sha256": "c10eb178707d946b71c5da1f2334d7ce099c02bf125f77ed68d058655bf0069f"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v22",
+      "path": "semantic_registry/v22.json",
+      "sha256": "56fa9a72368749112e1dafb17571aeb6ed5290c23d2df2f0c3717742d97d54be"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v22.schema",
+      "path": "semantic_registry/v22.schema.json",
+      "sha256": "a364a36e4ac0d60ed477da4fa80b1830e256cfd14e98c81b0b6fd52713fc0969"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v21",
+      "path": "presentation_registry/v21.json",
+      "sha256": "87d22d797a730ecf6a7f370017d56256753e6bafbe02a845acdb65e176dc2755"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v21.schema",
+      "path": "presentation_registry/v21.schema.json",
+      "sha256": "4f343596601b60e2a06c365055725d8a981e4e0726adfd70074e0b5756253e4d"
+    },
+    {
+      "id": "keel.telephony_call_respond_gateway_exact_facts.v1.schema",
+      "path": "schemas/telephony-call-respond-gateway-exact-facts-v1.schema.json",
+      "sha256": "9a7a96baa2a359ebefbb22be06ce2c617a854911bf61e54dd0593fdc32425a35"
     }
   ]
 }

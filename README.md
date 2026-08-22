@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/github/license/keelapi/keel-permit)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/keelapi/keel-permit?label=release)](https://github.com/keelapi/keel-permit/releases)
-![Spec version](https://img.shields.io/badge/spec-1.21.1-blue)
+![Spec version](https://img.shields.io/badge/spec-1.22.0-blue)
 [![OpenSSF Baseline](https://www.bestpractices.dev/projects/14125/baseline)](https://www.bestpractices.dev/projects/14125)
 
 A pre-execution decision record for AI agent systems. A Permit records that an action was evaluated and decided, and, for dispatched allow executions, can be bound to the final provider or tool request. A Permit JSON object alone is not self-authenticating; verification is performed from signed export artifacts and the relevant public keys or key manifest. Those artifacts are verifiable without contacting the issuer when the verifier has the signed export artifacts and relevant public keys/key manifest.
@@ -13,7 +13,7 @@ This repository contains the wire-format specification, JSON schemas, and verifi
 
 | | |
 |---|---|
-| Spec document version | 1.21.1 |
+| Spec document version | 1.22.0 |
 | Permit wire format | `v1` |
 | Permit binding versions | `v1`-`v7` (`v6` frozen; `v7` additive/c7) |
 | Closure record format | `closure_v1`, `closure_v2` |
@@ -192,7 +192,7 @@ byte-deterministic for a given tree, so you do not have to trust the publisher:
 
 ```sh
 git clone https://github.com/keelapi/keel-permit && cd keel-permit
-git archive --prefix=keel-permit-1.21.1/ --format=tar.gz v1.21.1 | sha256sum
+git archive --prefix=keel-permit-1.22.0/ --format=tar.gz v1.22.0 | sha256sum
 # compare with .bundle.sha256 in release-manifest.json
 ```
 
@@ -204,7 +204,7 @@ attests what is in it.
 attestation binding the bundle to the workflow and commit that produced it:
 
 ```sh
-gh attestation verify keel-permit-1.21.1.tar.gz -R keelapi/keel-permit
+gh attestation verify keel-permit-1.22.0.tar.gz -R keelapi/keel-permit
 ```
 
 ### What these checks do and do not establish
