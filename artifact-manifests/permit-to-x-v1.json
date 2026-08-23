@@ -1436,6 +1436,16 @@
       "id": "keel.telephony_call_respond_gateway_exact_facts.v1.schema",
       "path": "schemas/telephony-call-respond-gateway-exact-facts-v1.schema.json",
       "sha256": "9a7a96baa2a359ebefbb22be06ce2c617a854911bf61e54dd0593fdc32425a35"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v22",
+      "path": "presentation_registry/v22.json",
+      "sha256": "70f92d1daa4441afb01b748ae4dbebdbeb639146eeb14ae6fdf901ad13f1e991"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v22.schema",
+      "path": "presentation_registry/v22.schema.json",
+      "sha256": "a347c4fac013c7f556318ac0460bf81842b236386110ce6444b42fde12ae1a20"
     }
   ]
 }
