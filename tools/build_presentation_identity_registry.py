@@ -11,12 +11,54 @@ import copy
 
 from build_transactional_cx_registries import load, sha256, write
 
-
 IDENTITIES = {
     "permit_to_work.r1": ("AI-PTW", "AI Permit-to-Work"),
     "permit_to_pay.r1": ("AI-PTP", "AI Permit-to-Pay"),
     "stripe_connect_transfer_send.r1": ("AI-PTT", "AI Permit-to-Transfer"),
 }
+
+# These profiles intentionally preserve historical titles for compatible
+# semantic aliases. Every duplicate title must be named here; acronyms have no
+# aliases and are always globally unique.
+TITLE_ALIAS_ALLOWLIST = {
+    "AI Permit-to-Create-Calendar-Event": frozenset(
+        {"calendar_event_create.r1", "calendar_event_create_gateway.r1"}
+    ),
+    "AI Permit-to-Refund-Payment": frozenset(
+        {"permit_to_refund_payment.r1", "payment_refund_execute.r1"}
+    ),
+}
+
+
+def validate_identity_collisions(registry: dict) -> None:
+    by_acronym: dict[str, set[str]] = {}
+    by_title: dict[str, set[str]] = {}
+    for profile in registry["profiles"]:
+        profile_id = profile["presentation_profile_id"]
+        acronym = profile.get("acronym")
+        if acronym:
+            by_acronym.setdefault(acronym, set()).add(profile_id)
+        title = profile.get("customer_title")
+        if title:
+            by_title.setdefault(title, set()).add(profile_id)
+
+    acronym_collisions = {
+        value: sorted(profile_ids)
+        for value, profile_ids in by_acronym.items()
+        if len(profile_ids) > 1
+    }
+    if acronym_collisions:
+        raise RuntimeError(f"Presentation acronym collisions: {acronym_collisions}")
+
+    title_collisions = {}
+    for value, profile_ids in by_title.items():
+        if len(profile_ids) < 2:
+            continue
+        if TITLE_ALIAS_ALLOWLIST.get(value) == frozenset(profile_ids):
+            continue
+        title_collisions[value] = sorted(profile_ids)
+    if title_collisions:
+        raise RuntimeError(f"Presentation title collisions: {title_collisions}")
 
 
 def main() -> None:
@@ -35,6 +77,8 @@ def main() -> None:
     missing = sorted(set(IDENTITIES) - found)
     if missing:
         raise RuntimeError(f"Presentation profiles not found: {missing}")
+
+    validate_identity_collisions(registry)
 
     write("presentation_registry/v22.json", registry)
 
