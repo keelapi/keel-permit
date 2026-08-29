@@ -36,6 +36,47 @@ WORK_V2_CLAIMS = {
     "permit.work_value_conservation.v2",
     "permit.work_exact_review.v1",
 }
+MCP_ACTION_MAPPING_CLAIMS = {
+    "permit.mcp_action_mapping_binding.v1",
+    "permit.mcp_governance_interpretation.v1",
+    "permit.mcp_structural_hold_evidence.v1",
+    "permit.mcp_dispatch_eligibility.v1",
+}
+# Refusals the Action Mapping chain corpus must keep covering. A conformance
+# corpus that silently loses a refusal stops being evidence that the chain
+# fails closed, so the categories are pinned here rather than counted.
+ACTION_MAPPING_CHAIN_COVERAGE = {
+    "claim_registry": {
+        "CHAIN_RESOLVED",
+        "CHAIN_BASE_UNPINNED",
+        "CHAIN_BASE_DIGEST_ABSENT",
+        "CHAIN_BASE_DIGEST_MISMATCH",
+        "CHAIN_BASE_ARTIFACT_MISMATCH",
+        "CHAIN_BASE_VERSION_MISMATCH",
+        "CHAIN_CLAIM_REDEFINED",
+        "CHAIN_CLAIM_DUPLICATED",
+        "CHAIN_CLAIM_SET_MISMATCH",
+        "CHAIN_VERDICT_ENUM_CHANGED",
+        "CHAIN_CLAIM_CEILING_ABSENT",
+        "CHAIN_SEMANTIC_SUBSTITUTION",
+        "CHAIN_SCOPE_VIOLATION",
+    },
+    "universal_verification": {
+        "RECIPE_RESOLVED",
+        "RECIPE_BASE_UNPINNED",
+        "RECIPE_BASE_DIGEST_ABSENT",
+        "RECIPE_BASE_DIGEST_MISMATCH",
+        "RECIPE_BASE_ARTIFACT_MISMATCH",
+        "RECIPE_BASE_VERSION_MISMATCH",
+        "RECIPE_CLAIM_REGISTRY_MISMATCH",
+        "RECIPE_SURFACE_KEY_MISMATCH",
+        "RECIPE_ARTIFACT_CLASS_MAP_MISMATCH",
+        "RECIPE_ARTIFACT_CLASS_BINDING_MISMATCH",
+        "RECIPE_CLAIM_SET_MISMATCH",
+        "RECIPE_SEMANTIC_SUBSTITUTION",
+        "RECIPE_SCOPE_VIOLATION",
+    },
+}
 UNIVERSAL_CLAIMS = {
     "permit.type.v1",
     "permit.exact_target.v1",
@@ -4805,6 +4846,53 @@ def validate_claim_contracts() -> None:
         if artifact.get("body", {}).get("claim") != claim_name:
             raise ContractFailure(f"{path} does not bind claim {claim_name}")
 
+    claims_v7 = load_json("claim_registry/v7.json")
+    extension_v7 = claims_v7.get("extends")
+    if not isinstance(extension_v7, dict):
+        raise ContractFailure("claim_registry/v7.json must pin v6")
+    if extension_v7.get("artifact_id") != "keel.verifier_claim_registry.v6":
+        raise ContractFailure("claim_registry/v7.json extends the wrong artifact")
+    if extension_v7.get("version") != claims_v6.get("version"):
+        raise ContractFailure("claim_registry/v7.json extends the wrong version")
+    if extension_v7.get("sha256") != _sha256_file(
+        ROOT / "claim_registry/v6.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("claim_registry/v7.json has a stale base digest")
+    if set(claims_v7.get("verdict_enum", [])) != VERDICTS:
+        raise ContractFailure("claim_registry/v7.json changed the stable verdict enum")
+    v7_claims = claims_v7.get("claims")
+    if not isinstance(v7_claims, list):
+        raise ContractFailure("claim_registry/v7.json must add Action Mapping claims")
+    v7_names = {
+        claim.get("name") for claim in v7_claims if isinstance(claim, dict)
+    }
+    if v7_names != MCP_ACTION_MAPPING_CLAIMS:
+        raise ContractFailure(
+            f"claim_registry/v7.json Action Mapping claim mismatch: {sorted(v7_names)}"
+        )
+    # A successor may add claims. Redefining a released one would silently change
+    # the meaning of evidence already published under the registry that named it.
+    inherited_v7 = {
+        claim.get("name")
+        for version in ("v0", "v1", "v2", "v3", "v4", "v5", "v6")
+        for claim in load_json(f"claim_registry/{version}.json").get("claims", [])
+        if isinstance(claim, dict)
+    }
+    overlap_v7 = sorted(v7_names.intersection(inherited_v7))
+    if overlap_v7:
+        raise ContractFailure(
+            f"claim_registry/v7.json redefines inherited claims: {overlap_v7}"
+        )
+    for claim in v7_claims:
+        if set(claim.get("verdict_enum", [])) != VERDICTS:
+            raise ContractFailure(
+                f"{claim.get('name')} changed the stable verdict enum"
+            )
+        if not claim.get("does_not_establish"):
+            raise ContractFailure(
+                f"{claim.get('name')} lacks a claim-level evidence ceiling"
+            )
+
 
 def validate_universal_verification_contract(registry: Registry) -> dict[str, Any]:
     """Validate the composable S1 contract and its cross-repository corpus."""
@@ -5064,6 +5152,42 @@ def validate_universal_verification_contract(registry: Registry) -> dict[str, An
     if work_v2_claims != expected_work_v2_claims:
         raise ContractFailure(
             "universal verification v5 Work v2 claim mapping is incomplete"
+        )
+
+    universal_v6 = load_json("semantics/permit/universal_verification_v6.json")
+    universal_v6_extension = universal_v6.get("extends")
+    if not isinstance(universal_v6_extension, dict):
+        raise ContractFailure("universal verification v6 must pin v5")
+    if universal_v6_extension.get("artifact_id") != (
+        "keel.permit.universal_verification.v5"
+    ):
+        raise ContractFailure("universal verification v6 extends the wrong artifact")
+    if universal_v6_extension.get("sha256") != _sha256_file(
+        ROOT / "semantics/permit/universal_verification_v5.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("universal verification v6 has a stale base digest")
+    if universal_v6.get("body", {}).get("claim_registry_version") != (
+        "verifier-claims.v7"
+    ):
+        raise ContractFailure("universal verification v6 pins the wrong claim registry")
+    mapping_claims = universal_v6.get("body", {}).get(
+        "conditional_evidence_claims", {}
+    ).get("managed_mcp:action_mapping")
+    if mapping_claims != {
+        "binding": ["permit.mcp_action_mapping_binding.v1"],
+        "execution": ["permit.mcp_governance_interpretation.v1"],
+        "structural": ["permit.mcp_structural_hold_evidence.v1"],
+        "post_claim": ["permit.mcp_dispatch_eligibility.v1"],
+    }:
+        raise ContractFailure(
+            "universal verification v6 Action Mapping claim mapping is incomplete"
+        )
+    mapped_v7_claims = {
+        claim for claims in mapping_claims.values() for claim in claims
+    }
+    if mapped_v7_claims != MCP_ACTION_MAPPING_CLAIMS:
+        raise ContractFailure(
+            "universal verification v6 does not request every v7 registry claim"
         )
 
     validate_enforcement_claim_vectors()
@@ -5723,6 +5847,9 @@ def validate_artifact_manifest() -> None:
         "test-vectors/enforcement_claims/v1/corpus.json",
         "claim_registry/v6.json",
         "semantics/permit/universal_verification_v5.json",
+        "claim_registry/v7.json",
+        "semantics/permit/universal_verification_v6.json",
+        "test-vectors/claim_registry_chain/v1/corpus.json",
     }
     missing_latest = sorted(required_latest_paths - paths)
     if missing_latest:
@@ -5803,6 +5930,128 @@ def validate_enforcement_claim_vectors() -> None:
             )
     if covered_claims != ENFORCEMENT_REGIME_CLAIMS:
         raise ContractFailure("enforcement-claim corpus misses a claim")
+
+
+def validate_action_mapping_chain_vectors() -> None:
+    """Validate the v7 chain conformance corpus against the live artifacts.
+
+    The reference executor proves the resolution algorithm produces the corpus
+    outcomes. This proves the corpus is describing the artifacts this repository
+    actually ships: a corpus whose expectations drifted from the registry would
+    keep passing its own executor while asserting nothing.
+    """
+    corpus = load_json("test-vectors/claim_registry_chain/v1/corpus.json")
+    if corpus.get("version") != "keel.claim_registry_chain_vectors.v1":
+        raise ContractFailure("Action Mapping chain corpus has the wrong version")
+
+    executor = corpus.get("reference_executor")
+    if not isinstance(executor, str) or not (
+        ROOT / "test-vectors/claim_registry_chain/v1" / executor
+    ).is_file():
+        raise ContractFailure("Action Mapping chain corpus names no runnable reference executor")
+
+    chains = corpus.get("chains")
+    if not isinstance(chains, dict) or set(chains) != set(ACTION_MAPPING_CHAIN_COVERAGE):
+        raise ContractFailure("Action Mapping chain corpus covers the wrong chains")
+
+    registry_chain = chains["claim_registry"]
+    recipe_chain = chains["universal_verification"]
+    if registry_chain.get("base") != "claim_registry/v6.json" or registry_chain.get(
+        "extension"
+    ) != "claim_registry/v7.json":
+        raise ContractFailure("Action Mapping chain corpus points at the wrong registry artifacts")
+    if recipe_chain.get("base") != "semantics/permit/universal_verification_v5.json" or (
+        recipe_chain.get("extension") != "semantics/permit/universal_verification_v6.json"
+    ):
+        raise ContractFailure("Action Mapping chain corpus points at the wrong recipe artifacts")
+
+    claims_v7 = load_json("claim_registry/v7.json")
+    universal_v6 = load_json("semantics/permit/universal_verification_v6.json")
+    registry_expected = registry_chain.get("expected", {})
+    recipe_expected = recipe_chain.get("expected", {})
+
+    if registry_expected.get("base_artifact_id") != claims_v7.get("extends", {}).get(
+        "artifact_id"
+    ):
+        raise ContractFailure("Action Mapping corpus disagrees with the v7 base artifact")
+    if set(registry_expected.get("added_claims", [])) != MCP_ACTION_MAPPING_CLAIMS:
+        raise ContractFailure("Action Mapping corpus declares the wrong v7 claim set")
+    inherited = registry_expected.get("inherited_registries")
+    if inherited != [f"claim_registry/v{index}.json" for index in range(7)]:
+        raise ContractFailure("Action Mapping corpus omits part of the transitive base")
+    for path in inherited:
+        if not (ROOT / path).is_file():
+            raise ContractFailure(f"Action Mapping corpus names a missing registry: {path}")
+
+    body = universal_v6.get("body", {})
+    surface_key = recipe_expected.get("surface_key")
+    if recipe_expected.get("base_artifact_id") != universal_v6.get("extends", {}).get(
+        "artifact_id"
+    ):
+        raise ContractFailure("Action Mapping corpus disagrees with the recipe base artifact")
+    if recipe_expected.get("claim_registry_version") != body.get("claim_registry_version"):
+        raise ContractFailure("Action Mapping corpus disagrees with the recipe claim registry")
+    if recipe_expected.get("artifact_classes") != body.get(
+        "conditional_evidence_claims", {}
+    ).get(surface_key):
+        raise ContractFailure("Action Mapping corpus disagrees with the recipe artifact classes")
+    if set(recipe_expected.get("added_claims", [])) != MCP_ACTION_MAPPING_CLAIMS:
+        raise ContractFailure("Action Mapping corpus declares the wrong recipe claim set")
+
+    vectors = corpus.get("vectors")
+    if not isinstance(vectors, list) or not vectors:
+        raise ContractFailure("Action Mapping chain corpus declares no vectors")
+    seen: set[str] = set()
+    reasons: dict[str, set[str]] = {name: set() for name in chains}
+    positives: dict[str, int] = dict.fromkeys(chains, 0)
+    for vector in vectors:
+        vector_id = vector.get("id")
+        if not isinstance(vector_id, str) or vector_id in seen:
+            raise ContractFailure("Action Mapping chain vectors have duplicate or missing ids")
+        seen.add(vector_id)
+        chain = vector.get("chain")
+        if chain not in chains:
+            raise ContractFailure(f"Action Mapping vector {vector_id} names an unknown chain")
+        if not isinstance(vector.get("covers"), str) or not vector["covers"]:
+            raise ContractFailure(f"Action Mapping vector {vector_id} states no coverage intent")
+        expected = vector.get("expected")
+        if not isinstance(expected, dict) or expected.get("outcome") not in {
+            "resolved",
+            "refused",
+        }:
+            raise ContractFailure(f"Action Mapping vector {vector_id} lacks a stable outcome")
+        if not isinstance(expected.get("reason"), str):
+            raise ContractFailure(f"Action Mapping vector {vector_id} lacks a reason code")
+        reasons[chain].add(expected["reason"])
+
+        mutation = vector.get("mutation")
+        if expected["outcome"] == "resolved":
+            positives[chain] += 1
+            if mutation is not None:
+                raise ContractFailure(
+                    f"Action Mapping vector {vector_id} resolves despite a mutation"
+                )
+        else:
+            if not isinstance(mutation, dict) or mutation.get("target") not in {
+                "base",
+                "extension",
+            }:
+                raise ContractFailure(
+                    f"Action Mapping vector {vector_id} refuses without a declared mutation"
+                )
+            if not isinstance(mutation.get("op"), str):
+                raise ContractFailure(f"Action Mapping vector {vector_id} declares no mutation op")
+
+    for chain, required in ACTION_MAPPING_CHAIN_COVERAGE.items():
+        missing = sorted(required - reasons[chain])
+        if missing:
+            raise ContractFailure(
+                f"Action Mapping chain corpus lost {chain} refusal coverage: {missing}"
+            )
+        if positives[chain] != 1:
+            raise ContractFailure(
+                f"Action Mapping chain corpus needs exactly one {chain} positive vector"
+            )
 
 
 def validate_spec_document_pins() -> None:
@@ -6123,6 +6372,7 @@ def main() -> int:
         validate_artifact_manifest()
         validate_spec_document_pins()
         validate_enforcement_state_vectors()
+        validate_action_mapping_chain_vectors()
         validate_pack_v3_compatibility(registry, exact_pack)
     except (ContractFailure, jsonschema.SchemaError) as exc:
         print(f"Permit-to-X contract check failed: {exc}")

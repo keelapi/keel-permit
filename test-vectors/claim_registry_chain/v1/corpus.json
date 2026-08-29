@@ -1,0 +1,740 @@
+{
+  "version": "keel.claim_registry_chain_vectors.v1",
+  "description": "Conformance vectors for resolving the verifier-claims.v7 claim-registry extension and the keel.permit.universal_verification.v6 recipe extension. Expected outcomes are derived from spec/verifier-claims-v2.md and spec/verifier-claims-v7.md, not copied from any verifier's current output. Negative vectors are documented single-delta mutations of the valid parent artifacts; a mutation targeting the base changes the base bytes, so the extension's pinned digest is expected to stop matching.",
+  "reference_executor": "reference_executor.py",
+  "chains": {
+    "claim_registry": {
+      "base": "claim_registry/v6.json",
+      "extension": "claim_registry/v7.json",
+      "expected": {
+        "base_artifact_id": "keel.verifier_claim_registry.v6",
+        "added_claims": [
+          "permit.mcp_action_mapping_binding.v1",
+          "permit.mcp_governance_interpretation.v1",
+          "permit.mcp_structural_hold_evidence.v1",
+          "permit.mcp_dispatch_eligibility.v1"
+        ],
+        "inherited_registries": [
+          "claim_registry/v0.json",
+          "claim_registry/v1.json",
+          "claim_registry/v2.json",
+          "claim_registry/v3.json",
+          "claim_registry/v4.json",
+          "claim_registry/v5.json",
+          "claim_registry/v6.json"
+        ]
+      }
+    },
+    "universal_verification": {
+      "base": "semantics/permit/universal_verification_v5.json",
+      "extension": "semantics/permit/universal_verification_v6.json",
+      "expected": {
+        "base_artifact_id": "keel.permit.universal_verification.v5",
+        "claim_registry_version": "verifier-claims.v7",
+        "surface_key": "managed_mcp:action_mapping",
+        "artifact_classes": {
+          "binding": [
+            "permit.mcp_action_mapping_binding.v1"
+          ],
+          "execution": [
+            "permit.mcp_governance_interpretation.v1"
+          ],
+          "structural": [
+            "permit.mcp_structural_hold_evidence.v1"
+          ],
+          "post_claim": [
+            "permit.mcp_dispatch_eligibility.v1"
+          ]
+        },
+        "added_claims": [
+          "permit.mcp_action_mapping_binding.v1",
+          "permit.mcp_governance_interpretation.v1",
+          "permit.mcp_structural_hold_evidence.v1",
+          "permit.mcp_dispatch_eligibility.v1"
+        ]
+      }
+    }
+  },
+  "vectors": [
+    {
+      "id": "registry-chain-resolves",
+      "chain": "claim_registry",
+      "covers": "v7 extends v6 with exactly the four new claims and redefines nothing",
+      "mutation": null,
+      "expected": {
+        "outcome": "resolved",
+        "reason": "CHAIN_RESOLVED"
+      }
+    },
+    {
+      "id": "registry-extends-removed",
+      "chain": "claim_registry",
+      "covers": "missing inherited hash",
+      "mutation": {
+        "target": "extension",
+        "op": "remove_extends"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_BASE_UNPINNED"
+      }
+    },
+    {
+      "id": "registry-base-digest-absent",
+      "chain": "claim_registry",
+      "covers": "missing inherited hash",
+      "mutation": {
+        "target": "extension",
+        "op": "remove_extends_field",
+        "field": "sha256"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_BASE_DIGEST_ABSENT"
+      }
+    },
+    {
+      "id": "registry-base-digest-altered",
+      "chain": "claim_registry",
+      "covers": "changed predecessor hash",
+      "mutation": {
+        "target": "extension",
+        "op": "set_extends_field",
+        "field": "sha256",
+        "value": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_BASE_DIGEST_MISMATCH"
+      }
+    },
+    {
+      "id": "registry-predecessor-bytes-changed",
+      "chain": "claim_registry",
+      "covers": "changed predecessor hash",
+      "mutation": {
+        "target": "base",
+        "op": "inject_key",
+        "key": "_corpus_mutation",
+        "value": true
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_BASE_DIGEST_MISMATCH"
+      }
+    },
+    {
+      "id": "registry-base-artifact-substituted",
+      "chain": "claim_registry",
+      "covers": "registry version mismatch",
+      "mutation": {
+        "target": "extension",
+        "op": "set_extends_field",
+        "field": "artifact_id",
+        "value": "keel.verifier_claim_registry.v5"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_BASE_ARTIFACT_MISMATCH"
+      }
+    },
+    {
+      "id": "registry-base-version-absent",
+      "chain": "claim_registry",
+      "covers": "registry version mismatch",
+      "mutation": {
+        "target": "extension",
+        "op": "remove_extends_field",
+        "field": "version"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_BASE_VERSION_ABSENT"
+      }
+    },
+    {
+      "id": "registry-base-version-mismatch",
+      "chain": "claim_registry",
+      "covers": "registry version mismatch",
+      "mutation": {
+        "target": "extension",
+        "op": "set_extends_field",
+        "field": "version",
+        "value": "verifier-claims.v5"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_BASE_VERSION_MISMATCH"
+      }
+    },
+    {
+      "id": "registry-claim-redefines-work-v2",
+      "chain": "claim_registry",
+      "covers": "claim overlap/redefinition",
+      "mutation": {
+        "target": "extension",
+        "op": "rename_claim",
+        "from": "permit.mcp_dispatch_eligibility.v1",
+        "to": "permit.work_exact_review.v1"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_CLAIM_REDEFINED"
+      }
+    },
+    {
+      "id": "registry-claim-redefines-universal-v2",
+      "chain": "claim_registry",
+      "covers": "claim overlap/redefinition across the transitive base",
+      "mutation": {
+        "target": "extension",
+        "op": "rename_claim",
+        "from": "permit.mcp_structural_hold_evidence.v1",
+        "to": "permit.type.v1"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_CLAIM_REDEFINED"
+      }
+    },
+    {
+      "id": "registry-claim-duplicated",
+      "chain": "claim_registry",
+      "covers": "claim overlap/redefinition",
+      "mutation": {
+        "target": "extension",
+        "op": "duplicate_claim",
+        "name": "permit.mcp_action_mapping_binding.v1"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_CLAIM_DUPLICATED"
+      }
+    },
+    {
+      "id": "registry-claim-missing",
+      "chain": "claim_registry",
+      "covers": "missing Action Mapping claim",
+      "mutation": {
+        "target": "extension",
+        "op": "remove_claim",
+        "name": "permit.mcp_dispatch_eligibility.v1"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_CLAIM_SET_MISMATCH"
+      }
+    },
+    {
+      "id": "registry-claim-extra",
+      "chain": "claim_registry",
+      "covers": "extra Action Mapping claim",
+      "mutation": {
+        "target": "extension",
+        "op": "add_claim",
+        "name": "permit.mcp_unspecified_addition.v1"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_CLAIM_SET_MISMATCH"
+      }
+    },
+    {
+      "id": "registry-verdict-enum-widened",
+      "chain": "claim_registry",
+      "covers": "stable verdict enum",
+      "mutation": {
+        "target": "extension",
+        "op": "set_verdict_enum",
+        "value": [
+          "supported",
+          "disproved",
+          "insufficient_evidence",
+          "unverifiable_scope",
+          "probably"
+        ]
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_VERDICT_ENUM_CHANGED"
+      }
+    },
+    {
+      "id": "registry-claim-verdict-enum-narrowed",
+      "chain": "claim_registry",
+      "covers": "stable verdict enum",
+      "mutation": {
+        "target": "extension",
+        "op": "set_claim_field",
+        "name": "permit.mcp_governance_interpretation.v1",
+        "field": "verdict_enum",
+        "value": [
+          "supported"
+        ]
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_VERDICT_ENUM_CHANGED"
+      }
+    },
+    {
+      "id": "registry-claim-ceiling-removed",
+      "chain": "claim_registry",
+      "covers": "claim-level evidence ceiling",
+      "mutation": {
+        "target": "extension",
+        "op": "remove_claim_field",
+        "name": "permit.mcp_structural_hold_evidence.v1",
+        "field": "does_not_establish"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_CLAIM_CEILING_ABSENT"
+      }
+    },
+    {
+      "id": "registry-claim-substituted-payment-refund",
+      "chain": "claim_registry",
+      "covers": "semantic substitution through payment.refund",
+      "mutation": {
+        "target": "extension",
+        "op": "rename_claim",
+        "from": "permit.mcp_dispatch_eligibility.v1",
+        "to": "permit.payment_refund_dispatch.v1"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_SEMANTIC_SUBSTITUTION"
+      }
+    },
+    {
+      "id": "registry-claim-substituted-tool-call-selector",
+      "chain": "claim_registry",
+      "covers": "semantic substitution through mcp.tool.call",
+      "mutation": {
+        "target": "extension",
+        "op": "rename_claim",
+        "from": "permit.mcp_action_mapping_binding.v1",
+        "to": "keel.action.mcp_tool_call.v1"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_SEMANTIC_SUBSTITUTION"
+      }
+    },
+    {
+      "id": "registry-semantic-selector-injected",
+      "chain": "claim_registry",
+      "covers": "absence of semantic-registry selectors",
+      "mutation": {
+        "target": "extension",
+        "op": "inject_key",
+        "key": "semantic_id",
+        "value": "keel.action.mcp_tool_call.v1"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_SCOPE_VIOLATION"
+      }
+    },
+    {
+      "id": "registry-fact-profile-injected",
+      "chain": "claim_registry",
+      "covers": "absence of fact profiles",
+      "mutation": {
+        "target": "extension",
+        "op": "inject_key",
+        "key": "fact_profile_id",
+        "value": "keel.facts.mcp_action_mapping.v1"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_SCOPE_VIOLATION"
+      }
+    },
+    {
+      "id": "registry-consequence-entry-injected",
+      "chain": "claim_registry",
+      "covers": "absence of consequence-registry entries",
+      "mutation": {
+        "target": "extension",
+        "op": "inject_key",
+        "key": "consequence_registry_version",
+        "value": "keel.consequence_registry.v1"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_SCOPE_VIOLATION"
+      }
+    },
+    {
+      "id": "registry-presentation-entry-injected",
+      "chain": "claim_registry",
+      "covers": "absence of presentation-registry entries",
+      "mutation": {
+        "target": "extension",
+        "op": "inject_key",
+        "key": "non_authorizing_presentation_profile_id",
+        "value": "permit_to_call_tool.r1"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_SCOPE_VIOLATION"
+      }
+    },
+    {
+      "id": "registry-permit-binding-version-injected",
+      "chain": "claim_registry",
+      "covers": "absence of Permit schema/binding changes",
+      "mutation": {
+        "target": "extension",
+        "op": "inject_key",
+        "key": "permit_binding_version",
+        "value": "v8"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "CHAIN_SCOPE_VIOLATION"
+      }
+    },
+    {
+      "id": "recipe-chain-resolves",
+      "chain": "universal_verification",
+      "covers": "recipe v6 extends v5 and binds the expected Action Mapping claim set",
+      "mutation": null,
+      "expected": {
+        "outcome": "resolved",
+        "reason": "RECIPE_RESOLVED"
+      }
+    },
+    {
+      "id": "recipe-extends-removed",
+      "chain": "universal_verification",
+      "covers": "missing inherited hash",
+      "mutation": {
+        "target": "extension",
+        "op": "remove_extends"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_BASE_UNPINNED"
+      }
+    },
+    {
+      "id": "recipe-base-digest-absent",
+      "chain": "universal_verification",
+      "covers": "missing inherited hash",
+      "mutation": {
+        "target": "extension",
+        "op": "remove_extends_field",
+        "field": "sha256"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_BASE_DIGEST_ABSENT"
+      }
+    },
+    {
+      "id": "recipe-base-digest-altered",
+      "chain": "universal_verification",
+      "covers": "changed predecessor hash",
+      "mutation": {
+        "target": "extension",
+        "op": "set_extends_field",
+        "field": "sha256",
+        "value": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_BASE_DIGEST_MISMATCH"
+      }
+    },
+    {
+      "id": "recipe-predecessor-bytes-changed",
+      "chain": "universal_verification",
+      "covers": "changed predecessor hash",
+      "mutation": {
+        "target": "base",
+        "op": "inject_key",
+        "key": "_corpus_mutation",
+        "value": true
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_BASE_DIGEST_MISMATCH"
+      }
+    },
+    {
+      "id": "recipe-base-artifact-substituted",
+      "chain": "universal_verification",
+      "covers": "recipe version mismatch",
+      "mutation": {
+        "target": "extension",
+        "op": "set_extends_field",
+        "field": "artifact_id",
+        "value": "keel.permit.universal_verification.v4"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_BASE_ARTIFACT_MISMATCH"
+      }
+    },
+    {
+      "id": "recipe-base-version-mismatch",
+      "chain": "universal_verification",
+      "covers": "recipe version mismatch",
+      "mutation": {
+        "target": "extension",
+        "op": "set_extends_field",
+        "field": "version",
+        "value": "v4"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_BASE_VERSION_MISMATCH"
+      }
+    },
+    {
+      "id": "recipe-claim-registry-downgraded",
+      "chain": "universal_verification",
+      "covers": "recipe/registry version mismatch",
+      "mutation": {
+        "target": "extension",
+        "op": "set_body_field",
+        "field": "claim_registry_version",
+        "value": "verifier-claims.v6"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_CLAIM_REGISTRY_MISMATCH"
+      }
+    },
+    {
+      "id": "recipe-surface-key-renamed",
+      "chain": "universal_verification",
+      "covers": "mutated artifact class mapping",
+      "mutation": {
+        "target": "extension",
+        "op": "rename_surface_key",
+        "from": "managed_mcp:action_mapping",
+        "to": "managed_mcp:other"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_SURFACE_KEY_MISMATCH"
+      }
+    },
+    {
+      "id": "recipe-surface-key-substituted-payment-refund",
+      "chain": "universal_verification",
+      "covers": "semantic substitution through payment.refund",
+      "mutation": {
+        "target": "extension",
+        "op": "rename_surface_key",
+        "from": "managed_mcp:action_mapping",
+        "to": "keel.action.payment_refund.v1"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_SEMANTIC_SUBSTITUTION"
+      }
+    },
+    {
+      "id": "recipe-artifact-class-removed",
+      "chain": "universal_verification",
+      "covers": "mutated artifact class mapping",
+      "mutation": {
+        "target": "extension",
+        "op": "remove_artifact_class",
+        "surface": "managed_mcp:action_mapping",
+        "class": "structural"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_ARTIFACT_CLASS_MAP_MISMATCH"
+      }
+    },
+    {
+      "id": "recipe-artifact-class-added",
+      "chain": "universal_verification",
+      "covers": "mutated artifact class mapping; a structural hold has no resume class",
+      "mutation": {
+        "target": "extension",
+        "op": "set_artifact_class",
+        "surface": "managed_mcp:action_mapping",
+        "class": "resume",
+        "claims": [
+          "permit.mcp_structural_hold_evidence.v1"
+        ]
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_ARTIFACT_CLASS_MAP_MISMATCH"
+      }
+    },
+    {
+      "id": "recipe-artifact-class-claim-moved",
+      "chain": "universal_verification",
+      "covers": "mutated artifact class mapping; the structural hold and the post-claim class trade places, which would let a non-approvable hold name a dispatch claim",
+      "mutation": {
+        "target": "extension",
+        "op": "swap_artifact_classes",
+        "surface": "managed_mcp:action_mapping",
+        "classes": [
+          "structural",
+          "post_claim"
+        ]
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_ARTIFACT_CLASS_BINDING_MISMATCH"
+      }
+    },
+    {
+      "id": "recipe-claim-missing",
+      "chain": "universal_verification",
+      "covers": "missing Action Mapping claim",
+      "mutation": {
+        "target": "extension",
+        "op": "set_artifact_class",
+        "surface": "managed_mcp:action_mapping",
+        "class": "post_claim",
+        "claims": []
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_CLAIM_SET_MISMATCH"
+      }
+    },
+    {
+      "id": "recipe-claim-extra",
+      "chain": "universal_verification",
+      "covers": "extra Action Mapping claim",
+      "mutation": {
+        "target": "extension",
+        "op": "set_artifact_class",
+        "surface": "managed_mcp:action_mapping",
+        "class": "binding",
+        "claims": [
+          "permit.mcp_action_mapping_binding.v1",
+          "permit.mcp_unspecified_addition.v1"
+        ]
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_CLAIM_SET_MISMATCH"
+      }
+    },
+    {
+      "id": "recipe-claim-substituted-payment-refund",
+      "chain": "universal_verification",
+      "covers": "semantic substitution through payment.refund",
+      "mutation": {
+        "target": "extension",
+        "op": "set_artifact_class",
+        "surface": "managed_mcp:action_mapping",
+        "class": "post_claim",
+        "claims": [
+          "permit.refund_original_payment_bound.v1"
+        ]
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_SEMANTIC_SUBSTITUTION"
+      }
+    },
+    {
+      "id": "recipe-claim-substituted-tool-call-selector",
+      "chain": "universal_verification",
+      "covers": "semantic substitution through mcp.tool.call",
+      "mutation": {
+        "target": "extension",
+        "op": "set_artifact_class",
+        "surface": "managed_mcp:action_mapping",
+        "class": "binding",
+        "claims": [
+          "keel.action.mcp_tool_call.v1"
+        ]
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_SEMANTIC_SUBSTITUTION"
+      }
+    },
+    {
+      "id": "recipe-semantic-selector-injected",
+      "chain": "universal_verification",
+      "covers": "absence of semantic-registry selectors",
+      "mutation": {
+        "target": "extension",
+        "op": "inject_key",
+        "key": "selector_registry_version",
+        "value": "keel.semantic_selector_registry.v22"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_SCOPE_VIOLATION"
+      }
+    },
+    {
+      "id": "recipe-fact-profile-injected",
+      "chain": "universal_verification",
+      "covers": "absence of fact profiles",
+      "mutation": {
+        "target": "extension",
+        "op": "inject_key",
+        "key": "fact_profile_registry_version",
+        "value": "keel.fact_profile_registry.v19"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_SCOPE_VIOLATION"
+      }
+    },
+    {
+      "id": "recipe-consequence-entry-injected",
+      "chain": "universal_verification",
+      "covers": "absence of consequence-registry entries",
+      "mutation": {
+        "target": "extension",
+        "op": "inject_key",
+        "key": "consequence_id",
+        "value": "keel.consequence.mcp_tool_call.v1"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_SCOPE_VIOLATION"
+      }
+    },
+    {
+      "id": "recipe-presentation-entry-injected",
+      "chain": "universal_verification",
+      "covers": "absence of presentation-registry entries",
+      "mutation": {
+        "target": "extension",
+        "op": "inject_key",
+        "key": "presentation_registry_version",
+        "value": "keel.presentation_registry.v22"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_SCOPE_VIOLATION"
+      }
+    },
+    {
+      "id": "recipe-permit-schema-version-injected",
+      "chain": "universal_verification",
+      "covers": "absence of Permit schema/binding changes",
+      "mutation": {
+        "target": "extension",
+        "op": "inject_key",
+        "key": "permit_schema_version",
+        "value": "v2"
+      },
+      "expected": {
+        "outcome": "refused",
+        "reason": "RECIPE_SCOPE_VIOLATION"
+      }
+    }
+  ]
+}

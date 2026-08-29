@@ -42,6 +42,8 @@ jobs:
         run: python tools/check_fact_profile_freeze.py
       - name: Verify action-classification derivation corpus
         run: python test-vectors/action_classification_derivation/v1/reference_executor.py
+      - name: Verify claim-registry and recipe extension chains
+        run: python test-vectors/claim_registry_chain/v1/reference_executor.py
       - name: Verify permit co-signature golden vectors
         run: node test-vectors/permit_co_signature/v1/reference_verify.mjs
       - name: Verify target-bound permit co-signature golden vectors
