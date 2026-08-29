@@ -33,6 +33,16 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 - Hash-address both new artifacts in the Permit-to-X artifact manifest and
   validate the v6→v7 registry and v5→v6 recipe chains in
   `tools/check_permit_to_x_artifacts.py`.
+- Add the `keel.claim_registry_chain_vectors.v1` conformance corpus and its
+  offline reference executor, covering both extension chains: a positive
+  resolution of each, and refusals for a missing or altered inherited digest, a
+  changed predecessor, claim redefinition or duplication, a missing or extra
+  Action Mapping claim, a registry/recipe version mismatch, a mutated
+  artifact-class mapping, and semantic substitution through `mcp.tool.call` or
+  `payment.refund`.
+- Correct the README's release-manifest artifact count, which had stayed at the
+  v1.20.1 figure across three releases, and recompute it in
+  `tools/check_repo_integrity.py` so it cannot drift again.
 
 ### Compatibility
 
@@ -50,10 +60,15 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 - The claims establish what an artifact binds. They do not establish that
   upstream dispatch occurred, provider acceptance, downstream effect, or
   independent verification of the WebAuthn activation ceremony.
-- `verifier-claims.v7` is a candidate registry version. Conformance vectors
-  covering the new claim definitions are not published in this repository yet,
-  so the fourth requirement in
-  [`claim_registry/README.md`](claim_registry/README.md) remains outstanding.
+- `verifier-claims.v7` is a candidate registry version. The conformance-vector
+  requirement in [`claim_registry/README.md`](claim_registry/README.md) is met
+  by the new corpus, which covers each added claim's identity, verdict enum,
+  evidence ceiling, and artifact-class binding, and the refusals that keep the
+  chain failing closed.
+- Those vectors are registry- and recipe-composition vectors. Adjudicating a
+  `keel.mcp_action_mapping_evidence.v1` artifact is deliberately not vectored
+  here: that artifact and its schema are producer-owned, and this repository
+  does not vendor them.
 
 ## [1.22.0] — 2026-08-21
 

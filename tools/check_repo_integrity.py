@@ -4,10 +4,12 @@
 from __future__ import annotations
 
 import argparse
+import io
 import json
 import re
 import subprocess
 import sys
+import tarfile
 from pathlib import Path
 from typing import Any
 
@@ -239,6 +241,45 @@ def check_version_metadata(errors: list[str]) -> None:
         )
 
 
+def check_release_artifact_count(errors: list[str]) -> None:
+    """Recompute the release-bundle file count the README publishes.
+
+    The README states how many artifacts `release-manifest.json` carries a
+    digest for. Nothing recomputed it, so it stayed at the v1.20.1 figure while
+    three releases added files. `git archive` over the committed tree is the
+    same composition `tools/build_release_bundle.py` archives at a tag, so the
+    number is checkable rather than trusted.
+
+    Evaluated against HEAD, because that is the tree a tag would archive. A
+    commit that adds or removes a distributed file has to update the README in
+    the same commit, which is the drift this check exists to stop.
+    """
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    match = re.search(r"per-file digest for all ([0-9]+) artifacts", readme)
+    if not match:
+        fail(errors, "README release-manifest artifact count is missing")
+        return
+    try:
+        archive = subprocess.run(
+            ["git", "archive", "--prefix=release/", "--format=tar.gz", "HEAD"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+        ).stdout
+        with tarfile.open(fileobj=io.BytesIO(archive), mode="r:gz") as bundle:
+            actual = sum(1 for member in bundle.getmembers() if member.isfile())
+    except (OSError, subprocess.CalledProcessError, tarfile.TarError):
+        print("git archive unavailable; skipping release artifact count check.")
+        return
+    claimed = int(match.group(1))
+    if claimed != actual:
+        fail(
+            errors,
+            f"README claims {claimed} release artifacts; git archive HEAD contains "
+            f"{actual}",
+        )
+
+
 def check_examples_against_schemas(require_jsonschema: bool, errors: list[str]) -> None:
     try:
         import jsonschema
@@ -457,6 +498,7 @@ def main() -> int:
     check_claim_registry_v1_superset(errors)
     check_manifest_summary(errors)
     check_version_metadata(errors)
+    check_release_artifact_count(errors)
     check_json_schemas_self_validate(args.require_jsonschema, errors)
     check_examples_against_schemas(args.require_jsonschema, errors)
     check_permit_co_signature_vectors(args.require_jsonschema, errors)

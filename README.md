@@ -167,7 +167,7 @@ Each tagged release publishes three assets:
 | Asset | What it is |
 |---|---|
 | `keel-permit-<version>.tar.gz` | The published specification distribution. Development tooling is excluded. Not all of it is normative — see below. |
-| `release-manifest.json` | SHA-256 of the bundle, plus a per-file digest for all 733 artifacts, the source commit, and the command to reproduce the bundle. |
+| `release-manifest.json` | SHA-256 of the bundle, plus a per-file digest for all 794 artifacts, the source commit, and the command to reproduce the bundle. |
 | `SHA256SUMS` | `sha256sum`-compatible digests of the published assets. |
 
 ### What is in the distribution

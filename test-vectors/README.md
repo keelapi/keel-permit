@@ -35,6 +35,7 @@ For Permit Spec, this enables:
 - `semantics/` contains semantic-artifact conformance records for export manifests, governance-chain hashing, closures, checkpoints, workflow evidence, and Permit binding.
 - `vectors/cat-08-permit-chains/` contains self-contained Permit Chain semantic vectors. These assume the cryptographic substrate is valid and focus on claim-layer semantics.
 - `permit_co_signature/v1/` contains golden WebAuthn ES256 and EdDSA co-signature assertions, negative ceremony/binding vectors, and an executable offline reference verifier.
+- `claim_registry_chain/v1/` contains the `verifier-claims.v6`→`v7` and universal-verification `v5`→`v6` extension-chain vectors, with an executable offline reference executor.
 - `vectors/cat-01-baseline/` and `vectors/cat-02-tamper-chain/` contain the first byte-level fixture scaffolds, with placeholder hashes pending the deterministic fixture generator.
 - `MANIFEST.json` records Permit binding support through v7. v6 remains frozen; v7/c7 is additive and requires signed account/registry selector bytes for Permit v2 slot key lookup.
 

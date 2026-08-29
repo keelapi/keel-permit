@@ -1456,6 +1456,11 @@
       "id": "keel.permit.universal_verification.v6",
       "path": "semantics/permit/universal_verification_v6.json",
       "sha256": "d84bb5543c60d461ff0fdf1f2155199fb69adb877bd9e081ce364221d56d0bf2"
+    },
+    {
+      "id": "permit-to-x.test-vectors.claim-registry-chain.v1",
+      "path": "test-vectors/claim_registry_chain/v1/corpus.json",
+      "sha256": "8964a73376dbbf06b8ec5d597a8b1f2668cf6e1206c9d2e03860974252722b90"
     }
   ]
 }
