@@ -4,7 +4,19 @@
 the immutable v6 registry. Its canonical artifact is
 [`claim_registry/v7.json`](../claim_registry/v7.json), and its adjudication
 recipe is
-[`semantics/permit/universal_verification_v6.json`](../semantics/permit/universal_verification_v6.json).
+[`semantics/permit/universal_verification_v7.json`](../semantics/permit/universal_verification_v7.json).
+
+The released v7 recipe is an additive promotion wrapper over the immutable
+candidate
+[`universal_verification_v6.json`](../semantics/permit/universal_verification_v6.json).
+It pins the exact v6 bytes and preserves the complete v6 `body` byte-for-value
+after JSON parsing. The predecessor remains available under its original
+identity and candidate status; promotion never rewrites a historical pin.
+
+A verifier that supports recipe v6 does not thereby support recipe v7. It MUST
+explicitly allowlist the v7 identity and exact bytes. Until a coordinated public
+verifier release does so, evidence packs MUST continue to pin v6 and this
+promotion MUST NOT be described as externally supported.
 
 The artifact pins and extends the complete immutable v6 registry rather than
 copying it, under the composition rules stated in

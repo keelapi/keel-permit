@@ -5190,6 +5190,31 @@ def validate_universal_verification_contract(registry: Registry) -> dict[str, An
             "universal verification v6 does not request every v7 registry claim"
         )
 
+    universal_v7 = load_json("semantics/permit/universal_verification_v7.json")
+    universal_v7_extension = universal_v7.get("extends")
+    if not isinstance(universal_v7_extension, dict):
+        raise ContractFailure("universal verification v7 must pin v6")
+    if universal_v7_extension.get("artifact_id") != (
+        "keel.permit.universal_verification.v6"
+    ):
+        raise ContractFailure("universal verification v7 extends the wrong artifact")
+    if universal_v7_extension.get("version") != universal_v6.get("version"):
+        raise ContractFailure("universal verification v7 extends the wrong version")
+    if universal_v7_extension.get("sha256") != _sha256_file(
+        ROOT / "semantics/permit/universal_verification_v6.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("universal verification v7 has a stale base digest")
+    if universal_v7.get("id") != "keel.permit.universal_verification.v7":
+        raise ContractFailure("universal verification v7 has the wrong artifact id")
+    if universal_v7.get("version") != "v7":
+        raise ContractFailure("universal verification v7 has the wrong version")
+    if universal_v7.get("status") != "released":
+        raise ContractFailure("universal verification v7 is not released")
+    if universal_v7.get("kind") != universal_v6.get("kind"):
+        raise ContractFailure("universal verification v7 changed the recipe kind")
+    if universal_v7.get("body") != universal_v6.get("body"):
+        raise ContractFailure("universal verification v7 changed candidate semantics")
+
     validate_enforcement_claim_vectors()
 
     consequence_vectors = load_json(
@@ -5850,6 +5875,8 @@ def validate_artifact_manifest() -> None:
         "claim_registry/v7.json",
         "semantics/permit/universal_verification_v6.json",
         "test-vectors/claim_registry_chain/v1/corpus.json",
+        "semantics/permit/universal_verification_v7.json",
+        "test-vectors/universal_verification_promotion/v1/corpus.json",
     }
     missing_latest = sorted(required_latest_paths - paths)
     if missing_latest:
@@ -6052,6 +6079,97 @@ def validate_action_mapping_chain_vectors() -> None:
             raise ContractFailure(
                 f"Action Mapping chain corpus needs exactly one {chain} positive vector"
             )
+
+
+def validate_action_mapping_promotion_vectors() -> None:
+    """Keep the released v7 recipe a byte-semantic promotion of v6."""
+
+    corpus = load_json(
+        "test-vectors/universal_verification_promotion/v1/corpus.json"
+    )
+    if corpus.get("version") != "keel.universal_verification_promotion_vectors.v1":
+        raise ContractFailure("Action Mapping promotion corpus has the wrong version")
+    if corpus.get("base") != "semantics/permit/universal_verification_v6.json":
+        raise ContractFailure("Action Mapping promotion corpus names the wrong base")
+    if corpus.get("promotion") != (
+        "semantics/permit/universal_verification_v7.json"
+    ):
+        raise ContractFailure("Action Mapping promotion corpus names the wrong successor")
+    executor = corpus.get("reference_executor")
+    if not isinstance(executor, str) or not (
+        ROOT / "test-vectors/universal_verification_promotion/v1" / executor
+    ).is_file():
+        raise ContractFailure("Action Mapping promotion corpus has no executor")
+
+    expected = corpus.get("expected")
+    if expected != {
+        "base_artifact_id": "keel.permit.universal_verification.v6",
+        "base_version": "v6",
+        "promotion_artifact_id": "keel.permit.universal_verification.v7",
+        "promotion_version": "v7",
+        "promotion_status": "released",
+    }:
+        raise ContractFailure("Action Mapping promotion corpus has stale identities")
+
+    required_reasons = {
+        "RECIPE_PROMOTION_RESOLVED",
+        "RECIPE_PROMOTION_BASE_UNPINNED",
+        "RECIPE_PROMOTION_BASE_ARTIFACT_MISMATCH",
+        "RECIPE_PROMOTION_BASE_VERSION_MISMATCH",
+        "RECIPE_PROMOTION_BASE_DIGEST_ABSENT",
+        "RECIPE_PROMOTION_BASE_DIGEST_MISMATCH",
+        "RECIPE_PROMOTION_ID_MISMATCH",
+        "RECIPE_PROMOTION_VERSION_MISMATCH",
+        "RECIPE_PROMOTION_STATUS_MISMATCH",
+        "RECIPE_PROMOTION_KIND_MISMATCH",
+        "RECIPE_PROMOTION_BODY_MISMATCH",
+    }
+    vectors = corpus.get("vectors")
+    if not isinstance(vectors, list) or not vectors:
+        raise ContractFailure("Action Mapping promotion corpus declares no vectors")
+    seen: set[str] = set()
+    reasons: set[str] = set()
+    positives = 0
+    for vector in vectors:
+        vector_id = vector.get("id")
+        if not isinstance(vector_id, str) or vector_id in seen:
+            raise ContractFailure("Action Mapping promotion vectors have duplicate ids")
+        seen.add(vector_id)
+        if not isinstance(vector.get("covers"), str) or not vector["covers"]:
+            raise ContractFailure(
+                f"Action Mapping promotion vector {vector_id} states no coverage"
+            )
+        result = vector.get("expected")
+        if not isinstance(result, dict) or result.get("outcome") not in {
+            "resolved",
+            "refused",
+        }:
+            raise ContractFailure(
+                f"Action Mapping promotion vector {vector_id} lacks an outcome"
+            )
+        reason = result.get("reason")
+        if not isinstance(reason, str):
+            raise ContractFailure(
+                f"Action Mapping promotion vector {vector_id} lacks a reason"
+            )
+        reasons.add(reason)
+        if result["outcome"] == "resolved":
+            positives += 1
+            if vector.get("mutation") is not None:
+                raise ContractFailure(
+                    f"Action Mapping promotion vector {vector_id} resolves a mutation"
+                )
+        elif not isinstance(vector.get("mutation"), dict):
+            raise ContractFailure(
+                f"Action Mapping promotion vector {vector_id} refuses without mutation"
+            )
+    if positives != 1:
+        raise ContractFailure("Action Mapping promotion corpus needs one positive")
+    missing = sorted(required_reasons - reasons)
+    if missing:
+        raise ContractFailure(
+            f"Action Mapping promotion corpus lost refusal coverage: {missing}"
+        )
 
 
 def validate_spec_document_pins() -> None:
@@ -6373,6 +6491,7 @@ def main() -> int:
         validate_spec_document_pins()
         validate_enforcement_state_vectors()
         validate_action_mapping_chain_vectors()
+        validate_action_mapping_promotion_vectors()
         validate_pack_v3_compatibility(registry, exact_pack)
     except (ContractFailure, jsonschema.SchemaError) as exc:
         print(f"Permit-to-X contract check failed: {exc}")

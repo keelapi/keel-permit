@@ -8,6 +8,34 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 - No unreleased changes.
 
+## [1.24.0] — 2026-08-29
+
+### Added
+
+- Promote the Action Mapping universal-verification recipe without rewriting
+  the candidate bytes published in v1.23.0. New recipe
+  `keel.permit.universal_verification.v7` has `status: "released"`, pins the
+  exact v6 digest, and preserves the v6 Action Mapping body byte-for-value.
+- Mark `verifier-claims.v7` current released after public keel-verifier 3.25.1
+  shipped independent adjudication of all four claims against the exact v7
+  registry bytes.
+- Add a deterministic promotion-chain corpus proving the released recipe
+  identity, exact predecessor pin, released status, and absence of semantic
+  drift.
+
+### Compatibility
+
+- `claim_registry/v7.json`, `universal_verification_v6.json`, and every v1.23.0
+  chain vector remain byte-identical. Promotion is a new recipe version, never
+  an in-place status edit.
+- The v7 recipe changes no claim, artifact class, evidence ceiling, verdict, or
+  Action Mapping interpretation rule. It only gives the already-reviewed body
+  a released semantic-artifact identity.
+- A coordinated verifier release remains required before evidence packs can pin
+  recipe v7. Verifier 3.25.1 adjudicates the contract but allowlists only recipe
+  v6; the v7 identity must fail closed as unsupported until a later verifier
+  explicitly ships these exact bytes.
+
 ## [1.23.0] — 2026-08-28
 
 ### Added
