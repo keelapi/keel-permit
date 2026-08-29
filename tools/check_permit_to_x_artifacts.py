@@ -36,6 +36,12 @@ WORK_V2_CLAIMS = {
     "permit.work_value_conservation.v2",
     "permit.work_exact_review.v1",
 }
+MCP_ACTION_MAPPING_CLAIMS = {
+    "permit.mcp_action_mapping_binding.v1",
+    "permit.mcp_governance_interpretation.v1",
+    "permit.mcp_structural_hold_evidence.v1",
+    "permit.mcp_dispatch_eligibility.v1",
+}
 UNIVERSAL_CLAIMS = {
     "permit.type.v1",
     "permit.exact_target.v1",
@@ -4805,6 +4811,53 @@ def validate_claim_contracts() -> None:
         if artifact.get("body", {}).get("claim") != claim_name:
             raise ContractFailure(f"{path} does not bind claim {claim_name}")
 
+    claims_v7 = load_json("claim_registry/v7.json")
+    extension_v7 = claims_v7.get("extends")
+    if not isinstance(extension_v7, dict):
+        raise ContractFailure("claim_registry/v7.json must pin v6")
+    if extension_v7.get("artifact_id") != "keel.verifier_claim_registry.v6":
+        raise ContractFailure("claim_registry/v7.json extends the wrong artifact")
+    if extension_v7.get("version") != claims_v6.get("version"):
+        raise ContractFailure("claim_registry/v7.json extends the wrong version")
+    if extension_v7.get("sha256") != _sha256_file(
+        ROOT / "claim_registry/v6.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("claim_registry/v7.json has a stale base digest")
+    if set(claims_v7.get("verdict_enum", [])) != VERDICTS:
+        raise ContractFailure("claim_registry/v7.json changed the stable verdict enum")
+    v7_claims = claims_v7.get("claims")
+    if not isinstance(v7_claims, list):
+        raise ContractFailure("claim_registry/v7.json must add Action Mapping claims")
+    v7_names = {
+        claim.get("name") for claim in v7_claims if isinstance(claim, dict)
+    }
+    if v7_names != MCP_ACTION_MAPPING_CLAIMS:
+        raise ContractFailure(
+            f"claim_registry/v7.json Action Mapping claim mismatch: {sorted(v7_names)}"
+        )
+    # A successor may add claims. Redefining a released one would silently change
+    # the meaning of evidence already published under the registry that named it.
+    inherited_v7 = {
+        claim.get("name")
+        for version in ("v0", "v1", "v2", "v3", "v4", "v5", "v6")
+        for claim in load_json(f"claim_registry/{version}.json").get("claims", [])
+        if isinstance(claim, dict)
+    }
+    overlap_v7 = sorted(v7_names.intersection(inherited_v7))
+    if overlap_v7:
+        raise ContractFailure(
+            f"claim_registry/v7.json redefines inherited claims: {overlap_v7}"
+        )
+    for claim in v7_claims:
+        if set(claim.get("verdict_enum", [])) != VERDICTS:
+            raise ContractFailure(
+                f"{claim.get('name')} changed the stable verdict enum"
+            )
+        if not claim.get("does_not_establish"):
+            raise ContractFailure(
+                f"{claim.get('name')} lacks a claim-level evidence ceiling"
+            )
+
 
 def validate_universal_verification_contract(registry: Registry) -> dict[str, Any]:
     """Validate the composable S1 contract and its cross-repository corpus."""
@@ -5064,6 +5117,42 @@ def validate_universal_verification_contract(registry: Registry) -> dict[str, An
     if work_v2_claims != expected_work_v2_claims:
         raise ContractFailure(
             "universal verification v5 Work v2 claim mapping is incomplete"
+        )
+
+    universal_v6 = load_json("semantics/permit/universal_verification_v6.json")
+    universal_v6_extension = universal_v6.get("extends")
+    if not isinstance(universal_v6_extension, dict):
+        raise ContractFailure("universal verification v6 must pin v5")
+    if universal_v6_extension.get("artifact_id") != (
+        "keel.permit.universal_verification.v5"
+    ):
+        raise ContractFailure("universal verification v6 extends the wrong artifact")
+    if universal_v6_extension.get("sha256") != _sha256_file(
+        ROOT / "semantics/permit/universal_verification_v5.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("universal verification v6 has a stale base digest")
+    if universal_v6.get("body", {}).get("claim_registry_version") != (
+        "verifier-claims.v7"
+    ):
+        raise ContractFailure("universal verification v6 pins the wrong claim registry")
+    mapping_claims = universal_v6.get("body", {}).get(
+        "conditional_evidence_claims", {}
+    ).get("managed_mcp:action_mapping")
+    if mapping_claims != {
+        "binding": ["permit.mcp_action_mapping_binding.v1"],
+        "execution": ["permit.mcp_governance_interpretation.v1"],
+        "structural": ["permit.mcp_structural_hold_evidence.v1"],
+        "post_claim": ["permit.mcp_dispatch_eligibility.v1"],
+    }:
+        raise ContractFailure(
+            "universal verification v6 Action Mapping claim mapping is incomplete"
+        )
+    mapped_v7_claims = {
+        claim for claims in mapping_claims.values() for claim in claims
+    }
+    if mapped_v7_claims != MCP_ACTION_MAPPING_CLAIMS:
+        raise ContractFailure(
+            "universal verification v6 does not request every v7 registry claim"
         )
 
     validate_enforcement_claim_vectors()
@@ -5723,6 +5812,8 @@ def validate_artifact_manifest() -> None:
         "test-vectors/enforcement_claims/v1/corpus.json",
         "claim_registry/v6.json",
         "semantics/permit/universal_verification_v5.json",
+        "claim_registry/v7.json",
+        "semantics/permit/universal_verification_v6.json",
     }
     missing_latest = sorted(required_latest_paths - paths)
     if missing_latest:

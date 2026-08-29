@@ -1446,6 +1446,16 @@
       "id": "keel.permit.presentation_registry.v22.schema",
       "path": "presentation_registry/v22.schema.json",
       "sha256": "a347c4fac013c7f556318ac0460bf81842b236386110ce6444b42fde12ae1a20"
+    },
+    {
+      "id": "keel.verifier_claim_registry.v7",
+      "path": "claim_registry/v7.json",
+      "sha256": "1c8c5d1165470e34f7a1913019aae0da1fd194d46ce916a2a5de94e39f4fd95b"
+    },
+    {
+      "id": "keel.permit.universal_verification.v6",
+      "path": "semantics/permit/universal_verification_v6.json",
+      "sha256": "d84bb5543c60d461ff0fdf1f2155199fb69adb877bd9e081ce364221d56d0bf2"
     }
   ]
 }

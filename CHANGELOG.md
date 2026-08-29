@@ -8,6 +8,53 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 - No unreleased changes.
 
+## [1.23.0] — 2026-08-28
+
+### Added
+
+- Publish claim registry `verifier-claims.v7` with four managed-MCP Action
+  Mapping evidence claims: `permit.mcp_action_mapping_binding.v1`,
+  `permit.mcp_governance_interpretation.v1`,
+  `permit.mcp_structural_hold_evidence.v1`, and
+  `permit.mcp_dispatch_eligibility.v1`.
+- Separate the three artifact classes that carry different authority:
+  `execution` is signed into the Permit before either relational claim exists,
+  `structural_decision` is non-approvable evidence with no Permit and no resume
+  or dispatch semantics, and `post_claim_execution` is durable standalone
+  evidence emitted after both relational claims commit. Only
+  `post_claim_execution` may name a dispatch claim.
+- Publish the `keel.permit.universal_verification.v6` recipe extension, which
+  pins `verifier-claims.v7` and requests the claims for the
+  `managed_mcp:action_mapping` enforcement surface only.
+- Add [`spec/verifier-claims-v7.md`](spec/verifier-claims-v7.md) declaring the
+  new claim, verdict, artifact-class, and pack-pinning semantics, as
+  [`claim_registry/README.md`](claim_registry/README.md) requires of a new
+  registry version.
+- Hash-address both new artifacts in the Permit-to-X artifact manifest and
+  validate the v6→v7 registry and v5→v6 recipe chains in
+  `tools/check_permit_to_x_artifacts.py`.
+
+### Compatibility
+
+- Additive only. No released artifact is rewritten: `claim_registry/v6.json`
+  and `semantics/permit/universal_verification_v5.json` are byte-unchanged, and
+  v7 extends v6 by pinned SHA-256 digest without redefining any inherited
+  claim. The four stable verdict values are unchanged.
+- Both new artifacts are byte-identical to the keel-verifier copies they were
+  published from, so the specification and the reference verifier resolve the
+  same bytes.
+- No Permit schema, binding version, semantic registry, fact profile,
+  consequence registry, or presentation registry changes. The target
+  `governance_action_id` is deliberately not a semantic-registry selector, and
+  `permit_action_name` remains `mcp.tool.call`.
+- The claims establish what an artifact binds. They do not establish that
+  upstream dispatch occurred, provider acceptance, downstream effect, or
+  independent verification of the WebAuthn activation ceremony.
+- `verifier-claims.v7` is a candidate registry version. Conformance vectors
+  covering the new claim definitions are not published in this repository yet,
+  so the fourth requirement in
+  [`claim_registry/README.md`](claim_registry/README.md) remains outstanding.
+
 ## [1.22.0] — 2026-08-21
 
 ### Added
