@@ -1,0 +1,87 @@
+{
+  "version": "keel.universal_verification_promotion_vectors.v1",
+  "reference_executor": "reference_executor.py",
+  "base": "semantics/permit/universal_verification_v6.json",
+  "promotion": "semantics/permit/universal_verification_v7.json",
+  "expected": {
+    "base_artifact_id": "keel.permit.universal_verification.v6",
+    "base_version": "v6",
+    "promotion_artifact_id": "keel.permit.universal_verification.v7",
+    "promotion_version": "v7",
+    "promotion_status": "released"
+  },
+  "vectors": [
+    {
+      "id": "promotion-resolves",
+      "covers": "released v7 pins exact v6 bytes and preserves every Action Mapping rule",
+      "mutation": null,
+      "expected": {"outcome": "resolved", "reason": "RECIPE_PROMOTION_RESOLVED"}
+    },
+    {
+      "id": "promotion-base-unpinned",
+      "covers": "the released successor cannot float over a mutable predecessor",
+      "mutation": {"target": "promotion", "op": "remove_extends"},
+      "expected": {"outcome": "refused", "reason": "RECIPE_PROMOTION_BASE_UNPINNED"}
+    },
+    {
+      "id": "promotion-base-artifact-mismatch",
+      "covers": "the predecessor artifact identity is exact",
+      "mutation": {"target": "promotion", "op": "set_extends_field", "field": "artifact_id", "value": "keel.permit.universal_verification.v5"},
+      "expected": {"outcome": "refused", "reason": "RECIPE_PROMOTION_BASE_ARTIFACT_MISMATCH"}
+    },
+    {
+      "id": "promotion-base-version-mismatch",
+      "covers": "the predecessor version is exact",
+      "mutation": {"target": "promotion", "op": "set_extends_field", "field": "version", "value": "v5"},
+      "expected": {"outcome": "refused", "reason": "RECIPE_PROMOTION_BASE_VERSION_MISMATCH"}
+    },
+    {
+      "id": "promotion-base-digest-absent",
+      "covers": "the predecessor digest cannot be omitted",
+      "mutation": {"target": "promotion", "op": "remove_extends_field", "field": "sha256"},
+      "expected": {"outcome": "refused", "reason": "RECIPE_PROMOTION_BASE_DIGEST_ABSENT"}
+    },
+    {
+      "id": "promotion-base-digest-mismatch",
+      "covers": "an altered predecessor is refused even if its identity is unchanged",
+      "mutation": {"target": "base", "op": "set_top_field", "field": "status", "value": "released"},
+      "expected": {"outcome": "refused", "reason": "RECIPE_PROMOTION_BASE_DIGEST_MISMATCH"}
+    },
+    {
+      "id": "promotion-id-mismatch",
+      "covers": "the released recipe has a new immutable artifact identity",
+      "mutation": {"target": "promotion", "op": "set_top_field", "field": "id", "value": "keel.permit.universal_verification.v6"},
+      "expected": {"outcome": "refused", "reason": "RECIPE_PROMOTION_ID_MISMATCH"}
+    },
+    {
+      "id": "promotion-version-mismatch",
+      "covers": "the released recipe has a new immutable version",
+      "mutation": {"target": "promotion", "op": "set_top_field", "field": "version", "value": "v6"},
+      "expected": {"outcome": "refused", "reason": "RECIPE_PROMOTION_VERSION_MISMATCH"}
+    },
+    {
+      "id": "promotion-status-not-released",
+      "covers": "a promotion cannot remain candidate-labelled",
+      "mutation": {"target": "promotion", "op": "set_top_field", "field": "status", "value": "candidate"},
+      "expected": {"outcome": "refused", "reason": "RECIPE_PROMOTION_STATUS_MISMATCH"}
+    },
+    {
+      "id": "promotion-kind-mismatch",
+      "covers": "promotion does not change the recipe contract kind",
+      "mutation": {"target": "promotion", "op": "set_top_field", "field": "kind", "value": "permit_universal_verification_recipe"},
+      "expected": {"outcome": "refused", "reason": "RECIPE_PROMOTION_KIND_MISMATCH"}
+    },
+    {
+      "id": "promotion-claim-registry-changed",
+      "covers": "promotion cannot silently select another claim registry",
+      "mutation": {"target": "promotion", "op": "set_body_field", "field": "claim_registry_version", "value": "verifier-claims.v6"},
+      "expected": {"outcome": "refused", "reason": "RECIPE_PROMOTION_BODY_MISMATCH"}
+    },
+    {
+      "id": "promotion-rule-injected",
+      "covers": "promotion cannot add authority or interpretation rules",
+      "mutation": {"target": "promotion", "op": "set_body_field", "field": "automatic_allow", "value": true},
+      "expected": {"outcome": "refused", "reason": "RECIPE_PROMOTION_BODY_MISMATCH"}
+    }
+  ]
+}

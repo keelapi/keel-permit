@@ -21,5 +21,6 @@ test:
 	python3 tools/check_presentation_identity_collisions.py
 	python3 test-vectors/action_classification_derivation/v1/reference_executor.py
 	python3 test-vectors/claim_registry_chain/v1/reference_executor.py
+	python3 test-vectors/universal_verification_promotion/v1/reference_executor.py
 	node test-vectors/permit_co_signature/v1/reference_verify.mjs
 	node test-vectors/permit_co_signature/v2/reference_verify.mjs
