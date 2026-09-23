@@ -6,7 +6,10 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
-- No unreleased changes.
+### Added
+
+- Add the `verifier-claims.v8` MCP review journey claim and its explicit
+  evidence limits. Its registry extends the immutable v7 artifact.
 
 ## [1.24.0] — 2026-08-29
 

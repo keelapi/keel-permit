@@ -4888,6 +4888,27 @@ def validate_claim_contracts() -> None:
             raise ContractFailure(
                 f"{claim.get('name')} changed the stable verdict enum"
             )
+    claims_v8 = load_json("claim_registry/v8.json")
+    extension_v8 = claims_v8.get("extends")
+    if not isinstance(extension_v8, dict):
+        raise ContractFailure("claim_registry/v8.json must pin v7")
+    if extension_v8.get("artifact_id") != "keel.verifier_claim_registry.v7":
+        raise ContractFailure("claim_registry/v8.json extends the wrong artifact")
+    if extension_v8.get("version") != claims_v7.get("version"):
+        raise ContractFailure("claim_registry/v8.json extends the wrong version")
+    if extension_v8.get("sha256") != _sha256_file(
+        ROOT / "claim_registry/v7.json"
+    ).removeprefix("sha256:"):
+        raise ContractFailure("claim_registry/v8.json has a stale base digest")
+    if set(claims_v8.get("verdict_enum", [])) != VERDICTS:
+        raise ContractFailure("claim_registry/v8.json changed the stable verdict enum")
+    v8_claims = claims_v8.get("claims")
+    if not isinstance(v8_claims, list) or {
+        claim.get("name") for claim in v8_claims if isinstance(claim, dict)
+    } != {"mcp.review_journey.v1"}:
+        raise ContractFailure("claim_registry/v8.json must add only MCP review journey")
+    if any(set(claim.get("verdict_enum", [])) != VERDICTS for claim in v8_claims):
+        raise ContractFailure("claim_registry/v8.json changed a claim verdict enum")
         if not claim.get("does_not_establish"):
             raise ContractFailure(
                 f"{claim.get('name')} lacks a claim-level evidence ceiling"
