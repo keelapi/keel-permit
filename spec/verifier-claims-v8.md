@@ -16,9 +16,10 @@ gain the execution Permit's closure, provider receipts, or status.
 The verifier checks both inner bundle signatures, the trusted Permit decision
 signatures, and the reviewed Permit's signed human approval transition. The
 execution Permit must sign a citation to the reviewed Permit ID. The reviewed
-Permit's signed resource attributes must contain the same authorization facts
-as the execution Permit's signed resource attributes, and their request digest
-must equal the execution Permit's signed final request hash. For a reported
+Permit's signed resource attributes must contain the same action, fact profile,
+and exact request digest as the execution Permit's signed resource attributes.
+The request digest must equal the execution Permit's signed final request hash.
+For a reported
 closure, the verifier checks its signature, execution Permit ID, signed request
 digest, and closure hash against the execution export.
 
