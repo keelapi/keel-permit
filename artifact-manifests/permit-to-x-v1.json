@@ -110,7 +110,7 @@
     {
       "id": "permit-to-x.test-vectors.permit-to-work.v1",
       "path": "test-vectors/permit_to_work/v1/corpus.json",
-      "sha256": "15781c680dd05e230ad7cf98e6fa71c992b4894b552140a7a6a63ab6065e157e"
+      "sha256": "7c3340993c695e7dc93e7e0942af1c5b34aa4204c286e4d9aef5355d0b145490"
     },
     {
       "id": "permit-to-x.test-vectors.permit-to-work-authority.v2",
