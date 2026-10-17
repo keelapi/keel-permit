@@ -4,4 +4,5 @@
 # dependencies for validating this repository's own contents.
 jsonschema>=4.21,<5
 rfc8785>=0.1.4,<1
+cryptography>=42,<51
 ruff>=0.6,<1
