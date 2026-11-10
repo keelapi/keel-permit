@@ -10,6 +10,28 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 - Add the `verifier-claims.v8` MCP review journey claim and its explicit
   evidence limits. Its registry extends the immutable v7 artifact.
+- Add presentation registry v23. Every canonical `AI Permit-to-…` title gets an
+  explicit acronym in one `AI-P2` form (101 of 104 profiles), so consumers read
+  acronyms from the registry instead of deriving them. `AI-PTW`, `AI-PTP` and
+  `AI-PTT` become `AI-P2W`, `AI-P2P` and `AI-P2T`. Seven initials clashes take
+  the first two letters of their verb, and each shared alias title carries its
+  acronym on one profile (`payment_refund_execute.r1`,
+  `calendar_event_create.r1`). Built by
+  `tools/build_presentation_acronym_registry.py`; the CI identity check now
+  validates v23 and rejects stale `AI-PT` values, clashes and alias acronyms.
+- Document presentation identity (acronyms) in
+  `spec/permit-semantic-presentation-v1.md`.
+
+### Compatibility (presentation registry v23)
+
+- `presentation_registry/v22.json` and its schema stay byte-identical. v23
+  changes only `acronym` values, `version` and `$schema`; titles, definitions,
+  leading fields, evidence sections, fallbacks and release states are unchanged.
+- Acronyms remain non-authorizing. No selector, claim, comparator, verdict or
+  signed binding changes.
+- Consumers that render a Permit under v22 keep v22's acronyms. A coordinated
+  keel-verifier release must ship the v23 bytes before human artifacts render
+  `AI-P2` acronyms; until then the verifier keeps rendering v22.
 
 ## [1.24.0] — 2026-08-29
 

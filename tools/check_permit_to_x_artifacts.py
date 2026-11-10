@@ -937,11 +937,11 @@ def validate_transactional_cx_contract(registry: Registry) -> None:
                 raise ContractFailure("cancellation withdrawal is not true-to-false")
             if facts["canceled_at_before"] is not None or facts["ended_at_before"] is not None:
                 raise ContractFailure("withdrawal vector describes an ended subscription")
-        elif action == "support.case.resolve":
-            if facts["current_stage_state"] != "OPEN" or facts[
-                "requested_stage_state"
-            ] != "CLOSED":
-                raise ContractFailure("support resolution is not OPEN-to-CLOSED")
+        elif action == "support.case.resolve" and (
+            facts["current_stage_state"] != "OPEN"
+            or facts["requested_stage_state"] != "CLOSED"
+        ):
+            raise ContractFailure("support resolution is not OPEN-to-CLOSED")
 
         adversarial = copy.deepcopy(facts)
         adversarial["fact_profile_id"] = next(
