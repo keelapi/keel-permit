@@ -1471,6 +1471,16 @@
       "id": "permit-to-x.test-vectors.universal-verification-promotion.v1",
       "path": "test-vectors/universal_verification_promotion/v1/corpus.json",
       "sha256": "48e997cfadd2f2ecf13572e1ea7631a56d54a1cc69a0395eaaecd312775ce345"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v23",
+      "path": "presentation_registry/v23.json",
+      "sha256": "558247cb13be3ed7ef6da27051dc62fade293dc892e34a4c3f0e7580fc985e1a"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v23.schema",
+      "path": "presentation_registry/v23.schema.json",
+      "sha256": "d82a8217a5f1b55f97d7f4e7e62f98b16ddf40b43d60f79fcae825e717758010"
     }
   ]
 }

@@ -79,6 +79,27 @@ It MUST NOT:
   provider success, truth, quality, settlement, or comprehensive recording not
   established by evidence.
 
+### Presentation identity (acronyms)
+
+From presentation registry v22 a profile may carry an `acronym`, a short
+public alias for its customer title. Acronyms are explicit registry data:
+
+- consumers MUST read the acronym from the pinned registry and MUST NOT derive
+  one from a title or action name;
+- an acronym is non-authorizing and, like the title, MUST NOT change Policy,
+  claims, or verdicts;
+- acronyms are unique within a registry version; a title shared by compatible
+  semantic aliases carries its acronym on exactly one profile.
+
+v22 gave three profiles an acronym in the `AI-PT` form. v23 gives every
+canonical `AI Permit-to-…` title an acronym in one form: `AI-P2` followed by
+the initial of each word after `Permit-to` (`AI Permit-to-Grant-Group-Access`
+is `AI-P2GGA`). When two titles would share initials, the registry names which
+one uses the first two letters of its verb instead (`AI-P2REP` for
+`AI Permit-to-Reconcile-Payment`, next to `AI-P2RP` for
+`AI Permit-to-Refund-Payment`). Titles outside the `AI Permit-to-` pattern carry
+no acronym.
+
 ## 5. Historical and fallback behavior
 
 Reports pin the presentation artifact version and digest used for rendering.
