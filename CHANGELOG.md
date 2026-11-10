@@ -10,6 +10,15 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 - Add the `verifier-claims.v8` MCP review journey claim and its explicit
   evidence limits. Its registry extends the immutable v7 artifact.
+- Add presentation registry v24, which supersedes v23. It keeps v23's rule
+  and returns to the `AI-PT` prefix v22 used: `AI-PTW`, `AI-PTP` and `AI-PTT`
+  are unchanged from v22, and every other canonical title gets the same
+  initials after `AI-PT` (`AI-PTGGA` for `AI Permit-to-Grant-Group-Access`;
+  clash overrides such as `AI-PTREP`). `AI-PT` follows the established
+  Permit-to-Work (PTW) convention and does not read Permit-to-Pay as "P2P".
+  `tools/build_presentation_acronym_registry.py` builds both registries and
+  rebuilds v23 byte-identically; the CI identity check validates v24 and
+  rejects `AI-P2` values in it.
 - Add presentation registry v23. Every canonical `AI Permit-to-…` title gets an
   explicit acronym in one `AI-P2` form (101 of 104 profiles), so consumers read
   acronyms from the registry instead of deriving them. `AI-PTW`, `AI-PTP` and
@@ -21,6 +30,16 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
   validates v23 and rejects stale `AI-PT` values, clashes and alias acronyms.
 - Document presentation identity (acronyms) in
   `spec/permit-semantic-presentation-v1.md`.
+
+### Compatibility (presentation registry v24)
+
+- `presentation_registry/v23.json` and its schema stay byte-identical. v24
+  changes only `acronym` values, `version` and `$schema` (and the schema's
+  acronym pattern, `^AI-PT[A-Z]{1,4}$`).
+- Acronyms remain non-authorizing. No selector, claim, comparator, verdict or
+  signed binding changes.
+- A coordinated keel-verifier release must ship the v24 bytes before human
+  artifacts render v24 acronyms.
 
 ### Compatibility (presentation registry v23)
 

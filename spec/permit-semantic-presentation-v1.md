@@ -91,14 +91,19 @@ public alias for its customer title. Acronyms are explicit registry data:
 - acronyms are unique within a registry version; a title shared by compatible
   semantic aliases carries its acronym on exactly one profile.
 
-v22 gave three profiles an acronym in the `AI-PT` form. v23 gives every
-canonical `AI Permit-to-…` title an acronym in one form: `AI-P2` followed by
+v22 gave three profiles an acronym in the `AI-PT` form. v24 gives every
+canonical `AI Permit-to-…` title an acronym in that form: `AI-PT` followed by
 the initial of each word after `Permit-to` (`AI Permit-to-Grant-Group-Access`
-is `AI-P2GGA`). When two titles would share initials, the registry names which
-one uses the first two letters of its verb instead (`AI-P2REP` for
-`AI Permit-to-Reconcile-Payment`, next to `AI-P2RP` for
+is `AI-PTGGA`). When two titles would share initials, the registry names which
+one uses the first two letters of its verb instead (`AI-PTREP` for
+`AI Permit-to-Reconcile-Payment`, next to `AI-PTRP` for
 `AI Permit-to-Refund-Payment`). Titles outside the `AI Permit-to-` pattern carry
 no acronym.
+
+v23 applied the same rule with an `AI-P2` prefix and is superseded by v24.
+`AI-PT` follows the established Permit-to-Work (PTW) convention, does not read
+Permit-to-Pay as "P2P", and keeps the three acronyms v22 published. v23 stays
+published and byte-identical; consumers SHOULD pin v24.
 
 ## 5. Historical and fallback behavior
 
