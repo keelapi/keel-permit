@@ -38,6 +38,8 @@ jobs:
         run: python tools/check_permit_to_x_artifacts.py
       - name: Check Permit presentation identities
         run: python tools/check_presentation_identity_collisions.py
+      - name: Check review document templates
+        run: python tools/check_review_document_templates.py
       - name: Check deterministic signed Work corpus
         run: python tools/refresh_permit_to_work_vector_artifacts.py --check
       - name: Check verifier-claim pack integrity
