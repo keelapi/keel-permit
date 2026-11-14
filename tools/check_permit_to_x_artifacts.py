@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 import jsonschema
+from check_aidbox_contract import validate_aidbox_contract
 from referencing import Registry, Resource
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -6508,6 +6509,10 @@ def main() -> int:
         validate_claim_contracts()
         exact_pack = validate_universal_verification_contract(registry)
         validate_short_term_exact_profiles(registry)
+        try:
+            validate_aidbox_contract()
+        except ValueError as exc:
+            raise ContractFailure(str(exc)) from exc
         validate_artifact_manifest()
         validate_spec_document_pins()
         validate_enforcement_state_vectors()
