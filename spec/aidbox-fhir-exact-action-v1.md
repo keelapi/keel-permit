@@ -1,6 +1,6 @@
 # Synthetic Aidbox exact administrative facts v1
 
-Status: local canonical-artifact candidate, not released, enrolled or live-qualified.
+Status: released in keel-permit 1.25.0 as synthetic canonical artifacts; not enrolled or live-qualified.
 
 The [exact-facts schema](../schemas/aidbox-fhir-exact-facts-v1.schema.json) defines three distinct administrative requests: complete mailing-address update, appointment rescheduling and a defined external records release. [Selector v23](../semantic_registry/v23.json) preserves every v22 entry and adds exactly those actions. [Fact profiles v20](../fact_profiles/v20.json) preserves every v19 profile and its disclosure contract. Existing artifact bytes are unchanged.
 

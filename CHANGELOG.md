@@ -6,8 +6,18 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ## Unreleased
 
+## [1.25.0] — 2026-11-14
+
 ### Added
 
+- Add synthetic Aidbox FHIR exact administrative actions: the
+  [exact-facts schema v1](schemas/aidbox-fhir-exact-facts-v1.schema.json)
+  (complete mailing-address update, appointment rescheduling and a defined
+  external records release), selector registry v23 and fact profiles v20,
+  with synthetic conformance examples in
+  `fact_profiles/test-vectors/aidbox-v1.json` and
+  `tools/check_aidbox_contract.py`. See
+  [spec/aidbox-fhir-exact-action-v1.md](spec/aidbox-fhir-exact-action-v1.md).
 - Add the `verifier-claims.v8` MCP review journey claim and its explicit
   evidence limits. Its registry extends the immutable v7 artifact.
 - Add presentation registry v24, which supersedes v23. It keeps v23's rule
@@ -51,6 +61,25 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 - Consumers that render a Permit under v22 keep v22's acronyms. A coordinated
   keel-verifier release must ship the v23 bytes before human artifacts render
   `AI-P2` acronyms; until then the verifier keeps rendering v22.
+
+### Compatibility (Aidbox exact actions)
+
+- Selector registry v23 keeps every v22 entry and fact profiles v20 keeps every
+  v19 profile; historical artifact bytes are unchanged. Schema validity creates
+  no grant, and a coordinated keel-verifier release must vendor these exact
+  bytes before an issuer relies on them. The artifacts are synthetic: nothing
+  here is enrolled, live-qualified or a compliance claim.
+
+### Changed
+
+- State that hosted Keel issuer co-signature authority is contained: the public
+  evidence-verification contract does not imply hosted Keel accepts WebAuthn
+  co-signature issuance. Protocol vectors are unchanged.
+
+### Fixed
+
+- Author executable signed Permit-to-Work conformance vectors, refreshed by
+  `tools/refresh_permit_to_work_vector_artifacts.py`.
 
 ## [1.24.0] — 2026-08-29
 
