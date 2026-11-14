@@ -1491,6 +1491,36 @@
       "id": "keel.permit.presentation_registry.v24.schema",
       "path": "presentation_registry/v24.schema.json",
       "sha256": "3c7183955ff59ae3b4a3d36bd359eb3ff86509d956556bf7d67ce9f837b9fcd4"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v23",
+      "path": "semantic_registry/v23.json",
+      "sha256": "42022f73fbd8e59f79cec80d2857c21922f051cd48f33f559db0cd2435ce09c8"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v23.schema",
+      "path": "semantic_registry/v23.schema.json",
+      "sha256": "70dc85e9c68497f7252a39acb9bd52cfa4529792ec231f8803536ce86bd04897"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v20",
+      "path": "fact_profiles/v20.json",
+      "sha256": "f72e8d8f7f7c57ea9e70bb9bc0b80097c2f23fc901513d95652bb709a77e5b0f"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v20.schema",
+      "path": "fact_profiles/v20.schema.json",
+      "sha256": "253e29dba5f0ad009e4751b9540aa60d689b54f61627fa2ae20583846fff6a62"
+    },
+    {
+      "id": "keel.permit.aidbox_fhir_exact_facts.v1.schema",
+      "path": "schemas/aidbox-fhir-exact-facts-v1.schema.json",
+      "sha256": "48eb067a4da5352d17edab2140059413dbfbd939d0907e632a8c7f4d89a216d8"
+    },
+    {
+      "id": "keel.permit.aidbox_fhir_exact_facts.v1.test_vectors",
+      "path": "fact_profiles/test-vectors/aidbox-v1.json",
+      "sha256": "48353bc0df78a8629e518fa07429617115cd6265a0087b516fcf58220aa66a74"
     }
   ]
 }
