@@ -8,6 +8,19 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ### Added
 
+- Add review document templates v1 (`review_document_templates/v1.json` and
+  its strict schema). A template names, for one trusted Permit semantic, the
+  facts a reviewer reads before deciding a held request: each field's source
+  (signed exact facts, gateway subject facts checked against the exact facts'
+  commitments, the Review, or a template constant), its provenance, whether it
+  is essential, and its value labels or commitment. The requester's
+  explanation is agent-reported and non-authoritative, and votes, deadline and
+  filing state stay outside the document digest. v1 carries one template, for
+  `keel.action.identity_group_access_grant.v1` (adding a person to an Okta
+  group), with a beneficiary and a protected-class rule over
+  `group_privilege_class`. `tools/check_review_document_templates.py`, run in
+  CI, validates the file and resolves every template against the newest
+  semantic, presentation and fact-profile registries.
 - Add the `verifier-claims.v8` MCP review journey claim and its explicit
   evidence limits. Its registry extends the immutable v7 artifact.
 - Add presentation registry v24, which supersedes v23. It keeps v23's rule
@@ -30,6 +43,14 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
   validates v23 and rejects stale `AI-PT` values, clashes and alias acronyms.
 - Document presentation identity (acronyms) in
   `spec/permit-semantic-presentation-v1.md`.
+
+### Compatibility (review document templates v1)
+
+- New artifact; no existing artifact changes. Templates are presentation:
+  they cannot create, alter or complete a fact, and no selector, claim,
+  comparator, verdict or signed binding changes.
+- A coordinated keel-verifier release must ship the v1 bytes before
+  verifiers or review documents pin them.
 
 ### Compatibility (presentation registry v24)
 

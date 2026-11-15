@@ -93,6 +93,7 @@ Most JSON Schema (Draft 2020-12) files in [`schemas/`](schemas/) are generated f
 - [`semantic_registry/`](semantic_registry/) — server-provenance selector contract for stable Permit semantics.
 - [`fact_profiles/`](fact_profiles/) — typed authorization-fact schemas and disclosure rules for specific Permit semantics.
 - [`presentation_registry/`](presentation_registry/) — non-authorizing titles, definitions, controlled leading fields, evidence emphasis, and fallbacks.
+- [`review_document_templates/`](review_document_templates/) — non-authorizing review document templates: the labelled facts, provenance and essential fields a reviewer reads before deciding a held request.
 - [`consequence_registry/`](consequence_registry/) — exact consequential tool mappings that generate additive semantic and presentation registry releases.
 - [`artifact-manifests/permit-to-x-v1.json`](artifact-manifests/permit-to-x-v1.json) — exact-byte hashes for generated downstream consumers.
 
@@ -167,7 +168,7 @@ Each tagged release publishes three assets:
 | Asset | What it is |
 |---|---|
 | `keel-permit-<version>.tar.gz` | The published specification distribution. Development tooling is excluded. Not all of it is normative — see below. |
-| `release-manifest.json` | SHA-256 of the bundle, plus a per-file digest for all 811 artifacts, the source commit, and the command to reproduce the bundle. |
+| `release-manifest.json` | SHA-256 of the bundle, plus a per-file digest for all 814 artifacts, the source commit, and the command to reproduce the bundle. |
 | `SHA256SUMS` | `sha256sum`-compatible digests of the published assets. |
 
 ### What is in the distribution
