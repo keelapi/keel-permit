@@ -65,7 +65,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "752d41cab2f04c9df6bb8b3e15afcd4afc8c7ad13fc9a674f7a5c3bc64437f42",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
@@ -205,7 +205,7 @@
             "text": "Pay the March invoice for the design agency."
           }
         },
-        "digest": "caa9b0c19e182b81d3750db094e5508203ad995acaad91e556d4c13751d6de51",
+        "digest": "9c43b24d73a9e7e5056463c144259168cdafb851eacb216d6ed97c6a860252fe",
         "missing_essential": [],
         "fact_provenance": {
           "provider_environment": "keel_checked",
@@ -284,7 +284,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "752d41cab2f04c9df6bb8b3e15afcd4afc8c7ad13fc9a674f7a5c3bc64437f42",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
@@ -431,7 +431,7 @@
             "text": null
           }
         },
-        "digest": "6d8ddc9a7c5c565aa6e5407bc25ff4c80533fa9dfd1ccdd16274d67cd98d3bca",
+        "digest": "82c9bab26322f5764ce2d9b18ef2ae4c1e52498e06ee86e7baff4c84c41154b2",
         "missing_essential": [
           "request_digest"
         ],
@@ -514,7 +514,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "752d41cab2f04c9df6bb8b3e15afcd4afc8c7ad13fc9a674f7a5c3bc64437f42",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
@@ -654,7 +654,7 @@
             "text": null
           }
         },
-        "digest": "9cdb3131981b61fe98bfe39fc3aa9fa0b83845ea10c6224a6010d8518a6dce29",
+        "digest": "fbdb78a0b1483496887ec80cdbac480461675bc4dc40ab3eb1334f28e977a782",
         "missing_essential": [],
         "fact_provenance": {
           "provider_environment": "keel_checked",
@@ -734,7 +734,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "752d41cab2f04c9df6bb8b3e15afcd4afc8c7ad13fc9a674f7a5c3bc64437f42",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
@@ -874,7 +874,7 @@
             "text": null
           }
         },
-        "digest": "adebb1e9178e172db9373c736742d00f3e18c941b8dfcf2943c52b172ec2a834",
+        "digest": "ae3ed4984282ab777d4597c66590326e92c82262d73e5ad68de4310ef520e9e6",
         "missing_essential": [],
         "fact_provenance": {
           "provider_environment": "keel_checked",
@@ -960,7 +960,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "752d41cab2f04c9df6bb8b3e15afcd4afc8c7ad13fc9a674f7a5c3bc64437f42",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
@@ -1081,7 +1081,7 @@
             "text": "Release the visit summary to the patient's new clinic."
           }
         },
-        "digest": "48326449735f607de15d6f4084c83c62d85acf0fd7112f94aa1a1acf44e2527b",
+        "digest": "2e92011d65af23c341bba9228f84bd7cea06bf7fd637778b304c074d5da13a85",
         "missing_essential": [],
         "fact_provenance": {
           "request_commitment": "keel_checked",
@@ -1100,42 +1100,52 @@
       }
     },
     {
-      "id": "generic-refund",
-      "description": "Refund: amount card, refundable amount before shown as money",
+      "id": "generic-collections-payment",
+      "description": "Collections payment: amount card, remaining balance shown as money, lower-case currency normalized",
       "inputs": {
-        "semantic_id": "keel.action.payment_refund.v2",
+        "semantic_id": "keel.action.collections_payment_collect.v1",
         "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
         "exact_facts": {
-          "fact_profile_id": "keel.facts.refund_exact.v2",
-          "connector_identity": "stripe",
-          "connector_contract_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
-          "tool_schema_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-          "decision_trace_hash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-          "tool_arguments_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-          "request_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-          "provider_api_version": "2026-10-01",
-          "preflight_observed_at": "2026-11-16T09:57:46Z",
-          "preflight_expires_at": "2026-11-16T09:59:46Z",
-          "preflight_snapshot_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
-          "idempotency_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+          "version": "keel.collections_exact_facts.v1",
+          "fact_profile_id": "keel.facts.collections_payment_collect_exact.v1",
+          "action": "collections.payment.collect",
+          "operation": "call.tools",
+          "connector_identity": "payments",
+          "connector_contract_hash": "0012f6cacf27bad9629dd1c909d7ea53f635f080c9160363121d82a31d565b7b",
+          "tool_schema_hash": "9c5e089e78e17653d573f0ba38ea8dd30031c23cdc976802b041217ded3c8768",
+          "decision_trace_hash": "d2cbb0372e6e80748cb77d18a0af942ceecc2052a5d48178e4ae3c719b165e63",
+          "tool_arguments_hash": "bf1e4e2e1f40c09584f5aef215a1f128dc7b2a865d32088c182576e537317024",
+          "request_digest": "sha256:6651993131585d4f2a1f08394ca9c7d8bbc399d002f1a057feb8d948c1977558",
+          "enforcement_mode": "enforced_in_path",
+          "provider_environment": "sandbox",
+          "provider_api_version": "example",
+          "preflight_observed_at": "2026-11-16T18:04:05Z",
+          "preflight_expires_at": "2026-11-16T18:04:05Z",
+          "preflight_snapshot_digest": "sha256:ba28f37347de0a6c3644e4d2e4db5706e78a427630cd13f416407e9fef8e03ad",
+          "idempotency_digest": "sha256:0a24e5f899fe06132db4179ca7a045385268b492998b914168b03ecfcc958ee5",
           "max_uses": 1,
-          "provider_environment": "stripe_test_mode",
-          "payment_reference_kind": "payment_intent",
-          "original_payment_reference_commitment": {
-            "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
-            "method": "keel.salted_sha256_jcs.v1"
+          "obligation_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:8ae2af13c0b3603dc899cc6d8bbd4eaf6de371f6ba514cc46d913ab0c72de9d5"
           },
-          "payer_reference_commitment": {
-            "digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
-            "method": "keel.salted_sha256_jcs.v1"
+          "customer_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:9ba5731952875bbaa076f1f47009802cbf6f66903c6f852e1e51547ab06f3872"
+          },
+          "payment_method_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:f81ecce6b593436d0153dda9f1607f56d9354f99e85d59bd893b917e3b22710f"
           },
           "amount_minor": 4599,
-          "refundable_amount_minor_before": 12000,
           "currency": "usd",
-          "refund_reason": "requested_by_customer",
-          "refund_application_fee": false,
-          "reverse_transfer": false,
-          "payment_state_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+          "obligation_status": "delinquent",
+          "remaining_balance_minor": 10000,
+          "amount_within_balance": true,
+          "payment_method_attached": true,
+          "payment_method_type": "card",
+          "collection_mode": "off_session",
+          "customer_consent_record_digest": "sha256:2ea24014a61a09f7d9499c6bed243669fa2ef1f533a554a27b67614776f61c3c",
+          "payment_intent_status_before": "absent"
         },
         "review": {
           "cause": "policy_challenge"
@@ -1146,15 +1156,15 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "752d41cab2f04c9df6bb8b3e15afcd4afc8c7ad13fc9a674f7a5c3bc64437f42",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
-          "semantic_id": "keel.action.payment_refund.v2",
-          "fact_profile_id": "keel.facts.refund_exact.v2",
-          "presentation_profile_id": "payment_refund_execute.r1",
-          "title": "AI Permit-to-Refund-Payment",
-          "sentence": "Exact authorization to refund one provider-verified payment amount.",
+          "semantic_id": "keel.action.collections_payment_collect.v1",
+          "fact_profile_id": "keel.facts.collections_payment_collect_exact.v1",
+          "presentation_profile_id": "collections_payment_collect.r1",
+          "title": "AI Permit-to-Collect-Payment",
+          "sentence": "Exact authorization to create and confirm one Stripe test-mode PaymentIntent for one delinquent obligation using one already attached test payment method.",
           "cards": [
             {
               "card_id": "amount_minor",
@@ -1177,7 +1187,7 @@
                 {
                   "field_id": "provider_environment",
                   "label": "Provider environment",
-                  "value": "Stripe Test Mode",
+                  "value": "Sandbox",
                   "provenance": "keel_checked",
                   "provenance_label": "Checked by Keel"
                 },
@@ -1189,53 +1199,75 @@
                   "provenance_label": "Checked by Keel"
                 },
                 {
-                  "field_id": "payment_reference_kind",
-                  "label": "Payment reference kind",
-                  "value": "Payment Intent",
-                  "provenance": "keel_checked",
-                  "provenance_label": "Checked by Keel"
-                },
-                {
-                  "field_id": "original_payment_reference_commitment",
-                  "label": "Original payment",
+                  "field_id": "obligation_reference_commitment",
+                  "label": "Obligation",
                   "value": "Hidden",
                   "provenance": "keel_checked",
                   "provenance_label": "Checked by Keel",
                   "hidden": true
                 },
                 {
-                  "field_id": "payer_reference_commitment",
-                  "label": "Payer",
+                  "field_id": "customer_reference_commitment",
+                  "label": "Customer",
                   "value": "Hidden",
                   "provenance": "keel_checked",
                   "provenance_label": "Checked by Keel",
                   "hidden": true
                 },
                 {
-                  "field_id": "refundable_amount_minor_before",
-                  "label": "Refundable amount before",
-                  "value": "$120.00",
+                  "field_id": "payment_method_reference_commitment",
+                  "label": "Payment method",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "obligation_status",
+                  "label": "Obligation status",
+                  "value": "Delinquent",
                   "provenance": "keel_checked",
                   "provenance_label": "Checked by Keel"
                 },
                 {
-                  "field_id": "refund_reason",
-                  "label": "Refund reason",
-                  "value": "Requested By Customer",
+                  "field_id": "remaining_balance_minor",
+                  "label": "Remaining balance",
+                  "value": "$100.00",
                   "provenance": "keel_checked",
                   "provenance_label": "Checked by Keel"
                 },
                 {
-                  "field_id": "refund_application_fee",
-                  "label": "Refund application fee",
-                  "value": "No",
+                  "field_id": "amount_within_balance",
+                  "label": "Amount within balance",
+                  "value": "Yes",
                   "provenance": "keel_checked",
                   "provenance_label": "Checked by Keel"
                 },
                 {
-                  "field_id": "reverse_transfer",
-                  "label": "Reverse transfer",
-                  "value": "No",
+                  "field_id": "payment_method_attached",
+                  "label": "Payment method attached",
+                  "value": "Yes",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "payment_method_type",
+                  "label": "Payment method type",
+                  "value": "Card",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "collection_mode",
+                  "label": "Collection mode",
+                  "value": "Off Session",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "payment_intent_status_before",
+                  "label": "Payment intent status before",
+                  "value": "Absent",
                   "provenance": "keel_checked",
                   "provenance_label": "Checked by Keel"
                 }
@@ -1263,19 +1295,22 @@
             "text": null
           }
         },
-        "digest": "ad4a98e8689b69f3b1655206d3acca86f83855fa36c6f0ec1ba4316a4948485a",
+        "digest": "64aeaa416e9708d80bea744dd00ab286b1a378f120ef807afac58a781a50a0de",
         "missing_essential": [],
         "fact_provenance": {
           "provider_environment": "keel_checked",
           "max_uses": "keel_checked",
-          "payment_reference_kind": "keel_checked",
-          "original_payment_reference_commitment": "keel_checked",
-          "payer_reference_commitment": "keel_checked",
+          "obligation_reference_commitment": "keel_checked",
+          "customer_reference_commitment": "keel_checked",
+          "payment_method_reference_commitment": "keel_checked",
           "amount_minor": "keel_checked",
-          "refundable_amount_minor_before": "keel_checked",
-          "refund_reason": "keel_checked",
-          "refund_application_fee": "keel_checked",
-          "reverse_transfer": "keel_checked",
+          "obligation_status": "keel_checked",
+          "remaining_balance_minor": "keel_checked",
+          "amount_within_balance": "keel_checked",
+          "payment_method_attached": "keel_checked",
+          "payment_method_type": "keel_checked",
+          "collection_mode": "keel_checked",
+          "payment_intent_status_before": "keel_checked",
           "cause": "keel_checked"
         }
       }
@@ -1333,7 +1368,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "752d41cab2f04c9df6bb8b3e15afcd4afc8c7ad13fc9a674f7a5c3bc64437f42",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
@@ -1458,7 +1493,7 @@
             "text": null
           }
         },
-        "digest": "cce4821bc716e5d6d8b6319f9147118627ab941bdee39308f1db48e4c61faae0",
+        "digest": "33a063b60bbe084e7bd0189d4273dcd625e905fb8b8ae6f1c9228ccfbb23e2bd",
         "missing_essential": [],
         "fact_provenance": {
           "provider_environment": "keel_checked",
@@ -1478,41 +1513,71 @@
       }
     },
     {
-      "id": "generic-customer-credit",
-      "description": "Customer credit: EUR amount, negative provider amount, sentence without 'immutable'",
+      "id": "generic-deployment-immutable-wording",
+      "description": "Deployment: the type definition's 'immutable' is removed from the sentence",
       "inputs": {
-        "semantic_id": "keel.action.customer_credit_issue.v1",
+        "semantic_id": "keel.action.deployment_commit_deploy.v1",
         "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
         "exact_facts": {
-          "fact_profile_id": "keel.facts.customer_credit_issue_exact.v1",
-          "connector_identity": "stripe",
-          "connector_contract_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
-          "tool_schema_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-          "decision_trace_hash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-          "tool_arguments_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-          "request_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-          "provider_api_version": "2026-10-01",
-          "preflight_observed_at": "2026-11-16T09:57:46Z",
-          "preflight_expires_at": "2026-11-16T09:59:46Z",
-          "preflight_snapshot_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
-          "idempotency_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+          "version": "keel.release_exact_facts.v1",
+          "fact_profile_id": "keel.facts.deployment_commit_deploy_exact.v1",
+          "action": "deployment.commit.deploy",
+          "operation": "call.tools",
+          "connector_identity": "fly",
+          "connector_contract_hash": "0aa03e3b4d53d871cf25cee75ad63b02e442455b0d01c694bc0acff96cf2ea95",
+          "tool_schema_hash": "92894ef5e5297991b1ee885f553d95cf26b0c52a0788431c5e1e31995aeaef84",
+          "decision_trace_hash": "b798c2f569bfcd4052853e5c4e8706323320212dfc7545a1064c0d54ded63507",
+          "tool_arguments_hash": "eef6f2d5cba625ffd5e82f73d68c5a4a0d068a1793f25144968827e6f2024bf2",
+          "request_digest": "sha256:b0a1d0851962a61edc553747ef8dffdd9d113d8d6d1006885c2ee7f5d0c298c9",
+          "enforcement_mode": "enforced_in_path",
+          "provider_environment": "dedicated_demo",
+          "provider_api_version": "example",
+          "preflight_observed_at": "2026-11-16T18:04:05Z",
+          "preflight_expires_at": "2026-11-16T18:04:05Z",
+          "preflight_snapshot_digest": "sha256:eca123f1b4823f0acafba4b15e74ba5982ed484e4e6192a98266d8cba509ba38",
+          "idempotency_digest": "sha256:b634bb386b9e59a24ce03956565e28bcbb1b1dab97814e614e97ae4d4e5eac59",
           "max_uses": 1,
-          "provider_environment": "stripe_test_mode",
-          "customer_reference_commitment": {
-            "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-            "method": "keel.salted_sha256_jcs.v1"
+          "source_repository_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:49f28b6f9747d75ae4c9c26ceaedc8d92b7d38be891e891ec8ca8fff0c5302ba"
           },
-          "amount_minor": 2500,
-          "provider_amount_minor": -2500,
-          "currency": "eur",
-          "customer_balance_before_minor": 0,
-          "expected_customer_balance_after_minor": -2500,
-          "credit_direction": "credit",
-          "description_commitment": {
-            "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-            "method": "keel.salted_sha256_jcs.v1"
+          "source_commit_sha": "example",
+          "source_commit_signature_verified": true,
+          "artifact_registry": "ghcr.io",
+          "artifact_repository_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:b044141eebc93cea01287e2ede6471b376a3eba33807fededc821710da0df190"
           },
-          "customer_balance_state_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          "target_image_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:b18c549cca7bc2278d5cea3f2a7a1974963e53434f78131539bf6f301adcad8c"
+          },
+          "target_image_digest": "sha256:46a7e913de95d19c69319ee9012b82001fee733b404f5399af5253222a392ec8",
+          "artifact_revision_sha": "example",
+          "artifact_revision_matches_source_commit": true,
+          "artifact_metadata_digest": "sha256:22044b40dad52bc618c6db43f2dcdf448bbcd030f554feebc0db1d69de842128",
+          "fly_app_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:c2993e371635b515c4da20534515f3be2c965ae85b9a46c895f3932f95b2d443"
+          },
+          "fly_machine_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:7905e84de450e7ecc7a2ee7684e69f66e7164269231120da7887d427a9a6a4ec"
+          },
+          "deployment_environment": "production",
+          "current_instance_id": "example",
+          "current_machine_state": "started",
+          "current_image_digest": "sha256:74b7fa2b68fe27cb402f5b457df0465d8ab47c65f9cd97f8d14fce4502d9e237",
+          "current_config_digest": "sha256:000f80d66da4a0edf4e17488050d09eb07dc6c571be6bf06ec2c4d13f34b449d",
+          "target_config_digest": "sha256:1e7c178f49c8276713dce70dfa0f2d6000d9806c6df7f3e0904e50194bd50223",
+          "config_delta": "image_only",
+          "target_image_differs": true,
+          "target_machine_state": "started",
+          "expected_health_check_count": 1,
+          "concurrency_control": "lease_and_current_version",
+          "machine_lease_required": true,
+          "release_record_digest": "sha256:d76a5b11c48fc4976b9c00078e4453a7437c5835d98de5283ae5078a275fe8cf",
+          "rollback_snapshot_digest": "sha256:ce297c51be0f30c77bd6f1cfc262c3dcfa669de0617ec1e7db2c288b99378e2d"
         },
         "review": {
           "cause": "policy_challenge"
@@ -1523,24 +1588,25 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "752d41cab2f04c9df6bb8b3e15afcd4afc8c7ad13fc9a674f7a5c3bc64437f42",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
-          "semantic_id": "keel.action.customer_credit_issue.v1",
-          "fact_profile_id": "keel.facts.customer_credit_issue_exact.v1",
-          "presentation_profile_id": "customer_credit_issue.r1",
-          "title": "AI Permit-to-Issue-Account-Credit",
-          "sentence": "Exact authorization to create one customer credit-balance adjustment.",
+          "semantic_id": "keel.action.deployment_commit_deploy.v1",
+          "fact_profile_id": "keel.facts.deployment_commit_deploy_exact.v1",
+          "presentation_profile_id": "deployment_commit_deploy.r1",
+          "title": "AI Permit-to-Deploy-Commit",
+          "sentence": "Exact authorization to replace one production Fly Machine image with one OCI image whose revision metadata names the source commit.",
           "cards": [
             {
-              "card_id": "amount_minor",
-              "kind": "amount",
-              "label": "Amount",
-              "value": "€25.00",
-              "currency": "EUR",
+              "card_id": "current_machine_state",
+              "kind": "change",
+              "label": "Machine state",
+              "from": "Started",
+              "to": "Started",
               "field_ids": [
-                "amount_minor"
+                "current_machine_state",
+                "target_machine_state"
               ],
               "provenance": "keel_checked",
               "provenance_label": "Checked by Keel"
@@ -1554,7 +1620,7 @@
                 {
                   "field_id": "provider_environment",
                   "label": "Provider environment",
-                  "value": "Stripe Test Mode",
+                  "value": "Dedicated Demo",
                   "provenance": "keel_checked",
                   "provenance_label": "Checked by Keel"
                 },
@@ -1566,48 +1632,129 @@
                   "provenance_label": "Checked by Keel"
                 },
                 {
-                  "field_id": "customer_reference_commitment",
-                  "label": "Customer",
+                  "field_id": "source_repository_reference_commitment",
+                  "label": "Source repository",
                   "value": "Hidden",
                   "provenance": "keel_checked",
                   "provenance_label": "Checked by Keel",
                   "hidden": true
                 },
                 {
-                  "field_id": "provider_amount_minor",
-                  "label": "Provider amount",
-                  "value": "-€25.00",
-                  "provenance": "keel_checked",
-                  "provenance_label": "Checked by Keel"
-                },
-                {
-                  "field_id": "customer_balance_before_minor",
-                  "label": "Customer balance before",
-                  "value": "€0.00",
-                  "provenance": "keel_checked",
-                  "provenance_label": "Checked by Keel"
-                },
-                {
-                  "field_id": "expected_customer_balance_after_minor",
-                  "label": "Expected customer balance after",
-                  "value": "-€25.00",
-                  "provenance": "keel_checked",
-                  "provenance_label": "Checked by Keel"
-                },
-                {
-                  "field_id": "credit_direction",
-                  "label": "Credit direction",
-                  "value": "Credit",
-                  "provenance": "keel_checked",
-                  "provenance_label": "Checked by Keel"
-                },
-                {
-                  "field_id": "description_commitment",
-                  "label": "Description",
+                  "field_id": "source_commit_sha",
+                  "label": "Source commit sha",
                   "value": "Hidden",
                   "provenance": "keel_checked",
                   "provenance_label": "Checked by Keel",
                   "hidden": true
+                },
+                {
+                  "field_id": "source_commit_signature_verified",
+                  "label": "Source commit signature verified",
+                  "value": "Yes",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "artifact_registry",
+                  "label": "Artifact registry",
+                  "value": "ghcr.io",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "artifact_repository_reference_commitment",
+                  "label": "Artifact repository",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "target_image_reference_commitment",
+                  "label": "Target image",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "artifact_revision_sha",
+                  "label": "Artifact revision sha",
+                  "value": "Example",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "artifact_revision_matches_source_commit",
+                  "label": "Artifact revision matches source commit",
+                  "value": "Yes",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "fly_app_reference_commitment",
+                  "label": "Fly app",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "fly_machine_reference_commitment",
+                  "label": "Fly machine",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "deployment_environment",
+                  "label": "Deployment environment",
+                  "value": "Production",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "current_instance_id",
+                  "label": "Current instance id",
+                  "value": "Example",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "config_delta",
+                  "label": "Config delta",
+                  "value": "Image Only",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "target_image_differs",
+                  "label": "Target image differs",
+                  "value": "Yes",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "expected_health_check_count",
+                  "label": "Expected health check count",
+                  "value": "1",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "concurrency_control",
+                  "label": "Concurrency control",
+                  "value": "Lease And Current Version",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "machine_lease_required",
+                  "label": "Machine lease required",
+                  "value": "Yes",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
                 }
               ]
             },
@@ -1633,18 +1780,30 @@
             "text": null
           }
         },
-        "digest": "3fef03bb356d027e25b0e5331317f9801eaa4a99e8de57f7b76e463dc485aff2",
+        "digest": "9c24ea54261170542da467d8c4d1b1bcf7b44bbc44962a33f9cc391fa475e702",
         "missing_essential": [],
         "fact_provenance": {
           "provider_environment": "keel_checked",
           "max_uses": "keel_checked",
-          "customer_reference_commitment": "keel_checked",
-          "amount_minor": "keel_checked",
-          "provider_amount_minor": "keel_checked",
-          "customer_balance_before_minor": "keel_checked",
-          "expected_customer_balance_after_minor": "keel_checked",
-          "credit_direction": "keel_checked",
-          "description_commitment": "keel_checked",
+          "source_repository_reference_commitment": "keel_checked",
+          "source_commit_sha": "keel_checked",
+          "source_commit_signature_verified": "keel_checked",
+          "artifact_registry": "keel_checked",
+          "artifact_repository_reference_commitment": "keel_checked",
+          "target_image_reference_commitment": "keel_checked",
+          "artifact_revision_sha": "keel_checked",
+          "artifact_revision_matches_source_commit": "keel_checked",
+          "fly_app_reference_commitment": "keel_checked",
+          "fly_machine_reference_commitment": "keel_checked",
+          "deployment_environment": "keel_checked",
+          "current_instance_id": "keel_checked",
+          "current_machine_state": "keel_checked",
+          "config_delta": "keel_checked",
+          "target_image_differs": "keel_checked",
+          "target_machine_state": "keel_checked",
+          "expected_health_check_count": "keel_checked",
+          "concurrency_control": "keel_checked",
+          "machine_lease_required": "keel_checked",
           "cause": "keel_checked"
         }
       }
@@ -1682,7 +1841,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "752d41cab2f04c9df6bb8b3e15afcd4afc8c7ad13fc9a674f7a5c3bc64437f42",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "identity_group_access_grant.review.r1",
           "template_kind": "tailored",
@@ -1837,7 +1996,7 @@
             "text": null
           }
         },
-        "digest": "d76165c32bdec03c23c303f657bf5c2c625ab2bda57cf9f8edb4c5eea981d4dc",
+        "digest": "5b54a3bb0469cc906dc995e6fcc50b275cd58ff5259f3fa9780e34ea95e8a11a",
         "missing_essential": [],
         "fact_provenance": {
           "target_user.display_name": "gateway_reported",
@@ -1890,7 +2049,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "752d41cab2f04c9df6bb8b3e15afcd4afc8c7ad13fc9a674f7a5c3bc64437f42",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "identity_group_access_grant.review.r1",
           "template_kind": "tailored",
@@ -2045,7 +2204,7 @@
             "text": null
           }
         },
-        "digest": "8e95bf96afb98927e0fb2bc93c8bc6273dd3b6e5a56279f43bc5f1031f34e424",
+        "digest": "4c1c6246e428133c24a5fa97b803ea8badc0663b8227563245380edd22ed8ffe",
         "missing_essential": [
           "group.name"
         ],
@@ -2100,7 +2259,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "752d41cab2f04c9df6bb8b3e15afcd4afc8c7ad13fc9a674f7a5c3bc64437f42",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
           "permit_id": "00000000-0000-4000-8000-000000000001",
           "template_id": "payment_execute.review.r1",
           "template_kind": "tailored",
@@ -2202,7 +2361,7 @@
             "text": null
           }
         },
-        "digest": "77550a02512411d60aa3062356704c006e2273bebd895af20c79bd2b258ddbab",
+        "digest": "b09e3bdd4edd135e1be4c0575184ca3006bc423b8e304e43211105bedea4c9ac",
         "missing_essential": [],
         "fact_provenance": {
           "amount_minor": "keel_checked",
@@ -2292,7 +2451,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "752d41cab2f04c9df6bb8b3e15afcd4afc8c7ad13fc9a674f7a5c3bc64437f42",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
           "permit_id": "00000000-0000-4000-8000-000000000002",
           "template_id": "healthcare_records_release.review.r1",
           "template_kind": "tailored",
@@ -2484,7 +2643,7 @@
             "text": null
           }
         },
-        "digest": "6d0ea08b1995ed5befe19408aa0a369c24d7828c2a5e414c921404fec2335cde",
+        "digest": "26286523a222ae3dce5957e244fb62a571e9b4608a547de9186da6ae32bb7c7b",
         "missing_essential": [],
         "fact_provenance": {
           "request_digest": "keel_checked",
@@ -2585,7 +2744,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "752d41cab2f04c9df6bb8b3e15afcd4afc8c7ad13fc9a674f7a5c3bc64437f42",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
           "permit_id": "00000000-0000-4000-8000-000000000002",
           "template_id": "healthcare_records_release.review.r1",
           "template_kind": "tailored",
@@ -2777,7 +2936,7 @@
             "text": null
           }
         },
-        "digest": "fc2122286b542477013e074043031141a92d2e7cdd8a5361963d94065fb1654e",
+        "digest": "b2f64ca6f5f23f2da11fa3ce2ae7248a587247bea19bf78c2ced68d0d2336690",
         "missing_essential": [
           "request_digest",
           "total_bytes"
@@ -2802,6 +2961,2795 @@
           "human_review_required": "keel_checked",
           "preflight_observed_at": "keel_checked",
           "preflight_expires_at": "keel_checked"
+        }
+      }
+    },
+    {
+      "id": "tailored-payment-refund",
+      "description": "Tailored template: payment refund",
+      "inputs": {
+        "semantic_id": "keel.action.payment_refund.v1",
+        "permit_id": "00000000-0000-4000-8000-000000000003",
+        "exact_facts": {
+          "version": "keel.refund_exact_facts.v1",
+          "fact_profile_id": "keel.facts.refund_exact.v1",
+          "action": "payment.refund",
+          "original_payment_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:8ef0fd047f03fd62ebc8026b6560906a56f9d4cad28a55e114f174fecf951144"
+          },
+          "maximum_amount_minor": 125000,
+          "currency": "USD",
+          "payer_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:cbcfbfcaf4c918ca700b168967aa796ab60b4de019623752e72a6fe4e82c2731"
+          },
+          "payment_rail": "stripe.refund.create",
+          "reason_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:20805410330ee1d96d4ffe43ab5990d44d213571bbe5fb21375c71eaded75f3c"
+          },
+          "idempotency_digest": "sha256:44ea95ff6c961e5240d24b6539eadec847be072c0cc6f3295eed734baade4481",
+          "request_digest": "sha256:eab4280b2b9252b4db473d12d12368048acde8659cda22f729f6bb2a3feac5d3",
+          "max_uses": 1,
+          "expires_at": "2026-11-16T19:00:00Z"
+        },
+        "review": {
+          "cause": "Policy requires a person to approve this action."
+        },
+        "requester_explanation": null
+      },
+      "expected": {
+        "document": {
+          "format": "keel.review_document.v2",
+          "registry_version": "keel.review_document_templates.v3",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
+          "permit_id": "00000000-0000-4000-8000-000000000003",
+          "template_id": "payment_refund.review.r1",
+          "template_kind": "tailored",
+          "semantic_id": "keel.action.payment_refund.v1",
+          "fact_profile_id": "keel.facts.refund_exact.v1",
+          "presentation_profile_id": "permit_to_refund_payment.r1",
+          "title": "Refund one payment",
+          "sentence": "Refund up to $1,250.00 of one payment to its payer.",
+          "cards": [
+            {
+              "card_id": "maximum_amount_minor",
+              "kind": "amount",
+              "label": "Maximum refund",
+              "value": "$1,250.00",
+              "currency": "USD",
+              "field_ids": [
+                "maximum_amount_minor"
+              ],
+              "provenance": "keel_checked",
+              "provenance_label": "Checked by Keel"
+            }
+          ],
+          "sections": [
+            {
+              "section_id": "refund",
+              "label": "Refund",
+              "fields": [
+                {
+                  "field_id": "maximum_amount_minor",
+                  "label": "Maximum refund",
+                  "value": "$1,250.00",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "original_payment_reference_commitment",
+                  "label": "Original payment",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "payer_reference_commitment",
+                  "label": "Payer",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "reason_commitment",
+                  "label": "Reason",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "payment_rail",
+                  "label": "Payment rail",
+                  "value": "stripe.refund.create",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "max_uses",
+                  "label": "Runs",
+                  "value": "Once",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "expires_at",
+                  "label": "Permit valid until",
+                  "value": "2026-11-16 19:00 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "why_review",
+              "label": "Why review is required",
+              "fields": [
+                {
+                  "field_id": "cause",
+                  "label": "Reason",
+                  "value": "Policy requires a person to approve this action.",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "request",
+              "label": "Exact request",
+              "fields": [
+                {
+                  "field_id": "request_digest",
+                  "label": "Request digest",
+                  "value": "sha256:eab4280b2b9252b4db473d12d12368048acde8659cda22f729f6bb2a3feac5d3",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            }
+          ],
+          "beneficiary": null,
+          "requester_explanation": {
+            "label": "Requester's explanation",
+            "provenance": "agent_reported",
+            "authoritative": false,
+            "text": null
+          }
+        },
+        "digest": "2da819fa31bc39bedc75bc587938fb2945706b22e8d3d2d9dc12ccabb44b41b3",
+        "missing_essential": [],
+        "fact_provenance": {
+          "maximum_amount_minor": "keel_checked",
+          "original_payment_reference_commitment": "keel_checked",
+          "payer_reference_commitment": "keel_checked",
+          "reason_commitment": "keel_checked",
+          "payment_rail": "keel_checked",
+          "max_uses": "keel_checked",
+          "expires_at": "keel_checked",
+          "cause": "keel_checked",
+          "request_digest": "keel_checked"
+        }
+      }
+    },
+    {
+      "id": "tailored-payment-refund-r2",
+      "description": "Tailored template: payment refund r2",
+      "inputs": {
+        "semantic_id": "keel.action.payment_refund.v2",
+        "permit_id": "00000000-0000-4000-8000-000000000004",
+        "exact_facts": {
+          "version": "keel.transactional_cx_exact_facts.v1",
+          "fact_profile_id": "keel.facts.refund_exact.v2",
+          "action": "payment.refund",
+          "operation": "call.tools",
+          "connector_identity": "stripe",
+          "connector_contract_hash": "7a76c46752952b8c264bc8d4c55fbcefb52005ba00acd08df1703e22b1e6f574",
+          "tool_schema_hash": "e9a194db7076db0ed92534c7ca4139859081dcce86b1314f11cbb9db2e34417a",
+          "decision_trace_hash": "2894028dbd1eb4cdc27aef3bf8497ad82e881f8aff8dd777993692d50201da20",
+          "tool_arguments_hash": "1d17f833af27e234dac25f1965ff453b5edbc3bd26dfb235f2860f17ec987848",
+          "request_digest": "sha256:212bccfe7fd12b144c327170936541b9155b8595e8abc0d5268448e2a0aed822",
+          "enforcement_mode": "enforced_in_path",
+          "provider_environment": "test",
+          "provider_api_version": "example",
+          "preflight_observed_at": "2026-11-16T18:04:05Z",
+          "preflight_expires_at": "2026-11-16T18:04:05Z",
+          "preflight_snapshot_digest": "sha256:58bd5a902649c76883b86b71fc0dcd41f04f2c0f1e468ab379f80d3753a129a4",
+          "payment_reference_kind": "charge",
+          "original_payment_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:975807c3d20d3697dc4059f444c8ca24751122dbf4946884177dca0111f08402"
+          },
+          "payer_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:92a70a1c97f7bfd669a88979bac5b2c43236cd8aeafa5f0cd3d3fec974aca2ef"
+          },
+          "amount_minor": 2500,
+          "refundable_amount_minor_before": 10000,
+          "currency": "USD",
+          "refund_reason": "requested_by_customer",
+          "refund_application_fee": false,
+          "reverse_transfer": false,
+          "payment_state_digest": "sha256:2fab55c3b8b7d79cb6bd1641732a4279b5cd703ea23389970410868eb702885e",
+          "idempotency_digest": "sha256:e1a980dee18807dce01ee1b049188c4bde360a818463e23fbc86be13919e7149",
+          "max_uses": 1
+        },
+        "review": {
+          "cause": "Policy requires a person to approve this action."
+        },
+        "requester_explanation": null
+      },
+      "expected": {
+        "document": {
+          "format": "keel.review_document.v2",
+          "registry_version": "keel.review_document_templates.v3",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
+          "permit_id": "00000000-0000-4000-8000-000000000004",
+          "template_id": "payment_refund.review.r2",
+          "template_kind": "tailored",
+          "semantic_id": "keel.action.payment_refund.v2",
+          "fact_profile_id": "keel.facts.refund_exact.v2",
+          "presentation_profile_id": "payment_refund_execute.r1",
+          "title": "Refund one payment",
+          "sentence": "Refund $25.00 of one payment to its original payer.",
+          "cards": [
+            {
+              "card_id": "amount_minor",
+              "kind": "amount",
+              "label": "Refund amount",
+              "value": "$25.00",
+              "currency": "USD",
+              "field_ids": [
+                "amount_minor"
+              ],
+              "provenance": "keel_checked",
+              "provenance_label": "Checked by Keel"
+            }
+          ],
+          "sections": [
+            {
+              "section_id": "refund",
+              "label": "Refund",
+              "fields": [
+                {
+                  "field_id": "amount_minor",
+                  "label": "Refund amount",
+                  "value": "$25.00",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "refundable_amount_minor_before",
+                  "label": "Refundable on this payment now",
+                  "value": "$100.00",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "refund_reason",
+                  "label": "Reason",
+                  "value": "Requested by customer",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "refund_application_fee",
+                  "label": "Application fee refunded",
+                  "value": "No",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "reverse_transfer",
+                  "label": "Reverse transfer",
+                  "value": "No",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "original_payment_reference_commitment",
+                  "label": "Original payment",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "payer_reference_commitment",
+                  "label": "Payer",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "provider_environment",
+                  "label": "Payment environment",
+                  "value": "Test",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "max_uses",
+                  "label": "Runs",
+                  "value": "Once",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "why_review",
+              "label": "Why review is required",
+              "fields": [
+                {
+                  "field_id": "cause",
+                  "label": "Reason",
+                  "value": "Policy requires a person to approve this action.",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "request",
+              "label": "Exact request",
+              "fields": [
+                {
+                  "field_id": "request_digest",
+                  "label": "Request digest",
+                  "value": "sha256:212bccfe7fd12b144c327170936541b9155b8595e8abc0d5268448e2a0aed822",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_observed_at",
+                  "label": "Provider state read at",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_expires_at",
+                  "label": "Check valid until",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            }
+          ],
+          "beneficiary": null,
+          "requester_explanation": {
+            "label": "Requester's explanation",
+            "provenance": "agent_reported",
+            "authoritative": false,
+            "text": null
+          }
+        },
+        "digest": "55040c224e95154f941829c6f32a11f80e80c4aaedf972389b74c9ab5e004846",
+        "missing_essential": [],
+        "fact_provenance": {
+          "amount_minor": "keel_checked",
+          "refundable_amount_minor_before": "keel_checked",
+          "refund_reason": "keel_checked",
+          "refund_application_fee": "keel_checked",
+          "reverse_transfer": "keel_checked",
+          "original_payment_reference_commitment": "keel_checked",
+          "payer_reference_commitment": "keel_checked",
+          "provider_environment": "keel_checked",
+          "max_uses": "keel_checked",
+          "cause": "keel_checked",
+          "request_digest": "keel_checked",
+          "preflight_observed_at": "keel_checked",
+          "preflight_expires_at": "keel_checked"
+        }
+      }
+    },
+    {
+      "id": "tailored-invoice-payment-execute",
+      "description": "Tailored template: invoice payment execute",
+      "inputs": {
+        "semantic_id": "keel.action.invoice_payment_execute.v1",
+        "permit_id": "00000000-0000-4000-8000-000000000005",
+        "exact_facts": {
+          "version": "keel.payment_ledger_exact_facts.v1",
+          "fact_profile_id": "keel.facts.invoice_payment_exact.v1",
+          "action": "payment.invoice.pay",
+          "operation": "call.tools",
+          "connector_identity": "payments",
+          "connector_contract_hash": "6a5f83aa7348c97bd6008f73ddc100dd6893c86e58e3158ed6b1df9889769199",
+          "tool_schema_hash": "edf5f417c0c334f0390ca012d46e8f9cd4b4f71d609a53e9d8a266db5e2648a2",
+          "decision_trace_hash": "c6fabd604a653836997de4c25ef72516f808c0d81d8a3869434ab166cfc28f63",
+          "tool_arguments_hash": "b33bd590f2f895ab2e159ef1abb872931e988f408b111dc5f7d8390fc6df8699",
+          "request_digest": "sha256:8fd108be0c3ec72120c5641068b96a04dae16e8536adcc8066415b5b01cec751",
+          "enforcement_mode": "enforced_in_path",
+          "preflight_observed_at": "2026-11-16T18:04:05Z",
+          "preflight_expires_at": "2026-11-16T18:04:05Z",
+          "preflight_snapshot_digest": "sha256:2d1de791c2154d74298dcd16d7c6feff22c0f5e7b79eb3cbc1aefc0e95f95d87",
+          "invoice_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:48d8b1e3b135ca9bad937ea415598129cf035af7ee07bf6f9d15fbdf5c6e4f44"
+          },
+          "payer_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:db4707886c929fc53b1e295d8109635eec3771a8758c0f521719c76d6e916f80"
+          },
+          "merchant_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:8b178776afa2609c5321f3101bc66f50fe6bf98361c4d463da64798bf704846f"
+          },
+          "amount_minor": 480000,
+          "currency": "USD",
+          "payment_rail": "stripe.invoice.pay",
+          "invoice_status_before": "open",
+          "invoice_state_digest": "sha256:654a535d2ad97b9e9e53a83e12c2981c510c18838313f7493f695a4467bde36a",
+          "idempotency_digest": "sha256:9cba63356ebf3bd206cfcb3bd72975737405e280f881f778aefb134a6e931128",
+          "max_uses": 1
+        },
+        "review": {
+          "cause": "Policy requires a person to approve this action."
+        },
+        "requester_explanation": null
+      },
+      "expected": {
+        "document": {
+          "format": "keel.review_document.v2",
+          "registry_version": "keel.review_document_templates.v3",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
+          "permit_id": "00000000-0000-4000-8000-000000000005",
+          "template_id": "invoice_payment_execute.review.r1",
+          "template_kind": "tailored",
+          "semantic_id": "keel.action.invoice_payment_execute.v1",
+          "fact_profile_id": "keel.facts.invoice_payment_exact.v1",
+          "presentation_profile_id": "payment_invoice_pay.r1",
+          "title": "Pay one invoice",
+          "sentence": "Pay one open invoice: $4,800.00 to one merchant.",
+          "cards": [
+            {
+              "card_id": "amount_minor",
+              "kind": "amount",
+              "label": "Amount",
+              "value": "$4,800.00",
+              "currency": "USD",
+              "field_ids": [
+                "amount_minor"
+              ],
+              "provenance": "keel_checked",
+              "provenance_label": "Checked by Keel"
+            }
+          ],
+          "sections": [
+            {
+              "section_id": "payment",
+              "label": "Payment",
+              "fields": [
+                {
+                  "field_id": "amount_minor",
+                  "label": "Amount",
+                  "value": "$4,800.00",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "invoice_status_before",
+                  "label": "Invoice status now",
+                  "value": "Open",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "merchant_reference_commitment",
+                  "label": "Merchant",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "invoice_reference_commitment",
+                  "label": "Invoice",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "payer_reference_commitment",
+                  "label": "Payer",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "payment_rail",
+                  "label": "Payment rail",
+                  "value": "stripe.invoice.pay",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "max_uses",
+                  "label": "Runs",
+                  "value": "Once",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "why_review",
+              "label": "Why review is required",
+              "fields": [
+                {
+                  "field_id": "cause",
+                  "label": "Reason",
+                  "value": "Policy requires a person to approve this action.",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "request",
+              "label": "Exact request",
+              "fields": [
+                {
+                  "field_id": "request_digest",
+                  "label": "Request digest",
+                  "value": "sha256:8fd108be0c3ec72120c5641068b96a04dae16e8536adcc8066415b5b01cec751",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_observed_at",
+                  "label": "Provider state read at",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_expires_at",
+                  "label": "Check valid until",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            }
+          ],
+          "beneficiary": null,
+          "requester_explanation": {
+            "label": "Requester's explanation",
+            "provenance": "agent_reported",
+            "authoritative": false,
+            "text": null
+          }
+        },
+        "digest": "378aadd8a44706bcdd49fd039e7affc8469a5afb629233ba2e0077f2fef35a10",
+        "missing_essential": [],
+        "fact_provenance": {
+          "amount_minor": "keel_checked",
+          "invoice_status_before": "keel_checked",
+          "merchant_reference_commitment": "keel_checked",
+          "invoice_reference_commitment": "keel_checked",
+          "payer_reference_commitment": "keel_checked",
+          "payment_rail": "keel_checked",
+          "max_uses": "keel_checked",
+          "cause": "keel_checked",
+          "request_digest": "keel_checked",
+          "preflight_observed_at": "keel_checked",
+          "preflight_expires_at": "keel_checked"
+        }
+      }
+    },
+    {
+      "id": "tailored-stripe-connect-transfer-send",
+      "description": "Tailored template: stripe connect transfer send",
+      "inputs": {
+        "semantic_id": "keel.action.stripe_connect_transfer_send.v1",
+        "permit_id": "00000000-0000-4000-8000-000000000006",
+        "exact_facts": {
+          "version": "keel.goal3a_portfolio_exact_facts.v1",
+          "fact_profile_id": "keel.facts.stripe_transfer_create_exact.v1",
+          "action": "stripe.transfer.create",
+          "operation": "call.tools",
+          "connector_identity": "stripe",
+          "connector_contract_hash": "a55eb66edaf7d5d607d4ad030ba349cdffbdbe96ffef29a2a1678b5955c9f1aa",
+          "tool_schema_hash": "37f35ae6f93f55c744b9e6ae141d9e7677eb756d4705d1b875bbb4ead127d957",
+          "decision_trace_hash": "be5c1124b2dafb12a5f487d7c38c89019c03740432919782e7a160950c18b8a9",
+          "tool_arguments_hash": "79b4f69ee45d16093f5c49158aee636a385f2f1dba2e07b817df2fc7336d3498",
+          "request_digest": "sha256:46379310379a3846d8bd76ea6656c44c854ba86b28dad6aeeb28e7f3f76ce2e9",
+          "enforcement_mode": "enforced_in_path",
+          "provider_environment": "provider_sandbox",
+          "provider_api_version": "example",
+          "preflight_observed_at": "2026-11-16T18:04:05Z",
+          "preflight_expires_at": "2026-11-16T18:04:05Z",
+          "preflight_snapshot_digest": "sha256:7a8de360053194c5e7db9f019d6ee0feba21c81e2d98e117b2541515129f4f9b",
+          "idempotency_digest": "sha256:e9406a9e24ae80a1dd9c97df34ffcf096e535a911ff7724e2c9615a9ecd7cd2e",
+          "max_uses": 1,
+          "provider_instance_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:bb74d396e5f2993b18e98cd2347c5d529943cea53880e23851466b4ababb234e"
+          },
+          "target_is_dedicated_demo": true,
+          "platform_account_digest": "sha256:1feabe84f208627c032bd27d30649c2bf60f7da0dfa53f5ec11ea098311a4b40",
+          "amount_minor": 7500,
+          "currency": "USD",
+          "destination_account_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:6a96a009f7186d87c0877010249605aa1fea512c8e7b9586c84059044ecb25ef"
+          },
+          "destination_account_state_digest": "sha256:735e2f27eb15ea47bc93ab6c48f8a5160d578e42e5bfcb13126beb63f567b7b4",
+          "destination_charges_enabled": true,
+          "destination_payouts_enabled": false
+        },
+        "review": {
+          "cause": "Policy requires a person to approve this action."
+        },
+        "requester_explanation": null
+      },
+      "expected": {
+        "document": {
+          "format": "keel.review_document.v2",
+          "registry_version": "keel.review_document_templates.v3",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
+          "permit_id": "00000000-0000-4000-8000-000000000006",
+          "template_id": "stripe_connect_transfer_send.review.r1",
+          "template_kind": "tailored",
+          "semantic_id": "keel.action.stripe_connect_transfer_send.v1",
+          "fact_profile_id": "keel.facts.stripe_transfer_create_exact.v1",
+          "presentation_profile_id": "stripe_connect_transfer_send.r1",
+          "title": "Send one Stripe Connect transfer",
+          "sentence": "Send $75.00 to one Stripe connected account.",
+          "cards": [
+            {
+              "card_id": "amount_minor",
+              "kind": "amount",
+              "label": "Transfer amount",
+              "value": "$75.00",
+              "currency": "USD",
+              "field_ids": [
+                "amount_minor"
+              ],
+              "provenance": "keel_checked",
+              "provenance_label": "Checked by Keel"
+            }
+          ],
+          "sections": [
+            {
+              "section_id": "transfer",
+              "label": "Transfer",
+              "fields": [
+                {
+                  "field_id": "amount_minor",
+                  "label": "Transfer amount",
+                  "value": "$75.00",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "destination_account_reference_commitment",
+                  "label": "Destination",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "provider_instance_reference_commitment",
+                  "label": "Stripe platform account",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "destination_charges_enabled",
+                  "label": "Destination accepts charges",
+                  "value": "Yes",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "destination_payouts_enabled",
+                  "label": "Destination accepts payouts",
+                  "value": "No",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "target_is_dedicated_demo",
+                  "label": "Dedicated demo account",
+                  "value": "Yes",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "provider_environment",
+                  "label": "Environment",
+                  "value": "Stripe test mode",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "max_uses",
+                  "label": "Runs",
+                  "value": "Once",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "why_review",
+              "label": "Why review is required",
+              "fields": [
+                {
+                  "field_id": "cause",
+                  "label": "Reason",
+                  "value": "Policy requires a person to approve this action.",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "request",
+              "label": "Exact request",
+              "fields": [
+                {
+                  "field_id": "request_digest",
+                  "label": "Request digest",
+                  "value": "sha256:46379310379a3846d8bd76ea6656c44c854ba86b28dad6aeeb28e7f3f76ce2e9",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_observed_at",
+                  "label": "Provider state read at",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_expires_at",
+                  "label": "Check valid until",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            }
+          ],
+          "beneficiary": null,
+          "requester_explanation": {
+            "label": "Requester's explanation",
+            "provenance": "agent_reported",
+            "authoritative": false,
+            "text": null
+          }
+        },
+        "digest": "a8a09d59a76e171244e21e471f6879ca63ce84c1b6591adc80a2f062f351e305",
+        "missing_essential": [],
+        "fact_provenance": {
+          "amount_minor": "keel_checked",
+          "destination_account_reference_commitment": "keel_checked",
+          "provider_instance_reference_commitment": "keel_checked",
+          "destination_charges_enabled": "keel_checked",
+          "destination_payouts_enabled": "keel_checked",
+          "target_is_dedicated_demo": "keel_checked",
+          "provider_environment": "keel_checked",
+          "max_uses": "keel_checked",
+          "cause": "keel_checked",
+          "request_digest": "keel_checked",
+          "preflight_observed_at": "keel_checked",
+          "preflight_expires_at": "keel_checked"
+        }
+      }
+    },
+    {
+      "id": "tailored-ledger-entry-record",
+      "description": "Tailored template: ledger entry record",
+      "inputs": {
+        "semantic_id": "keel.action.ledger_entry_record.v1",
+        "permit_id": "00000000-0000-4000-8000-000000000007",
+        "exact_facts": {
+          "version": "keel.payment_ledger_exact_facts.v1",
+          "fact_profile_id": "keel.facts.ledger_entry_record_exact.v1",
+          "action": "ledger.entry.record",
+          "operation": "call.tools",
+          "connector_identity": "database.readwrite",
+          "connector_contract_hash": "26f2a145c61b546cbb3fe917675510895712d20f876dc00564225f9ae61b7b81",
+          "tool_schema_hash": "f212831ecab922998be1946bc1919a38830f3b8889f8ef88c511bd1cbe7eebe2",
+          "decision_trace_hash": "b7854e5326250a8879a05bf3e62427a93accedfcf01feae8dcf445a6c9aa9794",
+          "tool_arguments_hash": "23bb049eb3639407f65c976e240dc35328088f7eef9c71904480f463743390fc",
+          "request_digest": "sha256:915c9eb760c942e92c09470ab1e82077722d99258230417c23aee99fbb12bc02",
+          "enforcement_mode": "enforced_in_path",
+          "preflight_observed_at": "2026-11-16T18:04:05Z",
+          "preflight_expires_at": "2026-11-16T18:04:05Z",
+          "preflight_snapshot_digest": "sha256:08d3c1c725945ec9659a45675625708cd048a810637dfc8dccb6a8bd648306b3",
+          "ledger_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:7c842f9ae34f72155346006060fb00d1abcf0936040158d2e9035f91044105cf"
+          },
+          "entry_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:2947b69d89b5ed31aaf9c1b016d841a697ed1e70efcb09104d3a4c0f11e06b23"
+          },
+          "debit_account_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:3578fb484456d993c7781f4a466aedba31533a72d4c238c8a9523f886a96e589"
+          },
+          "credit_account_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:4a61c8384bc24d7d95c81dc0492f5c394baf5a5a4acbf27ca42c55a450f92818"
+          },
+          "amount_minor": 99900,
+          "currency": "USD",
+          "entry_effective_at": "2026-11-16T00:00:00Z",
+          "ledger_schema_version": "example",
+          "expected_ledger_version": "41",
+          "value_conserved": true,
+          "accounts_distinct": true,
+          "idempotency_digest": "sha256:5b70cabe36dbec24ada43e6c5a740a42beae6a9c7942279f89269a8cb22eadd1"
+        },
+        "review": {
+          "cause": "Policy requires a person to approve this action."
+        },
+        "requester_explanation": null
+      },
+      "expected": {
+        "document": {
+          "format": "keel.review_document.v2",
+          "registry_version": "keel.review_document_templates.v3",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
+          "permit_id": "00000000-0000-4000-8000-000000000007",
+          "template_id": "ledger_entry_record.review.r1",
+          "template_kind": "tailored",
+          "semantic_id": "keel.action.ledger_entry_record.v1",
+          "fact_profile_id": "keel.facts.ledger_entry_record_exact.v1",
+          "presentation_profile_id": "ledger_entry_record.r1",
+          "title": "Post one ledger entry",
+          "sentence": "Post one balanced ledger entry: $999.00 debited from one account and credited to a different one.",
+          "cards": [
+            {
+              "card_id": "amount_minor",
+              "kind": "amount",
+              "label": "Amount (each side)",
+              "value": "$999.00",
+              "currency": "USD",
+              "field_ids": [
+                "amount_minor"
+              ],
+              "provenance": "keel_checked",
+              "provenance_label": "Checked by Keel"
+            }
+          ],
+          "sections": [
+            {
+              "section_id": "entry",
+              "label": "Ledger entry",
+              "fields": [
+                {
+                  "field_id": "amount_minor",
+                  "label": "Amount (each side)",
+                  "value": "$999.00",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "value_conserved",
+                  "label": "Balanced",
+                  "value": "Debits equal credits",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "accounts_distinct",
+                  "label": "Accounts",
+                  "value": "Two different accounts",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "ledger_reference_commitment",
+                  "label": "Ledger",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "entry_reference_commitment",
+                  "label": "Entry",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "debit_account_commitment",
+                  "label": "Debit account",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "credit_account_commitment",
+                  "label": "Credit account",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "entry_effective_at",
+                  "label": "Effective",
+                  "value": "2026-11-16 00:00 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "expected_ledger_version",
+                  "label": "Expected ledger version (posting fails if the ledger moved)",
+                  "value": "41",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "why_review",
+              "label": "Why review is required",
+              "fields": [
+                {
+                  "field_id": "cause",
+                  "label": "Reason",
+                  "value": "Policy requires a person to approve this action.",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "request",
+              "label": "Exact request",
+              "fields": [
+                {
+                  "field_id": "request_digest",
+                  "label": "Request digest",
+                  "value": "sha256:915c9eb760c942e92c09470ab1e82077722d99258230417c23aee99fbb12bc02",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_observed_at",
+                  "label": "Provider state read at",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_expires_at",
+                  "label": "Check valid until",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            }
+          ],
+          "beneficiary": null,
+          "requester_explanation": {
+            "label": "Requester's explanation",
+            "provenance": "agent_reported",
+            "authoritative": false,
+            "text": null
+          }
+        },
+        "digest": "bc89653b585f0f60d5b69f0d09096ff6f87a3385c8d7deca169e4cef4166d887",
+        "missing_essential": [],
+        "fact_provenance": {
+          "amount_minor": "keel_checked",
+          "value_conserved": "keel_checked",
+          "accounts_distinct": "keel_checked",
+          "ledger_reference_commitment": "keel_checked",
+          "entry_reference_commitment": "keel_checked",
+          "debit_account_commitment": "keel_checked",
+          "credit_account_commitment": "keel_checked",
+          "entry_effective_at": "keel_checked",
+          "expected_ledger_version": "keel_checked",
+          "cause": "keel_checked",
+          "request_digest": "keel_checked",
+          "preflight_observed_at": "keel_checked",
+          "preflight_expires_at": "keel_checked"
+        }
+      }
+    },
+    {
+      "id": "tailored-payment-reconciliation-record",
+      "description": "Tailored template: payment reconciliation record",
+      "inputs": {
+        "semantic_id": "keel.action.payment_reconciliation_record.v1",
+        "permit_id": "00000000-0000-4000-8000-000000000008",
+        "exact_facts": {
+          "version": "keel.payment_ledger_exact_facts.v1",
+          "fact_profile_id": "keel.facts.payment_reconciliation_exact.v1",
+          "action": "payment.reconciliation.record",
+          "operation": "call.tools",
+          "connector_identity": "database.readwrite",
+          "connector_contract_hash": "a254520697d0b8814325a51856640e3f4382531c4e560c122d706e755dcd5c11",
+          "tool_schema_hash": "e3b915040ad77ee58690b5fbaebfdb05645972d098451336b71223b65273165b",
+          "decision_trace_hash": "4e3b744695909ed634e25586754d94671f853d86c4259e3d18696f7fe0c127a9",
+          "tool_arguments_hash": "b1bc338bb6cd93c3d3baf76f89ad951607cadd9486e0b2d047337411e13c9e8b",
+          "request_digest": "sha256:dde1b6fcbcd561fb1bb834674fba1a91b03c548bc6b4d8622a01b680dd985ea0",
+          "enforcement_mode": "enforced_in_path",
+          "preflight_observed_at": "2026-11-16T18:04:05Z",
+          "preflight_expires_at": "2026-11-16T18:04:05Z",
+          "preflight_snapshot_digest": "sha256:c19aecf9ec2a3e3ff1db4921238eec9e5187fae1058fdf87ccd90d7a63c79318",
+          "payment_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:c17fea925c700530bad07e3270686384b12861012154872fecd21c9f2642bd1d"
+          },
+          "ledger_entry_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:a41b58bff8c25bd40f362a1005ef1c1ba4c12f4bd26f6fe94f4acb26c38bcf6c"
+          },
+          "provider_observation_digest": "sha256:69cc9e99dbae0d261aee041cf3ab076cb03d3379d34a3ddd6931d4ac7d616eca",
+          "ledger_observation_digest": "sha256:ed8458c11b9d18aff5155dec930b3b8bf066d28f44135f3710d19f1e11428dd8",
+          "amount_minor": 99900,
+          "currency": "USD",
+          "provider_outcome_state": "completed",
+          "ledger_entry_state": "posted",
+          "amounts_match": true,
+          "currencies_match": true,
+          "expected_current_status": "unreconciled",
+          "requested_status": "reconciled",
+          "reconciliation_basis_version": "match-rules-2026-11",
+          "idempotency_digest": "sha256:2070933ee29f076cdf6a4313a819f88c3fc417b406922001875654a119c6f45b"
+        },
+        "review": {
+          "cause": "Policy requires a person to approve this action."
+        },
+        "requester_explanation": null
+      },
+      "expected": {
+        "document": {
+          "format": "keel.review_document.v2",
+          "registry_version": "keel.review_document_templates.v3",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
+          "permit_id": "00000000-0000-4000-8000-000000000008",
+          "template_id": "payment_reconciliation_record.review.r1",
+          "template_kind": "tailored",
+          "semantic_id": "keel.action.payment_reconciliation_record.v1",
+          "fact_profile_id": "keel.facts.payment_reconciliation_exact.v1",
+          "presentation_profile_id": "payment_reconciliation_record.r1",
+          "title": "Reconcile one payment",
+          "sentence": "Mark one completed payment and its posted ledger entry as reconciled ($999.00).",
+          "cards": [
+            {
+              "card_id": "expected_current_status",
+              "kind": "change",
+              "label": "Reconciliation status",
+              "from": "Unreconciled",
+              "to": "Reconciled",
+              "field_ids": [
+                "expected_current_status",
+                "requested_status"
+              ],
+              "provenance": "keel_checked",
+              "provenance_label": "Checked by Keel"
+            },
+            {
+              "card_id": "amount_minor",
+              "kind": "amount",
+              "label": "Matched amount",
+              "value": "$999.00",
+              "currency": "USD",
+              "field_ids": [
+                "amount_minor"
+              ],
+              "provenance": "keel_checked",
+              "provenance_label": "Checked by Keel"
+            }
+          ],
+          "sections": [
+            {
+              "section_id": "reconciliation",
+              "label": "Reconciliation",
+              "fields": [
+                {
+                  "field_id": "expected_current_status",
+                  "label": "Status now",
+                  "value": "Unreconciled",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "requested_status",
+                  "label": "Status after",
+                  "value": "Reconciled",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "amount_minor",
+                  "label": "Matched amount",
+                  "value": "$999.00",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "amounts_match",
+                  "label": "Amounts match",
+                  "value": "Yes",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "currencies_match",
+                  "label": "Currencies match",
+                  "value": "Yes",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "provider_outcome_state",
+                  "label": "Provider outcome",
+                  "value": "Completed",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "ledger_entry_state",
+                  "label": "Ledger entry",
+                  "value": "Posted",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "payment_reference_commitment",
+                  "label": "Payment",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "ledger_entry_reference_commitment",
+                  "label": "Ledger entry reference",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "reconciliation_basis_version",
+                  "label": "Matching rules",
+                  "value": "match-rules-2026-11",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "why_review",
+              "label": "Why review is required",
+              "fields": [
+                {
+                  "field_id": "cause",
+                  "label": "Reason",
+                  "value": "Policy requires a person to approve this action.",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "request",
+              "label": "Exact request",
+              "fields": [
+                {
+                  "field_id": "request_digest",
+                  "label": "Request digest",
+                  "value": "sha256:dde1b6fcbcd561fb1bb834674fba1a91b03c548bc6b4d8622a01b680dd985ea0",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_observed_at",
+                  "label": "Provider state read at",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_expires_at",
+                  "label": "Check valid until",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            }
+          ],
+          "beneficiary": null,
+          "requester_explanation": {
+            "label": "Requester's explanation",
+            "provenance": "agent_reported",
+            "authoritative": false,
+            "text": null
+          }
+        },
+        "digest": "8b1f3a6d2fc14de4c112d5cb100a14aea7049eb39cfce210a8587dadca353f89",
+        "missing_essential": [],
+        "fact_provenance": {
+          "expected_current_status": "keel_checked",
+          "requested_status": "keel_checked",
+          "amount_minor": "keel_checked",
+          "amounts_match": "keel_checked",
+          "currencies_match": "keel_checked",
+          "provider_outcome_state": "keel_checked",
+          "ledger_entry_state": "keel_checked",
+          "payment_reference_commitment": "keel_checked",
+          "ledger_entry_reference_commitment": "keel_checked",
+          "reconciliation_basis_version": "keel_checked",
+          "cause": "keel_checked",
+          "request_digest": "keel_checked",
+          "preflight_observed_at": "keel_checked",
+          "preflight_expires_at": "keel_checked"
+        }
+      }
+    },
+    {
+      "id": "tailored-customer-credit-issue",
+      "description": "Tailored template: customer credit issue",
+      "inputs": {
+        "semantic_id": "keel.action.customer_credit_issue.v1",
+        "permit_id": "00000000-0000-4000-8000-000000000009",
+        "exact_facts": {
+          "version": "keel.transactional_cx_exact_facts.v1",
+          "fact_profile_id": "keel.facts.customer_credit_issue_exact.v1",
+          "action": "customer.credit.issue",
+          "operation": "call.tools",
+          "connector_identity": "stripe",
+          "connector_contract_hash": "45ae90de4aaba87be9178ada8654816556a3394d2882daeb87a2f82e23b9e4a7",
+          "tool_schema_hash": "1a9b1010710c2b98fbaf9edb98431817508a90a2ce755d891e603d9a6dccf5f5",
+          "decision_trace_hash": "8a3d19db4d9e516a43c151ae7b32c806ce07cec83cf62f7f21f7bb258ed3add0",
+          "tool_arguments_hash": "da4363516443ad904a327e02fb5f0ad54ea0d6dc97cdf2f390028886018ad0b3",
+          "request_digest": "sha256:45d5b8d5ebae7bb2387d382745cc46bc799dd1cad9390697a77f4fafe1e150dc",
+          "enforcement_mode": "enforced_in_path",
+          "provider_environment": "test",
+          "provider_api_version": "example",
+          "preflight_observed_at": "2026-11-16T18:04:05Z",
+          "preflight_expires_at": "2026-11-16T18:04:05Z",
+          "preflight_snapshot_digest": "sha256:40f7d19b4ed64522b164289608c2e75f86a7762b93fd5a54b54b4a51131cb761",
+          "customer_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:8638d9f00ccda0e146b1e9b9b20afff4249b9536baeb04279647ddd235cc950a"
+          },
+          "amount_minor": 1500,
+          "provider_amount_minor": -1500,
+          "currency": "EUR",
+          "customer_balance_before_minor": -500,
+          "expected_customer_balance_after_minor": -2000,
+          "credit_direction": "customer_credit",
+          "description_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:dcc27b9f44d3afef04308ffc6e001f643ef44df2a736fe673f022f3b215157d1"
+          },
+          "customer_balance_state_digest": "sha256:c81155ff5723e5ba818a6d8a1e49c0345941e23413e8bd094a6f81c39e91e3f6",
+          "idempotency_digest": "sha256:b04919eced996a94cc5e8d59c23117aa4ed63d91d5dc234d85ac792766b57678",
+          "max_uses": 1
+        },
+        "review": {
+          "cause": "Policy requires a person to approve this action."
+        },
+        "requester_explanation": null
+      },
+      "expected": {
+        "document": {
+          "format": "keel.review_document.v2",
+          "registry_version": "keel.review_document_templates.v3",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
+          "permit_id": "00000000-0000-4000-8000-000000000009",
+          "template_id": "customer_credit_issue.review.r1",
+          "template_kind": "tailored",
+          "semantic_id": "keel.action.customer_credit_issue.v1",
+          "fact_profile_id": "keel.facts.customer_credit_issue_exact.v1",
+          "presentation_profile_id": "customer_credit_issue.r1",
+          "title": "Credit one customer account",
+          "sentence": "Credit one customer account with €15.00.",
+          "cards": [
+            {
+              "card_id": "amount_minor",
+              "kind": "amount",
+              "label": "Credit amount",
+              "value": "€15.00",
+              "currency": "EUR",
+              "field_ids": [
+                "amount_minor"
+              ],
+              "provenance": "keel_checked",
+              "provenance_label": "Checked by Keel"
+            },
+            {
+              "card_id": "customer_balance_before_minor",
+              "kind": "change",
+              "label": "Customer balance (provider)",
+              "from": "-€5.00",
+              "to": "-€20.00",
+              "field_ids": [
+                "customer_balance_before_minor",
+                "expected_customer_balance_after_minor"
+              ],
+              "provenance": "keel_checked",
+              "provenance_label": "Checked by Keel"
+            }
+          ],
+          "sections": [
+            {
+              "section_id": "credit",
+              "label": "Credit",
+              "fields": [
+                {
+                  "field_id": "amount_minor",
+                  "label": "Credit amount",
+                  "value": "€15.00",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "customer_balance_before_minor",
+                  "label": "Customer balance now (provider)",
+                  "value": "-€5.00",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "expected_customer_balance_after_minor",
+                  "label": "Customer balance after (provider)",
+                  "value": "-€20.00",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "customer_reference_commitment",
+                  "label": "Customer",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "description_commitment",
+                  "label": "Description",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "provider_environment",
+                  "label": "Environment",
+                  "value": "Test",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "max_uses",
+                  "label": "Runs",
+                  "value": "Once",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "why_review",
+              "label": "Why review is required",
+              "fields": [
+                {
+                  "field_id": "cause",
+                  "label": "Reason",
+                  "value": "Policy requires a person to approve this action.",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "request",
+              "label": "Exact request",
+              "fields": [
+                {
+                  "field_id": "request_digest",
+                  "label": "Request digest",
+                  "value": "sha256:45d5b8d5ebae7bb2387d382745cc46bc799dd1cad9390697a77f4fafe1e150dc",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_observed_at",
+                  "label": "Provider state read at",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_expires_at",
+                  "label": "Check valid until",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            }
+          ],
+          "beneficiary": null,
+          "requester_explanation": {
+            "label": "Requester's explanation",
+            "provenance": "agent_reported",
+            "authoritative": false,
+            "text": null
+          }
+        },
+        "digest": "cf05fca2cfc42b6f3e379c9c49e72557611bfefa02bcf873e8d38a0361d2843a",
+        "missing_essential": [],
+        "fact_provenance": {
+          "amount_minor": "keel_checked",
+          "customer_balance_before_minor": "keel_checked",
+          "expected_customer_balance_after_minor": "keel_checked",
+          "customer_reference_commitment": "keel_checked",
+          "description_commitment": "keel_checked",
+          "provider_environment": "keel_checked",
+          "max_uses": "keel_checked",
+          "cause": "keel_checked",
+          "request_digest": "keel_checked",
+          "preflight_observed_at": "keel_checked",
+          "preflight_expires_at": "keel_checked"
+        }
+      }
+    },
+    {
+      "id": "tailored-identity-group-access-remove",
+      "description": "Tailored template: identity group access remove",
+      "inputs": {
+        "semantic_id": "keel.action.identity_group_access_remove.v1",
+        "permit_id": "00000000-0000-4000-8000-000000000010",
+        "exact_facts": {
+          "version": "keel.identity_security_exact_facts.v1",
+          "fact_profile_id": "keel.facts.identity_group_access_remove_exact.v1",
+          "action": "identity.group_access.remove",
+          "operation": "call.tools",
+          "connector_identity": "okta",
+          "connector_contract_hash": "0ad5986e04cd0b793e386685221c0cbc73fa69ad86c79371d0f17befb302821b",
+          "tool_schema_hash": "b9df36b4b6b1a3c64e8108c44d70ffe7df4268b64bf3619e2f405ad4fe90de71",
+          "decision_trace_hash": "dab5ace77bc14786540fdfb1a0f06ee122b6380db9de75455c3709b65a097221",
+          "tool_arguments_hash": "5bfcfa1a58ada5fbc1afd023cab7e34c281ab2f0b8a13b41c044fffab3c5bcba",
+          "request_digest": "sha256:8fc1fe563099c40329a31a2ced448b2d8496a7b0303012e382d2a7a55da99757",
+          "enforcement_mode": "enforced_in_path",
+          "provider_environment": "dedicated_demo",
+          "provider_api_version": "example",
+          "preflight_observed_at": "2026-11-16T18:04:05Z",
+          "preflight_expires_at": "2026-11-16T18:04:05Z",
+          "preflight_snapshot_digest": "sha256:a83a9efade83680a00b298ed7e0b0e1933d7c2154e8f6fd49fb36e40548675dc",
+          "idempotency_digest": "sha256:e8b7c65654e18b24a4722fc8e3eca23e589b537c2244215124469d125f810cd2",
+          "max_uses": 1,
+          "tenant_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:73a662959097a51fd43a649eaf4c5a23504f4dca7b88ec7773c12bc4c8a9df9b"
+          },
+          "user_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:2f436f44c057d4b7cd14c34fd5e9cf0f0c7caafa137b8607dac8ea07f207cda8"
+          },
+          "provider_identity_type": "user",
+          "current_user_status": "ACTIVE",
+          "user_state_digest": "sha256:9eb0a2176fa01f7fed13b27aba90dccd2fa50383b659dc9e439fc74c5b79b09b",
+          "target_is_privileged_admin": false,
+          "admin_role_assignments_digest": "sha256:ff7bee9a33a221b4224bab164bc3c3c6c072b5b0e91482fe978d6cb71420bc13",
+          "group_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:12bbf3df806c3bf271bc34217b5c85c6c0bf85fbcc2e3fb6035a9338a6c0461b"
+          },
+          "group_type": "OKTA_GROUP",
+          "group_privilege_class": "privileged",
+          "group_state_digest": "sha256:3169023fd5effa76474c3e3f19daaeddf877af17a0183278e40865acf6e8a600",
+          "group_membership_state_digest": "sha256:0a6fe5e41a84760aae6e0981c980378b45b75aecf8652f145b49fe531a46f7d7",
+          "current_membership": true,
+          "target_membership": false,
+          "current_group_member_count": 4,
+          "projected_group_member_count": 3,
+          "target_is_last_privileged_member": false
+        },
+        "review": {
+          "cause": "Policy requires a person to approve this action."
+        },
+        "requester_explanation": null
+      },
+      "expected": {
+        "document": {
+          "format": "keel.review_document.v2",
+          "registry_version": "keel.review_document_templates.v3",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
+          "permit_id": "00000000-0000-4000-8000-000000000010",
+          "template_id": "identity_group_access_remove.review.r1",
+          "template_kind": "tailored",
+          "semantic_id": "keel.action.identity_group_access_remove.v1",
+          "fact_profile_id": "keel.facts.identity_group_access_remove_exact.v1",
+          "presentation_profile_id": "identity_group_access_remove.r1",
+          "title": "Remove a person from an Okta group",
+          "sentence": "Remove one Okta user from one privileged Okta group.",
+          "cards": [
+            {
+              "card_id": "current_membership",
+              "kind": "change",
+              "label": "Membership",
+              "from": "Member",
+              "to": "Not a member",
+              "field_ids": [
+                "current_membership",
+                "target_membership"
+              ],
+              "provenance": "keel_checked",
+              "provenance_label": "Checked by Keel"
+            },
+            {
+              "card_id": "current_group_member_count",
+              "kind": "change",
+              "label": "Group size",
+              "from": "4",
+              "to": "3",
+              "field_ids": [
+                "current_group_member_count",
+                "projected_group_member_count"
+              ],
+              "provenance": "keel_checked",
+              "provenance_label": "Checked by Keel"
+            }
+          ],
+          "sections": [
+            {
+              "section_id": "access",
+              "label": "Access removed",
+              "fields": [
+                {
+                  "field_id": "current_membership",
+                  "label": "Member today",
+                  "value": "Member",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "target_membership",
+                  "label": "Member after",
+                  "value": "Not a member",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "group_privilege_class",
+                  "label": "Group privilege",
+                  "value": "Privileged",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "current_group_member_count",
+                  "label": "Members now",
+                  "value": "4",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "projected_group_member_count",
+                  "label": "Members after",
+                  "value": "3",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "target_is_last_privileged_member",
+                  "label": "Last privileged member",
+                  "value": "No (checked)",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "current_user_status",
+                  "label": "User status",
+                  "value": "Active",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "group_reference_commitment",
+                  "label": "Group",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "target_is_privileged_admin",
+                  "label": "Okta administrator",
+                  "value": "No",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "user_reference_commitment",
+                  "label": "User",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "tenant_reference_commitment",
+                  "label": "Okta tenant",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "provider_environment",
+                  "label": "Environment",
+                  "value": "Dedicated demo tenant",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "max_uses",
+                  "label": "Runs",
+                  "value": "Once",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "why_review",
+              "label": "Why review is required",
+              "fields": [
+                {
+                  "field_id": "cause",
+                  "label": "Reason",
+                  "value": "Policy requires a person to approve this action.",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "request",
+              "label": "Exact request",
+              "fields": [
+                {
+                  "field_id": "request_digest",
+                  "label": "Request digest",
+                  "value": "sha256:8fc1fe563099c40329a31a2ced448b2d8496a7b0303012e382d2a7a55da99757",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_observed_at",
+                  "label": "Provider state read at",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_expires_at",
+                  "label": "Check valid until",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            }
+          ],
+          "beneficiary": null,
+          "requester_explanation": {
+            "label": "Requester's explanation",
+            "provenance": "agent_reported",
+            "authoritative": false,
+            "text": null
+          }
+        },
+        "digest": "11b79a0aa0309204f1cbeb9cbe88cd3e9b3cad1e505a0767c08960c325734de0",
+        "missing_essential": [],
+        "fact_provenance": {
+          "current_membership": "keel_checked",
+          "target_membership": "keel_checked",
+          "group_privilege_class": "keel_checked",
+          "current_group_member_count": "keel_checked",
+          "projected_group_member_count": "keel_checked",
+          "target_is_last_privileged_member": "keel_checked",
+          "current_user_status": "keel_checked",
+          "group_reference_commitment": "keel_checked",
+          "target_is_privileged_admin": "keel_checked",
+          "user_reference_commitment": "keel_checked",
+          "tenant_reference_commitment": "keel_checked",
+          "provider_environment": "keel_checked",
+          "max_uses": "keel_checked",
+          "cause": "keel_checked",
+          "request_digest": "keel_checked",
+          "preflight_observed_at": "keel_checked",
+          "preflight_expires_at": "keel_checked"
+        }
+      }
+    },
+    {
+      "id": "tailored-identity-mfa-reset",
+      "description": "Tailored template: identity mfa reset",
+      "inputs": {
+        "semantic_id": "keel.action.identity_mfa_reset.v1",
+        "permit_id": "00000000-0000-4000-8000-000000000011",
+        "exact_facts": {
+          "version": "keel.identity_security_exact_facts.v1",
+          "fact_profile_id": "keel.facts.identity_mfa_reset_exact.v1",
+          "action": "identity.mfa.reset",
+          "operation": "call.tools",
+          "connector_identity": "okta",
+          "connector_contract_hash": "dbd638e1bbb6009682e84d9a4ffac631aec2b897490b5ccb0efe3267fc18f623",
+          "tool_schema_hash": "4961c2e1002af218f3ea6c1b8f3a9879663fc42512d63b96f98101e27b9813ad",
+          "decision_trace_hash": "e66a7c1a2a89842fda9fc32b38a829450c92c5a23684d711d60277e3772353a3",
+          "tool_arguments_hash": "fcfff4b2a5f7272d36ef49cbf9df82ac8760f01d140941b40a1bf784349cebd9",
+          "request_digest": "sha256:9dc4c1b9bea5e55e0f2530e5b28fc352c8c48c3e2e31a05acf8e07ea8f1503d0",
+          "enforcement_mode": "enforced_in_path",
+          "provider_environment": "dedicated_demo",
+          "provider_api_version": "example",
+          "preflight_observed_at": "2026-11-16T18:04:05Z",
+          "preflight_expires_at": "2026-11-16T18:04:05Z",
+          "preflight_snapshot_digest": "sha256:6aebc5559544709e1b0483b15d26b2efabf2786c803ac948aea64ae942127576",
+          "idempotency_digest": "sha256:1e3f3e43922f7568101e467f5fbd348b7dcd4c15f03128428cdcdae1f432ac0e",
+          "max_uses": 1,
+          "tenant_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:455dead55f3ead9f9acb4d9031c63bead421cd2dcd5feb73b9714a5a395b8736"
+          },
+          "user_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:f49cb945cef5823629fc4e5a77482393019608e97059a395747f693e0077bb79"
+          },
+          "provider_identity_type": "user",
+          "current_user_status": "LOCKED_OUT",
+          "user_state_digest": "sha256:4d08ddd4a2c831fd1d5548e14e9bcf6a1fcd5d34cb94a0efc01a60a5bb2001c2",
+          "target_is_privileged_admin": false,
+          "admin_role_assignments_digest": "sha256:cea029ee8392b1f0f8fc63d37a5040fe2e043835883dbef2421462b7ba68a458",
+          "enrolled_factor_count": 3,
+          "factor_enrollment_state_digest": "sha256:dabbde585d39da30ddadb2948629d391f041077c20e0c59e733bbab46a651751",
+          "reset_scope": "all_enrolled_factors",
+          "target_user_status": "ACTIVE"
+        },
+        "review": {
+          "cause": "Policy requires a person to approve this action."
+        },
+        "requester_explanation": null
+      },
+      "expected": {
+        "document": {
+          "format": "keel.review_document.v2",
+          "registry_version": "keel.review_document_templates.v3",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
+          "permit_id": "00000000-0000-4000-8000-000000000011",
+          "template_id": "identity_mfa_reset.review.r1",
+          "template_kind": "tailored",
+          "semantic_id": "keel.action.identity_mfa_reset.v1",
+          "fact_profile_id": "keel.facts.identity_mfa_reset_exact.v1",
+          "presentation_profile_id": "identity_mfa_reset.r1",
+          "title": "Reset a person's MFA factors",
+          "sentence": "Reset all 3 enrolled MFA factors for one locked-out Okta user.",
+          "cards": [
+            {
+              "card_id": "enrolled_factor_count",
+              "kind": "change",
+              "label": "Enrolled MFA factors",
+              "from": "3",
+              "to": "0",
+              "field_ids": [
+                "enrolled_factor_count"
+              ],
+              "provenance": "keel_checked",
+              "provenance_label": "Checked by Keel"
+            }
+          ],
+          "sections": [
+            {
+              "section_id": "reset",
+              "label": "Reset requested",
+              "fields": [
+                {
+                  "field_id": "enrolled_factor_count",
+                  "label": "Enrolled MFA factors",
+                  "value": "3",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "reset_scope",
+                  "label": "Reset scope",
+                  "value": "All enrolled factors",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "current_user_status",
+                  "label": "User status now",
+                  "value": "Locked out",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "target_user_status",
+                  "label": "User status after",
+                  "value": "Active (unchanged)",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "target_is_privileged_admin",
+                  "label": "Okta administrator",
+                  "value": "No",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "user_reference_commitment",
+                  "label": "User",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "tenant_reference_commitment",
+                  "label": "Okta tenant",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "provider_environment",
+                  "label": "Environment",
+                  "value": "Dedicated demo tenant",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "max_uses",
+                  "label": "Runs",
+                  "value": "Once",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "why_review",
+              "label": "Why review is required",
+              "fields": [
+                {
+                  "field_id": "cause",
+                  "label": "Reason",
+                  "value": "Policy requires a person to approve this action.",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "request",
+              "label": "Exact request",
+              "fields": [
+                {
+                  "field_id": "request_digest",
+                  "label": "Request digest",
+                  "value": "sha256:9dc4c1b9bea5e55e0f2530e5b28fc352c8c48c3e2e31a05acf8e07ea8f1503d0",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_observed_at",
+                  "label": "Provider state read at",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_expires_at",
+                  "label": "Check valid until",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            }
+          ],
+          "beneficiary": null,
+          "requester_explanation": {
+            "label": "Requester's explanation",
+            "provenance": "agent_reported",
+            "authoritative": false,
+            "text": null
+          }
+        },
+        "digest": "853b5e579c7f020a7525240d991f56ef11a9e12e9f1b28e60aaa8356a5664267",
+        "missing_essential": [],
+        "fact_provenance": {
+          "enrolled_factor_count": "keel_checked",
+          "reset_scope": "keel_checked",
+          "current_user_status": "keel_checked",
+          "target_user_status": "keel_checked",
+          "target_is_privileged_admin": "keel_checked",
+          "user_reference_commitment": "keel_checked",
+          "tenant_reference_commitment": "keel_checked",
+          "provider_environment": "keel_checked",
+          "max_uses": "keel_checked",
+          "cause": "keel_checked",
+          "request_digest": "keel_checked",
+          "preflight_observed_at": "keel_checked",
+          "preflight_expires_at": "keel_checked"
+        }
+      }
+    },
+    {
+      "id": "tailored-identity-sessions-revoke",
+      "description": "Tailored template: identity sessions revoke",
+      "inputs": {
+        "semantic_id": "keel.action.identity_sessions_revoke.v1",
+        "permit_id": "00000000-0000-4000-8000-000000000012",
+        "exact_facts": {
+          "version": "keel.identity_security_exact_facts.v1",
+          "fact_profile_id": "keel.facts.identity_sessions_revoke_exact.v1",
+          "action": "identity.sessions.revoke",
+          "operation": "call.tools",
+          "connector_identity": "okta",
+          "connector_contract_hash": "88ce00085d2da4901897a1c73879d95369cf136d0dbaa03b69592d58b7e7f7c4",
+          "tool_schema_hash": "473309b8c498635dc6e4db708e9a2d392881341cd577f223d717ea8bcd1eb828",
+          "decision_trace_hash": "78d4d195e4c3a13a59f2b3dff7ded0b88668a39aeae55dc2c810a61f1ef6068e",
+          "tool_arguments_hash": "7cabfd2c18e3c5897adb0b7120082b69a7ce8cf3a1521ec1a286254edb8e0b4a",
+          "request_digest": "sha256:5a3115192d47c8f205791646e10b3b632a9dadb4097d5700ac7b48d1115e630d",
+          "enforcement_mode": "enforced_in_path",
+          "provider_environment": "dedicated_demo",
+          "provider_api_version": "example",
+          "preflight_observed_at": "2026-11-16T18:04:05Z",
+          "preflight_expires_at": "2026-11-16T18:04:05Z",
+          "preflight_snapshot_digest": "sha256:b53fe7ce399f00bdee546676dc4d374160280a6f78fc70bb9c90b520d649837b",
+          "idempotency_digest": "sha256:4a8b4a36dfb29d825e94f6275424296fedaa9e38f65c3114c2e91eac134a7b15",
+          "max_uses": 1,
+          "tenant_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:1359c899591a07feec5a4005d854e08c06b0abc9fe7a2501aa45d4d462bab5cb"
+          },
+          "user_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:5c62d03473b4eb4c5a0fc807d5daf90e3d5fff98ba9b54b8dd0b18e8b55e3903"
+          },
+          "provider_identity_type": "user",
+          "current_user_status": "ACTIVE",
+          "user_state_digest": "sha256:69e005a0f9cf178dd109e348d85fac23a128e9fbb21ba38fb1144b9de912f38d",
+          "target_is_privileged_admin": true,
+          "admin_role_assignments_digest": "sha256:229eb52233e505f598eecac76c8810e0c153dfa21b2efad5724e6314b634d0b1",
+          "session_revocation_scope": "all_okta_sessions_and_oauth_tokens",
+          "revoke_oauth_tokens": true,
+          "active_sessions_enumerable": false
+        },
+        "review": {
+          "cause": "Policy requires a person to approve this action."
+        },
+        "requester_explanation": null
+      },
+      "expected": {
+        "document": {
+          "format": "keel.review_document.v2",
+          "registry_version": "keel.review_document_templates.v3",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
+          "permit_id": "00000000-0000-4000-8000-000000000012",
+          "template_id": "identity_sessions_revoke.review.r1",
+          "template_kind": "tailored",
+          "semantic_id": "keel.action.identity_sessions_revoke.v1",
+          "fact_profile_id": "keel.facts.identity_sessions_revoke_exact.v1",
+          "presentation_profile_id": "identity_sessions_revoke.r1",
+          "title": "Sign a person out of Okta",
+          "sentence": "Sign one active Okta user out of every Okta session and revoke their OAuth tokens.",
+          "cards": [],
+          "sections": [
+            {
+              "section_id": "revoke",
+              "label": "Sign-out requested",
+              "fields": [
+                {
+                  "field_id": "session_revocation_scope",
+                  "label": "Scope",
+                  "value": "All Okta sessions and OAuth tokens",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "revoke_oauth_tokens",
+                  "label": "OAuth tokens included",
+                  "value": "Yes",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "active_sessions_enumerable",
+                  "label": "Active sessions",
+                  "value": "Count not exposed by Okta",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "current_user_status",
+                  "label": "User status",
+                  "value": "Active",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "target_is_privileged_admin",
+                  "label": "Okta administrator",
+                  "value": "Yes",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "user_reference_commitment",
+                  "label": "User",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "tenant_reference_commitment",
+                  "label": "Okta tenant",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "provider_environment",
+                  "label": "Environment",
+                  "value": "Dedicated demo tenant",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "max_uses",
+                  "label": "Runs",
+                  "value": "Once",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "why_review",
+              "label": "Why review is required",
+              "fields": [
+                {
+                  "field_id": "cause",
+                  "label": "Reason",
+                  "value": "Policy requires a person to approve this action.",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "request",
+              "label": "Exact request",
+              "fields": [
+                {
+                  "field_id": "request_digest",
+                  "label": "Request digest",
+                  "value": "sha256:5a3115192d47c8f205791646e10b3b632a9dadb4097d5700ac7b48d1115e630d",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_observed_at",
+                  "label": "Provider state read at",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_expires_at",
+                  "label": "Check valid until",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            }
+          ],
+          "beneficiary": null,
+          "requester_explanation": {
+            "label": "Requester's explanation",
+            "provenance": "agent_reported",
+            "authoritative": false,
+            "text": null
+          }
+        },
+        "digest": "9490b5fab07deb1f49285a9fe45f3b80d98239a0afa8fe8b882c5d34590573ab",
+        "missing_essential": [],
+        "fact_provenance": {
+          "session_revocation_scope": "keel_checked",
+          "revoke_oauth_tokens": "keel_checked",
+          "active_sessions_enumerable": "keel_checked",
+          "current_user_status": "keel_checked",
+          "target_is_privileged_admin": "keel_checked",
+          "user_reference_commitment": "keel_checked",
+          "tenant_reference_commitment": "keel_checked",
+          "provider_environment": "keel_checked",
+          "max_uses": "keel_checked",
+          "cause": "keel_checked",
+          "request_digest": "keel_checked",
+          "preflight_observed_at": "keel_checked",
+          "preflight_expires_at": "keel_checked"
+        }
+      }
+    },
+    {
+      "id": "tailored-identity-disable",
+      "description": "Tailored template: identity disable",
+      "inputs": {
+        "semantic_id": "keel.action.identity_disable.v1",
+        "permit_id": "00000000-0000-4000-8000-000000000013",
+        "exact_facts": {
+          "version": "keel.identity_security_exact_facts.v1",
+          "fact_profile_id": "keel.facts.identity_disable_exact.v1",
+          "action": "identity.disable",
+          "operation": "call.tools",
+          "connector_identity": "okta",
+          "connector_contract_hash": "448aa077f5697b654bc91a32c6291d281de412747cea9f7364f5a1762a6b69ec",
+          "tool_schema_hash": "34dca7bf06a8308f2b04065f009781ca13b4c6f965fa9470af64d3dd29ba8c43",
+          "decision_trace_hash": "c91e76be06d9665eab92fda742a8fe3516a2cdeedc4b9e193445f1390901d2c6",
+          "tool_arguments_hash": "b6c1cea96e522a97b271174b83bfbe9fca3de2c9ee81082f2aa2b79d9a0bf5bd",
+          "request_digest": "sha256:53fe713889a69f3bc6daa9310a9e6bf6105a40b0787670104fbb8d8bef07a2c0",
+          "enforcement_mode": "enforced_in_path",
+          "provider_environment": "dedicated_demo",
+          "provider_api_version": "example",
+          "preflight_observed_at": "2026-11-16T18:04:05Z",
+          "preflight_expires_at": "2026-11-16T18:04:05Z",
+          "preflight_snapshot_digest": "sha256:80dd743a44d6040ff374600dca7d6db7be734f0304218c0542e64cc16b3f09d3",
+          "idempotency_digest": "sha256:8e2543d3e4733a11e43d919376240a3332e768f3977632f281e4c4dc7867c837",
+          "max_uses": 1,
+          "tenant_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:1ec84c2dc6bcdd6127f34ae6ab6bab7f3d800b377a67dcb6fa5fcd81f46e54f8"
+          },
+          "user_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:1df0fb0058ddc58c05932f8cc80666aa841871f2188de564bad038b3428677c8"
+          },
+          "provider_identity_type": "user",
+          "current_user_status": "ACTIVE",
+          "user_state_digest": "sha256:9b8acec8000268f391ba8e080762dd8c9aa2f79b09f6490271e1144d0f6431b9",
+          "target_is_privileged_admin": false,
+          "admin_role_assignments_digest": "sha256:0f9bfcf1108d64584f63c8fdab3b10741cd9ac5410e0e2300653d51ae0b67796",
+          "target_user_status": "DEPROVISIONED",
+          "destructive_deprovisioning_acknowledged": true,
+          "app_assignment_state_digest": "sha256:f5cc7bc1d087733bc7d2e554ac633cc11b92eab850557372b94afdc42d55c76a",
+          "group_membership_state_digest": "sha256:9d1f74e5e35e7f004aded27192e054018f5172f06f3f68868fb622232518535e"
+        },
+        "review": {
+          "cause": "Policy requires a person to approve this action."
+        },
+        "requester_explanation": null
+      },
+      "expected": {
+        "document": {
+          "format": "keel.review_document.v2",
+          "registry_version": "keel.review_document_templates.v3",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
+          "permit_id": "00000000-0000-4000-8000-000000000013",
+          "template_id": "identity_disable.review.r1",
+          "template_kind": "tailored",
+          "semantic_id": "keel.action.identity_disable.v1",
+          "fact_profile_id": "keel.facts.identity_disable_exact.v1",
+          "presentation_profile_id": "identity_disable.r1",
+          "title": "Deprovision an Okta user",
+          "sentence": "Deprovision one Okta user: Active → Deprovisioned.",
+          "cards": [
+            {
+              "card_id": "current_user_status",
+              "kind": "change",
+              "label": "Account status",
+              "from": "Active",
+              "to": "Deprovisioned",
+              "field_ids": [
+                "current_user_status",
+                "target_user_status"
+              ],
+              "provenance": "keel_checked",
+              "provenance_label": "Checked by Keel"
+            }
+          ],
+          "sections": [
+            {
+              "section_id": "disable",
+              "label": "Deprovisioning requested",
+              "fields": [
+                {
+                  "field_id": "current_user_status",
+                  "label": "Account status now",
+                  "value": "Active",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "target_user_status",
+                  "label": "Account status after",
+                  "value": "Deprovisioned",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "destructive_deprovisioning_acknowledged",
+                  "label": "Destructive deprovisioning",
+                  "value": "Acknowledged in the request",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "app_assignment_state_digest",
+                  "label": "App assignments",
+                  "value": "Current state recorded",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "group_membership_state_digest",
+                  "label": "Group memberships",
+                  "value": "Current state recorded",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "target_is_privileged_admin",
+                  "label": "Okta administrator",
+                  "value": "No",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "user_reference_commitment",
+                  "label": "User",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "tenant_reference_commitment",
+                  "label": "Okta tenant",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "provider_environment",
+                  "label": "Environment",
+                  "value": "Dedicated demo tenant",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "max_uses",
+                  "label": "Runs",
+                  "value": "Once",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "why_review",
+              "label": "Why review is required",
+              "fields": [
+                {
+                  "field_id": "cause",
+                  "label": "Reason",
+                  "value": "Policy requires a person to approve this action.",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "request",
+              "label": "Exact request",
+              "fields": [
+                {
+                  "field_id": "request_digest",
+                  "label": "Request digest",
+                  "value": "sha256:53fe713889a69f3bc6daa9310a9e6bf6105a40b0787670104fbb8d8bef07a2c0",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_observed_at",
+                  "label": "Provider state read at",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_expires_at",
+                  "label": "Check valid until",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            }
+          ],
+          "beneficiary": null,
+          "requester_explanation": {
+            "label": "Requester's explanation",
+            "provenance": "agent_reported",
+            "authoritative": false,
+            "text": null
+          }
+        },
+        "digest": "092db4dff7b0c9d4d8e59ed26f455b65d791caa2bde1b0a716ed99f0c2fc95dc",
+        "missing_essential": [],
+        "fact_provenance": {
+          "current_user_status": "keel_checked",
+          "target_user_status": "keel_checked",
+          "destructive_deprovisioning_acknowledged": "keel_checked",
+          "app_assignment_state_digest": "keel_checked",
+          "group_membership_state_digest": "keel_checked",
+          "target_is_privileged_admin": "keel_checked",
+          "user_reference_commitment": "keel_checked",
+          "tenant_reference_commitment": "keel_checked",
+          "provider_environment": "keel_checked",
+          "max_uses": "keel_checked",
+          "cause": "keel_checked",
+          "request_digest": "keel_checked",
+          "preflight_observed_at": "keel_checked",
+          "preflight_expires_at": "keel_checked"
+        }
+      }
+    },
+    {
+      "id": "tailored-security-indicator-block",
+      "description": "Tailored template: security indicator block",
+      "inputs": {
+        "semantic_id": "keel.action.security_indicator_block.v1",
+        "permit_id": "00000000-0000-4000-8000-000000000014",
+        "exact_facts": {
+          "version": "keel.identity_security_exact_facts.v1",
+          "fact_profile_id": "keel.facts.security_indicator_block_exact.v1",
+          "action": "security.indicator.block",
+          "operation": "call.tools",
+          "connector_identity": "cloudflare",
+          "connector_contract_hash": "1d097abfb8a2a191649b5407ef2fd8fac17fb04c295fec2700055a6580a5336b",
+          "tool_schema_hash": "7c3fe260800ca143a20bf0ed2580220a19faf1668e92b49f27a14010b268efe4",
+          "decision_trace_hash": "804dae10c3726942fb559a7a5779d4a462453c1780fb5dc62481c9d526d984fb",
+          "tool_arguments_hash": "23c5e692e65fe866ece7af6d2e61ecc670199c7640f07d8f4f07a3eaf7546728",
+          "request_digest": "sha256:4c2852ac72e135f76f04df60bc83154a42009ec4006020af797eae364fb6d15c",
+          "enforcement_mode": "enforced_in_path",
+          "provider_environment": "dedicated_demo",
+          "provider_api_version": "example",
+          "preflight_observed_at": "2026-11-16T18:04:05Z",
+          "preflight_expires_at": "2026-11-16T18:04:05Z",
+          "preflight_snapshot_digest": "sha256:4a1f67a4d3795fdfa0d902b53ca5e06b5e8cdf020556eb6ade12df55e3ddb73a",
+          "idempotency_digest": "sha256:212e7945e30263fd5329f91991a52996ad3688ffa8d2e39eaf287fc59cdba84d",
+          "max_uses": 1,
+          "zone_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:9fad56416d457f268bdb91515486387796d773a70e08d3cb17f1ca462d743a7e"
+          },
+          "zone_status": "active",
+          "ruleset_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:e4e7bb2793a42157ca872439051c19fe5b3eaec79999d3193c005b4a5bec784f"
+          },
+          "ruleset_phase": "http_request_firewall_custom",
+          "ruleset_version": "7",
+          "ruleset_state_digest": "sha256:5e9be7686ee645f6451b5e384d74a48e846ce1ec37e46a8b7a7bcc9c3e8fb7e8",
+          "indicator_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:5a64a0205784d42976b411255e527813515883d0cbe9a51bd58166901ae01acc"
+          },
+          "indicator_type": "ipv4",
+          "indicator_scope": "public_internet",
+          "source_alert_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:67e3feca5247ad2d7fa9d8d9e3b669a98c335021b5faf0077a0a0535d32d2e44"
+          },
+          "rule_expression_digest": "sha256:92b1945e59251d5080d5c6cd591f7aaa110f7edb60212c7096248deddbae4fa6",
+          "rule_reference_commitment": {
+            "method": "keel.salted_sha256_jcs.v1",
+            "digest": "sha256:e47dc77d0d2fdff7dabdcbb9e986bc6eac9125ef9fa2542ada5a6304a15cc744"
+          },
+          "current_matching_rule_count": 0,
+          "current_rules_count": 12,
+          "projected_rules_count": 13,
+          "target_action": "block",
+          "rule_enabled": true
+        },
+        "review": {
+          "cause": "Policy requires a person to approve this action."
+        },
+        "requester_explanation": null
+      },
+      "expected": {
+        "document": {
+          "format": "keel.review_document.v2",
+          "registry_version": "keel.review_document_templates.v3",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
+          "permit_id": "00000000-0000-4000-8000-000000000014",
+          "template_id": "security_indicator_block.review.r1",
+          "template_kind": "tailored",
+          "semantic_id": "keel.action.security_indicator_block.v1",
+          "fact_profile_id": "keel.facts.security_indicator_block_exact.v1",
+          "presentation_profile_id": "security_indicator_block.r1",
+          "title": "Block one indicator in Cloudflare",
+          "sentence": "Block one IPv4 address from the public internet in one active Cloudflare zone.",
+          "cards": [
+            {
+              "card_id": "current_rules_count",
+              "kind": "change",
+              "label": "Rules in the ruleset",
+              "from": "12",
+              "to": "13",
+              "field_ids": [
+                "current_rules_count",
+                "projected_rules_count"
+              ],
+              "provenance": "keel_checked",
+              "provenance_label": "Checked by Keel"
+            }
+          ],
+          "sections": [
+            {
+              "section_id": "block",
+              "label": "Block requested",
+              "fields": [
+                {
+                  "field_id": "indicator_type",
+                  "label": "Indicator type",
+                  "value": "IPv4 address",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "indicator_reference_commitment",
+                  "label": "Indicator",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "indicator_scope",
+                  "label": "Blocked from",
+                  "value": "The public internet",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "current_rules_count",
+                  "label": "Rules in the ruleset now",
+                  "value": "12",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "projected_rules_count",
+                  "label": "Rules in the ruleset after",
+                  "value": "13",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "current_matching_rule_count",
+                  "label": "Existing rules for this indicator",
+                  "value": "0",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "target_action",
+                  "label": "Rule action",
+                  "value": "Block",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "rule_enabled",
+                  "label": "Rule enabled",
+                  "value": "Yes",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "ruleset_phase",
+                  "label": "Ruleset",
+                  "value": "Custom firewall rules",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "ruleset_version",
+                  "label": "Ruleset version",
+                  "value": "7",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "zone_status",
+                  "label": "Zone status",
+                  "value": "Active",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "zone_reference_commitment",
+                  "label": "Zone",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "ruleset_reference_commitment",
+                  "label": "Ruleset reference",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "source_alert_reference_commitment",
+                  "label": "Source alert",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "rule_reference_commitment",
+                  "label": "Rule",
+                  "value": "Hidden",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel",
+                  "hidden": true
+                },
+                {
+                  "field_id": "provider_environment",
+                  "label": "Environment",
+                  "value": "Dedicated demo zone",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "max_uses",
+                  "label": "Runs",
+                  "value": "Once",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "why_review",
+              "label": "Why review is required",
+              "fields": [
+                {
+                  "field_id": "cause",
+                  "label": "Reason",
+                  "value": "Policy requires a person to approve this action.",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "request",
+              "label": "Exact request",
+              "fields": [
+                {
+                  "field_id": "request_digest",
+                  "label": "Request digest",
+                  "value": "sha256:4c2852ac72e135f76f04df60bc83154a42009ec4006020af797eae364fb6d15c",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_observed_at",
+                  "label": "Provider state read at",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "preflight_expires_at",
+                  "label": "Check valid until",
+                  "value": "2026-11-16 18:04 UTC",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            }
+          ],
+          "beneficiary": null,
+          "requester_explanation": {
+            "label": "Requester's explanation",
+            "provenance": "agent_reported",
+            "authoritative": false,
+            "text": null
+          }
+        },
+        "digest": "1aa389e003347315c61a8d550a155c948b880414648a217e1cb114f1503f8634",
+        "missing_essential": [],
+        "fact_provenance": {
+          "indicator_type": "keel_checked",
+          "indicator_reference_commitment": "keel_checked",
+          "indicator_scope": "keel_checked",
+          "current_rules_count": "keel_checked",
+          "projected_rules_count": "keel_checked",
+          "current_matching_rule_count": "keel_checked",
+          "target_action": "keel_checked",
+          "rule_enabled": "keel_checked",
+          "ruleset_phase": "keel_checked",
+          "ruleset_version": "keel_checked",
+          "zone_status": "keel_checked",
+          "zone_reference_commitment": "keel_checked",
+          "ruleset_reference_commitment": "keel_checked",
+          "source_alert_reference_commitment": "keel_checked",
+          "rule_reference_commitment": "keel_checked",
+          "provider_environment": "keel_checked",
+          "max_uses": "keel_checked",
+          "cause": "keel_checked",
+          "request_digest": "keel_checked",
+          "preflight_observed_at": "keel_checked",
+          "preflight_expires_at": "keel_checked"
+        }
+      }
+    },
+    {
+      "id": "tailored-generate-text",
+      "description": "Tailored template: generate text",
+      "inputs": {
+        "semantic_id": "keel.action.generate_text.v1",
+        "permit_id": "00000000-0000-4000-8000-000000000015",
+        "exact_facts": {
+          "version": "keel.generate_text_exact_facts.v1",
+          "fact_profile_id": "keel.facts.generate_text_exact.v1",
+          "action": "ai.generate",
+          "operation": "generate.text",
+          "provider": "anthropic",
+          "model": "claude-sonnet-5-5",
+          "request_digest": "sha256:4eb00f00f7832019fdab50f54ffe90dddfdec5fd8e9e703614d9e3c9fbdfdc88",
+          "adapter_id": "keel.adapter.anthropic_messages",
+          "adapter_version": "1.4.0",
+          "certification_id": "cert-2026-11"
+        },
+        "review": {
+          "cause": "Policy requires a person to approve this action."
+        },
+        "requester_explanation": null
+      },
+      "expected": {
+        "document": {
+          "format": "keel.review_document.v2",
+          "registry_version": "keel.review_document_templates.v3",
+          "registry_digest": "f36b7b27844155b369cd73f208f51b3e081bdb9a602683cc56bdc1768f88924a",
+          "permit_id": "00000000-0000-4000-8000-000000000015",
+          "template_id": "generate_text.review.r1",
+          "template_kind": "tailored",
+          "semantic_id": "keel.action.generate_text.v1",
+          "fact_profile_id": "keel.facts.generate_text_exact.v1",
+          "presentation_profile_id": "permit_to_generate_text.r2",
+          "title": "Generate text with one model",
+          "sentence": "Call claude-sonnet-5-5 on anthropic to generate text.",
+          "cards": [],
+          "sections": [
+            {
+              "section_id": "call",
+              "label": "Model call",
+              "fields": [
+                {
+                  "field_id": "model",
+                  "label": "Model",
+                  "value": "claude-sonnet-5-5",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "provider",
+                  "label": "Provider",
+                  "value": "anthropic",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "adapter_id",
+                  "label": "Adapter",
+                  "value": "keel.adapter.anthropic_messages",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "adapter_version",
+                  "label": "Adapter version",
+                  "value": "1.4.0",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                },
+                {
+                  "field_id": "certification_id",
+                  "label": "Certification",
+                  "value": "cert-2026-11",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "why_review",
+              "label": "Why review is required",
+              "fields": [
+                {
+                  "field_id": "cause",
+                  "label": "Reason",
+                  "value": "Policy requires a person to approve this action.",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            },
+            {
+              "section_id": "request",
+              "label": "Exact request",
+              "fields": [
+                {
+                  "field_id": "request_digest",
+                  "label": "Request digest",
+                  "value": "sha256:4eb00f00f7832019fdab50f54ffe90dddfdec5fd8e9e703614d9e3c9fbdfdc88",
+                  "provenance": "keel_checked",
+                  "provenance_label": "Checked by Keel"
+                }
+              ]
+            }
+          ],
+          "beneficiary": null,
+          "requester_explanation": {
+            "label": "Requester's explanation",
+            "provenance": "agent_reported",
+            "authoritative": false,
+            "text": null
+          }
+        },
+        "digest": "9c2bcfa2da51a696f70ebe572f9c6f5665f03c9d2d37c8cfbb2819b49be40b5d",
+        "missing_essential": [],
+        "fact_provenance": {
+          "model": "keel_checked",
+          "provider": "keel_checked",
+          "adapter_id": "keel_checked",
+          "adapter_version": "keel_checked",
+          "certification_id": "keel_checked",
+          "cause": "keel_checked",
+          "request_digest": "keel_checked"
         }
       }
     },

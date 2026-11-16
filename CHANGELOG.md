@@ -8,6 +8,18 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ### Added
 
+- Add v3 tailored review templates for the 13 types keel-dashboard already words in plain language:
+  - refunds v1 and v2;
+  - invoice payment;
+  - Stripe Connect transfer;
+  - ledger entry;
+  - reconciliation;
+  - customer credit;
+  - Okta group removal, MFA reset, session revoke and disable;
+  - security indicator block;
+  - generate text.
+
+  Every reference shows as Hidden.
 - Add review document templates v3 (`review_document_templates/v3.json`, its schema and `test-vectors/v3.json`). v3 keeps v2's generic rule set and adds tailored templates for:
   - AI Permit-to-Pay (`payment_execute.review.r1`);
   - the Avermont records release (`healthcare_records_release.review.r1`): no PHI, a request code the Avermont portal shows too, and patient, recipient and document set Hidden.

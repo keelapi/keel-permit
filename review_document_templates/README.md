@@ -129,7 +129,19 @@ A v3 tailored template may also carry:
 
 **v3 holds tailored templates besides the Okta group grant for:**
 - AI Permit-to-Pay;
-- the Avermont records release: no PHI, a request code, patient, recipient and document set Hidden.
+- the Avermont records release: no PHI, a request code, patient, recipient and document set Hidden;
+- the 13 types keel-dashboard words in plain language:
+  - refunds v1 and v2;
+  - invoice payment;
+  - Stripe Connect transfer;
+  - ledger entry;
+  - reconciliation;
+  - customer credit;
+  - Okta group removal, MFA reset, session revoke and disable;
+  - security indicator block;
+  - generate text.
+
+Their sentences are the dashboard's, so the dashboard and the review sheet can say the same thing. Names stay Hidden for these non-identity actions.
 
 `tools/review_document_tailored.py` is the reference for the formats, sentences and cards. `test-vectors/v3.json` keeps v2's generic coverage on types that have no v3 tailored template. Regenerate it with `python3 tools/review_document_reference.py --write-vectors --version 3`.
 
