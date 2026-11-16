@@ -1550,7 +1550,7 @@
     {
       "id": "keel.permit.review_document_templates.v3",
       "path": "review_document_templates/v3.json",
-      "sha256": "754ca8d56191951077fb4460a3ffb3e1465ca1a334da613ad82b92a06cfa913f"
+      "sha256": "39619e81487b11c07fd1cc3db310231165f7dd8a68d30a78d8b3efb9e7d909c7"
     },
     {
       "id": "keel.permit.review_document_templates.v3.schema",
@@ -1560,7 +1560,7 @@
     {
       "id": "keel.permit.review_document_templates.v3.test_vectors",
       "path": "review_document_templates/test-vectors/v3.json",
-      "sha256": "a3207d0c7b2e25e31590c9a688fc26fd01971e6f486556b506b77c14cc79b952"
+      "sha256": "08bafd71cadee23ae0bef6aeabf755283e54dd5e1e597d7ef1137348798020f7"
     },
     {
       "id": "keel.permit.presentation_registry.v25",

@@ -399,6 +399,12 @@ def validate_tailored_presentation(
             sides = [card["from"], card["to"]]
         if not any("field_id" in side for side in sides):
             raise TemplateFailure(f"{label} shows no fact")
+        # The review sheet's strict contract: a change card names two facts and
+        # carries no Hidden side.
+        if card["kind"] == "change" and not all("field_id" in side for side in sides):
+            raise TemplateFailure(f"{label} change card must compare two facts")
+        if any(side.get("format") == "hidden" for side in sides):
+            raise TemplateFailure(f"{label} cards show no Hidden facts")
         for side in sides:
             check_value_spec(side, properties, schema, label)
             if "field_id" in side:
@@ -673,6 +679,15 @@ def tailored_negative_cases() -> list[tuple[Callable[[dict[str, Any]], None], st
     def foreign_condition(d: dict[str, Any]) -> None:
         release(d)["sentence"]["variants"][0]["when"] = {"record_is_synthetic": False}
 
+    def constant_change_side(d: dict[str, Any]) -> None:
+        side = {"field_id": "amount_minor", "format": "amount"}
+        pay(d)["cards"].append({"card_id": "x", "kind": "change", "label": "X", "from": side, "to": {"constant": "0"}})
+
+    def hidden_change_side(d: dict[str, Any]) -> None:
+        hidden_side = {"field_id": "recipient_reference_commitment", "format": "hidden"}
+        amount_side = {"field_id": "amount_minor", "format": "amount"}
+        pay(d)["cards"].append({"card_id": "x", "kind": "change", "label": "X", "from": amount_side, "to": hidden_side})
+
     return [
         (unhide_patient, "without the hidden format"),
         (lambda d: release_field(d, "total_bytes").update(format="timestamp_utc"), "cannot read"),
@@ -687,6 +702,8 @@ def tailored_negative_cases() -> list[tuple[Callable[[dict[str, Any]], None], st
         (unconditional_first, "only the last sentence variant"),
         (foreign_condition, "is not a value of the fact"),
         (lambda d: pay(d)["cards"].append(dict(pay(d)["cards"][0])), "appears more than once"),
+        (constant_change_side, "must compare two facts"),
+        (hidden_change_side, "cards show no Hidden facts"),
         (lambda d: pay(d).update(presentation_profile_id=None), "must name"),
         (lambda d: pay_field(d, "amount_minor").update(source="review", field_id="cause"), "fails its schema"),
         (lambda d: pay_field(d, "currency").update(values={"USD": "US dollar"}), "fails its schema"),

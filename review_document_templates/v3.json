@@ -2072,20 +2072,6 @@
           }
         }
       },
-      "cards": [
-        {
-          "card_id": "enrolled_factor_count",
-          "kind": "change",
-          "label": "Enrolled MFA factors",
-          "from": {
-            "field_id": "enrolled_factor_count",
-            "format": "count"
-          },
-          "to": {
-            "constant": "0"
-          }
-        }
-      ],
       "sections": [
         {
           "section_id": "reset",
