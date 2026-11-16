@@ -1531,6 +1531,21 @@
       "id": "keel.permit.review_document_templates.v1.schema",
       "path": "review_document_templates/v1.schema.json",
       "sha256": "76c8b33d7b282f3b7eb08b938c03976d6e90ba565f54e8eb38fa00e21436bdd3"
+    },
+    {
+      "id": "keel.permit.review_document_templates.v2",
+      "path": "review_document_templates/v2.json",
+      "sha256": "38220f891f2a71975ba3a610b045760f121de11fc79b892ce5822dd68bb6d8a0"
+    },
+    {
+      "id": "keel.permit.review_document_templates.v2.schema",
+      "path": "review_document_templates/v2.schema.json",
+      "sha256": "3a864f0d761cfe1a790d49d06a4e99a81db0e4b1282e5e14a9a5c03c04a7c1e3"
+    },
+    {
+      "id": "keel.permit.review_document_templates.v2.test_vectors",
+      "path": "review_document_templates/test-vectors/v2.json",
+      "sha256": "95ddae37f76ce51e340d3f72977ba79220ae1bc79731d65bfd5cb48d5da5d87a"
     }
   ]
 }

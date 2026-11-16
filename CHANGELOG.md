@@ -8,6 +8,21 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ### Added
 
+- Add review document templates v2 (`review_document_templates/v2.json`, its
+  strict schema and `test-vectors/v2.json`), document format
+  `keel.review_document.v2`. v2 keeps the v1 Okta group-grant template and
+  adds a versioned generic rule set for every Permit with no tailored
+  template, so each held exact-action Permit can have a review document. The
+  rules pin semantic registry v23, presentation registry v24 and fact profiles
+  v20 by digest, and fix the title and sentence (presentation profile, else
+  the `generic_ai_permit` fallback), an amount card, up to two before → after
+  cards, the label rule, value formatting, and the essential facts (the
+  profile's material request facts). Facts are shown in clear when authorized
+  in cleartext and classified operational or financial; every commitment and target fact shows
+  as Hidden; digests, timestamps and Keel's plumbing facts are left out. v1 is
+  unchanged. `tools/review_document_reference.py` builds the vectors, and
+  `tools/check_review_document_templates.py` now also audits the generic rules
+  against all 104 pinned profiles they apply to.
 - Add review document templates v1 (`review_document_templates/v1.json` and
   its strict schema). A template names, for one trusted Permit semantic, the
   facts a reviewer reads before deciding a held request: each field's source
