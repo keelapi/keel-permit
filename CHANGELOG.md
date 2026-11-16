@@ -8,6 +8,12 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ### Added
 
+- Add presentation registry v25 (`presentation_registry/v25.json` and its schema). It keeps every v24 profile and titles the three synthetic Aidbox healthcare semantics of semantic registry v23:
+  - AI Permit-to-Update-Patient-Address (AI-PTUPA);
+  - AI Permit-to-Reschedule-Appointment (AI-PTRA);
+  - AI Permit-to-Release-Records (AI-PTRR).
+
+  Their Permits no longer fall back to the generic "AI Permit" title. `semantic_registry_version` moves to v23. v24 is unchanged.
 - Add v3 tailored review templates for the 13 types keel-dashboard already words in plain language:
   - refunds v1 and v2;
   - invoice payment;

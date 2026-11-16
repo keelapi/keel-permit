@@ -5768,6 +5768,8 @@ def validate_artifact_manifest() -> None:
         "presentation_registry/v19.schema.json",
         "presentation_registry/v20.json",
         "presentation_registry/v20.schema.json",
+        "presentation_registry/v25.json",
+        "presentation_registry/v25.schema.json",
         "review_document_templates/v1.json",
         "review_document_templates/v1.schema.json",
         "review_document_templates/v2.json",

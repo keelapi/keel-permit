@@ -7,10 +7,12 @@ from build_presentation_acronym_registry import (
     V23,
     V24,
     acronym_for,
+    validate_acronyms,
     validate_v23_acronyms,
     validate_v24_acronyms,
 )
 from build_presentation_identity_registry import validate_identity_collisions
+from build_presentation_registry_v25 import ADDED_PROFILES, SEMANTIC_REGISTRY_VERSION, V25
 from build_transactional_cx_registries import load
 
 
@@ -111,10 +113,45 @@ def check_v24() -> None:
     expect_failure(validate_v24_acronyms, clash, "AI-PTRM", "A clashing acronym must fail v24 validation")
 
 
+def check_v25() -> None:
+    registry = load("presentation_registry/v25.json")
+    validate_acronyms(registry, V25)
+
+    # v25 is v24 plus the three Aidbox profiles, appended in order.
+    v24 = load("presentation_registry/v24.json")
+    kept = registry["profiles"][: len(v24["profiles"])]
+    assert kept == v24["profiles"], "v25 must keep every v24 profile unchanged"
+    added = registry["profiles"][len(v24["profiles"]) :]
+    assert [p["semantic_id"] for p in added] == [p["semantic_id"] for p in ADDED_PROFILES]
+    assert registry["semantic_registry_version"] == SEMANTIC_REGISTRY_VERSION
+    for key in ("allowed_leading_fields", "allowed_evidence_sections", "human_artifact_contract", "fallback_profiles"):
+        assert registry[key] == v24[key], key
+
+    # Each added profile names a semantic of semantic registry v23 that no
+    # earlier profile titles, and uses only allowed fields and sections.
+    semantics = {e["semantic_id"] for e in load("semantic_registry/v23.json")["entries"]}
+    titled = {p["semantic_id"] for p in v24["profiles"]}
+    for profile in added:
+        where = profile["presentation_profile_id"]
+        assert profile["semantic_id"] in semantics, where
+        assert profile["semantic_id"] not in titled, where
+        assert {f["field"] for f in profile["leading_fields"]} <= set(registry["allowed_leading_fields"]), where
+        assert set(profile["evidence_sections"]) <= set(registry["allowed_evidence_sections"]), where
+        assert "immutable" not in profile["type_definition"].lower(), where
+        assert profile["acronym"] == acronym_for(profile, V25.prefix), where
+
+    clash = copy.deepcopy(registry)
+    clash["profiles"][-1]["acronym"] = "AI-PTRP"
+    expect_failure(
+        lambda r: validate_acronyms(r, V25), clash, "acronym collisions", "A reused acronym must fail v25 validation"
+    )
+
+
 def main() -> None:
     check_v22()
     check_v23()
     check_v24()
+    check_v25()
 
 
 if __name__ == "__main__":

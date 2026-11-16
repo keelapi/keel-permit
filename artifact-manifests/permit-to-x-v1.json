@@ -1561,6 +1561,16 @@
       "id": "keel.permit.review_document_templates.v3.test_vectors",
       "path": "review_document_templates/test-vectors/v3.json",
       "sha256": "4cfa1c9b4061925078da61aa4e84264d2faa54212b70f8e06357b50a76a3b9de"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v25",
+      "path": "presentation_registry/v25.json",
+      "sha256": "a18d4a367f0eea8e37adfeea1e00035200db9bab2ebcdc40b459f841555446d6"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v25.schema",
+      "path": "presentation_registry/v25.schema.json",
+      "sha256": "8bd5e9b19a6fbcba9a72cc9216415555b14dc4af0a930ae2e53335f5d0551c17"
     }
   ]
 }
