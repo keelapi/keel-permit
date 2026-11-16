@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Reference builder for keel.review_document.v2 documents.
+"""Reference builder for keel.review_document.v2 documents (registries v2 and v3).
 
 Not the product. Builds a review document from
-`review_document_templates/v2.json` by hand, from the registry alone, so a
+`review_document_templates/v2.json` or `v3.json` by hand, from the registry alone, so a
 second implementation (keel-api) can check it produces the same bytes and
 digest. Every choice the registry does not state is a registry gap.
 
@@ -19,8 +19,9 @@ A tailored template applies when its `semantic_id` and `fact_profile_id`
 match. Otherwise the generic rule set applies, from the pinned fact profile
 and presentation profile. Anything else has no document.
 
-Run with `--write-vectors` to recompute the expected outputs of
-`review_document_templates/test-vectors/v2.json` from its inputs.
+Run with `--write-vectors [--version N]` to recompute the expected outputs of
+`review_document_templates/test-vectors/vN.json` (default the newest) from
+its inputs.
 """
 
 from __future__ import annotations
@@ -35,10 +36,18 @@ from pathlib import Path
 from typing import Any
 
 import rfc8785
+from review_document_tailored import Rules as TailoredRules
 
 ROOT = Path(__file__).resolve().parents[1]
-REGISTRY_PATH = "review_document_templates/v2.json"
-VECTORS_PATH = "review_document_templates/test-vectors/v2.json"
+REGISTRY_VERSIONS = (2, 3)
+
+
+def registry_path(version: int) -> str:
+    return f"review_document_templates/v{version}.json"
+
+
+def vectors_path(version: int) -> str:
+    return f"review_document_templates/test-vectors/v{version}.json"
 _BIDI_CONTROLS = frozenset(chr(code) for code in (*range(0x202A, 0x202F), *range(0x2066, 0x206A)))
 
 
@@ -46,8 +55,10 @@ class NoDocument(RuntimeError):
     """No template or rule set applies to these inputs."""
 
 
-def load_registry(root: Path = ROOT) -> tuple[dict[str, Any], str, dict[str, dict[str, Any]]]:
-    raw = (root / REGISTRY_PATH).read_bytes()
+def load_registry(
+    root: Path = ROOT, version: int = REGISTRY_VERSIONS[-1]
+) -> tuple[dict[str, Any], str, dict[str, dict[str, Any]]]:
+    raw = (root / registry_path(version)).read_bytes()
     registry = json.loads(raw)
     sources: dict[str, dict[str, Any]] = {}
     for name, pin in registry["source_registries"].items():
@@ -427,6 +438,7 @@ def build_tailored(
 ) -> tuple[dict[str, Any], list[str], dict[str, str]]:
     labels = {kind["id"]: kind["label"] for kind in registry["provenance_kinds"]}
     text_rule = registry["generic"]["values"]["text"]
+    tailored = TailoredRules(registry, money=money, clean_text=clean_text)
     missing: list[str] = []
     provenance: dict[str, str] = {}
     sections = []
@@ -443,7 +455,10 @@ def build_tailored(
                 value = review.get(field_id)
             else:
                 value = field.get("constant")
-            if value is None:
+            if source == "exact_facts" and "format" in field:
+                # Phase 3 field formats (amount, request code, Hidden, ...).
+                shown = tailored.display(field, exact_facts)
+            elif value is None:
                 shown = None
             else:
                 key = ("true" if value else "false") if isinstance(value, bool) else str(value)
@@ -462,6 +477,8 @@ def build_tailored(
             }
             if "commitment" in field:
                 entry["checked_against"] = field["commitment"]
+            if field.get("format") == "hidden" and shown is not None:
+                entry["hidden"] = True
             fields.append(entry)
         sections.append({"section_id": section["section_id"], "label": section["label"], "fields": fields})
     document = {
@@ -471,8 +488,8 @@ def build_tailored(
         "fact_profile_id": template["fact_profile_id"],
         "presentation_profile_id": template["presentation_profile_id"],
         "title": template["title"],
-        "sentence": template.get("sentence"),
-        "cards": [],
+        "sentence": tailored.sentence(template.get("sentence"), exact_facts)[0],
+        "cards": tailored.cards(template.get("cards", []), exact_facts, labels["keel_checked"]),
         "sections": sections,
         "beneficiary": template.get("beneficiary"),
     }
@@ -531,9 +548,9 @@ def build(
     }
 
 
-def run_vectors(root: Path = ROOT, *, write: bool = False) -> int:
-    registry, registry_digest, sources = load_registry(root)
-    path = root / VECTORS_PATH
+def run_vectors(root: Path = ROOT, *, write: bool = False, version: int = REGISTRY_VERSIONS[-1]) -> int:
+    registry, registry_digest, sources = load_registry(root, version)
+    path = root / vectors_path(version)
     corpus = json.loads(path.read_text(encoding="utf-8"))
     mismatches = 0
     for vector in corpus["vectors"]:
@@ -558,4 +575,6 @@ def run_vectors(root: Path = ROOT, *, write: bool = False) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(run_vectors(write="--write-vectors" in sys.argv[1:]))
+    args = sys.argv[1:]
+    chosen = int(args[args.index("--version") + 1]) if "--version" in args else REGISTRY_VERSIONS[-1]
+    sys.exit(run_vectors(write="--write-vectors" in args, version=chosen))

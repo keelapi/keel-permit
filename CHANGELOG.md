@@ -8,6 +8,17 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ### Added
 
+- Add review document templates v3 (`review_document_templates/v3.json`, its schema and `test-vectors/v3.json`). v3 keeps v2's generic rule set and adds tailored templates for:
+  - AI Permit-to-Pay (`payment_execute.review.r1`);
+  - the Avermont records release (`healthcare_records_release.review.r1`): no PHI, a request code the Avermont portal shows too, and patient, recipient and document set Hidden.
+
+  v3 tailored templates gain:
+  - field formats: `amount`, `count`, `byte_count`, `timestamp_utc`, `hidden`, `request_code`, `recorded`, `text`;
+  - sentence variants with slots;
+  - amount and change cards in the generic cards' shape;
+  - a null presentation profile or beneficiary where none exists.
+
+  The checker enforces that formats fit fact types and that every commitment is Hidden. v2 is unchanged.
 - Add review document templates v2 (`review_document_templates/v2.json`, its
   strict schema and `test-vectors/v2.json`), document format
   `keel.review_document.v2`. v2 keeps the v1 Okta group-grant template and

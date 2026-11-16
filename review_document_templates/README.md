@@ -101,6 +101,38 @@ missing essential facts and fact provenance for each, built by
 `python3 tools/review_document_reference.py --write-vectors` together with a
 new registry version, never for a published one.
 
+## v3: tailored templates with formats, sentences and cards
+
+`v3.json` keeps v2's generic rule set, its pinned registries and the Okta group-grant template unchanged. It adds tailored templates for more types; v2 stays byte-identical.
+
+v3's documents use the same format, `keel.review_document.v2`, so a sheet that renders v2 documents renders v3 documents unchanged.
+
+A v3 tailored template may also carry:
+
+- **`format`** on an `exact_facts` field (never together with `values`):
+  - `amount`: a `*_minor` integer as money, by the generic `amount` rules and the profile's `currency` fact;
+  - `count`: an integer with comma grouping;
+  - `byte_count`: an exact size, `1,234,567 bytes`, never rounded;
+  - `timestamp_utc`: `2026-11-16 18:04 UTC`, truncated to the minute, so a deadline never reads later than it is;
+  - `hidden`: a salted commitment shows `Hidden` and its digest never enters the document. The row carries `"hidden": true`. Every commitment field must use it;
+  - `request_code`: `sha256:4f2a91c0…` → `4F2A-91C0`, the first 8 hex characters, upper case, with a hyphen in the middle. It's a matching aid that a customer portal shows too, not an identifier: 32 bits don't make requests distinct;
+  - `recorded`: a state digest shows `Current state recorded`;
+  - `text`: a string, cleaned by the generic text rule.
+
+  A fact a format cannot read counts as missing. An essential field then refuses Approve.
+- **`sentence`** as an object:
+  - `variants`: the first one whose `when` conditions all hold (type-strict equality) wins. Only the last has no condition;
+  - `slots`: each `{name}` is filled in one pass from one essential field's fact, with a format or `values`. A slot that can't be filled reads `Not recorded`.
+- **`cards`**: `amount` (one `*_minor` fact) and `change` (from → to, each a fact with a format or `values`, or a constant). Cards have the generic cards' shape and only repeat facts the sections show.
+- A `null` `presentation_profile_id`, only for a semantic the presentation registry doesn't describe (the Avermont records release).
+- A `null` `beneficiary`: an action that grants no one access.
+
+**v3 holds tailored templates besides the Okta group grant for:**
+- AI Permit-to-Pay;
+- the Avermont records release: no PHI, a request code, patient, recipient and document set Hidden.
+
+`tools/review_document_tailored.py` is the reference for the formats, sentences and cards. `test-vectors/v3.json` keeps v2's generic coverage on types that have no v3 tailored template. Regenerate it with `python3 tools/review_document_reference.py --write-vectors --version 3`.
+
 ## Checks
 
 `tools/check_review_document_templates.py` validates `v1.json` against
@@ -114,3 +146,13 @@ templates against them, applies the generic rules to every pinned fact profile
 and fails if a commitment, a target fact, a fact not authorized in cleartext,
 or a personal, sensitive or free-text fact would be shown in clear, and
 recomputes the test vectors.
+
+For v3 tailored templates it also checks:
+- each format can read its fact's schema type;
+- every commitment field is `hidden`;
+- `values` labels cover exactly the fact's values, in sentence slots and cards too;
+- sentence conditions use values the fact can take;
+- slots are defined, used, and essential fields;
+- cards and sentences repeat only facts the sections show.
+
+Negative cases cover each of these.
