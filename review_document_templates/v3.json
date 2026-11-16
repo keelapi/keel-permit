@@ -11,9 +11,9 @@
       "digest": "sha256:42022f73fbd8e59f79cec80d2857c21922f051cd48f33f559db0cd2435ce09c8"
     },
     "presentation_registry": {
-      "version": "keel.presentation_registry.v24",
-      "path": "presentation_registry/v24.json",
-      "digest": "sha256:e11e312beab6f662e92030279754040b02e424cde3cb85d8ebbc0f5f92ac61c3"
+      "version": "keel.presentation_registry.v25",
+      "path": "presentation_registry/v25.json",
+      "digest": "sha256:a18d4a367f0eea8e37adfeea1e00035200db9bab2ebcdc40b459f841555446d6"
     },
     "fact_profiles": {
       "version": "keel.fact_profile_registry.v20",
@@ -361,7 +361,7 @@
       "template_id": "healthcare_records_release.review.r1",
       "semantic_id": "keel.action.healthcare_records_release.v1",
       "fact_profile_id": "keel.facts.healthcare_records_release_exact.v1",
-      "presentation_profile_id": null,
+      "presentation_profile_id": "healthcare_records_release.r1",
       "title": "Release records to an external specialist",
       "sentence": {
         "variants": [

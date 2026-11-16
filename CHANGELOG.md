@@ -8,6 +8,7 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ### Added
 
+- Review document templates v3 pin presentation registry v25. The Avermont records-release template is titled "AI Permit-to-Release-Records" (`healthcare_records_release.r1`), and the generic Aidbox documents get their v25 titles.
 - Add presentation registry v25 (`presentation_registry/v25.json` and its schema). It keeps every v24 profile and titles the three synthetic Aidbox healthcare semantics of semantic registry v23:
   - AI Permit-to-Update-Patient-Address (AI-PTUPA);
   - AI Permit-to-Reschedule-Appointment (AI-PTRA);

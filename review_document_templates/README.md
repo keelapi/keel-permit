@@ -103,7 +103,7 @@ new registry version, never for a published one.
 
 ## v3: tailored templates with formats, sentences and cards
 
-`v3.json` keeps v2's generic rule set, its pinned registries and the Okta group-grant template unchanged. It adds tailored templates for more types; v2 stays byte-identical.
+`v3.json` keeps v2's generic rule set, the Okta group-grant template and v2's semantic and fact-profile pins unchanged. It pins presentation registry v25 instead of v24, so the Aidbox semantics have titles. It adds tailored templates for more types; v2 stays byte-identical.
 
 v3's documents use the same format, `keel.review_document.v2`, so a sheet that renders v2 documents renders v3 documents unchanged.
 
@@ -124,7 +124,7 @@ A v3 tailored template may also carry:
   - `variants`: the first one whose `when` conditions all hold (type-strict equality) wins. Only the last has no condition;
   - `slots`: each `{name}` is filled in one pass from one essential field's fact, with a format or `values`. A slot that can't be filled reads `Not recorded`.
 - **`cards`**: `amount` (one `*_minor` fact) and `change` (from → to, each a fact with a format or `values`, or a constant). Cards have the generic cards' shape and only repeat facts the sections show.
-- A `null` `presentation_profile_id`, only for a semantic the presentation registry doesn't describe (the Avermont records release).
+- A `null` `presentation_profile_id`, only for a semantic the pinned presentation registry doesn't describe. v3 pins presentation registry v25, which titles the Avermont records release, so no v3 template uses it today.
 - A `null` `beneficiary`: an action that grants no one access.
 
 **v3 holds tailored templates besides the Okta group grant for:**
