@@ -118,6 +118,7 @@ A v3 tailored template may also carry:
   - `request_code`: `sha256:4f2a91c0…` → `4F2A-91C0`, the first 8 hex characters, upper case, with a hyphen in the middle. It's a matching aid that a customer portal shows too, not an identifier: 32 bits don't make requests distinct;
   - `recorded`: a state digest shows `Current state recorded`;
   - `text`: a string, cleaned by the generic text rule.
+  - `code`: a machine code in words, by the dashboard's rule: split on `.`, `_`, `-`, `/` and spaces; the generic `acronyms` in capitals, other words capitalized (`stripe.payment_intent.create` → "Stripe Payment Intent Create").
 
   A fact a format cannot read counts as missing. An essential field then refuses Approve.
 - **`sentence`** as an object:

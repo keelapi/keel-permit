@@ -8,6 +8,7 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ### Added
 
+- Review document templates v3 add the field format `code`. It turns a machine code into words, by the dashboard's rule. AI Permit-to-Pay, refund v1 and invoice payment show the payment rail with it ("Stripe Payment Intent Create"), as the owner decided on 2026-11-16.
 - Review document templates v3 pin presentation registry v25. The Avermont records-release template is titled "AI Permit-to-Release-Records" (`healthcare_records_release.r1`), and the generic Aidbox documents get their v25 titles.
 - Add presentation registry v25 (`presentation_registry/v25.json` and its schema). It keeps every v24 profile and titles the three synthetic Aidbox healthcare semantics of semantic registry v23:
   - AI Permit-to-Update-Patient-Address (AI-PTUPA);

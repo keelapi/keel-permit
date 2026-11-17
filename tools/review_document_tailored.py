@@ -23,9 +23,26 @@ RAW_DIGEST = re.compile(r"^[0-9a-f]{64}$")
 TIMESTAMP = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?Z$")
 SLOT = re.compile(r"\{([a-z_]+)\}")
 
-FORMATS = ("amount", "byte_count", "count", "hidden", "recorded", "request_code", "text", "timestamp_utc")
+FORMATS = ("amount", "byte_count", "code", "count", "hidden", "recorded", "request_code", "text", "timestamp_utc")
+CODE_SEPARATORS = re.compile(r"[._\-/\s]+")
 NOT_RECORDED = "Not recorded"
 RECORDED = "Current state recorded"
+
+
+def code(value: Any, acronyms: set[str]) -> str | None:
+    """``stripe.payment_intent.create`` → ``Stripe Payment Intent Create``.
+
+    The dashboard's rule for showing a code to a person: split on dots,
+    underscores, hyphens, slashes and spaces; the registry's acronyms in
+    capitals, every other word with a capital first letter.
+    """
+
+    if not isinstance(value, str):
+        return None
+    words = [word for word in CODE_SEPARATORS.split(value.strip().lower()) if word]
+    if not words:
+        return None
+    return " ".join(word.upper() if word in acronyms else word[:1].upper() + word[1:] for word in words)
 
 
 def request_code(value: Any) -> str | None:
@@ -122,6 +139,8 @@ class Rules:
             return self._clean_text(value, self.values["text"])
         if name == "request_code":
             return request_code(value)
+        if name == "code":
+            return code(value, set(self.values["acronyms"]))
         if name == "count":
             return count(value, self.separator)
         if name == "byte_count":

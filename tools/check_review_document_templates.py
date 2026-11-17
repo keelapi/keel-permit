@@ -251,6 +251,7 @@ def validate_template(
 FORMAT_KINDS = {
     "amount": {"integer"},
     "byte_count": {"integer"},
+    "code": {"string"},
     "count": {"integer"},
     "hidden": {"commitment"},
     "recorded": {"digest", "raw_digest"},
