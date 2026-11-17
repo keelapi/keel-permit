@@ -2897,7 +2897,7 @@
           },
           "provider": {
             "field_id": "provider",
-            "format": "text"
+            "format": "code"
           }
         }
       },
@@ -2920,7 +2920,7 @@
               "source": "exact_facts",
               "provenance": "keel_checked",
               "essential": true,
-              "format": "text"
+              "format": "code"
             },
             {
               "field_id": "adapter_id",
