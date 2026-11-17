@@ -1531,6 +1531,46 @@
       "id": "keel.permit.review_document_templates.v1.schema",
       "path": "review_document_templates/v1.schema.json",
       "sha256": "76c8b33d7b282f3b7eb08b938c03976d6e90ba565f54e8eb38fa00e21436bdd3"
+    },
+    {
+      "id": "keel.permit.review_document_templates.v2",
+      "path": "review_document_templates/v2.json",
+      "sha256": "38220f891f2a71975ba3a610b045760f121de11fc79b892ce5822dd68bb6d8a0"
+    },
+    {
+      "id": "keel.permit.review_document_templates.v2.schema",
+      "path": "review_document_templates/v2.schema.json",
+      "sha256": "3a864f0d761cfe1a790d49d06a4e99a81db0e4b1282e5e14a9a5c03c04a7c1e3"
+    },
+    {
+      "id": "keel.permit.review_document_templates.v2.test_vectors",
+      "path": "review_document_templates/test-vectors/v2.json",
+      "sha256": "95ddae37f76ce51e340d3f72977ba79220ae1bc79731d65bfd5cb48d5da5d87a"
+    },
+    {
+      "id": "keel.permit.review_document_templates.v3",
+      "path": "review_document_templates/v3.json",
+      "sha256": "4767754bc0b0bdfd0974e51ddca4af925e8630d2cd5331a4018317061a453a27"
+    },
+    {
+      "id": "keel.permit.review_document_templates.v3.schema",
+      "path": "review_document_templates/v3.schema.json",
+      "sha256": "e9d89cc5395fdbe95028ddd9c9919181e04dc01abcad8b3e30ee6c8e7a32d442"
+    },
+    {
+      "id": "keel.permit.review_document_templates.v3.test_vectors",
+      "path": "review_document_templates/test-vectors/v3.json",
+      "sha256": "2cdd4194ed8bf1b7160400e2cc1b85611bf476b800c9c443b715d01d0aeae612"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v25",
+      "path": "presentation_registry/v25.json",
+      "sha256": "693a25984def1dbd1d1ac3489cb083ac554d2be4306f7daae60f4cebc858b424"
+    },
+    {
+      "id": "keel.permit.presentation_registry.v25.schema",
+      "path": "presentation_registry/v25.schema.json",
+      "sha256": "8bd5e9b19a6fbcba9a72cc9216415555b14dc4af0a930ae2e53335f5d0551c17"
     }
   ]
 }

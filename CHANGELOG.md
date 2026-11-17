@@ -8,6 +8,54 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ### Added
 
+- The v3 generate-text template shows the provider in words with the `code` format ("on Anthropic"), as keel-dashboard did.
+- Presentation registry v25 titles the Aidbox mailing-address update "AI Permit-to-Update-Patient-Mailing-Address" (AI-PTUPMA), as the owner approved on 2026-11-16. The two other Aidbox titles are unchanged.
+- Review document templates v3 add the field format `code`. It turns a machine code into words, by the dashboard's rule. AI Permit-to-Pay, refund v1 and invoice payment show the payment rail with it ("Stripe Payment Intent Create"), as the owner decided on 2026-11-16.
+- Review document templates v3 pin presentation registry v25. The Avermont records-release template is titled "AI Permit-to-Release-Records" (`healthcare_records_release.r1`), and the generic Aidbox documents get their v25 titles.
+- Add presentation registry v25 (`presentation_registry/v25.json` and its schema). It keeps every v24 profile and titles the three synthetic Aidbox healthcare semantics of semantic registry v23:
+  - AI Permit-to-Update-Patient-Mailing-Address (AI-PTUPMA);
+  - AI Permit-to-Reschedule-Appointment (AI-PTRA);
+  - AI Permit-to-Release-Records (AI-PTRR).
+
+  Their Permits no longer fall back to the generic "AI Permit" title. `semantic_registry_version` moves to v23. v24 is unchanged.
+- Add v3 tailored review templates for the 13 types keel-dashboard already words in plain language:
+  - refunds v1 and v2;
+  - invoice payment;
+  - Stripe Connect transfer;
+  - ledger entry;
+  - reconciliation;
+  - customer credit;
+  - Okta group removal, MFA reset, session revoke and disable;
+  - security indicator block;
+  - generate text.
+
+  Every reference shows as Hidden.
+- Add review document templates v3 (`review_document_templates/v3.json`, its schema and `test-vectors/v3.json`). v3 keeps v2's generic rule set and adds tailored templates for:
+  - AI Permit-to-Pay (`payment_execute.review.r1`);
+  - the Avermont records release (`healthcare_records_release.review.r1`): no PHI, a request code the Avermont portal shows too, and patient, recipient and document set Hidden.
+
+  v3 tailored templates gain:
+  - field formats: `amount`, `count`, `byte_count`, `timestamp_utc`, `hidden`, `request_code`, `recorded`, `text`;
+  - sentence variants with slots;
+  - amount and change cards in the generic cards' shape;
+  - a null presentation profile or beneficiary where none exists.
+
+  The checker enforces that formats fit fact types and that every commitment is Hidden. v2 is unchanged.
+- Add review document templates v2 (`review_document_templates/v2.json`, its
+  strict schema and `test-vectors/v2.json`), document format
+  `keel.review_document.v2`. v2 keeps the v1 Okta group-grant template and
+  adds a versioned generic rule set for every Permit with no tailored
+  template, so each held exact-action Permit can have a review document. The
+  rules pin semantic registry v23, presentation registry v24 and fact profiles
+  v20 by digest, and fix the title and sentence (presentation profile, else
+  the `generic_ai_permit` fallback), an amount card, up to two before → after
+  cards, the label rule, value formatting, and the essential facts (the
+  profile's material request facts). Facts are shown in clear when authorized
+  in cleartext and classified operational or financial; every commitment and target fact shows
+  as Hidden; digests, timestamps and Keel's plumbing facts are left out. v1 is
+  unchanged. `tools/review_document_reference.py` builds the vectors, and
+  `tools/check_review_document_templates.py` now also audits the generic rules
+  against all 104 pinned profiles they apply to.
 - Add review document templates v1 (`review_document_templates/v1.json` and
   its strict schema). A template names, for one trusted Permit semantic, the
   facts a reviewer reads before deciding a held request: each field's source

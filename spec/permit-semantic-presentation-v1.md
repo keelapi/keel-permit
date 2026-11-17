@@ -103,7 +103,14 @@ no acronym.
 v23 applied the same rule with an `AI-P2` prefix and is superseded by v24.
 `AI-PT` follows the established Permit-to-Work (PTW) convention, does not read
 Permit-to-Pay as "P2P", and keeps the three acronyms v22 published. v23 stays
-published and byte-identical; consumers SHOULD pin v24.
+published and byte-identical.
+
+v25 keeps every v24 profile and adds the three synthetic Aidbox healthcare semantics of semantic registry v23, which v24 did not title:
+- `AI Permit-to-Update-Patient-Mailing-Address` (`AI-PTUPMA`);
+- `AI Permit-to-Reschedule-Appointment` (`AI-PTRA`);
+- `AI Permit-to-Release-Records` (`AI-PTRR`).
+
+Its `semantic_registry_version` is v23. v24 stays published and byte-identical; consumers SHOULD pin v25.
 
 ## 5. Historical and fallback behavior
 
