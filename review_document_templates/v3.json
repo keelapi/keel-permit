@@ -13,7 +13,7 @@
     "presentation_registry": {
       "version": "keel.presentation_registry.v25",
       "path": "presentation_registry/v25.json",
-      "digest": "sha256:a18d4a367f0eea8e37adfeea1e00035200db9bab2ebcdc40b459f841555446d6"
+      "digest": "sha256:693a25984def1dbd1d1ac3489cb083ac554d2be4306f7daae60f4cebc858b424"
     },
     "fact_profiles": {
       "version": "keel.fact_profile_registry.v20",

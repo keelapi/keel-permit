@@ -106,7 +106,7 @@ Permit-to-Pay as "P2P", and keeps the three acronyms v22 published. v23 stays
 published and byte-identical.
 
 v25 keeps every v24 profile and adds the three synthetic Aidbox healthcare semantics of semantic registry v23, which v24 did not title:
-- `AI Permit-to-Update-Patient-Address` (`AI-PTUPA`);
+- `AI Permit-to-Update-Patient-Mailing-Address` (`AI-PTUPMA`);
 - `AI Permit-to-Reschedule-Appointment` (`AI-PTRA`);
 - `AI Permit-to-Release-Records` (`AI-PTRR`).
 

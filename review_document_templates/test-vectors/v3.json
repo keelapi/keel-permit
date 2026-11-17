@@ -65,7 +65,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
@@ -205,7 +205,7 @@
             "text": "Pay the March invoice for the design agency."
           }
         },
-        "digest": "2f952f58669edc1accf85c27ed8160ac34b69d3eeee85d7fb2000344dfb2b318",
+        "digest": "f195c0c798fa543cc45950194d3d8537fa17c193f11fe0621a73f6684901a8a9",
         "missing_essential": [],
         "fact_provenance": {
           "provider_environment": "keel_checked",
@@ -284,7 +284,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
@@ -431,7 +431,7 @@
             "text": null
           }
         },
-        "digest": "455269d24fb7f2f00e3d6f0ccb72dd26bb4d7bdc02b41921194ba049c5f1c1c4",
+        "digest": "8ce295f5a8597b38d59d79623df1f6dc4f17343ae3d93c186d26719ed2d184de",
         "missing_essential": [
           "request_digest"
         ],
@@ -514,7 +514,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
@@ -654,7 +654,7 @@
             "text": null
           }
         },
-        "digest": "2129aa2cd53711fb2e040740d8629c01ceb8f647aa6566b68836cb0c8ae08883",
+        "digest": "fe61dce7b93cfedd5ea27c97e827024fb18efdfcbe948fab42d525b9b6563232",
         "missing_essential": [],
         "fact_provenance": {
           "provider_environment": "keel_checked",
@@ -734,7 +734,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
@@ -874,7 +874,7 @@
             "text": null
           }
         },
-        "digest": "0cb4ad17d2af93773fca8a2f6625d82d29e618957af0b71cfb3ecc2454eb550d",
+        "digest": "2614531c2156b274468dcc0b3ba75de9f8614c83a88da47fb17565d3aa38d3e7",
         "missing_essential": [],
         "fact_provenance": {
           "provider_environment": "keel_checked",
@@ -960,14 +960,14 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
           "semantic_id": "keel.action.healthcare_patient_mailing_address_update.v1",
           "fact_profile_id": "keel.facts.healthcare_patient_mailing_address_update_exact.v1",
           "presentation_profile_id": "healthcare_patient_mailing_address_update.r1",
-          "title": "AI Permit-to-Update-Patient-Address",
+          "title": "AI Permit-to-Update-Patient-Mailing-Address",
           "sentence": "Exact authorization to replace one verified synthetic patient's complete mailing address without changing clinical fields.",
           "cards": [],
           "sections": [
@@ -1081,7 +1081,7 @@
             "text": "Release the visit summary to the patient's new clinic."
           }
         },
-        "digest": "67af91dc911654a63c9ed29a91da1989f627ae3248312e151c8dbbd05d1d101d",
+        "digest": "523580b3ffdb72e1522873d3e6f2386c085386d997da229f7c79e1f60ea77415",
         "missing_essential": [],
         "fact_provenance": {
           "request_commitment": "keel_checked",
@@ -1156,7 +1156,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
@@ -1295,7 +1295,7 @@
             "text": null
           }
         },
-        "digest": "4e1a2d91523ec046faa46e77aa523acebeabb56971d5d314b43776fb65e07024",
+        "digest": "64b99f0ee4dfd631ed5007ef43090bb8c5382753853ed301a3c13f31b878be0a",
         "missing_essential": [],
         "fact_provenance": {
           "provider_environment": "keel_checked",
@@ -1368,7 +1368,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
@@ -1493,7 +1493,7 @@
             "text": null
           }
         },
-        "digest": "d851ade8aa608f439a4a78163891f9a333bbfa400790730fcbc71a6efd7ada8a",
+        "digest": "ca5e957470c1c162f69eae8ce3d88985cfc47ad30c17215578af872592f21ea9",
         "missing_essential": [],
         "fact_provenance": {
           "provider_environment": "keel_checked",
@@ -1588,7 +1588,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "generic.review.r1",
           "template_kind": "generic",
@@ -1780,7 +1780,7 @@
             "text": null
           }
         },
-        "digest": "d6753f00ccafe942c2f131fa2658125de13fee6321d1cb7118428fb70eeffe8b",
+        "digest": "c83d2b91ab0d98d443881e21b96c50789242a5d953b24b3c05ca616352161dd3",
         "missing_essential": [],
         "fact_provenance": {
           "provider_environment": "keel_checked",
@@ -1841,7 +1841,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "identity_group_access_grant.review.r1",
           "template_kind": "tailored",
@@ -1996,7 +1996,7 @@
             "text": null
           }
         },
-        "digest": "1eac599268d850e9db6e90f0caf2e5c5b44d5c3656043d4f41170fc28d66145b",
+        "digest": "395a7beb63b503e7931043b7da55df45217254e41a7622bd6dfbe5d2108f90cb",
         "missing_essential": [],
         "fact_provenance": {
           "target_user.display_name": "gateway_reported",
@@ -2049,7 +2049,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "7d1f3c2a-4b5e-4f60-8a71-9c0d1e2f3a4b",
           "template_id": "identity_group_access_grant.review.r1",
           "template_kind": "tailored",
@@ -2204,7 +2204,7 @@
             "text": null
           }
         },
-        "digest": "1cbcf23410e90bd1cc0b738295b8cac8818727960282dee66ae382ed221e3b94",
+        "digest": "dae83f82b97544960be60e5214f2edd60a68756176d3333af4cb4eb7ee653419",
         "missing_essential": [
           "group.name"
         ],
@@ -2259,7 +2259,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000001",
           "template_id": "payment_execute.review.r1",
           "template_kind": "tailored",
@@ -2361,7 +2361,7 @@
             "text": null
           }
         },
-        "digest": "7257485b7bd35ed6cfc07cdaa854d818286984a2b90e1a87bbc338a56b7460c0",
+        "digest": "5fda78e58ecb77730e8d295c43b677af145fb2cbe2017795683c04224f6ef532",
         "missing_essential": [],
         "fact_provenance": {
           "amount_minor": "keel_checked",
@@ -2451,7 +2451,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000002",
           "template_id": "healthcare_records_release.review.r1",
           "template_kind": "tailored",
@@ -2643,7 +2643,7 @@
             "text": null
           }
         },
-        "digest": "9dc0edafb7d18a9c20e56a8758cbf580a72dc27c128ac729b16f37baf7346de5",
+        "digest": "e041dfc643ccb0491183ee2112dbee2648fdb2f6883f823564f9a2d48d760b15",
         "missing_essential": [],
         "fact_provenance": {
           "request_digest": "keel_checked",
@@ -2744,7 +2744,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000002",
           "template_id": "healthcare_records_release.review.r1",
           "template_kind": "tailored",
@@ -2936,7 +2936,7 @@
             "text": null
           }
         },
-        "digest": "35ca60f8d16233078a3535571cba85ed17473568284920f4af0d8f05116a0b0b",
+        "digest": "8e94dbea7b7a251da3daee322aaedaf341dfa13d41cf9f8ad6e8f62887844e6f",
         "missing_essential": [
           "request_digest",
           "total_bytes"
@@ -3003,7 +3003,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000003",
           "template_id": "payment_refund.review.r1",
           "template_kind": "tailored",
@@ -3120,7 +3120,7 @@
             "text": null
           }
         },
-        "digest": "5a63b1b5c6fd1d4c386c44103da07233f3bf751a7b8c73bcebfd07a0699a7848",
+        "digest": "e41e0cfd101203d162214d98b3eeb6a5124c55e0786f36ee083ca5d9d3dfe0a2",
         "missing_essential": [],
         "fact_provenance": {
           "maximum_amount_minor": "keel_checked",
@@ -3186,7 +3186,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000004",
           "template_id": "payment_refund.review.r2",
           "template_kind": "tailored",
@@ -3330,7 +3330,7 @@
             "text": null
           }
         },
-        "digest": "1bd4b9f826d4a843c729a8f2c5107afa4f98a9dd7bc61663d77f15730f02f134",
+        "digest": "43e0c7a95343bf9ede9dd316814fa85113e7c30fcd7ee1ab71ebf4c94a9ecc78",
         "missing_essential": [],
         "fact_provenance": {
           "amount_minor": "keel_checked",
@@ -3399,7 +3399,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000005",
           "template_id": "invoice_payment_execute.review.r1",
           "template_kind": "tailored",
@@ -3530,7 +3530,7 @@
             "text": null
           }
         },
-        "digest": "fb3655954cd3678607bbb31041cf0a55ab674c90ba6650deb97270bab0c9cede",
+        "digest": "2ef815915ba987c343f2793501749fe42a30fe18201f0c3f9d880e003c4ef543",
         "missing_essential": [],
         "fact_provenance": {
           "amount_minor": "keel_checked",
@@ -3597,7 +3597,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000006",
           "template_id": "stripe_connect_transfer_send.review.r1",
           "template_kind": "tailored",
@@ -3734,7 +3734,7 @@
             "text": null
           }
         },
-        "digest": "2791344bfe7fd32fb933f6f5867e626c698d45820916fbfd085b72bbe1a44202",
+        "digest": "dba79af9722ddfa677ce17f3467deb03132f5809011fb5e1f7957f59d2f5abcf",
         "missing_essential": [],
         "fact_provenance": {
           "amount_minor": "keel_checked",
@@ -3807,7 +3807,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000007",
           "template_id": "ledger_entry_record.review.r1",
           "template_kind": "tailored",
@@ -3953,7 +3953,7 @@
             "text": null
           }
         },
-        "digest": "7d7e392e3798a4ca9c97f011c825cba334374ddf8dc4cd34ae5447bf7496b0e8",
+        "digest": "ab25c23caeb99e1739bbd7320ccc3cdc4da5d606e9288f6ffb2650786ae56113",
         "missing_essential": [],
         "fact_provenance": {
           "amount_minor": "keel_checked",
@@ -4023,7 +4023,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000008",
           "template_id": "payment_reconciliation_record.review.r1",
           "template_kind": "tailored",
@@ -4187,7 +4187,7 @@
             "text": null
           }
         },
-        "digest": "57c5a385de484b4d12ed72a72c581fb1e2302572d85c57d15f13f03f0b5170c7",
+        "digest": "e49ca64a06c2118d89daa91f24d5c59e155f862022a859bfd0e084ef0fc31313",
         "missing_essential": [],
         "fact_provenance": {
           "expected_current_status": "keel_checked",
@@ -4257,7 +4257,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000009",
           "template_id": "customer_credit_issue.review.r1",
           "template_kind": "tailored",
@@ -4400,7 +4400,7 @@
             "text": null
           }
         },
-        "digest": "39caf169fbd0360b4e6dd56580377a59e2c261ba2edc05ecb46ece49861d44a8",
+        "digest": "a3ef779be3341a1666d1a3a8213cf1f6bbda654d5cb47f67ddf697e986f2da54",
         "missing_essential": [],
         "fact_provenance": {
           "amount_minor": "keel_checked",
@@ -4478,7 +4478,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000010",
           "template_id": "identity_group_access_remove.review.r1",
           "template_kind": "tailored",
@@ -4665,7 +4665,7 @@
             "text": null
           }
         },
-        "digest": "d5f108590590b255d2a5560261e491dfc025d51027de0e87effea2370613a9b4",
+        "digest": "1ae89be906d8130e63549bf834a81c6cf75a1e79c9c8505f363d02a5a14c2d08",
         "missing_essential": [],
         "fact_provenance": {
           "current_membership": "keel_checked",
@@ -4740,7 +4740,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000011",
           "template_id": "identity_mfa_reset.review.r1",
           "template_kind": "tailored",
@@ -4871,7 +4871,7 @@
             "text": null
           }
         },
-        "digest": "cdfe38a9f9f4fedcc4f6f1334969af82ecc566a6069daf942dc9a8507fb651b3",
+        "digest": "e4986bc3f3bde612e7576d146be3316cc9002c736d2d257e35f9e40eb701421c",
         "missing_essential": [],
         "fact_provenance": {
           "enrolled_factor_count": "keel_checked",
@@ -4941,7 +4941,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000012",
           "template_id": "identity_sessions_revoke.review.r1",
           "template_kind": "tailored",
@@ -5072,7 +5072,7 @@
             "text": null
           }
         },
-        "digest": "f9ab98cd8e38368097fc019feb86ea39ad57456c24c788bf21e11f3c2c15ad10",
+        "digest": "f528928b598a26e7bc007b2a450be7d138a14f2b86ecd9d80f9803fd34c93995",
         "missing_essential": [],
         "fact_provenance": {
           "session_revocation_scope": "keel_checked",
@@ -5143,7 +5143,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000013",
           "template_id": "identity_disable.review.r1",
           "template_kind": "tailored",
@@ -5295,7 +5295,7 @@
             "text": null
           }
         },
-        "digest": "741c7733859e88e408f63e7b01b74905e656f40937e3c2f94fc2d3a7fb3c0982",
+        "digest": "6f234d77c947f085347b9bf34246f90761320b1970517e3fa2333de9f1f4386a",
         "missing_essential": [],
         "fact_provenance": {
           "current_user_status": "keel_checked",
@@ -5382,7 +5382,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000014",
           "template_id": "security_indicator_block.review.r1",
           "template_kind": "tailored",
@@ -5586,7 +5586,7 @@
             "text": null
           }
         },
-        "digest": "28b68afe36e0664c1045a7611309bbfa4441f6b62ced84202919356d15c13633",
+        "digest": "08ea2439cd8435afd70f60178c3305c4d1de10391c6d65308b39af3a16e16dd9",
         "missing_essential": [],
         "fact_provenance": {
           "indicator_type": "keel_checked",
@@ -5640,7 +5640,7 @@
         "document": {
           "format": "keel.review_document.v2",
           "registry_version": "keel.review_document_templates.v3",
-          "registry_digest": "a5f4926609a54db1ddfaea414eb37092ca001408943033dd55cca898051b921c",
+          "registry_digest": "c366e0482f9bb529fe30cf18780a02d85d0414682449648d7bedd8f1c28d5517",
           "permit_id": "00000000-0000-4000-8000-000000000015",
           "template_id": "generate_text.review.r1",
           "template_kind": "tailored",
@@ -5727,7 +5727,7 @@
             "text": null
           }
         },
-        "digest": "1837e255b3278b51a4de430c59f23580fdda2e750740df7f491ad97ca682cfb6",
+        "digest": "10babff3f668f2bfb266bbc3507a3fd2fdce57552aad8b0d6d35c645513d402f",
         "missing_essential": [],
         "fact_provenance": {
           "model": "keel_checked",

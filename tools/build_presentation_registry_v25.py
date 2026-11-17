@@ -37,7 +37,7 @@ ADDED_PROFILES = [
     {
         "semantic_id": "keel.action.healthcare_patient_mailing_address_update.v1",
         "presentation_profile_id": "healthcare_patient_mailing_address_update.r1",
-        "customer_title": "AI Permit-to-Update-Patient-Address",
+        "customer_title": "AI Permit-to-Update-Patient-Mailing-Address",
         "type_definition": (
             "Exact authorization to replace one verified synthetic patient's complete mailing address "
             "without changing clinical fields"
