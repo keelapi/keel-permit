@@ -49,6 +49,8 @@ Before applying §2's common rules, the issuer MUST strip volatile observability
 - `timestamp`
 - `keelidempotencykey`
 
+Request canonicalization versions differ in where they strip (see §14). In `v1` and `v5`, matching keys are stripped at every depth of the body. In `v6`, they are stripped from the top-level object only.
+
 Issuers MAY extend this list with additional issuer-internal observability keys, provided that:
 
 - The extension is documented in the issuer's specification supplement.
@@ -66,7 +68,11 @@ The following normalized keys MUST also be stripped before canonicalization:
 - `xgoogapikey`
 - `proxyauthorization`
 
-These belong in HTTP headers, not in provider/tool request bodies, but defensive stripping prevents accidental commitment of credentials to long-lived hashes.
+These belong in HTTP headers, not in provider/tool request bodies, but defensive stripping prevents accidental commitment of credentials to long-lived hashes. They are stripped at the same depth as §3.1's keys: at every depth in `v1` and `v5`, at the top level only in `v6`.
+
+### 3.2.1 MCP `idempotency_key` tool argument (`v1` and `v5`)
+
+When the dispatch provider is `mcp` and the body is an MCP `tools/call` request whose `params.arguments` object contains the exact key `idempotency_key`, `v1` and `v5` keep `params.arguments.idempotency_key`. It is a registered tool argument, not issuer observability metadata. Every other §3.1/§3.2 key is still stripped. A verifier MUST apply this exception exactly when the signed binding payload's `provider` is `mcp`. `v6` needs no exception, because it never strips below the top level.
 
 ### 3.3 Required properties
 
@@ -75,7 +81,7 @@ The wire-body canonicalization function MUST be:
 - **Deterministic.** Identical inputs under the same pinned canonicalization profile MUST produce byte-identical output across runs, processes, machines, and language runtime versions. Implementations SHOULD pin golden test vectors in CI.
 - **Pure.** No I/O, no clock reads, no random sources, no environment lookups, no global-state mutation.
 - **Single source of truth.** The same function MUST produce both the bytes that feed `binding_request_hash` and the bytes dispatched as the HTTP request body. Implementations MUST NOT serialize the request body via a different code path; doing so reintroduces the byte-fidelity gap that this spec exists to close.
-- **Versioned.** The `v1` rules in this spec are stable. Future bumps MUST use a new function name (e.g., `canonical_provider_wire_body_v2`) and MUST migrate adapter-by-adapter, never silently.
+- **Versioned.** Each request canonicalization version (`v1`, `v5`, `v6`; see §14) is stable: its bytes for a given input MUST NOT change. A change in output MUST use a new `binding_request_canonical_version` value and MUST migrate adapter-by-adapter, never silently.
 
 ### 3.4 Adapter-specific request shapes
 
@@ -126,7 +132,7 @@ Starting with binding version v5, Keel adopts **RFC 8785 (JSON Canonicalization 
 
 - Permit binding payloads (`canonical_binding_payload_v5`)
 - PERMIT_V2 envelope signature slots (operator_approval, counter_signature, audit_attestation, provider_attestation)
-- Provider wire-body hashes (`binding_request_canonical_version=v5`)
+- Provider wire-body hashes (`binding_request_canonical_version` `v5` or `v6`; see §14)
 - Chain canonicalization (`closure_v3` chain format)
 
 The profile is named `keel.canonical_json.payload.v2-rfc8785` in the `canonicalization_profile` field. Verifiers select the canonical algorithm based on the artifact's `binding_version` (or equivalent version field on the specific surface).
@@ -275,3 +281,54 @@ For permits issued under binding v6, the current set of agent-payment rail keys 
 | `amex_ace` | **Scaffold / vocabulary stake** — no public wire spec; NOT a live binding |
 
 This enumeration covers 8 live-binding rails plus 1 vocabulary stake. The scope-faithful guarantee (replay invariant, point 4) applies to whatever keys are present in a given permit's `resource_attributes_json`; a permit need not contain all keys, and this list is not a completeness claim over all possible future rail evidence.
+
+## 14. Request canonicalization versions and `v6` top-level stripping
+
+**Status**: ACTIVE. The Keel Issuer binds the provider/tool request body of every Permit first bound at `binding_version` `v5`-`v8` with request canonicalization `v6`. Permits first bound before `v6` keep `v5`. Verified by keel-verifier 3.37.1 and later.
+
+### 14.1 Versions
+
+| `binding_request_canonical_version` | Serializer | Stripping (§3.1, §3.2) |
+|---|---|---|
+| `v1` | legacy Keel canonical profile (§2) | every depth, with the §3.2.1 MCP exception |
+| `v5` | RFC 8785 / JCS (§9) | every depth, with the §3.2.1 MCP exception |
+| `v6` | RFC 8785 / JCS (§9) | top-level object only |
+
+In `v6`, `canonical_provider_wire_body(payload)` returns `rfc8785.dumps(strip_top(payload))`. `strip_top` removes from the top-level JSON object every member whose key, lower-cased with non-alphanumeric characters removed, is in the §3.1 or §3.2 list. Members of nested objects, including objects inside arrays at any depth, are not examined and are serialized verbatim. A missing payload is `{}`. `binding_request_hash` and `final_request_hash` are SHA-256 over those bytes, and the same bytes are dispatched (§3.3).
+
+Rationale: `v1` and `v5` strip at every depth. That silently removed business content, such as MCP tool arguments named `timestamp` or `request_id` and JSON-schema properties named `authorization`, from both the bound bytes and the dispatched body.
+
+### 14.2 Version selection
+
+| `binding_version` | Request canonical versions an issuer may use |
+|---|---|
+| `v1`-`v4` | `v1` |
+| `v5`-`v8` | `v5` (Permits first bound before `v6`) or `v6` |
+
+An issuer MUST use `v6` for a Permit's first binding at `v5`-`v8`. When it re-signs a Permit, it MUST keep both the Permit's `binding_version` and the request canonical version the Permit was first bound with. Exports carry the version in the permit record field `binding_request_canonical_version`. A `null`, absent or blank value means `v5` for `v5`-`v8` and `v1` otherwise.
+
+### 14.3 Verifier requirements
+
+In `v5`-`v8` the request canonical version is **not** part of the signed binding payload. A verifier that recomputes the request hash from a wire body:
+
+- MUST use `v1` for `binding_version` `v1`-`v4`;
+- for `v5`-`v8`, MUST accept only `v5` or `v6` from the export (absent means `v5`) and MUST reject any other value;
+- MUST treat a `v6` match as binding every member below the top level. A `v6` match proves this whichever version the issuer used: when the issuer used `v5`, a `v6` match is possible only if the body has no §3.1/§3.2 key below the top level, and then `v5` and `v6` bytes are identical;
+- MUST NOT report a `v5` match as binding the values under §3.1/§3.2 keys below the top level. Because the version is unsigned, `v5` can be declared for a Permit the issuer bound with `v6`. A verifier SHOULD name those paths as not established.
+
+A future binding version SHOULD sign the request canonical version.
+
+### 14.4 Test vector
+
+Body (provider other than `mcp`):
+
+```json
+{"method":"tools/call","request_id":"keel_req_01","params":{"name":"tickets.create","arguments":{"title":"Rotate key","timestamp":"2026-11-19T09:59:00Z"}}}
+```
+
+| Version | Canonical bytes | SHA-256 |
+|---|---|---|
+| `v5` | `{"method":"tools/call","params":{"arguments":{"title":"Rotate key"},"name":"tickets.create"}}` | `1839c74624e6ec87d42500195a4af07c1e221067efbfc2f44159bc031031de5c` |
+| `v6` | `{"method":"tools/call","params":{"arguments":{"timestamp":"2026-11-19T09:59:00Z","title":"Rotate key"},"name":"tickets.create"}}` | `c1008bdb27811aa9593b784bd3c0838d103ccd216ff4d9260343e79cf9c1bcc9` |
+
+keel-verifier's `tests/fixtures/request_canonicalization_v6_issuer_vectors.json` holds more issuer-produced vectors, including the §3.2.1 MCP exception.
