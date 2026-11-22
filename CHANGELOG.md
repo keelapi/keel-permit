@@ -8,6 +8,7 @@ The spec document follows [Semantic Versioning](https://semver.org/). Wire forma
 
 ### Added
 
+- `spec/canonical-json.md` §14 defines request canonicalization `v6`, which the Keel Issuer uses for every Permit first bound at `v5`-`v8`. It is RFC 8785 / JCS with volatile and credential keys stripped from the top level of the body only. §14 also covers version selection, the fact that the version is unsigned in `v5`-`v8` (with what a verifier may accept and must report), and a test vector. §3.1 and §3.2 now say how deep each version strips. A new §3.2.1 documents the MCP `params.arguments.idempotency_key` exception in `v1` and `v5`. §3.3 versions by `binding_request_canonical_version` rather than by function name.
 - The v3 generate-text template shows the provider in words with the `code` format ("on Anthropic"), as keel-dashboard did.
 - Presentation registry v25 titles the Aidbox mailing-address update "AI Permit-to-Update-Patient-Mailing-Address" (AI-PTUPMA), as the owner approved on 2026-11-16. The two other Aidbox titles are unchanged.
 - Review document templates v3 add the field format `code`. It turns a machine code into words, by the dashboard's rule. AI Permit-to-Pay, refund v1 and invoice payment show the payment rail with it ("Stripe Payment Intent Create"), as the owner decided on 2026-11-16.
