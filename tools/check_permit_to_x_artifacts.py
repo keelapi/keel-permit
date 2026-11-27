@@ -15,6 +15,9 @@ from typing import Any
 
 import jsonschema
 from check_aidbox_contract import validate_aidbox_contract
+from check_stripe_payout_account_change_contract import (
+    validate_stripe_payout_account_change_contract,
+)
 from referencing import Registry, Resource
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -6521,6 +6524,10 @@ def main() -> int:
         validate_short_term_exact_profiles(registry)
         try:
             validate_aidbox_contract()
+        except ValueError as exc:
+            raise ContractFailure(str(exc)) from exc
+        try:
+            validate_stripe_payout_account_change_contract()
         except ValueError as exc:
             raise ContractFailure(str(exc)) from exc
         validate_artifact_manifest()

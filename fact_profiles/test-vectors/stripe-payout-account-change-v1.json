@@ -1,0 +1,55 @@
+{
+  "scope": "synthetic schema-validation examples; not issued Permits, provider evidence or a live authorization result",
+  "cases": [
+    {
+      "action": "stripe.external_account.create",
+      "facts": {
+        "version": "keel.stripe_payout_account_change_exact_facts.v1",
+        "fact_profile_id": "keel.facts.stripe_payout_account_change_exact.v1",
+        "action": "stripe.external_account.create",
+        "operation": "call.tools",
+        "connector_identity": "stripe",
+        "connector_contract_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "tool_schema_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "decision_trace_hash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "tool_arguments_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "request_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "enforcement_mode": "enforced_in_path",
+        "provider_environment": "provider_sandbox",
+        "provider_api_version": "stripe-2025-12-15.clover",
+        "preflight_observed_at": "2026-11-27T18:00:00Z",
+        "preflight_expires_at": "2026-11-27T18:04:00Z",
+        "preflight_snapshot_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "idempotency_digest": "sha256:0652f4543e4f889c0e6400d22432883fd126b41a8d0075b932a8166ed062d298",
+        "max_uses": 1,
+        "provider_instance_reference_commitment": {
+          "method": "keel.salted_sha256_jcs.v1",
+          "digest": "sha256:d7e8ba688a4a4ea05004a254c7b2f57f70b9d13e03edb92f29ee13d16df469b2"
+        },
+        "target_is_dedicated_demo": true,
+        "platform_account_digest": "sha256:d34c8a564adc6d66df0ad671179e81339a8a448f5a016eca0e10b61353e78266",
+        "connected_account_reference_commitment": {
+          "method": "keel.salted_sha256_jcs.v1",
+          "digest": "sha256:5552cec3ce7e51de066638a273916c2cd8bfb787c3e35411d4c825c432979cad"
+        },
+        "connected_account_state_digest": "sha256:b717b41d3ddd01ceae15155cde37aed82a5ac520c5f7557757e6c5d6395a68e6",
+        "external_account_token_reference_commitment": {
+          "method": "keel.salted_sha256_jcs.v1",
+          "digest": "sha256:a6a2bf754243498c56d9878d9f35f7de5ed989602fffc5e8386eb53ffdf526f0"
+        },
+        "new_account_fingerprint_commitment": {
+          "method": "keel.salted_sha256_jcs.v1",
+          "digest": "sha256:d655ea1dc34dd38b167e58d5ee43da9a5dc78dc8360aa17baf074fcf56a02958"
+        },
+        "new_account_is_new_to_customer": true,
+        "new_account_last4": "6789",
+        "new_account_country": "US",
+        "new_account_currency": "USD",
+        "previous_default_account_last4": "1116",
+        "existing_external_account_count": 1,
+        "default_for_currency": true,
+        "change_channel": "voice_call"
+      }
+    }
+  ]
+}

@@ -1571,6 +1571,36 @@
       "id": "keel.permit.presentation_registry.v25.schema",
       "path": "presentation_registry/v25.schema.json",
       "sha256": "8bd5e9b19a6fbcba9a72cc9216415555b14dc4af0a930ae2e53335f5d0551c17"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v24",
+      "path": "semantic_registry/v24.json",
+      "sha256": "cfcd397eb0c9992d53eca04950fcee63a8090020d78ebdad47270b7c355dfa38"
+    },
+    {
+      "id": "keel.permit.semantic_selector_registry.v24.schema",
+      "path": "semantic_registry/v24.schema.json",
+      "sha256": "175751b88c192f558322ae073b6f589705c37cb765b34454bbd395b3a064a400"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v21",
+      "path": "fact_profiles/v21.json",
+      "sha256": "3146e2b24d3aa43761a41bfd26f3e4372fa20af80c6893a575bae8666481a899"
+    },
+    {
+      "id": "keel.permit.fact_profile_registry.v21.schema",
+      "path": "fact_profiles/v21.schema.json",
+      "sha256": "446b8007f553228bd5d0634408e64350404b2886b43894bbd4aacecb4782e3e9"
+    },
+    {
+      "id": "keel.permit.stripe_payout_account_change_exact_facts.v1.schema",
+      "path": "schemas/stripe-payout-account-change-exact-facts-v1.schema.json",
+      "sha256": "52d3ecf6e7bd59923365a3a30bcbf6a1b484d5d5b7a27fff4e8b0541125b06d3"
+    },
+    {
+      "id": "keel.permit.stripe_payout_account_change_exact_facts.v1.test_vectors",
+      "path": "fact_profiles/test-vectors/stripe-payout-account-change-v1.json",
+      "sha256": "1673d9caa9bba7ce0a96886e273a1adb7380a0acc23f9b02bce541a3d576752a"
     }
   ]
 }

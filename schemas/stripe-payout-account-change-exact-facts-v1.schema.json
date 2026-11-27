@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keelapi/keel-permit/schemas/stripe-payout-account-change-exact-facts-v1.schema.json",
+  "title": "Keel exact Stripe payout-account-change facts v1",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/stripe_external_account_create"
+    }
+  ],
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "rawDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,9})?Z$"
+    },
+    "saltedCommitment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "digest"
+      ],
+      "properties": {
+        "method": {
+          "const": "keel.salted_sha256_jcs.v1"
+        },
+        "digest": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    },
+    "stripe_external_account_create": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "fact_profile_id",
+        "action",
+        "operation",
+        "connector_identity",
+        "connector_contract_hash",
+        "tool_schema_hash",
+        "decision_trace_hash",
+        "tool_arguments_hash",
+        "request_digest",
+        "enforcement_mode",
+        "provider_environment",
+        "provider_api_version",
+        "preflight_observed_at",
+        "preflight_expires_at",
+        "preflight_snapshot_digest",
+        "idempotency_digest",
+        "max_uses",
+        "provider_instance_reference_commitment",
+        "target_is_dedicated_demo",
+        "platform_account_digest",
+        "connected_account_reference_commitment",
+        "connected_account_state_digest",
+        "external_account_token_reference_commitment",
+        "new_account_fingerprint_commitment",
+        "new_account_is_new_to_customer",
+        "new_account_last4",
+        "new_account_country",
+        "new_account_currency",
+        "previous_default_account_last4",
+        "existing_external_account_count",
+        "default_for_currency",
+        "change_channel"
+      ],
+      "properties": {
+        "version": {
+          "const": "keel.stripe_payout_account_change_exact_facts.v1"
+        },
+        "fact_profile_id": {
+          "const": "keel.facts.stripe_payout_account_change_exact.v1"
+        },
+        "action": {
+          "const": "stripe.external_account.create"
+        },
+        "operation": {
+          "const": "call.tools"
+        },
+        "connector_identity": {
+          "const": "stripe"
+        },
+        "connector_contract_hash": {
+          "$ref": "#/$defs/rawDigest"
+        },
+        "tool_schema_hash": {
+          "$ref": "#/$defs/rawDigest"
+        },
+        "decision_trace_hash": {
+          "$ref": "#/$defs/rawDigest"
+        },
+        "tool_arguments_hash": {
+          "$ref": "#/$defs/rawDigest"
+        },
+        "request_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "enforcement_mode": {
+          "const": "enforced_in_path"
+        },
+        "provider_environment": {
+          "const": "provider_sandbox"
+        },
+        "provider_api_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "preflight_observed_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "preflight_expires_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "preflight_snapshot_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "idempotency_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "max_uses": {
+          "const": 1
+        },
+        "provider_instance_reference_commitment": {
+          "$ref": "#/$defs/saltedCommitment"
+        },
+        "target_is_dedicated_demo": {
+          "const": true
+        },
+        "platform_account_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "connected_account_reference_commitment": {
+          "$ref": "#/$defs/saltedCommitment"
+        },
+        "connected_account_state_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "external_account_token_reference_commitment": {
+          "$ref": "#/$defs/saltedCommitment"
+        },
+        "new_account_fingerprint_commitment": {
+          "$ref": "#/$defs/saltedCommitment"
+        },
+        "new_account_is_new_to_customer": {
+          "type": "boolean"
+        },
+        "new_account_last4": {
+          "type": "string",
+          "pattern": "^[0-9]{4}$"
+        },
+        "new_account_country": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        },
+        "new_account_currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "previous_default_account_last4": {
+          "type": "string",
+          "pattern": "^(?:[0-9]{4}|none)$"
+        },
+        "existing_external_account_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "default_for_currency": {
+          "const": true
+        },
+        "change_channel": {
+          "enum": [
+            "api",
+            "chat",
+            "email",
+            "staff_console",
+            "voice_call"
+          ]
+        }
+      }
+    }
+  }
+}
